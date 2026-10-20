@@ -1,77 +1,124 @@
 /**
- * PLACEHOLDER for phase 2 (session, API client, login). Phase 2 replaces the
- * body of this file and keeps its exports: `SessionProvider`, `useSession`
- * and the `Session` shape, which the app shell already consumes.
+ * The session: who is using the site, built on the `['me']` query.
  *
- * What exists now: everyone is anonymous, `login` sends to the real Lineup
- * login (LINEUP.md §2), `logout` does nothing yet. For looking at the signed-in
- * shell during development, `localStorage['lineup-dev-session']` can be set to
- * `user` or `staff` (development builds only).
+ *   loading        the first answer has not come yet
+ *   anonymous      no session (401), or the API could not be asked (`error` is then set)
+ *   authenticated  `me` is there
+ *   suspended      403 `user_suspended`: no sign-in loop, the sanction is shown (`sanction`)
+ *
+ * A signed-out visitor reads every public page; only an action sends them to
+ * sign in (`login`, `useAuthAction`). A 401 met by a background query never
+ * redirects anywhere (see routeApiError).
  */
 
-import {createContext, type ReactNode, use, useCallback, useMemo} from 'react';
+import {useQueryClient} from '@tanstack/react-query';
+import {createContext, type ReactNode, use, useCallback, useEffect, useMemo} from 'react';
+import {useNavigate} from 'react-router';
 
-import {config} from '@/config';
-import {getString, removeItem} from '@/lib/storage';
+import {hasCode} from '@/api/client';
+import {logout as requestLogout, loginUrl} from '@/api/endpoints';
+import {errorMessage} from '@/api/errors';
+import {useMe} from '@/api/queries';
+import {queryKeys} from '@/api/queryKeys';
+import {ANONYMOUS} from '@/api/sessionSnapshot';
+import type {ApiError} from '@/api/client';
+import type {Me, SanctionInfo} from '@/api/types';
+import {paths} from '@/app/paths';
+import {useT} from '@/i18n/useT';
+import {browser} from '@/lib/browser';
+import {useSnackbar} from '@/ui';
 
-/** `GET /lineup/me` → `user` (LINEUP.md §6.1). No e-mail, ever. */
-export interface SessionUser {
-  id: string;
-  username: string;
-  global_name: string | null;
-  avatar_url: string | null;
-  is_staff: boolean;
-}
-
-export interface SessionMe {
-  user: SessionUser;
-  /** False: the session comes from the dashboard; automatic verification needs a Lineup login. */
-  has_lineup_scopes: boolean;
-}
+import {takeAuthError} from './authError';
+import {runBeforeLogin} from './beforeLogin';
+import {deriveSession, type SessionStatus} from './status';
 
 export interface Session {
-  status: 'loading' | 'anonymous' | 'authenticated';
-  me?: SessionMe;
-  /** Sends the browser to Discord through the API; comes back to `redirect`. */
+  status: SessionStatus;
+  /** The signed-in person (`GET /lineup/me`). */
+  me?: Me;
+  /** The sanction behind a `suspended` session, for the screen. */
+  sanction?: SanctionInfo;
+  /** The session could not be read (network, 5xx). The person is then `anonymous`. */
+  error?: ApiError;
+  /**
+   * Sends the browser to Discord through the API and back to `redirect` (the
+   * current page by default). Runs the "save my draft" callbacks first
+   * (registerBeforeLogin).
+   */
   login: (redirect?: string) => void;
+  /** Ends the session, forgets the person's data and goes home. */
   logout: () => Promise<void>;
+  /**
+   * For a protected action: true when the person is signed in. Otherwise
+   * starts the sign-in for the current page (unless suspended or still
+   * loading) and returns false.
+   */
+  requireAuth: () => boolean;
+  /** Asks the API for the session again (after `error`). */
+  refresh: () => void;
 }
 
 const SessionContext = createContext<Session | null>(null);
 
-function developmentSession(): SessionMe | undefined {
-  if (!import.meta.env.DEV) return undefined;
-  const kind = getString('lineup-dev-session');
-  if (kind !== 'user' && kind !== 'staff') return undefined;
-  return {
-    user: {
-      id: '345678901234567890',
-      username: 'alex',
-      global_name: 'Alex',
-      avatar_url: null,
-      is_staff: kind === 'staff',
-    },
-    has_lineup_scopes: true,
-  };
-}
-
 export function SessionProvider({children}: {children: ReactNode}) {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const snackbar = useSnackbar();
+  const {t} = useT('common');
+  const {t: tErrors} = useT('errors');
+  const {data, error, isPending, refetch} = useMe();
+
+  const derived = useMemo(() => deriveSession({data, error, isPending}), [data, error, isPending]);
+  const {status} = derived;
+
+  // A refused sign-in brought the person back with `?auth_error=` (read before the router started).
+  const showMessage = snackbar.show;
+  const cancelled = t('auth.cancelled');
+  const failed = t('auth.failed');
+  useEffect(() => {
+    const code = takeAuthError();
+    if (code !== null) showMessage({message: code === 'access_denied' ? cancelled : failed});
+  }, [showMessage, cancelled, failed]);
+
   const login = useCallback((redirect: string = window.location.href) => {
-    window.location.assign(`${config.apiBase}/lineup/auth/login?redirect=${encodeURIComponent(redirect)}`);
+    runBeforeLogin();
+    browser.navigate(loginUrl(redirect));
   }, []);
 
   const logout = useCallback(async () => {
-    // Phase 2: POST /auth/logout, then clear the cached session.
-    if (developmentSession()) {
-      removeItem('lineup-dev-session');
-      window.location.reload();
+    try {
+      await requestLogout();
+    } catch (failure) {
+      // Already signed out is the goal reached; anything else is shown and nothing is forgotten.
+      if (!hasCode(failure, 'unauthenticated')) {
+        showMessage({message: errorMessage(failure, tErrors)});
+        return;
+      }
     }
-  }, []);
+    // Everything personal goes, and public pages keep no trace of who looked (`can_edit`,
+    // `is_self`…). Not `queryClient.clear()`: that detaches the mounted observers. The
+    // session query stays, now anonymous, and so does the public catalog.
+    const kept = [queryKeys.me(), queryKeys.catalog()].map((key) => key.join('/'));
+    queryClient.removeQueries({predicate: (query) => !kept.includes(query.queryKey.join('/'))});
+    queryClient.setQueryData(queryKeys.me(), ANONYMOUS);
+    void navigate(paths.home());
+    showMessage({message: t('auth.loggedOut')});
+  }, [queryClient, navigate, showMessage, t, tErrors]);
 
-  const value = useMemo<Session>(() => {
-    const me = developmentSession();
-    return me ? {status: 'authenticated', me, login, logout} : {status: 'anonymous', login, logout};
-  }, [login, logout]);
+  const requireAuth = useCallback(() => {
+    if (status === 'authenticated') return true;
+    if (status === 'anonymous') login();
+    return false;
+  }, [status, login]);
+
+  const refresh = useCallback(() => {
+    void refetch();
+  }, [refetch]);
+
+  const value = useMemo<Session>(
+    () => ({...derived, login, logout, requireAuth, refresh}),
+    [derived, login, logout, requireAuth, refresh],
+  );
 
   return <SessionContext value={value}>{children}</SessionContext>;
 }

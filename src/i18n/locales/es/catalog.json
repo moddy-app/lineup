@@ -1,1 +1,90 @@
-{}
+{
+  "positions": {
+    "moderator": "Moderador",
+    "admin": "Administrador",
+    "community_manager": "Community manager",
+    "manager": "Responsable",
+    "communication": "Comunicación",
+    "developer": "Desarrollador",
+    "graphic_designer": "Diseñador gráfico",
+    "support": "Soporte",
+    "event_animator": "Animador de eventos",
+    "partnership_manager": "Responsable de alianzas",
+    "other": "Otro"
+  },
+  "requirements": {
+    "min_age": "Edad mínima",
+    "account_age_days": "Antigüedad de la cuenta de Discord (días)",
+    "server_activity": "Actividad en el servidor",
+    "experience_months": "Experiencia (meses)",
+    "verified_experience": "Experiencia verificada en Lineup",
+    "languages": "Idiomas hablados",
+    "availability_hours": "Disponibilidad (horas por semana)",
+    "voice_required": "Micrófono / voz obligatorio",
+    "custom": "Requisito personalizado"
+  },
+  "application_types": {
+    "external_url": "Enlace externo",
+    "discord_dm": "Mensaje directo de Discord",
+    "lineup_form": "Formulario de Lineup"
+  },
+  "themes": {
+    "gaming": "Videojuegos",
+    "roleplay": "Rol",
+    "community": "Comunidad",
+    "education": "Educación",
+    "tech": "Tecnología",
+    "art": "Arte",
+    "music": "Música",
+    "anime": "Anime",
+    "streaming": "Streaming",
+    "esport": "Esports",
+    "nsfw": "NSFW (+18)",
+    "other": "Otro"
+  },
+  "languages": {
+    "fr": "Francés",
+    "en": "Inglés",
+    "es": "Español",
+    "de": "Alemán",
+    "pt": "Portugués",
+    "it": "Italiano",
+    "nl": "Neerlandés",
+    "pl": "Polaco",
+    "ru": "Ruso",
+    "tr": "Turco",
+    "ar": "Árabe",
+    "ja": "Japonés",
+    "ko": "Coreano",
+    "zh": "Chino"
+  },
+  "compensations": {
+    "volunteer": "Voluntario",
+    "paid": "Remunerado",
+    "negotiable": "A negociar"
+  },
+  "badges": {
+    "discord_verified": "Servidor verificado de Discord",
+    "discord_partner": "Socio de Discord",
+    "moddy_installed": "Moddy instalado",
+    "moddy_premium": "Moddy Premium",
+    "nsfw": "NSFW (+18)",
+    "moddy_staff": "Equipo de Moddy",
+    "discord_staff": "Empleado de Discord",
+    "discord_partnered_server_owner": "Propietario de un servidor asociado",
+    "discord_hypesquad_events": "HypeSquad Events",
+    "discord_bug_hunter_level_1": "Cazador de errores (nivel 1)",
+    "discord_bug_hunter_level_2": "Cazador de errores (nivel 2)",
+    "discord_hypesquad_house_bravery": "HypeSquad Bravery",
+    "discord_hypesquad_house_brilliance": "HypeSquad Brilliance",
+    "discord_hypesquad_house_balance": "HypeSquad Balance",
+    "discord_early_supporter": "Seguidor temprano",
+    "discord_verified_bot": "Bot verificado",
+    "discord_early_verified_bot_developer": "Pionero desarrollador de bots verificados",
+    "discord_certified_moderator": "Moderador certificado de Discord",
+    "discord_active_developer": "Desarrollador activo",
+    "lineup_verified": "Verificado por Lineup",
+    "moddy_partner": "Socio de Moddy",
+    "moddy_server": "Servidor oficial de Moddy"
+  }
+}

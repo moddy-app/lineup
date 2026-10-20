@@ -23,6 +23,37 @@
 }
 
 /* ---------------------------------------------------------------------------
+ * Suspension: the notice above public pages, and the references of a sanction.
+ * ------------------------------------------------------------------------- */
+
+.suspended-notice {
+  margin-bottom: var(--page-gap);
+}
+
+.sanction-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+}
+
+.sanction-details p {
+  margin: 0;
+}
+
+.sanction-references {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-s);
+}
+
+.card.hero .sanction-details,
+.card.hero .sanction-references {
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------------------------------------------------------------------------
  * Footer: the byline on the left, the language on the right; they wrap
  * under each other on a narrow window.
  * ------------------------------------------------------------------------- */

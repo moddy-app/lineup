@@ -10,7 +10,26 @@
   },
   "auth": {
     "login": "Anmelden",
-    "loginWithDiscord": "Mit Discord anmelden"
+    "loginWithDiscord": "Mit Discord anmelden",
+    "cancelled": "Anmeldung abgebrochen",
+    "failed": "Die Anmeldung ist nicht zustande gekommen",
+    "loggedOut": "Sie sind abgemeldet",
+    "logout": "Abmelden",
+    "signInRequired": {
+      "title": "Melden Sie sich an, um fortzufahren",
+      "purpose": {
+        "default": "Diese Seite erfordert ein Discord-Konto.",
+        "profile": "Bearbeiten Sie Ihr öffentliches Profil, das Server beim Recruiting sehen.",
+        "experiences": "Fügen Sie Ihre Erfahrungen hinzu und lassen Sie sie verifizieren.",
+        "posts": "Finden Sie Ihre Anzeigen, ob veröffentlicht, als Entwurf oder geschlossen.",
+        "editor": "Verfassen Sie eine Anzeige für einen Server oder für sich selbst.",
+        "claim": "Beanspruchen Sie einen Server, um sein Profil und seine Anzeigen zu verwalten.",
+        "manage": "Verwalten Sie Profil, Anzeigen und Sichtbarkeit eines Servers."
+      }
+    },
+    "sessionError": {
+      "title": "Ihre Sitzung konnte nicht geprüft werden"
+    }
   },
   "userMenu": {
     "profile": "Mein Profil",
@@ -45,5 +64,14 @@
   "routeError": {
     "title": "Es ist ein Fehler aufgetreten",
     "body": "Diese Seite konnte nicht angezeigt werden. Laden Sie sie neu oder gehen Sie zurück zu den Anzeigen."
+  },
+  "suspended": {
+    "title": "Ihr Zugang zu Moddy ist gesperrt.",
+    "body": "Sie können auf Lineup nichts mehr veröffentlichen oder bearbeiten. Öffentliche Seiten bleiben zum Lesen offen.",
+    "noticeBody": "Lineup ist für Sie schreibgeschützt. Sie können nichts mehr veröffentlichen oder bearbeiten.",
+    "references": "Referenzen",
+    "until": "Bis zum {{date}}",
+    "noEnd": "Ohne Enddatum",
+    "viewSanction": "Sanktion ansehen"
   }
 }

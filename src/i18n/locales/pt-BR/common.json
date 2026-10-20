@@ -10,7 +10,26 @@
   },
   "auth": {
     "login": "Entrar",
-    "loginWithDiscord": "Entrar com o Discord"
+    "loginWithDiscord": "Entrar com o Discord",
+    "cancelled": "Login cancelado",
+    "failed": "O login não foi concluído",
+    "loggedOut": "Você saiu da conta",
+    "logout": "Sair",
+    "signInRequired": {
+      "title": "Entre para continuar",
+      "purpose": {
+        "default": "Esta página exige uma conta do Discord.",
+        "profile": "Edite seu perfil público, o que os servidores em recrutamento veem.",
+        "experiences": "Adicione suas experiências e peça a verificação delas.",
+        "posts": "Veja seus anúncios publicados, em rascunho ou fechados.",
+        "editor": "Escreva um anúncio para um servidor ou para você.",
+        "claim": "Reivindique um servidor para gerenciar o perfil e os anúncios dele.",
+        "manage": "Gerencie o perfil, os anúncios e a visibilidade de um servidor."
+      }
+    },
+    "sessionError": {
+      "title": "Não foi possível verificar sua sessão"
+    }
   },
   "userMenu": {
     "profile": "Meu perfil",
@@ -45,5 +64,14 @@
   "routeError": {
     "title": "Ocorreu um erro",
     "body": "Não foi possível exibir esta página. Recarregue-a ou volte aos anúncios."
+  },
+  "suspended": {
+    "title": "Seu acesso ao Moddy está suspenso.",
+    "body": "Você não pode mais publicar nem editar no Lineup. As páginas públicas continuam abertas para leitura.",
+    "noticeBody": "O Lineup está somente leitura para você. Você não pode mais publicar nem editar.",
+    "references": "Referências",
+    "until": "Até {{date}}",
+    "noEnd": "Sem data de término",
+    "viewSanction": "Ver a sanção"
   }
 }

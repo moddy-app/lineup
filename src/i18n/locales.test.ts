@@ -18,6 +18,14 @@ const placeholders = (text: string) =>
 
 const others = LANGUAGE_CODES.filter((code) => code !== 'en');
 
+/**
+ * `catalog` is the one namespace that is not complete in English: French and
+ * English use the labels of the API (empty files), and es, pt-BR and de translate
+ * every catalog id (src/api/catalog.test.ts checks that they are all there). It
+ * is exempt from the key-for-key comparison with English, not from the rest.
+ */
+const API_LABELLED = 'catalog';
+
 describe('locales', () => {
   it('has the same five languages everywhere', () => {
     expect(Object.keys(resources).sort()).toEqual([...LANGUAGE_CODES].sort());
@@ -37,7 +45,8 @@ describe('locales', () => {
       for (const code of others) {
         it(`${code} has every English key, none extra, and no empty value`, () => {
           const target = new Map(leaves(resources[code][ns] as Tree));
-          expect([...target.keys()].sort(), `${code}.${ns}`).toEqual([...source.keys()].sort());
+          if (ns !== API_LABELLED)
+            expect([...target.keys()].sort(), `${code}.${ns}`).toEqual([...source.keys()].sort());
           for (const [key, value] of target) {
             expect(typeof value, `${code}.${ns}.${key}`).toBe('string');
             expect((value as string).trim(), `${code}.${ns}.${key}`).not.toBe('');

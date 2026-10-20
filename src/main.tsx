@@ -17,11 +17,14 @@ import {createRoot} from 'react-dom/client';
 import '@/ui/material';
 
 import {App} from '@/app/App';
+import {consumeAuthError} from '@/auth/authError';
 import {initI18n} from '@/i18n';
 import {getItem, setItem} from '@/lib/storage';
 
 initTheme();
 initI18n();
+// A refused sign-in comes back with ?auth_error=: read and removed before the router reads the address.
+consumeAuthError();
 
 // After a deploy, an open tab asks for a script that no longer exists: reload
 // once to get the new version (the guard stops a loop if the server is down).

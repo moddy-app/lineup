@@ -13,6 +13,7 @@ import {Icon} from '@/ui';
 import {Footer} from './Footer';
 import type {RouteHandle} from './handle';
 import {paths} from './paths';
+import {SuspendedNotice} from './SuspendedNotice';
 
 /** Whether a nav destination covers the current page. */
 type Match = (pathname: string) => boolean;
@@ -57,6 +58,9 @@ export function AppShell() {
 
   const isStaff = session.me?.user.is_staff === true;
   const special = matches.some((match) => (match.handle as RouteHandle | undefined)?.special);
+  // A page that needs a session shows the suspension screen itself; every other page gets the notice.
+  const showSuspendedNotice =
+    session.status === 'suspended' && !matches.some((match) => (match.handle as RouteHandle | undefined)?.requiresAuth);
 
   const me = session.me?.user;
   const user = useMemo<ModdyUser | null>(() => {
@@ -115,6 +119,7 @@ export function AppShell() {
       )}
 
       <main ref={main} className="app-content" id="main-content" tabIndex={-1}>
+        {showSuspendedNotice && <SuspendedNotice />}
         <Outlet />
       </main>
 

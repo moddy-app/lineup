@@ -10,7 +10,26 @@
   },
   "auth": {
     "login": "Sign in",
-    "loginWithDiscord": "Sign in with Discord"
+    "loginWithDiscord": "Sign in with Discord",
+    "cancelled": "Sign-in cancelled",
+    "failed": "Sign-in did not complete",
+    "loggedOut": "You are signed out",
+    "logout": "Sign out",
+    "signInRequired": {
+      "title": "Sign in to continue",
+      "purpose": {
+        "default": "This page needs a Discord account.",
+        "profile": "Edit your public profile, the one servers see when they recruit.",
+        "experiences": "Add your experience and have it verified.",
+        "posts": "Find your posts, whether published, drafts or closed.",
+        "editor": "Write a post for a server or for yourself.",
+        "claim": "Claim a server to manage its profile and posts.",
+        "manage": "Manage a server's profile, posts and visibility."
+      }
+    },
+    "sessionError": {
+      "title": "Your session could not be checked"
+    }
   },
   "userMenu": {
     "profile": "My profile",
@@ -45,5 +64,14 @@
   "routeError": {
     "title": "Something went wrong",
     "body": "This page could not be displayed. Reload it or go back to the posts."
+  },
+  "suspended": {
+    "title": "Your Moddy access is suspended.",
+    "body": "You can no longer publish or edit on Lineup. Public pages stay open to read.",
+    "noticeBody": "Lineup is read-only for you. You can no longer publish or edit.",
+    "references": "References",
+    "until": "Until {{date}}",
+    "noEnd": "No end date",
+    "viewSanction": "View the sanction"
   }
 }
