@@ -314,10 +314,10 @@ describe('the router', () => {
     log.mockRestore();
   });
 
-  it('answers a 204 with no body and no content type', async () => {
+  it('answers a 200 with an empty body and no content type (logout)', async () => {
     const api = createTestApi('camille');
     const response = await dispatch(api.server, new Request('https://api.moddy.app/auth/logout', {method: 'POST'}));
-    expect(response.status).toBe(204);
+    expect(response.status).toBe(200);
     expect(await response.text()).toBe('');
     expect(response.headers.get('Content-Type')).toBeNull();
   });

@@ -1,0 +1,111 @@
+/* User profile page: header, facts of the side column. Tokens only. */
+
+.profile-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space);
+}
+
+.profile-identity {
+  display: flex;
+  flex: 1 1 280px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-m);
+  min-width: 0;
+}
+
+.profile-identity h1 {
+  margin: 0;
+  font-size: var(--text-title);
+  letter-spacing: normal;
+  overflow-wrap: anywhere;
+}
+
+.profile-handles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-s) var(--gap-m);
+}
+
+.profile-handles .pill {
+  overflow-wrap: anywhere;
+}
+
+.profile-headline {
+  margin: 0;
+  max-width: none;
+  color: var(--md-sys-color-on-surface-variant);
+  overflow-wrap: anywhere;
+}
+
+.profile-bio {
+  margin: 0;
+  max-width: 70ch;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.profile-facts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space);
+}
+
+.profile-fact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-m);
+}
+
+.profile-fact > * {
+  max-width: 100%;
+}
+
+.profile-fact h3 {
+  margin: 0;
+  font-size: var(--text-subtitle);
+}
+
+.profile-fact .link-list {
+  width: 100%;
+}
+
+.profile-account {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-l);
+}
+
+.profile-created {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-s);
+  margin: 0;
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.profile-created .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.profile-empty {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.profile-empty-with-shape {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-l);
+}
+
+.profile-count {
+  margin: 0 0 var(--gap-m);
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-on-surface-variant);
+}

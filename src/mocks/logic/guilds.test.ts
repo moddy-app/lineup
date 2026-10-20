@@ -378,6 +378,36 @@ describe('editing, refreshing and my servers', () => {
     expect((await api.call('PUT', `/lineup/guilds/${G.atelier}`, {body: {invite: null}})).status).toBe(200);
   });
 
+  it('checks a PUT in the documented order when several conditions fail together', async () => {
+    const put = (api: ReturnType<typeof createTestApi>, id: string, body: unknown) =>
+      api.call('PUT', `/lineup/guilds/${id}`, {body});
+    const api = createTestApi();
+    // 1. Validation before the session.
+    expect((await put(api, G.atelier, {description: 5})).status).toBe(422);
+    expect((await api.call('PUT', '/lineup/guilds/not-a-snowflake', {body: {}})).status).toBe(422);
+    expect((await put(api, G.atelier, {})).status).toBe(401);
+    // 3. An unknown invite on a server she does not manage: forbidden first.
+    api.as('camille');
+    expect(code(await put(api, G.cubelands, {invite: 'zzz999'}))).toBe('lineup_guild_forbidden');
+    // Discord silent: undecidable rights (not in the session list) give 503 before anything else.
+    api.state.discordDown = true;
+    api.server.db.guildListCache = {};
+    expect((await put(api, G.cubelands, {invite: 'zzz999'})).status).toBe(503);
+    // 4. No profile before the invitation.
+    api.state.discordDown = false;
+    expect(code(await put(api, G.cafe, {invite: 'zzz999'}))).toBe('lineup_guild_not_found');
+    // 5. Unreadable format before Discord's silence, then 503, then the rest; nothing is written on a failure.
+    expect(code(await put(api, G.atelier, {invite: 'not a code!!', listed: false}))).toBe('invite_invalid');
+    api.state.discordDown = true;
+    expect((await put(api, G.atelier, {invite: 'zzz999', listed: false})).status).toBe(503);
+    api.state.discordDown = false;
+    expect(code(await put(api, G.atelier, {invite: 'groupe-mp', listed: false}))).toBe('invite_invalid');
+    expect(code(await put(api, G.atelier, {invite: 'cubelands', listed: false}))).toBe('invite_guild_mismatch');
+    expect((await api.call('GET', `/lineup/guilds/${G.atelier}`)).json.listed).toBe(true);
+    // 6. Success writes.
+    expect((await put(api, G.atelier, {invite: 'atelier', listed: false})).json.listed).toBe(false);
+  });
+
   it('checks the rights again on every write: 401, 403, 404 without a profile', async () => {
     const api = createTestApi();
     expect((await api.call('PUT', `/lineup/guilds/${G.atelier}`, {body: {}})).status).toBe(401);

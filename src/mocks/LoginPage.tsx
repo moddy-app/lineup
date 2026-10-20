@@ -1,7 +1,7 @@
 /**
  * The mock's sign-in page, at `/__mock/login?redirect=<path>`. It stands in
  * for Discord's authorization screen (LINEUP.md §2): pick who you are and you
- * come back to the page you left; "Refuser" comes back with
+ * come back to the page you left; "Deny" comes back with
  * `?auth_error=access_denied` and no session.
  *
  * Development only (English text on purpose, clearly marked).
@@ -108,7 +108,7 @@ export function MockLoginPage({navigate = (url) => window.location.assign(url)}:
                     navigate(declined(path));
                   }}
                 >
-                  Refuser (access_denied)
+                  Deny (access_denied)
                 </md-outlined-button>
               </div>
             </section>

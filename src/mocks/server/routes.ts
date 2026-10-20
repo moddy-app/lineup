@@ -77,7 +77,9 @@ export interface Route {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   path: string;
   /** `public`: nobody asked · `optional`: enriches the answer · `session`: current_user · `staff`: session + is_staff. */
-  auth: 'public' | 'optional' | 'session' | 'staff';
+  auth: 'public' | 'optional' | 'session' | 'staff' | 'any_session';
+  /** Validation that runs BEFORE authentication (the 422 comes before the 401), for routes that do so. */
+  validateFirst?: (context: RouteContext) => void;
   handler: (context: RouteContext) => Reply | Promise<Reply>;
 }
 
@@ -145,6 +147,10 @@ export const routes: Route[] = [
     method: 'PUT',
     path: '/lineup/guilds/:guild_id',
     auth: 'session',
+    validateFirst: (c) => {
+      pathSnowflake(c, 'guild_id');
+      parseBody(c.rawBody, guildUpdateBody);
+    },
     handler: (c) => {
       const guildId = pathSnowflake(c, 'guild_id');
       return ok(updateGuild(c.env, actorOf(c), guildId, parseBody(c.rawBody, guildUpdateBody)));
@@ -417,10 +423,11 @@ export const routes: Route[] = [
   {
     method: 'POST',
     path: '/auth/logout',
-    auth: 'public',
+    auth: 'any_session',
     handler: (c) => {
       c.server.logout();
-      return noContent();
+      // 200 with an EMPTY body (not JSON, no content-type).
+      return {status: 200};
     },
   },
 ];

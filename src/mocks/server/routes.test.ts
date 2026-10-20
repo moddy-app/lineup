@@ -8,7 +8,7 @@ import {routes} from './routes';
  * LINEUP.md section 6, route by route: method, path and who may call it. 41 routes, of which
  * `GET /lineup/auth/login` is a browser navigation (never a request), plus the dashboard's `POST /auth/logout`.
  */
-const DOC: ReadonlyArray<readonly [method: string, path: string, auth: 'public' | 'optional' | 'session' | 'staff']> = [
+const DOC: ReadonlyArray<readonly [method: string, path: string, auth: 'public' | 'optional' | 'session' | 'staff' | 'any_session']> = [
   ['GET', '/lineup/me', 'session'],
   ['GET', '/lineup/me/guilds', 'session'],
   ['POST', '/lineup/me/refresh-guilds', 'session'],
@@ -49,7 +49,7 @@ const DOC: ReadonlyArray<readonly [method: string, path: string, auth: 'public' 
   ['GET', '/lineup/staff/reports', 'staff'],
   ['POST', '/lineup/staff/reports/{report_id}/resolve', 'staff'],
   ['POST', '/lineup/staff/reports/{report_id}/dismiss', 'staff'],
-  ['POST', '/auth/logout', 'public'],
+  ['POST', '/auth/logout', 'any_session'],
 ];
 
 const VALUES: Record<string, string> = {
@@ -81,9 +81,9 @@ describe('the table of routes', () => {
       const response = await api.call(method, concrete(path), {body: method === 'GET' ? undefined : {}});
       const label = `${method} ${path}`;
       // Never the "unknown route" of the router.
-      expect(response.json, label).not.toEqual({error: 'Not Found'});
-      expect(response.json, label).not.toEqual({error: 'Method Not Allowed'});
-      if (auth === 'session' || auth === 'staff') {
+      expect(response.json, label).not.toEqual({detail: 'Not Found'});
+      expect(response.json, label).not.toEqual({detail: 'Method Not Allowed'});
+      if (auth === 'session' || auth === 'staff' || auth === 'any_session') {
         expect([response.status, response.json], label).toEqual([401, {error: 'Non authentifie'}]);
       } else {
         expect(response.status, label).not.toBe(401);
@@ -120,8 +120,8 @@ describe('the table of routes', () => {
 
   it('does not answer the 401 of a missing session to a public route, and 404s what is not a route', async () => {
     const api = createTestApi();
-    expect((await api.call('GET', '/lineup/auth/login')).json).toEqual({error: 'Not Found'});
-    expect((await api.call('GET', '/lineup')).json).toEqual({error: 'Not Found'});
+    expect((await api.call('GET', '/lineup/auth/login')).json).toEqual({detail: 'Not Found'});
+    expect((await api.call('GET', '/lineup')).json).toEqual({detail: 'Not Found'});
     expect((await api.call('GET', '/lineup/posts/')).status).toBe(404);
     expect((await api.call('PATCH', '/lineup/guilds/claim')).status).toBe(405);
     expect((await api.call('GET', '/lineup/me/experiences/order')).status).toBe(405);

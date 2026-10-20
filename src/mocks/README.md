@@ -39,8 +39,14 @@ cannot be loaded, `startMocks()` logs one explicit error in the console and the 
 ## Sign-in
 
 `setLoginUrlBuilder` sends every login to `/__mock/login?redirect=<path>` (this origin). Pick a persona and you
-come back to `<path>`. "Refuser" comes back with `?auth_error=access_denied` and no session. `POST /auth/logout`
-puts the persona back to `anonymous`.
+come back to `<path>`. "Deny (access_denied)" comes back with `?auth_error=access_denied` and no session.
+`POST /auth/logout` answers `200` with an EMPTY body (no JSON) and puts the persona back to `anonymous`; a suspended
+account can still sign out; without a valid session it is `401 {"error":"Non authentifie"}` (no cookie) or
+`{"error":"Session expiree"}` (cookie, dead session).
+
+The dev panel action "Expire the session" keeps the cookie but kills the session: session routes answer
+`401 {"error":"Session expiree"}`, public and optional routes keep working as anonymous. Signing in again
+(`/__mock/login`) clears it.
 
 ## Personas
 
@@ -66,6 +72,20 @@ success, `not_member`, `no_staff_permission`), the 60 s feed cache, and the rese
 experiences), `verify`, and the rights checks that neither the session nor the 5-minute server list can answer.
 Public reads never fail (they serve the old snapshot with `stale: true`), and "my servers" degrades to the
 session's Moddy servers.
+
+## Errors worth knowing
+
+- Unknown route: `404 {"detail":"Not Found"}`; wrong method: `405 {"detail":"Method Not Allowed"}` with
+  `Allow: <all methods of the path>`. FastAPI's native shape (`detail`, not `error`).
+- `Cache-Control`: `/lineup/catalog` (public, max-age=3600), `/lineup/posts` and `/lineup/guilds` (public,
+  max-age=60) keep it with a session; their errors set none, so with a session they get `no-store`.
+- `POST /lineup/me/experiences/{id}/verify`: session, 404, 422 `not_guild`, 422 `ended`, already verified (200,
+  unchanged, no Discord), 403 `lineup_reauth_required`, 429, then Discord (503, or 422 `lineup_verification_failed`).
+  A verified then ended experience answers 422 `ended`.
+- `PUT /lineup/guilds/{id}`: body and id validation (422), session (401/403), rights (503 if Discord is silent,
+  403 `lineup_guild_forbidden`, 403 `guild_suspended`), no profile (404), then `invite` (422 `invite_invalid`, 503,
+  404 `invite_not_found`, 422 `invite_invalid` / `invite_expiring` / `invite_guild_mismatch`), then the write.
+  Nothing is written if a step fails.
 
 ## Test invitation codes
 

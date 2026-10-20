@@ -17,7 +17,7 @@ export function getMe({signal}: ReadOptions = {}): Promise<Me> {
   return apiFetch<Me>('/lineup/me', {signal});
 }
 
-/** `POST /auth/logout` (a dashboard route; same cookie). 204. */
+/** `POST /auth/logout` (a dashboard route; same cookie). 200 with an EMPTY body (not JSON); 401 without a valid session. */
 export function logout(): Promise<void> {
   return apiFetch<void>('/auth/logout', {method: 'POST'});
 }

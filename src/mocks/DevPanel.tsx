@@ -12,7 +12,7 @@ import {Dialog, Select, Switch} from '@/ui';
 
 import {resetDb} from './db';
 import type {VerifyOutcome} from './env';
-import {getPersonaId, PERSONAS, setPersonaId, subscribePersona, type PersonaId} from './personas';
+import {expireSession, getPersonaId, PERSONAS, setPersonaId, subscribePersona, type PersonaId} from './personas';
 import './mocks.css';
 import {getSettings, subscribeSettings, updateSettings, type MockSettings} from './settings';
 
@@ -110,6 +110,14 @@ export function DevPanel() {
               onCheckedChange={(feedCache) => updateSettings({feedCache})}
               label="Cache the feed for 60 s, like Redis"
             />
+            <md-outlined-button
+              onclick={() => {
+                expireSession();
+                window.location.reload();
+              }}
+            >
+              Expire the session
+            </md-outlined-button>
             <md-outlined-button onclick={() => setConfirmReset(true)}>Reset the database</md-outlined-button>
           </div>
         </section>

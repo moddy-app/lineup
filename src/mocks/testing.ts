@@ -9,7 +9,7 @@ export const NOW = new Date('2026-10-20T14:00:00.000Z');
 
 export interface TestApi {
   server: ServerContext;
-  state: {session: Session | null; discordDown: boolean; verifyOutcome: VerifyOutcome; feedCache: boolean; now: Date};
+  state: {session: Session | null; expired: boolean; discordDown: boolean; verifyOutcome: VerifyOutcome; feedCache: boolean; now: Date};
   call: (
     method: string,
     path: string,
@@ -29,6 +29,7 @@ export function createTestApi(initial: keyof typeof U | null = null): TestApi {
   const db = createSeedDb(NOW);
   const state: TestApi['state'] = {
     session: null,
+    expired: false,
     discordDown: false,
     verifyOutcome: 'auto',
     feedCache: false,
@@ -37,7 +38,8 @@ export function createTestApi(initial: keyof typeof U | null = null): TestApi {
   const server: ServerContext = {
     db,
     now: () => state.now,
-    session: () => state.session,
+    session: () => (state.expired ? null : state.session),
+    expired: () => state.expired,
     discordDown: () => state.discordDown,
     verifyOutcome: () => state.verifyOutcome,
     feedCache: () => state.feedCache,
@@ -47,6 +49,7 @@ export function createTestApi(initial: keyof typeof U | null = null): TestApi {
     persist: () => {},
   };
   const as: TestApi['as'] = (who, options = {}) => {
+    state.expired = false;
     state.session = who ? {userId: U[who], hasLineupScopes: options.scopes ?? true} : null;
   };
   as(initial);

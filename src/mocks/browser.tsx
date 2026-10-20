@@ -22,7 +22,7 @@ import {config} from '@/config';
 import {getDb, saveDb} from './db';
 import {DevPanel} from './DevPanel';
 import {MockLoginPage} from './LoginPage';
-import {currentSession, getPersonaId, setPersonaId} from './personas';
+import {currentSession, getPersonaId, isSessionExpired, setPersonaId} from './personas';
 import {dispatch, type ServerContext} from './server/dispatch';
 import {routes} from './server/routes';
 import {getSettings, takeFailNext} from './settings';
@@ -36,6 +36,7 @@ const server: ServerContext = {
   },
   now: () => new Date(),
   session: currentSession,
+  expired: isSessionExpired,
   discordDown: () => getSettings().discordDown,
   verifyOutcome: () => getSettings().verifyOutcome,
   feedCache: () => getSettings().feedCache,

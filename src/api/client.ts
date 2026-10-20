@@ -213,6 +213,12 @@ export function errorFromResponse(status: number, body: unknown, retryAfterHeade
       });
     }
 
+    if (typeof error !== 'string' && !isRecord(error) && typeof body.detail === 'string') {
+      // FastAPI's native shape for an unknown route or a wrong method: {detail: "Not Found"}.
+      const {code, expired} = textErrorCode(status, body.detail);
+      return new ApiError({status, kind: 'text', code, expired, serverMessage: body.detail, retryAfter: headerSeconds});
+    }
+
     if (typeof error === 'string') {
       // Shape 3: a plain text.
       const {code, expired} = textErrorCode(status, error);

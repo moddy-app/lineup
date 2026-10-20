@@ -311,6 +311,30 @@ describe('automatic verification (§7)', () => {
     expect(ended.status).toBe(422);
   });
 
+  it('checks in the documented order when several conditions fail together', async () => {
+    const api = createTestApi('camille');
+    api.as('camille', {scopes: false});
+    api.state.discordDown = true;
+    // Verified, then ended: 422 ended (not 200), whatever the scopes and Discord say.
+    api.server.db.experiences[x(1)]!.end_date = '2026-01-01';
+    const ended = await verify(api, x(1));
+    expect(ended.status).toBe(422);
+    expect(ended.json).toMatchObject({code: 'lineup_verification_not_applicable', reason: 'ended'});
+    // A service wins over ended.
+    api.server.db.experiences[x(6)]!.end_date = '2026-01-01';
+    expect((await verify(api, x(6))).json.reason).toBe('not_guild');
+    // Unknown id before anything else; session before the unknown id.
+    expect((await verify(api, '00000000-0000-4000-8000-00000000ffff')).status).toBe(404);
+    // No scope beats the rate limit and Discord's silence.
+    expect((await verify(api, x(5))).json.code).toBe('lineup_reauth_required');
+    // Then the rate limit beats Discord's silence.
+    api.as('camille');
+    for (let i = 0; i < 5; i += 1) expect((await verify(api, x(5))).status).toBe(503);
+    expect((await verify(api, x(5))).status).toBe(429);
+    api.as(null);
+    expect((await verify(api, x(5))).status).toBe(401);
+  });
+
   it('answers lineup_reauth_required with login_url for a session born from the dashboard', async () => {
     const api = createTestApi();
     api.as('camille', {scopes: false});

@@ -229,6 +229,22 @@ describe('error shape 3: plain text', () => {
     expect(error.expired).toBe(true);
   });
 
+  it('reads the FastAPI `detail` string of an unknown route or a wrong method like a plain text', async () => {
+    respond(404, {detail: 'Not Found'});
+    const notFound = await failure();
+    expect([notFound.kind, notFound.code, notFound.serverMessage]).toEqual(['text', 'route_not_found', 'Not Found']);
+    respond(405, {detail: 'Method Not Allowed'});
+    const method = await failure();
+    expect([method.kind, method.code, method.status]).toEqual(['text', null, 405]);
+    respond(401, {detail: 'Not authenticated'});
+    expect((await failure()).code).toBe('unauthenticated');
+  });
+
+  it('treats a 200 with an empty body (logout) as a success', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => new Response(null, {status: 200})));
+    await expect(apiFetch('/auth/logout', {method: 'POST'})).resolves.toBeUndefined();
+  });
+
   it('maps Staff only', async () => {
     respond(403, {error: 'Staff only'});
     expect((await failure()).code).toBe('staff_only');

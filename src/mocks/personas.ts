@@ -60,6 +60,18 @@ export const PERSONAS: Persona[] = [
 ];
 
 const KEY = 'lineup-mock-persona';
+const EXPIRED_KEY = 'lineup-mock-expired';
+
+/** The cookie is still sent but the session is gone (dev panel "Expire the session"). */
+export function isSessionExpired(): boolean {
+  return getString(EXPIRED_KEY) === '1';
+}
+
+/** Kills the session but keeps the "cookie": the next session route answers 401 `Session expiree`. */
+export function expireSession(): void {
+  setString(EXPIRED_KEY, '1');
+  for (const listener of listeners) listener();
+}
 
 export function getPersonaId(): PersonaId {
   const stored = getString(KEY);
@@ -70,6 +82,7 @@ const listeners = new Set<() => void>();
 
 export function setPersonaId(id: PersonaId): void {
   setString(KEY, id);
+  setString(EXPIRED_KEY, '0'); // signing in (or out) again clears the expired cookie
   for (const listener of listeners) listener();
 }
 
@@ -82,6 +95,7 @@ export function subscribePersona(listener: () => void): () => void {
 }
 
 export function currentSession(): Session | null {
+  if (isSessionExpired()) return null;
   const id = getPersonaId();
   return PERSONAS.find((persona) => persona.id === id)?.session ?? null;
 }

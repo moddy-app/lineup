@@ -64,7 +64,7 @@ describe('errors, byte for byte (§0)', () => {
     });
   });
 
-  it('answers Staff only, Not Found and Method Not Allowed as plain texts', async () => {
+  it('answers Staff only as a plain text, Not Found and Method Not Allowed in FastAPI\'s `detail` shape', async () => {
     const api = createTestApi('camille');
     for (const path of ['/lineup/staff/experiences', '/lineup/staff/reports', '/lineup/staff/badges']) {
       expect(await api.call('GET', path)).toMatchObject({status: 403, json: {error: 'Staff only'}});
@@ -76,11 +76,12 @@ describe('errors, byte for byte (§0)', () => {
     // Authentication first, as a dependency: a signed-out visitor gets 401, not 403.
     api.as(null);
     expect(await api.call('GET', '/lineup/staff/reports')).toMatchObject({status: 401});
-    expect(await api.call('GET', '/lineup/nope')).toMatchObject({status: 404, json: {error: 'Not Found'}});
-    expect(await api.call('DELETE', '/lineup/catalog')).toMatchObject({
-      status: 405,
-      json: {error: 'Method Not Allowed'},
-    });
+    expect(await api.call('GET', '/lineup/nope')).toMatchObject({status: 404, json: {detail: 'Not Found'}});
+    const wrong = await api.call('DELETE', '/lineup/catalog');
+    expect(wrong).toMatchObject({status: 405, json: {detail: 'Method Not Allowed'}});
+    expect(wrong.headers.get('Allow')).toBe('GET');
+    expect((await api.call('PATCH', '/lineup/guilds/1')).headers.get('Allow')).toBe('DELETE, GET, PUT');
+    expect((await api.call('GET', '/auth/logout')).headers.get('Allow')).toBe('POST');
   });
 
   it('puts the retry delay in the body AND in Retry-After on 429 and 503', async () => {
@@ -148,12 +149,53 @@ describe('the session', () => {
     });
   });
 
-  it('signs out with 204', async () => {
+  it('signs out with 200 and an empty body', async () => {
     const api = createTestApi('camille');
     const response = await api.call('POST', '/auth/logout');
-    expect(response.status).toBe(204);
+    expect(response.status).toBe(200);
+    expect(response.json).toBeUndefined();
+    expect(response.headers.get('Content-Type')).toBeNull();
     expect(api.state.session).toBeNull();
     expect((await api.call('GET', '/lineup/me')).status).toBe(401);
+  });
+
+  it('lets a suspended account sign out, and refuses logout without a valid session', async () => {
+    const api = createTestApi('dylan');
+    expect((await api.call('GET', '/lineup/me')).status).toBe(403);
+    expect((await api.call('POST', '/auth/logout')).status).toBe(200);
+    expect(api.state.session).toBeNull();
+    expect(await api.call('POST', '/auth/logout')).toMatchObject({status: 401, json: {error: 'Non authentifie'}});
+    api.state.expired = true;
+    expect(await api.call('POST', '/auth/logout')).toMatchObject({status: 401, json: {error: 'Session expiree'}});
+  });
+
+  it('answers Session expiree when the cookie is still sent but the session is gone, until signing in again', async () => {
+    const api = createTestApi('camille');
+    api.state.expired = true;
+    expect(await api.call('GET', '/lineup/me')).toMatchObject({status: 401, json: {error: 'Session expiree'}});
+    expect(await api.call('GET', `/lineup/staff/reports`)).toMatchObject({status: 401, json: {error: 'Session expiree'}});
+    // Public and optional routes keep working as anonymous, with no no-store.
+    const feed = await api.call('GET', '/lineup/posts');
+    expect(feed.status).toBe(200);
+    expect(feed.headers.get('Cache-Control')).toBe('public, max-age=60');
+    expect((await api.call('GET', `/lineup/guilds/${G.atelier}`)).status).toBe(200);
+    api.as('camille');
+    expect((await api.call('GET', '/lineup/me')).status).toBe(200);
+  });
+
+  it('keeps its own Cache-Control on the successes of the cached routes, and no-store on their errors with a session', async () => {
+    const api = createTestApi('camille');
+    expect((await api.call('GET', '/lineup/catalog')).headers.get('Cache-Control')).toBe('public, max-age=3600');
+    expect((await api.call('GET', '/lineup/guilds')).headers.get('Cache-Control')).toBe('public, max-age=60');
+    for (const path of ['/lineup/posts', '/lineup/guilds']) {
+      const bad = await api.call('GET', path, {query: {limit: '0'}});
+      expect(bad.status, path).toBe(422);
+      expect(bad.headers.get('Cache-Control'), path).toBe('no-store');
+    }
+    api.as(null);
+    const anonymous = await api.call('GET', '/lineup/posts', {query: {limit: '0'}});
+    expect(anonymous.status).toBe(422);
+    expect(anonymous.headers.get('Cache-Control')).toBeNull();
   });
 });
 

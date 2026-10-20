@@ -38,10 +38,10 @@ describe('the mock sign-in page', () => {
     expect(navigate).toHaveBeenCalledWith('/posts?kind=guild#top');
   });
 
-  it('"Refuser" goes back with ?auth_error=access_denied, keeps the other parameters, and signs nobody in', () => {
+  it('"Deny" goes back with ?auth_error=access_denied, keeps the other parameters, and signs nobody in', () => {
     window.localStorage.setItem('lineup-mock-persona', 'anonymous');
     const navigate = renderAt('?redirect=%2Fposts%3Fkind%3Dguild%26q%3Dmod');
-    fireEvent.click(screen.getByText(/Refuser/));
+    fireEvent.click(screen.getByText(/Deny/));
     expect(navigate).toHaveBeenCalledWith('/posts?kind=guild&q=mod&auth_error=access_denied');
     expect(getPersonaId()).toBe('anonymous');
   });

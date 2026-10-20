@@ -58,7 +58,10 @@ export function validationFailure(issues: ValidationIssue[]): ApiFailure {
 
 export const unauthenticated = (expired = false) => textError(401, expired ? 'Session expiree' : 'Non authentifie');
 export const staffOnly = () => textError(403, 'Staff only');
-export const notFoundRoute = () => textError(404, 'Not Found');
+/** FastAPI's own shape for an unknown route or a wrong method: `detail`, not `error`. */
+export const notFoundRoute = () => new ApiFailure(404, {detail: 'Not Found'});
+export const methodNotAllowed = (allow: string[]) =>
+  new ApiFailure(405, {detail: 'Method Not Allowed'}, {Allow: allow.join(', ')});
 
 const SANCTION_VIOLATIONS_URL = 'https://moddy.app/violations';
 

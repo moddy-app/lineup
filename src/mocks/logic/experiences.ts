@@ -246,10 +246,11 @@ function verificationFailed(reason: 'not_member' | 'no_staff_permission') {
 
 /**
  * `POST …/verify` (automatic, with the person's own Discord token). Order of
- * checks (§6.6): 404 → 422 not applicable (`not_guild`, `ended`) → 403
+ * checks (§6.6): session (dispatcher) → 404 → 422 not applicable (`not_guild`,
+ * then `ended`) → already verified: returned as it is, no Discord call → 403
  * `lineup_reauth_required` → 429 (5 per 10 minutes) → Discord (503 if silent)
- * → 422 `lineup_verification_failed`. An experience already verified is
- * returned as it is, before any of the costly checks.
+ * → 422 `lineup_verification_failed`. So a verified then ended experience
+ * answers 422 `ended`.
  */
 export function verifyExperience(env: Env, actor: Actor, id: Uuid): PrivateExperience {
   const row = loadOwnExperience(env, actor, id);

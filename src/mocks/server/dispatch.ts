@@ -3,9 +3,11 @@
  * MSW or the browser, so the same code runs behind the service worker and in
  * the unit tests. It does what the real app's middleware does, in order:
  *
- *   1. route (404 `{"error": "Not Found"}`, 405 `{"error": "Method Not Allowed"}`)
+ *   1. route (404 `{"detail": "Not Found"}`, 405 `{"detail": "Method Not Allowed"}` + `Allow`,
+ *      FastAPI's own shape)
  *   2. authentication, as a dependency would (401 / 403 sanction / 403 Staff only)
- *      BEFORE the request is validated, like FastAPI
+ *      BEFORE the request is validated, like FastAPI. A route can ask for its
+ *      validation to come first (`validateFirst`: `PUT /lineup/guilds/{id}`).
  *   3. the handler (validation, then business rules)
  *   4. `Cache-Control: no-store` whenever a session cookie is present and the
  *      route set no cache header of its own (§0)
@@ -13,7 +15,7 @@
 
 import type {Snowflake} from '@/api/types';
 
-import {ApiFailure, notFoundRoute, sanctionError, staffOnly, textError, unauthenticated} from '../errors';
+import {ApiFailure, methodNotAllowed, notFoundRoute, sanctionError, staffOnly, unauthenticated} from '../errors';
 import type {Actor, Db, Env, VerifyOutcome, Viewer} from '../env';
 import {toResponse, type Reply} from './http';
 import {routes, type Route} from './routes';
@@ -30,6 +32,8 @@ export interface ServerContext {
   now: () => Date;
   /** The current session, or null for an anonymous visitor. */
   session: () => Session | null;
+  /** A cookie is still sent but its session is gone: session routes answer `Session expiree`. */
+  expired: () => boolean;
   discordDown: () => boolean;
   verifyOutcome: () => VerifyOutcome;
   feedCache: () => boolean;
@@ -62,12 +66,15 @@ const compiled: Compiled[] = routes.map((route) => {
   return {route, regex: new RegExp(`^${source}$`), names};
 });
 
-function match(method: string, pathname: string): {route: Route; params: Record<string, string>} | 'method' | null {
-  let pathMatched = false;
+function match(
+  method: string,
+  pathname: string,
+): {route: Route; params: Record<string, string>} | {allow: string[]} | null {
+  const allow = new Set<string>();
   for (const {route, regex, names} of compiled) {
     const found = regex.exec(pathname);
     if (!found) continue;
-    pathMatched = true;
+    allow.add(route.method);
     if (route.method !== method) continue;
     const params: Record<string, string> = {};
     names.forEach((name, index) => {
@@ -75,7 +82,7 @@ function match(method: string, pathname: string): {route: Route; params: Record<
     });
     return {route, params};
   }
-  return pathMatched ? 'method' : null;
+  return allow.size > 0 ? {allow: [...allow].sort()} : null;
 }
 
 function actorFor(server: ServerContext, db: Db): {actor: Actor; suspended: boolean} | null {
@@ -98,7 +105,7 @@ export async function dispatch(server: ServerContext, request: Request): Promise
 
   try {
     if (found === null) throw notFoundRoute();
-    if (found === 'method') throw textError(405, 'Method Not Allowed');
+    if ('allow' in found) throw methodNotAllowed(found.allow);
     const {route, params} = found;
     const env: Env = {
       db: server.db,
@@ -111,8 +118,15 @@ export async function dispatch(server: ServerContext, request: Request): Promise
     hasSession = resolved !== null;
     let actor: Actor | null = null;
     let viewer: Viewer | null = null;
-    if (route.auth === 'session' || route.auth === 'staff') {
-      if (!resolved) throw unauthenticated();
+    const rawBody = method === 'GET' || method === 'DELETE' ? '' : await request.text();
+    const context: RouteContext = {env, server, actor: null, viewer: null, params, query: url.searchParams, rawBody};
+    if (route.validateFirst) route.validateFirst(context);
+    if (route.auth === 'any_session') {
+      // Signing out: a suspended account may still do it.
+      if (!resolved) throw unauthenticated(server.expired());
+      actor = resolved.actor;
+    } else if (route.auth === 'session' || route.auth === 'staff') {
+      if (!resolved) throw unauthenticated(server.expired());
       if (resolved.suspended && resolved.actor.user.sanction) {
         throw sanctionError('user_suspended', resolved.actor.id, resolved.actor.user.sanction);
       }
@@ -122,8 +136,7 @@ export async function dispatch(server: ServerContext, request: Request): Promise
       viewer = {...resolved.actor, suspended: resolved.suspended};
     }
 
-    const rawBody = method === 'GET' || method === 'DELETE' ? '' : await request.text();
-    reply = await route.handler({env, server, actor, viewer, params, query: url.searchParams, rawBody});
+    reply = await route.handler({...context, actor, viewer});
     if (method !== 'GET') server.persist();
   } catch (error) {
     if (error instanceof ApiFailure) {
