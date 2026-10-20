@@ -1,0 +1,26 @@
+{
+  "appBar": {
+    "home": "Início",
+    "skipToMain": "Ir para o conteúdo principal"
+  },
+  "userMenu": {
+    "userMenu": "Menu do usuário",
+    "signOut": "Sair"
+  },
+  "theme": {
+    "title": "Tema",
+    "colors": "Cores",
+    "random": "Aleatória",
+    "randomTitle": "Uma cor nova a cada visita",
+    "custom": "Cor personalizada",
+    "source": "Cor de origem",
+    "hue": "Matiz",
+    "chroma": "Saturação",
+    "tone": "Luminosidade",
+    "mode": "Modo de cor",
+    "dark": "Escuro",
+    "auto": "Automático",
+    "autoShort": "Auto",
+    "light": "Claro"
+  }
+}

@@ -1,0 +1,215 @@
+/**
+ * Page layout.
+ *
+ *   <div class="app">
+ *     <moddy-app-bar>…</moddy-app-bar>
+ *     <main class="app-content" id="main-content">
+ *       <div class="page"><div class="bento">cards</div></div>
+ *     </main>
+ *     <footer class="app-footer"><div class="app-footer-card">…</div></footer>
+ *   </div>
+ */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.app-content {
+  flex: 1;
+  box-sizing: border-box;
+  width: 100%;
+  /* The bottom margin is covered by the band below: at the end of the
+     scroll the last card sits one page margin above the window's edge (or
+     the footer). */
+  padding: var(--page-gap);
+  outline: none;
+}
+
+/* The content column: 1240px at most, centered. */
+.page {
+  max-width: var(--content-width);
+  margin: 0 auto;
+}
+
+/* The bottom of the window mirrors the app bar: cards leave the screen one
+ * page margin above its edge, not at it. A fixed band in the page color
+ * covers that margin; the cards' bottom caps (card.css) stick right above
+ * it. The footer is drawn over the band and runs to the window's edge. */
+.page::after {
+  content: '';
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 4;
+  height: var(--page-gap);
+  background-color: var(--md-sys-color-surface-container);
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * Bento grid: 12 columns. Cards take span-3 … span-8 (12 by default) and
+ * every row is full: the spans of a row add up to 12.
+ * ------------------------------------------------------------------------- */
+
+.bento {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--page-gap);
+}
+
+/* Every child takes the full width unless it has a span. */
+.bento > *,
+.bento-group > * {
+  grid-column: span 12;
+}
+
+/* A group of cards placed in the grid as if they were its own children
+   (to show or hide several at once). */
+.bento-group {
+  display: contents;
+}
+
+.bento-group[hidden] {
+  display: none;
+}
+
+.bento .span-3 { grid-column: span 3; }
+.bento .span-4 { grid-column: span 4; }
+.bento .span-5 { grid-column: span 5; }
+.bento .span-6 { grid-column: span 6; }
+.bento .span-7 { grid-column: span 7; }
+.bento .span-8 { grid-column: span 8; }
+
+/* A column of cards inside the grid, for app layouts where a main column
+ * (a feed) runs next to a side column. The gap stays the page gap. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--page-gap);
+  min-width: 0;
+}
+
+/* A side column that stays in view while the main column scrolls. */
+.stack.sticky {
+  position: sticky;
+  top: calc(var(--app-bar-height) + var(--page-gap));
+  align-self: start;
+}
+
+@media (max-width: 1100px) {
+  .bento .span-3 { grid-column: span 6; }
+  .bento :is(.span-4, .span-5, .span-6, .span-7, .span-8) { grid-column: span 12; }
+
+  .stack.sticky {
+    position: static;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Special pages (404, errors, sign-in): no footer, content narrower and
+ * centered both ways in the window.
+ * ------------------------------------------------------------------------- */
+
+.page.special {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 1040px;
+  min-height: calc(100dvh - var(--app-bar-height) - var(--page-gap) * 3);
+}
+
+@media (max-width: 1100px) {
+  .page.special {
+    max-width: 640px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Navigation in the app bar (slot="nav"): an icon and a label per
+ * destination; the current one sits in a secondary-container pill.
+ * ------------------------------------------------------------------------- */
+
+.app-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.app-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding-inline: 12px 16px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-body-small);
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface-variant);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.app-nav a .material-symbols-outlined {
+  font-size: 22px;
+}
+
+.app-nav a[aria-current='page'] {
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+.app-nav a[aria-current='page'] .material-symbols-outlined {
+  font-variation-settings: 'FILL' 1;
+}
+
+@media (hover: hover) {
+  .app-nav a:not([aria-current='page']):hover {
+    background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
+    color: var(--md-sys-color-on-surface);
+  }
+}
+
+/* Narrow windows: icons only, the label stays for screen readers. */
+@media (max-width: 900px) {
+  .app-nav a {
+    padding-inline: 9px;
+  }
+
+  .app-nav-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Footer: a card that runs off the bottom of the window (no bottom corners),
+ * drawn over the band of .page::after.
+ * ------------------------------------------------------------------------- */
+
+.app-footer {
+  position: relative;
+  z-index: 5;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0 var(--page-gap);
+}
+
+.app-footer-card {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: var(--card-padding);
+  border-radius: var(--card-radius) var(--card-radius) 0 0;
+  background-color: var(--md-sys-color-surface-container-lowest);
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: var(--text-body-small);
+}

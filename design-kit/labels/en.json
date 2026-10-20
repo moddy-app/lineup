@@ -1,0 +1,26 @@
+{
+  "appBar": {
+    "home": "Home",
+    "skipToMain": "Skip to main content"
+  },
+  "userMenu": {
+    "userMenu": "User menu",
+    "signOut": "Sign out"
+  },
+  "theme": {
+    "title": "Theme",
+    "colors": "Colors",
+    "random": "Random",
+    "randomTitle": "A new color on every visit",
+    "custom": "Custom color",
+    "source": "Source color",
+    "hue": "Hue",
+    "chroma": "Chroma",
+    "tone": "Tone",
+    "mode": "Color mode",
+    "dark": "Dark",
+    "auto": "Automatic",
+    "autoShort": "Auto",
+    "light": "Light"
+  }
+}

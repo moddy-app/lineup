@@ -1,0 +1,37 @@
+{
+  "name": "@moddy/design-kit",
+  "version": "1.0.0",
+  "description": "The Moddy design system: CSS, theme, fonts and web components shared by every Moddy service.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./src/*": "./src/*",
+    "./labels/*": "./labels/*",
+    "./assets/*": "./assets/*",
+    "./dist/*": "./dist/*"
+  },
+  "files": [
+    "dist",
+    "src",
+    "labels",
+    "assets"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/build.mjs --serve",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@material/material-color-utilities": "0.2.7",
+    "@material/web": "^2.4.1",
+    "lit": "^3.3.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.12",
+    "typescript": "~5.8.2"
+  }
+}

@@ -1,0 +1,64 @@
+/* The demo's own pieces, built from the kit's tokens only. */
+
+.profile-head {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.profile-name {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+}
+
+.card .profile-name h1 {
+  margin: 0;
+  font-size: clamp(32px, 4vw, 48px);
+}
+
+.profile-name .verified .material-symbols-outlined {
+  font-size: 28px;
+}
+
+.stats {
+  gap: 20px;
+}
+
+.conversation {
+  gap: 12px;
+}
+
+.bubble {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  max-width: 85%;
+}
+
+.bubble span {
+  padding: 10px 14px;
+  border-radius: 18px 18px 18px 4px;
+  background-color: var(--md-sys-color-surface-container-lowest);
+  font-size: var(--text-body-small);
+}
+
+.bubble.mine {
+  align-self: flex-end;
+}
+
+.bubble.mine span {
+  border-radius: 18px 18px 4px 18px;
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+}
+
+@media (max-width: 600px) {
+  .profile-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

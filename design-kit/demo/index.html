@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Moddy Network</title>
+    <!-- The browser's UI takes the page color (set by the theme). -->
+    <meta name="theme-color" content="#f1f0f7" />
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+
+    <!-- 1. Theme before the first paint, and the page held until ready.
+            Blocking on purpose, before the stylesheets. -->
+    <script src="/dist/theme-boot.js"></script>
+
+    <!-- 2. The design system, the text font preloaded. -->
+    <link rel="stylesheet" href="/dist/moddy.css" />
+    <link rel="stylesheet" href="/demo/demo.css" />
+    <link rel="preload" href="/dist/fonts/variable.woff2" as="font" type="font/woff2" crossorigin />
+
+    <!-- 3. Material Symbols. display=block: an icon stays blank until its
+            font arrives instead of showing its name ("group", "work"…). -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" />
+
+    <script type="module" src="/dist/demo.js"></script>
+  </head>
+  <body>
+    <div class="app">
+      <moddy-app-bar home-href="/demo/">
+        <nav slot="nav" class="app-nav" aria-label="Main">
+          <a href="#" aria-current="page"><span class="material-symbols-outlined" aria-hidden="true">home</span><span class="app-nav-label">Feed</span></a>
+          <a href="#"><span class="material-symbols-outlined" aria-hidden="true">group</span><span class="app-nav-label">Network</span></a>
+          <a href="#"><span class="material-symbols-outlined" aria-hidden="true">work</span><span class="app-nav-label">Jobs</span></a>
+          <a href="#"><span class="material-symbols-outlined" aria-hidden="true">chat</span><span class="app-nav-label">Messages</span></a>
+        </nav>
+        <moddy-theme-menu></moddy-theme-menu>
+        <moddy-user-menu>
+          <md-menu-item href="#">
+            <md-icon slot="start">person</md-icon>
+            <div slot="headline">Profile</div>
+          </md-menu-item>
+          <md-menu-item href="#">
+            <md-icon slot="start">settings</md-icon>
+            <div slot="headline">Settings</div>
+          </md-menu-item>
+        </moddy-user-menu>
+      </moddy-app-bar>
+
+      <main class="app-content" id="main-content" tabindex="-1">
+        <div class="page">
+          <div class="bento">
+            <!-- Row 1: 8 + 4 -->
+            <section class="card span-8 profile">
+              <div class="profile-head">
+                <img class="avatar xl" src="/assets/avatars/mia.webp" alt="" />
+                <div class="profile-name">
+                  <h1>Mia Laurent <span class="verified" data-tooltip="Verified account" tabindex="0" role="img" aria-label="Verified account"><span class="material-symbols-outlined">check_circle</span></span></h1>
+                  <span class="pill">@mia</span>
+                </div>
+              </div>
+              <p>Runs moderation for three gaming communities, 48,000 members in all. Writes the rules, trains the mod team, and keeps the bans fair.</p>
+              <div class="card-actions">
+                <md-filled-button>Follow</md-filled-button>
+                <md-outlined-button>Message</md-outlined-button>
+              </div>
+            </section>
+
+            <section class="card span-4">
+              <h2>This week</h2>
+              <div class="card-visual">
+                <div class="panel stats">
+                  <div class="stat"><span class="stat-value" data-number="1284"></span><span class="stat-label">Profile views</span></div>
+                  <div class="stat"><span class="stat-value" data-number="312"></span><span class="stat-label">New followers</span></div>
+                  <div class="stat"><span class="stat-value" data-number="18420"></span><span class="stat-label">Post views</span></div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Row 2: a feed (8) next to a side column (4) -->
+            <div class="stack span-8">
+              <article class="card">
+                <div class="card-head">
+                  <img class="avatar" src="/assets/avatars/leo.webp" alt="" />
+                  <div class="row-body">
+                    <span class="row-title"><strong>Léo Martin</strong></span>
+                    <span class="row-meta" data-time="-7200000"></span>
+                  </div>
+                </div>
+                <div class="card-visual">
+                  <p>We moved our server from manual bans to AltGuard last month. Alt accounts caught: 214. Real members wrongly blocked: 0.</p>
+                  <div class="rows">
+                    <div class="row">
+                      <span class="shape small shape-hexagon tone-tertiary"><span class="material-symbols-outlined">shield_person</span></span>
+                      <div class="row-body"><span class="row-title">Second account blocked</span><span class="row-meta mono">case #4821</span></div>
+                      <span class="status strong">Blocked</span>
+                    </div>
+                    <div class="row">
+                      <span class="shape small shape-square"><span class="material-symbols-outlined">how_to_reg</span></span>
+                      <div class="row-body"><span class="row-title">New member verified</span><span class="row-meta mono">case #4822</span></div>
+                      <span class="status">Passed</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-actions">
+                  <md-text-button><md-icon slot="icon" class="filled">thumb_up</md-icon>36</md-text-button>
+                  <md-text-button><md-icon slot="icon" class="filled">mode_comment</md-icon>8</md-text-button>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="card-head">
+                  <img class="avatar" src="/assets/avatars/sam.webp" alt="" />
+                  <div class="row-body">
+                    <span class="row-title"><strong>Sam Okafor</strong></span>
+                    <span class="row-meta" data-time="-86400000"></span>
+                  </div>
+                </div>
+                <div class="card-visual">
+                  <p>Looking for two moderators for a 9,000-member art server, European evenings. Experience with ticket systems is a plus.</p>
+                  <div class="chips">
+                    <span class="chip"><span class="material-symbols-outlined">palette</span>Art</span>
+                    <span class="chip"><span class="material-symbols-outlined">confirmation_number</span>Tickets</span>
+                    <span class="chip"><span class="material-symbols-outlined">schedule</span>Evenings</span>
+                  </div>
+                </div>
+                <div class="card-actions">
+                  <md-text-button><md-icon slot="icon" class="filled">thumb_up</md-icon>12</md-text-button>
+                  <md-text-button><md-icon slot="icon" class="filled">mode_comment</md-icon>3</md-text-button>
+                </div>
+              </article>
+            </div>
+
+            <div class="stack span-4 sticky">
+              <section class="card">
+                <h2>People to follow</h2>
+                <div class="card-visual">
+                  <div class="rows">
+                    <div class="row">
+                      <img class="avatar small" src="/assets/avatars/alex.webp" alt="" />
+                      <div class="row-body"><span class="row-title">Alex Kim</span><span class="row-meta">Community manager</span></div>
+                      <md-outlined-button>Follow</md-outlined-button>
+                    </div>
+                    <div class="row">
+                      <img class="avatar small" src="/assets/avatars/alex2.webp" alt="" />
+                      <div class="row-body"><span class="row-title">Alexis Moreau</span><span class="row-meta">Bot developer</span></div>
+                      <md-outlined-button>Follow</md-outlined-button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="card">
+                <h2>Jobs</h2>
+                <div class="card-visual">
+                  <div class="rows">
+                    <a class="row" href="#">
+                      <span class="shape small shape-diamond tone-secondary"><span class="material-symbols-outlined">gavel</span></span>
+                      <div class="row-body"><span class="row-title">Head moderator</span><span class="row-meta">Pixel League</span></div>
+                      <span class="status accent">New</span>
+                    </a>
+                    <a class="row" href="#">
+                      <span class="shape small shape-pentagon"><span class="material-symbols-outlined">support_agent</span></span>
+                      <div class="row-body"><span class="row-title">Support lead</span><span class="row-meta">Craft Hub</span></div>
+                      <span class="status">Remote</span>
+                    </a>
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            <!-- Row 3: 6 + 6 -->
+            <section class="card span-6">
+              <span class="shape shape-octagon tone-tertiary"><span class="material-symbols-outlined">work_history</span></span>
+              <h2>Experience</h2>
+              <p>Every role is checked against the server it names.</p>
+              <div class="card-visual">
+                <ul class="rows">
+                  <li class="row">
+                    <img class="avatar small" src="/assets/avatars/moddy.webp" alt="" />
+                    <div class="row-body"><span class="row-title">Head moderator, Pixel League</span><span class="row-meta">2023 to today</span></div>
+                    <span class="status">Verified</span>
+                  </li>
+                  <li class="row">
+                    <img class="avatar small" src="/assets/avatars/troublemaker.webp" alt="" />
+                    <div class="row-body"><span class="row-title">Moderator, Night Owls</span><span class="row-meta">2021 to 2023</span></div>
+                    <span class="status">Verified</span>
+                  </li>
+                </ul>
+              </div>
+            </section>
+
+            <section class="card span-6">
+              <span class="shape shape-heptagon tone-secondary"><span class="material-symbols-outlined">workspace_premium</span></span>
+              <h2>Skills</h2>
+              <p>Endorsed by people who worked with Mia.</p>
+              <div class="card-visual">
+                <div class="chips">
+                  <a class="chip" href="#"><span class="material-symbols-outlined">gavel</span>Moderation<span class="material-symbols-outlined chip-go">arrow_forward</span></a>
+                  <a class="chip" href="#"><span class="material-symbols-outlined">smart_toy</span>AutoMod<span class="material-symbols-outlined chip-go">arrow_forward</span></a>
+                  <a class="chip" href="#"><span class="material-symbols-outlined">groups</span>Team training<span class="material-symbols-outlined chip-go">arrow_forward</span></a>
+                  <a class="chip" href="#"><span class="material-symbols-outlined">translate</span>French, English<span class="material-symbols-outlined chip-go">arrow_forward</span></a>
+                </div>
+              </div>
+            </section>
+
+            <!-- Row 4: three cards that are links (4 + 4 + 4) -->
+            <a class="card span-4" href="#">
+              <span class="shape shape-square"><span class="material-symbols-outlined">sports_esports</span></span>
+              <h2>Pixel League</h2>
+              <p>48,000 members. Mia is head moderator.</p>
+            </a>
+            <a class="card span-4" href="#">
+              <span class="shape shape-diamond tone-solid"><span class="material-symbols-outlined">dark_mode</span></span>
+              <h2>Night Owls</h2>
+              <p>12,000 members. Mia moderated here for two years.</p>
+            </a>
+            <a class="card span-4" href="#">
+              <span class="shape shape-pentagon tone-tertiary"><span class="material-symbols-outlined">brush</span></span>
+              <h2>Ink &amp; Pixels</h2>
+              <p>9,000 members. Hiring two moderators.</p>
+            </a>
+
+            <!-- Row 5: an empty state with a scripted demo (12) -->
+            <section class="card split">
+              <div class="card-text">
+                <span class="shape shape-hexagon"><span class="material-symbols-outlined">forum</span></span>
+                <h2>No messages yet</h2>
+                <p>Write to someone from their profile. They see your servers and roles before they reply.</p>
+                <div class="card-actions">
+                  <md-filled-button>Find people</md-filled-button>
+                </div>
+              </div>
+              <div class="card-visual">
+                <div class="panel conversation" data-demo="message">
+                  <div class="bubble" data-at="1">
+                    <img class="avatar small" src="/assets/avatars/sam.webp" alt="" />
+                    <span>Hi Mia, are you open to a head mod role?</span>
+                  </div>
+                  <div class="bubble mine" data-at="2">
+                    <span>Yes, tell me about the server.</span>
+                    <img class="avatar small" src="/assets/avatars/mia.webp" alt="" />
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
+
+      <footer class="app-footer">
+        <div class="app-footer-card">
+          <span>Moddy Network demo, built with the Moddy design kit.</span>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

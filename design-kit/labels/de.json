@@ -1,0 +1,26 @@
+{
+  "appBar": {
+    "home": "Startseite",
+    "skipToMain": "Zum Hauptinhalt springen"
+  },
+  "userMenu": {
+    "userMenu": "Benutzermenü",
+    "signOut": "Abmelden"
+  },
+  "theme": {
+    "title": "Design",
+    "colors": "Farben",
+    "random": "Zufällig",
+    "randomTitle": "Bei jedem Besuch eine neue Farbe",
+    "custom": "Eigene Farbe",
+    "source": "Grundfarbe",
+    "hue": "Farbton",
+    "chroma": "Sättigung",
+    "tone": "Helligkeit",
+    "mode": "Farbmodus",
+    "dark": "Dunkel",
+    "auto": "Automatisch",
+    "autoShort": "Auto",
+    "light": "Hell"
+  }
+}

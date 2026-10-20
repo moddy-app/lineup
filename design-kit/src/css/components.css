@@ -1,0 +1,460 @@
+/**
+ * The small pieces cards are made of: icon shapes, inner panels, rows,
+ * chips, statuses, mono pills, avatars, stats, tiles.
+ */
+
+/* ---------------------------------------------------------------------------
+ * Icon shapes: a filled Material Symbol on a rounded polygon, never a circle.
+ *
+ *   <span class="shape shape-hexagon tone-tertiary">
+ *     <span class="material-symbols-outlined">verified</span>
+ *   </span>
+ *
+ * Shapes: square, diamond, pentagon, hexagon, heptagon, octagon.
+ * Tones: default (primary), tone-secondary, tone-tertiary, tone-solid.
+ * Sizes: 56px, or .small (36px). Vary them between neighbouring cards.
+ * The shape is a masked ::before, so the icon itself is never clipped.
+ * ------------------------------------------------------------------------- */
+
+.shape {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  --shape-size: 56px;
+  width: var(--shape-size);
+  height: var(--shape-size);
+  color: var(--md-sys-color-on-primary-container);
+}
+
+.shape::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--md-sys-color-primary-container);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+/* A Material Symbol is a ligature on a text line: pin it to a 1em box so the
+   glyph sits on the exact centre of the shape. */
+.shape .material-symbols-outlined {
+  position: relative;
+  display: block;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  overflow: hidden;
+  font-size: 28px;
+  font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Pentagons and heptagons point up: their visual centre sits below the
+   middle of their box (by ~5% and ~2.5% of the height). */
+.shape.shape-pentagon > * {
+  transform: translateY(calc(var(--shape-size) * 0.05));
+}
+
+.shape.shape-heptagon > * {
+  transform: translateY(calc(var(--shape-size) * 0.025));
+}
+
+.shape.small {
+  --shape-size: 36px;
+}
+
+.shape.small .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.shape.tone-secondary {
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+.shape.tone-secondary::before {
+  background-color: var(--md-sys-color-secondary-container);
+}
+
+.shape.tone-tertiary {
+  color: var(--md-sys-color-on-tertiary-container);
+}
+
+.shape.tone-tertiary::before {
+  background-color: var(--md-sys-color-tertiary-container);
+}
+
+.shape.tone-solid {
+  color: var(--md-sys-color-on-primary);
+}
+
+.shape.tone-solid::before {
+  background-color: var(--md-sys-color-primary);
+}
+
+.shape-square::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M98.0 73.0 C98.0 86.8 86.8 98.0 73.0 98.0 L27.0 98.0 C13.2 98.0 2.0 86.8 2.0 73.0 L2.0 27.0 C2.0 13.2 13.2 2.0 27.0 2.0 L73.0 2.0 C86.8 2.0 98.0 13.2 98.0 27.0 Z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M98.0 73.0 C98.0 86.8 86.8 98.0 73.0 98.0 L27.0 98.0 C13.2 98.0 2.0 86.8 2.0 73.0 L2.0 27.0 C2.0 13.2 13.2 2.0 27.0 2.0 L73.0 2.0 C86.8 2.0 98.0 13.2 98.0 27.0 Z'/%3E%3C/svg%3E");
+}
+
+.shape-diamond::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M38.5 13.5 C44.8 7.2 55.2 7.2 61.5 13.5 L86.5 38.5 C92.8 44.8 92.8 55.2 86.5 61.5 L61.5 86.5 C55.2 92.8 44.8 92.8 38.5 86.5 L13.5 61.5 C7.2 55.2 7.2 44.8 13.5 38.5 Z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M38.5 13.5 C44.8 7.2 55.2 7.2 61.5 13.5 L86.5 38.5 C92.8 44.8 92.8 55.2 86.5 61.5 L61.5 86.5 C55.2 92.8 44.8 92.8 38.5 86.5 L13.5 61.5 C7.2 55.2 7.2 44.8 13.5 38.5 Z'/%3E%3C/svg%3E");
+}
+
+.shape-pentagon::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M37.5 13.4 C44.4 8.4 55.6 8.4 62.5 13.4 L85.5 30.2 C92.4 35.1 95.9 45.8 93.2 53.9 L84.4 81.0 C81.8 89.0 72.7 95.7 64.2 95.7 L35.8 95.7 C27.3 95.7 18.2 89.0 15.6 81.0 L6.8 53.9 C4.1 45.8 7.6 35.1 14.5 30.2 Z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M37.5 13.4 C44.4 8.4 55.6 8.4 62.5 13.4 L85.5 30.2 C92.4 35.1 95.9 45.8 93.2 53.9 L84.4 81.0 C81.8 89.0 72.7 95.7 64.2 95.7 L35.8 95.7 C27.3 95.7 18.2 89.0 15.6 81.0 L6.8 53.9 C4.1 45.8 7.6 35.1 14.5 30.2 Z'/%3E%3C/svg%3E");
+}
+
+.shape-hexagon::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M91.8 39.2 C95.2 45.1 95.2 54.9 91.8 60.8 L80.2 80.8 C76.8 86.7 68.4 91.6 61.5 91.6 L38.5 91.6 C31.6 91.6 23.2 86.7 19.8 80.8 L8.2 60.8 C4.8 54.9 4.8 45.1 8.2 39.2 L19.8 19.2 C23.2 13.3 31.6 8.4 38.5 8.4 L61.5 8.4 C68.4 8.4 76.8 13.3 80.2 19.2 Z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M91.8 39.2 C95.2 45.1 95.2 54.9 91.8 60.8 L80.2 80.8 C76.8 86.7 68.4 91.6 61.5 91.6 L38.5 91.6 C31.6 91.6 23.2 86.7 19.8 80.8 L8.2 60.8 C4.8 54.9 4.8 45.1 8.2 39.2 L19.8 19.2 C23.2 13.3 31.6 8.4 38.5 8.4 L61.5 8.4 C68.4 8.4 76.8 13.3 80.2 19.2 Z'/%3E%3C/svg%3E");
+}
+
+.shape-heptagon::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M40.0 8.0 C45.5 5.4 54.5 5.4 60.0 8.0 L78.5 16.9 C84.0 19.6 89.6 26.6 91.0 32.6 L95.5 52.6 C96.9 58.5 94.9 67.3 91.1 72.1 L78.3 88.1 C74.5 92.9 66.4 96.8 60.3 96.8 L39.7 96.8 C33.6 96.8 25.5 92.9 21.7 88.1 L8.9 72.1 C5.1 67.3 3.1 58.5 4.5 52.6 L9.0 32.6 C10.4 26.6 16.0 19.6 21.5 16.9 Z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M40.0 8.0 C45.5 5.4 54.5 5.4 60.0 8.0 L78.5 16.9 C84.0 19.6 89.6 26.6 91.0 32.6 L95.5 52.6 C96.9 58.5 94.9 67.3 91.1 72.1 L78.3 88.1 C74.5 92.9 66.4 96.8 60.3 96.8 L39.7 96.8 C33.6 96.8 25.5 92.9 21.7 88.1 L8.9 72.1 C5.1 67.3 3.1 58.5 4.5 52.6 L9.0 32.6 C10.4 26.6 16.0 19.6 21.5 16.9 Z'/%3E%3C/svg%3E");
+}
+
+.shape-octagon::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M98.0 60.3 C98.0 65.6 95.0 72.9 91.3 76.6 L76.6 91.3 C72.9 95.0 65.6 98.0 60.3 98.0 L39.7 98.0 C34.4 98.0 27.1 95.0 23.4 91.3 L8.7 76.6 C5.0 72.9 2.0 65.6 2.0 60.3 L2.0 39.7 C2.0 34.4 5.0 27.1 8.7 23.4 L23.4 8.7 C27.1 5.0 34.4 2.0 39.7 2.0 L60.3 2.0 C65.6 2.0 72.9 5.0 76.6 8.7 L91.3 23.4 C95.0 27.1 98.0 34.4 98.0 39.7 Z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M98.0 60.3 C98.0 65.6 95.0 72.9 91.3 76.6 L76.6 91.3 C72.9 95.0 65.6 98.0 60.3 98.0 L39.7 98.0 C34.4 98.0 27.1 95.0 23.4 91.3 L8.7 76.6 C5.0 72.9 2.0 65.6 2.0 60.3 L2.0 39.7 C2.0 34.4 5.0 27.1 8.7 23.4 L23.4 8.7 C27.1 5.0 34.4 2.0 39.7 2.0 L60.3 2.0 C65.6 2.0 72.9 5.0 76.6 8.7 L91.3 23.4 C95.0 27.1 98.0 34.4 98.0 39.7 Z'/%3E%3C/svg%3E");
+}
+
+/* ---------------------------------------------------------------------------
+ * Inner panels: one step darker than the card (surface-container).
+ * ------------------------------------------------------------------------- */
+
+/* A soft panel holding an illustration or a group of controls. */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+  padding: 20px;
+  border-radius: var(--radius-xl);
+  background-color: var(--md-sys-color-surface-container);
+}
+
+/* A list of rows: a small shape or an avatar, two lines of text and a
+   status on the right (an experience, a job, a notification). */
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 12px 14px;
+  border-radius: var(--radius-l);
+  background-color: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface);
+}
+
+/* A row that is a link reacts to the pointer. */
+a.row {
+  text-decoration: none;
+  transition: background-color 200ms var(--ease);
+}
+
+a.row:hover {
+  background-color: var(--md-sys-color-surface-container-high);
+}
+
+.row-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.row-title {
+  overflow: hidden;
+  font-size: var(--text-subtitle);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row-meta {
+  overflow: hidden;
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Metadata the user did not write (an id, a date stamp): mono. */
+.row-meta.mono {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+}
+
+/* ---------------------------------------------------------------------------
+ * Chips: a tag, a skill, a command. 36px high, outlined, 8px corners.
+ * ------------------------------------------------------------------------- */
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-s);
+  flex-shrink: 0;
+  box-sizing: border-box;
+  height: 36px;
+  padding-inline: 12px 16px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--radius-s);
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-on-surface-variant);
+  background-color: var(--md-sys-color-surface-container-lowest);
+  white-space: nowrap;
+}
+
+.chip:not(:has(.material-symbols-outlined)) {
+  padding-inline: 16px;
+}
+
+.chip .material-symbols-outlined {
+  font-size: 18px;
+  color: var(--md-sys-color-primary);
+  font-variation-settings: 'FILL' 1;
+}
+
+/* A chip that is a link: it fills in on hover and its arrow
+   (<span class="material-symbols-outlined chip-go">arrow_forward</span>)
+   slides out (motion.css). */
+a.chip {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.chip .chip-go {
+  width: 0;
+  margin-left: -8px;
+  overflow: hidden;
+  opacity: 0;
+  color: inherit;
+}
+
+.chip.mono {
+  font-family: var(--font-mono);
+}
+
+/* ---------------------------------------------------------------------------
+ * Statuses and badges
+ * ------------------------------------------------------------------------- */
+
+.status {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-label);
+  font-weight: 600;
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  white-space: nowrap;
+}
+
+.status.strong {
+  background-color: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
+}
+
+.status.accent {
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+.status.error {
+  background-color: var(--md-sys-color-error-container);
+  color: var(--md-sys-color-on-error-container);
+}
+
+/* A count on an icon (unread messages): the one solid accent. */
+.badge {
+  display: inline-grid;
+  place-items: center;
+  box-sizing: border-box;
+  min-width: 18px;
+  height: 18px;
+  padding-inline: 5px;
+  border-radius: var(--radius-full);
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The verified badge after a name: one icon for every kind, the kind in
+   its tooltip (data-tooltip, see .tooltip below). */
+.verified {
+  display: inline-flex;
+  vertical-align: -2px;
+  color: var(--md-sys-color-primary);
+}
+
+.verified .material-symbols-outlined {
+  font-size: 16px;
+  font-variation-settings: 'FILL' 1;
+}
+
+/* ---------------------------------------------------------------------------
+ * Mono pill: a dynamic value the user did not write (a path, an id, a
+ * handle), never inline in a sentence.
+ * ------------------------------------------------------------------------- */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  background-color: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------------
+ * Avatars: round, cover. Example people use the Memoji in assets/avatars.
+ * ------------------------------------------------------------------------- */
+
+.avatar {
+  --avatar-size: 40px;
+  flex-shrink: 0;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: var(--md-sys-color-surface-container);
+}
+
+.avatar.small { --avatar-size: 32px; }
+.avatar.large { --avatar-size: 56px; }
+.avatar.xl { --avatar-size: 96px; }
+
+/* ---------------------------------------------------------------------------
+ * Numbers that change: tabular figures, in the locale's format
+ * (src/utils/format.ts).
+ * ------------------------------------------------------------------------- */
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-value {
+  font-size: var(--text-title);
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--md-sys-color-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-label {
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.numeric {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------------
+ * Tiles: large colored areas, in the soft tints (never the containers).
+ * ------------------------------------------------------------------------- */
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-auto-rows: 1fr;
+  gap: var(--gap-m);
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+  min-width: 0;
+  padding: 16px;
+  border-radius: var(--radius-xl);
+  background-color: var(--tint-primary);
+  color: var(--md-sys-color-on-surface);
+}
+
+.tile.tint-tertiary { background-color: var(--tint-tertiary); }
+.tile.tint-secondary { background-color: var(--tint-secondary); }
+
+/* ---------------------------------------------------------------------------
+ * Tooltip: <span data-tooltip="Verified account" tabindex="0">…</span>.
+ * inverse-surface, 4px corners, 12px text, opacity fade only (motion.css).
+ * ------------------------------------------------------------------------- */
+
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  z-index: 20;
+  padding: 4px 8px;
+  border-radius: var(--radius-xs);
+  background-color: var(--md-sys-color-inverse-surface);
+  color: var(--md-sys-color-inverse-on-surface);
+  font-family: var(--font-sans);
+  font-size: var(--text-label);
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-50%);
+}
+
+[data-tooltip]:hover::after,
+[data-tooltip]:focus-visible::after {
+  opacity: 1;
+}
+
+/* ---------------------------------------------------------------------------
+ * Text helpers
+ * ------------------------------------------------------------------------- */
+
+.text-muted {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.text-small {
+  font-size: var(--text-small);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

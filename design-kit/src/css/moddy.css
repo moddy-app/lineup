@@ -1,0 +1,13 @@
+/**
+ * The Moddy design system. One file to link; the build bundles it into
+ * dist/moddy.css with the fonts next to it.
+ */
+
+@import './theme-fallback.css';
+@import './fonts.css';
+@import './base.css';
+@import './layout.css';
+@import './card.css';
+@import './components.css';
+@import './material.css';
+@import './motion.css';

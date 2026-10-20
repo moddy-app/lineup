@@ -1,0 +1,304 @@
+/**
+ * Cards: plain rounded blocks, one idea each.
+ *
+ *   <section class="card span-7">
+ *     <span class="edge-caps" aria-hidden="true">…</span>   (src/utils/edge-caps.ts)
+ *     <h2>Title</h2>
+ *     <p>One or two sentences.</p>
+ *     <div class="card-visual">…</div>
+ *     <div class="card-actions">…</div>
+ *   </section>
+ *
+ * No gradient, no shadow, no hover (unless the whole card is a link:
+ * a.card).
+ */
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-width: 0;
+  padding: var(--card-padding);
+  border-radius: var(--card-radius);
+  background-color: var(--md-sys-color-surface-container-lowest);
+  color: var(--md-sys-color-on-surface);
+  /* clip, not hidden: hidden would make the card a scroll container and
+     stop its edge caps (below) from sticking. */
+  overflow: clip;
+}
+
+.card[hidden] {
+  display: none;
+}
+
+/* Title → text → (visual) → actions, separated by --space. Inside the text
+   block (shape, title, text) the steps are smaller and always the same. */
+.card h1,
+.card h2,
+.card h3 {
+  margin: 20px 0 10px;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.card h1 {
+  font-size: var(--text-display);
+  letter-spacing: -0.01em;
+}
+
+.card h2 {
+  font-size: var(--text-title);
+}
+
+.card h3 {
+  font-size: var(--text-subtitle);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.card :is(h1, h2, h3):first-child {
+  margin-top: 0;
+}
+
+.card p {
+  margin: 0;
+  max-width: 560px;
+  font-size: var(--text-body);
+  line-height: 1.5;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.card p + p {
+  margin-top: 10px;
+}
+
+/* Buttons sit at the bottom of their card, at most three in a row. */
+.card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-m);
+  margin-top: auto;
+  padding-top: var(--space);
+}
+
+.card-actions.end {
+  justify-content: flex-end;
+}
+
+/* A title next to a small shape or an avatar. */
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-m);
+  min-width: 0;
+}
+
+.card-head :is(h2, h3) {
+  margin: 0;
+}
+
+.card-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+}
+
+.card-visual {
+  min-width: 0;
+}
+
+/* In a stacked card the illustration sits one --space under the text and
+   one --space above the buttons, and grows to fill the room left, so the
+   cards of one row end up the same height without holes. */
+.card > .card-visual {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-l);
+  margin-top: var(--space);
+}
+
+.card > .card-visual > :is(.panel, .rows) {
+  flex: 1;
+}
+
+.card > .card-visual > .panel {
+  justify-content: center;
+}
+
+/* Two columns: text on one side, visual on the other (.reverse swaps
+   them). One column under 900px. */
+.card.split {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--card-padding);
+  align-items: center;
+}
+
+.card.split .card-text {
+  justify-content: flex-start;
+}
+
+.card.split .card-actions {
+  margin-top: 0;
+}
+
+.card.split > .card-visual {
+  margin-top: 0;
+}
+
+.card.split.reverse .card-visual {
+  order: -1;
+}
+
+@media (max-width: 900px) {
+  .card.split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .card.split.reverse .card-visual {
+    order: 0;
+  }
+}
+
+/* The hero: the page's one h1, its content centered vertically. */
+.card.hero {
+  justify-content: center;
+}
+
+.card.hero .card-actions {
+  margin-top: 0;
+}
+
+.card.hero p {
+  font-size: var(--text-hero);
+}
+
+/* A card that is a link as a whole: the only card with a hover state. */
+a.card {
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 200ms var(--ease);
+}
+
+a.card:hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 4%, var(--md-sys-color-surface-container-lowest));
+}
+
+a.card:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------------------
+ * Cards leave the screen with rounded corners, each on its own, where they
+ * meet the app bar and one page margin above the window's bottom edge.
+ *
+ * Nothing is clipped. Every card with .edge-caps draws its corners with
+ * small pieces in the page color, each a concave quarter circle of the
+ * card's radius:
+ *   - .own: the card's own four corners, fixed to the card (the card itself
+ *     then has no border-radius);
+ *   - .cap-top / .cap-bottom: two pairs that are position: sticky, so the
+ *     browser's scrolling alone keeps them under the app bar and above the
+ *     bottom margin while the card crosses those edges. Their track
+ *     overhangs the card by one radius at each end, so they stick until its
+ *     last pixel.
+ *
+ * On the card's last two radii the pieces shrink with transform: scale() on
+ * the card's view timeline, so the card ends as a pill. Only transform: it
+ * runs on the compositor, in step with the scroll. Animating border-radius,
+ * a custom property or a clip-path was tried and lagged or flickered on
+ * phones (it is recomputed on the main thread). The pill runs only with a
+ * mouse: phones keep the plain pieces (a small, stable ogive on a card's
+ * last pixels).
+ * ------------------------------------------------------------------------- */
+
+.card:has(> .edge-caps) {
+  border-radius: 0;
+  view-timeline: --card block;
+  view-timeline-inset: var(--app-bar-height) var(--page-gap);
+}
+
+.edge-caps {
+  --cap: var(--card-radius);
+  --cap-color: var(--md-sys-color-surface-container);
+  position: absolute;
+  inset: calc(-1 * var(--cap)) 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.edge-caps > i {
+  position: sticky;
+  display: block;
+  flex-shrink: 0;
+  height: var(--cap);
+}
+
+.edge-caps > .cap-top {
+  top: var(--app-bar-height);
+}
+
+.edge-caps > .cap-bottom {
+  bottom: var(--page-gap);
+}
+
+.edge-caps b {
+  position: absolute;
+  width: var(--cap);
+  height: var(--cap);
+  background-repeat: no-repeat;
+}
+
+/* The card's own corners sit on the card (the span overhangs it by --cap). */
+.edge-caps > .own {
+  position: absolute;
+  top: var(--cap);
+  right: 0;
+  bottom: var(--cap);
+  left: 0;
+}
+
+.edge-caps .tl { top: 0; left: 0; transform-origin: 0 0;
+  background-image: radial-gradient(circle at 100% 100%, transparent calc(var(--cap) - 0.5px), var(--cap-color) var(--cap)); }
+.edge-caps .tr { top: 0; right: 0; transform-origin: 100% 0;
+  background-image: radial-gradient(circle at 0 100%, transparent calc(var(--cap) - 0.5px), var(--cap-color) var(--cap)); }
+.edge-caps .bl { bottom: 0; left: 0; transform-origin: 0 100%;
+  background-image: radial-gradient(circle at 100% 0, transparent calc(var(--cap) - 0.5px), var(--cap-color) var(--cap)); }
+.edge-caps .br { bottom: 0; right: 0; transform-origin: 100% 100%;
+  background-image: radial-gradient(circle at 0 0, transparent calc(var(--cap) - 0.5px), var(--cap-color) var(--cap)); }
+
+@supports (view-timeline: --card) {
+  @media (hover: hover) and (pointer: fine) {
+    .cap-top b,
+    .own .bl,
+    .own .br {
+      animation: edge-shrink linear;
+      animation-timeline: --card;
+      animation-range: exit calc(100% - 2 * var(--cap)) exit 100%;
+    }
+
+    .cap-bottom b,
+    .own .tl,
+    .own .tr {
+      animation: edge-grow linear;
+      animation-timeline: --card;
+      animation-range: entry 0% entry calc(2 * var(--cap));
+    }
+  }
+}
+
+@keyframes edge-shrink {
+  from { transform: scale(1); }
+  to { transform: scale(0); }
+}
+
+@keyframes edge-grow {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}

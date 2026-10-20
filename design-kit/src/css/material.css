@@ -1,0 +1,58 @@
+/**
+ * Material Web, tuned to the Moddy look. Buttons, menus, fields and
+ * dialogs are Material Web components: never a custom button.
+ *
+ * md-filled-button: the one main action. md-outlined-button: the others.
+ * At most three buttons in a row.
+ */
+
+:root {
+  /* Buttons: Google Sans, medium. */
+  --md-filled-button-label-text-font: var(--font-sans);
+  --md-outlined-button-label-text-font: var(--font-sans);
+  --md-text-button-label-text-font: var(--font-sans);
+  --md-filled-tonal-button-label-text-font: var(--font-sans);
+
+  /* Menus: lowest surface, 24px corners, 48px items. */
+  --md-menu-container-color: var(--md-sys-color-surface-container-lowest);
+  --md-menu-container-shape: var(--radius-xl);
+  --md-menu-top-space: 8px;
+  --md-menu-bottom-space: 8px;
+  --md-menu-item-one-line-container-height: 48px;
+  --md-menu-item-label-text-font: var(--font-sans);
+  --md-menu-item-label-text-weight: 500;
+  --md-menu-item-leading-icon-color: var(--md-sys-color-on-surface-variant);
+  --md-menu-item-trailing-icon-color: var(--md-sys-color-outline);
+
+  /* Fields and dialogs. */
+  --md-outlined-text-field-container-shape: var(--radius-l);
+  --md-filled-text-field-container-shape: var(--radius-l);
+  --md-dialog-container-color: var(--md-sys-color-surface-container-lowest);
+  --md-dialog-container-shape: var(--card-radius);
+}
+
+/* Menu items: 16px corners, 8px from the menu's sides, filled icons. */
+md-menu md-menu-item,
+md-menu-item.moddy {
+  margin-inline: 8px;
+  border-radius: var(--radius-l);
+  overflow: hidden;
+}
+
+md-menu md-menu-item md-icon {
+  font-variation-settings: 'FILL' 1;
+}
+
+/* The destructive item (sign out, delete): error. */
+md-menu-item.destructive {
+  --md-menu-item-label-text-color: var(--md-sys-color-error);
+  --md-menu-item-leading-icon-color: var(--md-sys-color-error);
+  --md-menu-item-hover-state-layer-color: var(--md-sys-color-error);
+  --md-menu-item-pressed-state-layer-color: var(--md-sys-color-error);
+}
+
+/* The divider between groups: inset 16px on both sides. */
+md-menu md-divider {
+  width: auto;
+  margin: 8px 16px;
+}

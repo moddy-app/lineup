@@ -1,0 +1,96 @@
+/**
+ * Motion. Everything here lives inside prefers-reduced-motion: without it,
+ * each illustration shows its final state and nothing moves.
+ *
+ * Easing: var(--ease). 150–400ms for the UI, slower only for ambient loops.
+ * Hover only on what reacts to the pointer (links, chips, buttons), and only
+ * where it tells something. No scroll-triggered entrance on cards, nothing
+ * computed on scroll.
+ */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* The page fades in once ready (html.booting, src/theme/boot.ts). */
+  body {
+    transition: opacity 150ms ease-out;
+  }
+
+  /* Tooltips: opacity only. */
+  [data-tooltip]::after {
+    transition: opacity 120ms;
+  }
+
+  /* Link chips: the chip fills in, its icon turns and an arrow slides out. */
+  a.chip,
+  a.chip .material-symbols-outlined {
+    transition:
+      background-color 250ms var(--ease),
+      border-color 250ms var(--ease),
+      color 250ms var(--ease),
+      rotate 400ms var(--ease),
+      scale 300ms var(--ease),
+      width 300ms var(--ease),
+      margin 300ms var(--ease),
+      opacity 250ms var(--ease),
+      translate 300ms var(--ease);
+  }
+
+  a.chip:hover,
+  a.chip:focus-visible {
+    border-color: transparent;
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+    text-decoration: none;
+    translate: 0 -2px;
+  }
+
+  a.chip:hover .material-symbols-outlined:first-child,
+  a.chip:focus-visible .material-symbols-outlined:first-child {
+    color: var(--md-sys-color-on-primary);
+    rotate: -12deg;
+    scale: 1.15;
+  }
+
+  a.chip:hover .chip-go,
+  a.chip:focus-visible .chip-go {
+    width: 18px;
+    margin-left: 0;
+    opacity: 1;
+  }
+
+  /* Scripted demos (src/utils/motion.ts): steps appear as the demo plays,
+     and the demo fades out before starting over. */
+  .playing [data-at] {
+    opacity: 0;
+    translate: 0 10px;
+    transition:
+      opacity 450ms var(--ease),
+      translate 450ms var(--ease);
+  }
+
+  .playing [data-at].shown {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  [data-demo] {
+    transition: opacity 500ms var(--ease);
+  }
+
+  [data-demo].resetting {
+    opacity: 0;
+  }
+
+  [data-demo] .pressed {
+    scale: 0.92;
+    transition: scale 150ms var(--ease);
+  }
+
+  /* A shape turning slowly: the one ambient loop. */
+  .shape.turning::before {
+    animation: turn 24s linear infinite;
+  }
+
+  @keyframes turn {
+    to { rotate: 360deg; }
+  }
+}

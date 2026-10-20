@@ -1,0 +1,175 @@
+/**
+ * Tokens and base styles.
+ *
+ * Colors are only the Material theme tokens (--md-sys-color-*), set on :root
+ * by the theme (src/theme). Never write a hex value: the theme is a random
+ * seed on every load, in light and dark, and anything hardcoded clashes with
+ * some theme.
+ */
+
+:root {
+  /* ---- Spacing: one value per level ------------------------------------ */
+
+  /* Page margin, gap between cards, space above the footer. */
+  --page-gap: 20px;
+  /* Card padding AND the space between the blocks inside a card. */
+  --card-padding: 32px;
+  --space: var(--card-padding);
+  --card-radius: 32px;
+  --content-width: 1240px;
+  --app-bar-height: 72px;
+
+  /* Small steps inside components. */
+  --gap-s: 8px;
+  --gap-m: 12px;
+  --gap-l: 16px;
+
+  /* ---- Shapes ----------------------------------------------------------- */
+
+  --radius-xs: 4px; /* tooltips */
+  --radius-s: 8px; /* chips */
+  --radius-m: 12px;
+  --radius-l: 16px; /* rows, menu items, user card */
+  --radius-xl: 24px; /* panels, menus */
+  --radius-full: 999px; /* pills, statuses */
+
+  /* ---- Type ------------------------------------------------------------- */
+
+  --font-sans: 'Google Sans', Roboto, system-ui, sans-serif;
+  --font-mono: 'Google Sans Mono', ui-monospace, monospace;
+
+  --text-display: clamp(38px, 5.2vw, 64px); /* the page's one h1 */
+  --text-title: 28px; /* card h2 */
+  --text-subtitle: 15px; /* card h3, row titles */
+  --text-hero: 18px; /* body of the hero card */
+  --text-body: 16px;
+  --text-body-small: 14px; /* chips, secondary text */
+  --text-small: 13px; /* emails, small print */
+  --text-label: 12px; /* statuses, mono metadata, tooltips */
+
+  /* ---- Motion ----------------------------------------------------------- */
+
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+
+  /* ---- Soft tints for large colored areas -------------------------------
+     The containers are fine for a small shape and loud for a tile: large
+     areas mix them with the card color, so they also work in dark mode. */
+  --tint-primary: color-mix(in srgb, var(--md-sys-color-primary-container) 22%, var(--md-sys-color-surface-container-lowest));
+  --tint-tertiary: color-mix(in srgb, var(--md-sys-color-tertiary-container) 22%, var(--md-sys-color-surface-container-lowest));
+  --tint-secondary: color-mix(in srgb, var(--md-sys-color-secondary-container) 45%, var(--md-sys-color-surface-container-lowest));
+
+  /* Material Web components use the same font. */
+  --md-ref-typeface-brand: var(--font-sans);
+  --md-ref-typeface-plain: var(--font-sans);
+
+  font-family: var(--font-sans);
+  /* The page is surface-container; cards sit one step lighter. */
+  background-color: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface);
+  color-scheme: light dark;
+  scroll-padding-block-start: calc(var(--app-bar-height) + var(--page-gap));
+}
+
+@media (max-width: 600px) {
+  :root {
+    --page-gap: 12px;
+    --card-padding: 20px;
+    --card-radius: 24px;
+    --text-title: 24px;
+    --text-body: 14px;
+    --text-body-small: 12px;
+  }
+}
+
+body {
+  margin: 0;
+  font-size: var(--text-body);
+  line-height: 1.5;
+  background-color: var(--md-sys-color-surface-container);
+}
+
+/* Titles and names: Google Sans semibold. Never 700, never synthetic bold. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+strong,
+b {
+  font-weight: 600;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.15;
+  scroll-margin-top: calc(var(--app-bar-height) + var(--page-gap));
+}
+
+a {
+  color: var(--md-sys-color-primary);
+  text-decoration: none;
+}
+
+a:hover,
+a:focus-visible {
+  text-decoration: underline;
+}
+
+:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+code,
+kbd,
+samp {
+  font-family: var(--font-mono);
+}
+
+/* Material Symbols: filled in shapes, menus and badges. */
+.material-symbols-outlined.filled,
+md-icon.filled {
+  font-variation-settings: 'FILL' 1;
+}
+
+/* ---- Loading ----------------------------------------------------------
+ * The page stays hidden until the components on screen are defined and the
+ * fonts are loaded (1.5 s at most, see src/theme/boot.ts), then fades in
+ * (motion.css). Until they are defined, components keep their final size so
+ * nothing moves when they upgrade, and stay hidden so a raw label or an
+ * icon name never flashes. */
+
+html.booting body {
+  opacity: 0;
+}
+
+moddy-app-bar:not(:defined) {
+  display: block;
+  height: var(--app-bar-height);
+}
+
+:is(md-filled-button, md-filled-tonal-button, md-outlined-button, md-text-button):not(:defined) {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: 40px;
+  padding-inline: 24px;
+  visibility: hidden;
+}
+
+:is(md-icon-button, moddy-theme-menu, moddy-user-menu):not(:defined) {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  visibility: hidden;
+}
+
+md-icon:not(:defined) {
+  visibility: hidden;
+}
