@@ -28,7 +28,7 @@
       }
     },
     "sessionError": {
-      "title": "No se pudo comprobar su sesión"
+      "note": "No se pudo comprobar su sesión."
     }
   },
   "userMenu": {

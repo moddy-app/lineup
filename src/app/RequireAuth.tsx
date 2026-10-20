@@ -4,7 +4,6 @@ import {useSession} from '@/auth/session';
 import {PageLoading} from '@/ui';
 
 import {Component as NotFound} from './NotFoundPage';
-import {SessionError} from './SessionError';
 import {SignInPrompt, type AuthPurpose} from './SignInPrompt';
 import {SuspendedScreen} from './SuspendedScreen';
 
@@ -13,7 +12,7 @@ import {SuspendedScreen} from './SuspendedScreen';
  * the editor, the claim and management of a server, the staff console):
  *
  *   loading        the page loader
- *   anonymous      the sign-in prompt, or SessionError if the API is unreachable
+ *   anonymous      the sign-in prompt (which also says so when the session could not be read)
  *   suspended      the SuspendedScreen
  *   authenticated  the page; `staff` also needs `is_staff`, and the 404 is shown
  *                  otherwise, so the console is not revealed
@@ -29,7 +28,7 @@ export function RequireAuth({purpose, staff}: {purpose: AuthPurpose; staff?: boo
     case 'suspended':
       return <SuspendedScreen />;
     case 'anonymous':
-      return session.error ? <SessionError /> : <SignInPrompt purpose={purpose} />;
+      return <SignInPrompt purpose={purpose} />;
     case 'authenticated':
       return staff && !session.me?.user.is_staff ? <NotFound /> : <Outlet />;
   }

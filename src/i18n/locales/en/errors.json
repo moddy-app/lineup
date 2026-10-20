@@ -7,7 +7,7 @@
     "lineup_guild_forbidden": "You do not manage this server.",
     "lineup_post_forbidden": "You cannot edit this post.",
     "staff_only": "This page is reserved for the Moddy team.",
-    "origin_not_allowed": "The request was refused because the site is not served from an allowed address.",
+    "origin_not_allowed": "Request refused: this site is not served from an allowed address.",
     "route_not_found": "This feature is not available.",
     "lineup_guild_not_found": "This server was not found or has no Lineup profile.",
     "lineup_user_not_found": "This profile was not found.",
@@ -22,7 +22,7 @@
     "lineup_post_hidden": "This post was hidden by the Moddy team.",
     "lineup_post_invalid_status": "This action is not possible in the post's current state.",
     "lineup_post_not_hidden": "This post is not hidden.",
-    "lineup_experience_limit": "You reached the limit of experiences.",
+    "lineup_experience_limit": "You reached the maximum number of experiences. Delete one to add another.",
     "lineup_experience_already_verified": "This experience is already verified.",
     "lineup_review_already_pending": "A review is already pending for this experience.",
     "lineup_report_already_handled": "This report was already handled.",
@@ -76,9 +76,9 @@
     "manage": "You no longer manage this server."
   },
   "invalidStatus": {
-    "draft": "This post is a draft, so this action is not possible.",
+    "draft": "This action is not possible on a draft.",
     "published": "This post is already published.",
-    "closed": "This post is closed, so this action is not possible.",
+    "closed": "This action is not possible on a closed post.",
     "hidden": "This post was hidden by the Moddy team."
   },
   "filterInvalid": {

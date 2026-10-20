@@ -7,7 +7,7 @@
     "lineup_guild_forbidden": "No gestiona este servidor.",
     "lineup_post_forbidden": "No puede editar este anuncio.",
     "staff_only": "Esta página está reservada al equipo de Moddy.",
-    "origin_not_allowed": "Se rechazó la solicitud porque el sitio no se sirve desde una dirección autorizada.",
+    "origin_not_allowed": "Solicitud rechazada: este sitio no se sirve desde una dirección autorizada.",
     "route_not_found": "Esta función no está disponible.",
     "lineup_guild_not_found": "No se encontró este servidor o no tiene perfil en Lineup.",
     "lineup_user_not_found": "No se encontró este perfil.",
@@ -22,7 +22,7 @@
     "lineup_post_hidden": "El equipo de Moddy ocultó este anuncio.",
     "lineup_post_invalid_status": "Esta acción no es posible en el estado actual del anuncio.",
     "lineup_post_not_hidden": "Este anuncio no está oculto.",
-    "lineup_experience_limit": "Ha alcanzado el límite de experiencias.",
+    "lineup_experience_limit": "Ha alcanzado el número máximo de experiencias. Elimine una para añadir otra.",
     "lineup_experience_already_verified": "Esta experiencia ya está verificada.",
     "lineup_review_already_pending": "Ya hay una revisión pendiente para esta experiencia.",
     "lineup_report_already_handled": "Esta denuncia ya se ha tratado.",
@@ -76,9 +76,9 @@
     "manage": "Ya no gestiona este servidor."
   },
   "invalidStatus": {
-    "draft": "Este anuncio es un borrador, así que esta acción no es posible.",
+    "draft": "Esta acción no es posible en un borrador.",
     "published": "Este anuncio ya está publicado.",
-    "closed": "Este anuncio está cerrado, así que esta acción no es posible.",
+    "closed": "Esta acción no es posible en un anuncio cerrado.",
     "hidden": "El equipo de Moddy ocultó este anuncio."
   },
   "filterInvalid": {

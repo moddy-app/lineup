@@ -105,7 +105,7 @@ describe('RequireAuth', () => {
     expect(document.querySelector('md-filled-button')).toBeNull();
   });
 
-  it('says the session could not be read when the API is unreachable, and tries again on request', async () => {
+  it('keeps the sign-in prompt when the API is unreachable, says so, and tries again on request', async () => {
     let up = false;
     mockApi({
       'GET /lineup/me': () => {
@@ -114,9 +114,10 @@ describe('RequireAuth', () => {
       },
     });
     renderApp(routes, {path: '/private'});
-    await waitFor(() => expect(screen.getByText('Impossible de vérifier votre session')).toBeTruthy());
-    expect(screen.getByText('Connexion impossible. Vérifiez votre réseau.')).toBeTruthy();
-    expect(screen.queryByText('Connectez-vous pour continuer')).toBeNull();
+    await waitFor(() => expect(screen.getByText('Connectez-vous pour continuer')).toBeTruthy());
+    expect(
+      screen.getByText('Impossible de vérifier votre session. Connexion impossible. Vérifiez votre réseau.'),
+    ).toBeTruthy();
 
     up = true;
     fireEvent.click(screen.getByText('Réessayer'));

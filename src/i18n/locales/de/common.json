@@ -28,7 +28,7 @@
       }
     },
     "sessionError": {
-      "title": "Ihre Sitzung konnte nicht geprüft werden"
+      "note": "Ihre Sitzung konnte nicht geprüft werden."
     }
   },
   "userMenu": {

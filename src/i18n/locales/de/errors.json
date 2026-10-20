@@ -7,7 +7,7 @@
     "lineup_guild_forbidden": "Sie verwalten diesen Server nicht.",
     "lineup_post_forbidden": "Sie können diese Anzeige nicht bearbeiten.",
     "staff_only": "Diese Seite ist dem Moddy-Team vorbehalten.",
-    "origin_not_allowed": "Die Anfrage wurde abgelehnt, weil die Website nicht von einer erlaubten Adresse ausgeliefert wird.",
+    "origin_not_allowed": "Anfrage abgelehnt: Diese Website wird nicht von einer erlaubten Adresse ausgeliefert.",
     "route_not_found": "Diese Funktion ist nicht verfügbar.",
     "lineup_guild_not_found": "Dieser Server wurde nicht gefunden oder hat kein Lineup-Profil.",
     "lineup_user_not_found": "Dieses Profil wurde nicht gefunden.",
@@ -22,7 +22,7 @@
     "lineup_post_hidden": "Das Moddy-Team hat diese Anzeige ausgeblendet.",
     "lineup_post_invalid_status": "Diese Aktion ist im aktuellen Zustand der Anzeige nicht möglich.",
     "lineup_post_not_hidden": "Diese Anzeige ist nicht ausgeblendet.",
-    "lineup_experience_limit": "Sie haben die Grenze für Erfahrungen erreicht.",
+    "lineup_experience_limit": "Sie haben die maximale Anzahl an Erfahrungen erreicht. Löschen Sie eine, um eine neue hinzuzufügen.",
     "lineup_experience_already_verified": "Diese Erfahrung ist bereits verifiziert.",
     "lineup_review_already_pending": "Für diese Erfahrung steht bereits eine Prüfung aus.",
     "lineup_report_already_handled": "Diese Meldung wurde bereits bearbeitet.",
@@ -76,9 +76,9 @@
     "manage": "Sie verwalten diesen Server nicht mehr."
   },
   "invalidStatus": {
-    "draft": "Diese Anzeige ist ein Entwurf, daher ist diese Aktion nicht möglich.",
+    "draft": "Diese Aktion ist bei einem Entwurf nicht möglich.",
     "published": "Diese Anzeige ist bereits veröffentlicht.",
-    "closed": "Diese Anzeige ist geschlossen, daher ist diese Aktion nicht möglich.",
+    "closed": "Diese Aktion ist bei einer geschlossenen Anzeige nicht möglich.",
     "hidden": "Das Moddy-Team hat diese Anzeige ausgeblendet."
   },
   "filterInvalid": {

@@ -61,6 +61,7 @@ describe('SessionProvider: the status', () => {
     expect(status()).toBe('loading');
     await waitFor(() => expect(status()).toBe('authenticated'));
     expect(session.me?.user.username).toBe('alex');
+    expect(session.canWrite).toBe(true);
   });
 
   it('is anonymous on a 401, with one request and no retry', async () => {
@@ -69,6 +70,8 @@ describe('SessionProvider: the status', () => {
     await waitFor(() => expect(status()).toBe('anonymous'));
     expect(session.error).toBeUndefined();
     expect(api.calls).toHaveLength(1);
+    // Signed out, an action is still allowed: it sends the person to sign in.
+    expect(session.canWrite).toBe(true);
   });
 
   it('is suspended on a 403 user_suspended, with the sanction, and no retry', async () => {
@@ -78,6 +81,7 @@ describe('SessionProvider: the status', () => {
     expect(session.sanction?.references).toEqual(['A7F2K9']);
     expect(session.sanction?.violations_url).toBe('https://moddy.app/violations');
     expect(session.me).toBeUndefined();
+    expect(session.canWrite).toBe(false);
     expect(api.calls).toHaveLength(1);
   });
 

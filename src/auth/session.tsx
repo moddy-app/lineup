@@ -41,6 +41,12 @@ export interface Session {
   /** The session could not be read (network, 5xx). The person is then `anonymous`. */
   error?: ApiError;
   /**
+   * False while the account is suspended: every write action (buttons, forms) is
+   * disabled app-wide, and the suspension notice says why. True otherwise, even
+   * signed out: the action then sends the person to sign in (`useAuthAction`).
+   */
+  canWrite: boolean;
+  /**
    * Sends the browser to Discord through the API and back to `redirect` (the
    * current page by default). Runs the "save my draft" callbacks first
    * (registerBeforeLogin).
@@ -116,8 +122,8 @@ export function SessionProvider({children}: {children: ReactNode}) {
   }, [refetch]);
 
   const value = useMemo<Session>(
-    () => ({...derived, login, logout, requireAuth, refresh}),
-    [derived, login, logout, requireAuth, refresh],
+    () => ({...derived, canWrite: status !== 'suspended', login, logout, requireAuth, refresh}),
+    [derived, status, login, logout, requireAuth, refresh],
   );
 
   return <SessionContext value={value}>{children}</SessionContext>;

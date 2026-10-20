@@ -21,14 +21,14 @@
         "default": "This page needs a Discord account.",
         "profile": "Edit your public profile, the one servers see when they recruit.",
         "experiences": "Add your experience and have it verified.",
-        "posts": "Find your posts, whether published, drafts or closed.",
+        "posts": "Find your posts: published, draft or closed.",
         "editor": "Write a post for a server or for yourself.",
         "claim": "Claim a server to manage its profile and posts.",
         "manage": "Manage a server's profile, posts and visibility."
       }
     },
     "sessionError": {
-      "title": "Your session could not be checked"
+      "note": "Your session could not be checked."
     }
   },
   "userMenu": {

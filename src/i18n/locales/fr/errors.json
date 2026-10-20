@@ -7,13 +7,13 @@
     "lineup_guild_forbidden": "Vous ne gérez pas ce serveur.",
     "lineup_post_forbidden": "Vous ne pouvez pas modifier cette annonce.",
     "staff_only": "Cette page est réservée à l'équipe Moddy.",
-    "origin_not_allowed": "La requête a été refusée, car le site n'est pas servi depuis une adresse autorisée.",
+    "origin_not_allowed": "Requête refusée : ce site n'est pas servi depuis une adresse autorisée.",
     "route_not_found": "Cette fonction n'est pas disponible.",
     "lineup_guild_not_found": "Ce serveur est introuvable ou n'a pas de profil Lineup.",
     "lineup_user_not_found": "Ce profil est introuvable.",
     "lineup_post_not_found": "Annonce introuvable ou retirée.",
     "lineup_experience_not_found": "Cette expérience est introuvable.",
-    "lineup_report_target_not_found": "Ce contenu n'existe plus, il ne peut pas être signalé.",
+    "lineup_report_target_not_found": "Ce contenu n'existe plus et ne peut pas être signalé.",
     "lineup_report_not_found": "Ce signalement est introuvable.",
     "lineup_badge_not_found": "Ce badge n'est pas attribué.",
     "invite_not_found": "Invitation invalide ou expirée.",
@@ -22,7 +22,7 @@
     "lineup_post_hidden": "Cette annonce a été masquée par l'équipe Moddy.",
     "lineup_post_invalid_status": "Cette action n'est pas possible pour l'état actuel de l'annonce.",
     "lineup_post_not_hidden": "Cette annonce n'est pas masquée.",
-    "lineup_experience_limit": "Vous avez atteint la limite d'expériences.",
+    "lineup_experience_limit": "Vous avez atteint le nombre maximal d'expériences. Supprimez-en une pour en ajouter.",
     "lineup_experience_already_verified": "Cette expérience est déjà vérifiée.",
     "lineup_review_already_pending": "Une vérification est déjà en attente pour cette expérience.",
     "lineup_report_already_handled": "Ce signalement a déjà été traité.",
@@ -76,9 +76,9 @@
     "manage": "Vous ne gérez plus ce serveur."
   },
   "invalidStatus": {
-    "draft": "Cette annonce est un brouillon, cette action n'est pas possible.",
+    "draft": "Cette action n'est pas possible sur un brouillon.",
     "published": "Cette annonce est déjà publiée.",
-    "closed": "Cette annonce est fermée, cette action n'est pas possible.",
+    "closed": "Cette action n'est pas possible sur une annonce fermée.",
     "hidden": "Cette annonce a été masquée par l'équipe Moddy."
   },
   "filterInvalid": {

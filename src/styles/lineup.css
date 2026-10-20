@@ -36,8 +36,13 @@
   gap: var(--gap-s);
 }
 
-.sanction-details p {
+.card .sanction-details p {
   margin: 0;
+}
+
+/* The same rhythm as two paragraphs of a card (the kit's `p + p`). */
+.card > p + .sanction-details {
+  margin-top: 10px;
 }
 
 .sanction-references {
@@ -45,12 +50,6 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--gap-s);
-}
-
-.card.hero .sanction-details,
-.card.hero .sanction-references {
-  align-items: center;
-  justify-content: center;
 }
 
 /* ---------------------------------------------------------------------------
