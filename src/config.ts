@@ -10,6 +10,9 @@ export const config = {
   apiBase: trimSlash(import.meta.env.VITE_API_BASE || 'https://api.moddy.app'),
   /** Where this site is served. */
   siteUrl: trimSlash(import.meta.env.VITE_SITE_URL || 'https://lineup.moddy.app'),
-  /** Development mock API instead of the real one. Never true in production. */
-  mockApi: import.meta.env.VITE_MOCK_API === '1' && !import.meta.env.PROD,
+  /**
+   * Development mock API instead of the real one. Never true in a production
+   * build; `--mode mock` (npm run dev:mock, build:mock) is the only way in.
+   */
+  mockApi: import.meta.env.VITE_MOCK_API === '1' && (!import.meta.env.PROD || import.meta.env.MODE === 'mock'),
 } as const;

@@ -1,0 +1,181 @@
+{
+  "badges": {
+    "label": "Abzeichen",
+    "more_one": "{{count}} weiteres Abzeichen: {{list}}",
+    "more_other": "{{count}} weitere Abzeichen: {{list}}"
+  },
+  "post": {
+    "kind": {
+      "guild": "Sucht Verstärkung",
+      "user": "Sucht ein Team"
+    },
+    "status": {
+      "draft": "Entwurf",
+      "published": "Veröffentlicht",
+      "closed": "Geschlossen",
+      "hidden": "Ausgeblendet",
+      "expired": "Abgelaufen"
+    },
+    "unknownGuild": "Server ohne Namen",
+    "unknownAuthor": "Discord-Nutzer",
+    "positions": "Positionen",
+    "hoursPerWeek": "{{value}} Std. pro Woche",
+    "openings_one": "{{value}} offene Stelle",
+    "openings_other": "{{value}} offene Stellen"
+  },
+  "expiry": {
+    "inHours_one": "Läuft in {{value}} Stunde ab",
+    "inHours_other": "Läuft in {{value}} Stunden ab",
+    "inDays_one": "Läuft in {{value}} Tag ab",
+    "inDays_other": "Läuft in {{value}} Tagen ab",
+    "on": "Läuft am {{date}} ab",
+    "expired": "Abgelaufen",
+    "never": "Ohne Ablaufdatum"
+  },
+  "languages": {
+    "label": "Sprachen",
+    "more": "+{{count}}"
+  },
+  "timezone": {
+    "label": "Zeitzone",
+    "localTime": "{{time}} Ortszeit"
+  },
+  "links": {
+    "label": "Links"
+  },
+  "requirement": {
+    "label": "Anforderungen",
+    "unit": {
+      "years_one": "{{value}} Jahr",
+      "years_other": "{{value}} Jahre",
+      "months_one": "{{value}} Monat",
+      "months_other": "{{value}} Monate",
+      "days_one": "{{value}} Tag",
+      "days_other": "{{value}} Tage",
+      "hoursPerWeek_one": "{{value}} Stunde pro Woche",
+      "hoursPerWeek_other": "{{value}} Stunden pro Woche"
+    },
+    "minAge_one": "Mindestens {{value}} Jahr",
+    "minAge_other": "Mindestens {{value}} Jahre",
+    "daysApprox": "{{days}}, etwa {{approx}}",
+    "voice": {
+      "required": "Mikrofon erforderlich",
+      "notRequired": "Mikrofon nicht erforderlich"
+    },
+    "promise": {
+      "label": "Prüfung durch Lineup geplant",
+      "hint": "Lineup prüft diese Anforderung, sobald Bewerbungen auf Lineup möglich sind. Aktuell wird nichts geprüft."
+    },
+    "viewer": {
+      "met": "Sie erfüllen diese Anforderung",
+      "notYet": "Noch nicht",
+      "hint": "Hinweis anhand Ihres Kontos, keine Prüfung."
+    }
+  },
+  "experience": {
+    "title": "{{position}}, {{name}}",
+    "range": "{{start}} bis {{end}}",
+    "present": "heute",
+    "duration": {
+      "lessThanMonth": "weniger als ein Monat",
+      "months_one": "{{value}} Monat",
+      "months_other": "{{value}} Monate",
+      "years_one": "{{value}} Jahr",
+      "years_other": "{{value}} Jahre",
+      "both": "{{years}} und {{months}}"
+    },
+    "showMore": "Mehr anzeigen",
+    "showLess": "Weniger anzeigen",
+    "verification": {
+      "verified": "Verifiziert",
+      "pending": "Ausstehend",
+      "unverified": "Nicht verifiziert",
+      "rejected": "Abgelehnt",
+      "tip": {
+        "discord": "Über Discord verifiziert am {{date}}",
+        "staff": "Vom Moddy-Team verifiziert am {{date}}",
+        "generic": "Verifiziert am {{date}}",
+        "pending": "Das Moddy-Team prüft die Anfrage."
+      }
+    }
+  },
+  "report": {
+    "button": "Melden",
+    "title": {
+      "post": "Diese Anzeige melden",
+      "user": "Dieses Profil melden",
+      "guild": "Diesen Server melden"
+    },
+    "intro": "Ihre Meldung geht an das Moddy-Team. Sie erhalten keine Antwort.",
+    "reason": "Grund",
+    "reasons": {
+      "spam": {
+        "label": "Spam",
+        "hint": "Werbung, wiederholte oder unpassende Nachrichten."
+      },
+      "scam": {
+        "label": "Betrug",
+        "hint": "Fordert Geld oder persönliche Daten."
+      },
+      "inappropriate": {
+        "label": "Unangemessener Inhalt",
+        "hint": "Verstörende oder hasserfüllte Inhalte, oder von Discord verboten."
+      },
+      "impersonation": {
+        "label": "Identitätsmissbrauch",
+        "hint": "Gibt sich als Person, Server oder Moddy aus."
+      },
+      "other": {
+        "label": "Anderes",
+        "hint": "Ein anderes Problem, das Sie unten beschreiben können."
+      }
+    },
+    "details": "Details (optional)",
+    "submit": "Meldung senden",
+    "retryIn": "Erneut versuchen in {{seconds}} s",
+    "sent": "Meldung gesendet. Danke.",
+    "alreadyTitle": "Bereits gemeldet",
+    "already": "Sie haben diesen Inhalt bereits gemeldet. Das Moddy-Team prüft ihn."
+  },
+  "nsfw": {
+    "title": "Nur für Erwachsene",
+    "body": "Dieser Inhalt ist für Minderjährige nicht geeignet. Bestätigen Sie, dass Sie mindestens 18 Jahre alt sind, um ihn anzuzeigen.",
+    "confirm": "Ich bin mindestens 18, anzeigen",
+    "back": "Zurück",
+    "dialog": {
+      "title": "Inhalte für Erwachsene",
+      "body": "NSFW-Anzeigen und -Server sind für Personen ab 18 Jahren. Bestätigen Sie Ihr Alter, um sie in der Liste anzuzeigen.",
+      "confirm": "Ich bin mindestens 18, weiter"
+    }
+  },
+  "errorState": {
+    "title": "Inhalt konnte nicht geladen werden",
+    "notFoundTitle": "Nicht gefunden",
+    "retryIn": "Erneut versuchen in {{seconds}} s"
+  },
+  "quota": {
+    "guild_one": "{{used}} / {{limit}} veröffentlichte Anzeige auf diesem Server",
+    "guild_other": "{{used}} / {{limit}} veröffentlichte Anzeigen auf diesem Server",
+    "user_one": "{{used}} / {{limit}} veröffentlichte Anzeige",
+    "user_other": "{{used}} / {{limit}} veröffentlichte Anzeigen",
+    "full": "Limit erreicht"
+  },
+  "stale": {
+    "text": "Discord-Daten sind möglicherweise veraltet"
+  },
+  "invite": {
+    "title": "Permanente Einladung erstellen",
+    "intro": "Lineup braucht einen Link, der nie abläuft. In Discord:",
+    "steps": {
+      "open": "Öffnen Sie die Servereinstellungen und dann \"Einladungen\". Alternativ klicken Sie mit der rechten Maustaste auf einen Kanal und wählen \"Leute einladen\" und \"Einladungslink bearbeiten\".",
+      "expire": "Stellen Sie \"Läuft ab nach\" auf \"Nie\".",
+      "uses": "Lassen Sie \"Maximale Anzahl an Verwendungen\" auf \"Kein Limit\".",
+      "copy": "Kopieren Sie den Link und fügen Sie ihn hier ein."
+    }
+  },
+  "application": {
+    "apply": "Bewerben",
+    "dm": "Per DM kontaktieren",
+    "dmHint": "Öffnet das Profil des Autors. Der Kontakt läuft über eine Discord-Direktnachricht."
+  }
+}

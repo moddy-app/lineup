@@ -3,6 +3,7 @@ import {fileURLToPath} from 'node:url';
 import {defineConfig} from 'vitest/config';
 
 import {fontPreload} from './scripts/vite-plugin-font-preload';
+import {mockWorker} from './scripts/vite-plugin-mock-worker';
 import {themeBoot} from './scripts/vite-plugin-theme-boot';
 
 /**
@@ -16,7 +17,7 @@ import {themeBoot} from './scripts/vite-plugin-theme-boot';
  * ("already been defined") and break instanceof checks.
  */
 export default defineConfig({
-  plugins: [react(), themeBoot(), fontPreload()],
+  plugins: [react(), themeBoot(), fontPreload(), mockWorker()],
   resolve: {
     alias: {'@': fileURLToPath(new URL('./src', import.meta.url))},
     dedupe: ['lit', '@material/web', '@material/material-color-utilities'],

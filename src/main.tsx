@@ -11,7 +11,7 @@ import '@moddy/design-kit/src/css/moddy.css';
 import '@/styles/lineup.css';
 
 import {initTheme} from '@moddy/design-kit';
-import {StrictMode} from 'react';
+import {type ReactNode, StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 
 import '@/ui/material';
@@ -37,8 +37,13 @@ window.addEventListener('vite:preloadError', (event) => {
   }
 });
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
+// Development mock API (`npm run dev:mock`, `npm run build:mock`): starts the MSW worker BEFORE anything renders and
+// may return its own page (the mock sign-in) to render instead of the app. The condition is a constant in a normal
+// production build, so neither src/mocks nor msw is in it (the dynamic import is dropped).
+let mockPage: ReactNode = null;
+if (import.meta.env.VITE_MOCK_API === '1' && (import.meta.env.DEV || import.meta.env.MODE === 'mock')) {
+  const {startMocks} = await import('./mocks/browser');
+  mockPage = await startMocks();
+}
+
+createRoot(document.getElementById('root')!).render(<StrictMode>{mockPage ?? <App />}</StrictMode>);

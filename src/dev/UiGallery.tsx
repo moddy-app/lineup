@@ -7,6 +7,8 @@
 
 import {useState} from 'react';
 
+import {DomainGallery} from './DomainGallery';
+
 import {
   Avatar,
   Bento,
@@ -321,6 +323,7 @@ export function Component() {
           onCancel={() => setDestructive(false)}
           onConfirm={() => setDestructive(false)}
         />
+        <DomainGallery />
       </Bento>
     </Page>
   );

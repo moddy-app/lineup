@@ -1,6 +1,7 @@
 # Dependencies and build output
 node_modules/
 dist/
+dist-mock/
 
 # Local env files (.env.example and .env.mock are committed)
 .env*.local

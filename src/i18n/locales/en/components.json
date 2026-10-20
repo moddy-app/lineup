@@ -1,0 +1,181 @@
+{
+  "badges": {
+    "label": "Badges",
+    "more_one": "{{count}} more badge: {{list}}",
+    "more_other": "{{count}} more badges: {{list}}"
+  },
+  "post": {
+    "kind": {
+      "guild": "Hiring",
+      "user": "Looking for a team"
+    },
+    "status": {
+      "draft": "Draft",
+      "published": "Published",
+      "closed": "Closed",
+      "hidden": "Hidden",
+      "expired": "Expired"
+    },
+    "unknownGuild": "Unnamed server",
+    "unknownAuthor": "Discord user",
+    "positions": "Positions",
+    "hoursPerWeek": "{{value}} h per week",
+    "openings_one": "{{value}} opening",
+    "openings_other": "{{value}} openings"
+  },
+  "expiry": {
+    "inHours_one": "Expires in {{value}} hour",
+    "inHours_other": "Expires in {{value}} hours",
+    "inDays_one": "Expires in {{value}} day",
+    "inDays_other": "Expires in {{value}} days",
+    "on": "Expires on {{date}}",
+    "expired": "Expired",
+    "never": "No expiry date"
+  },
+  "languages": {
+    "label": "Languages",
+    "more": "+{{count}}"
+  },
+  "timezone": {
+    "label": "Time zone",
+    "localTime": "{{time}} local time"
+  },
+  "links": {
+    "label": "Links"
+  },
+  "requirement": {
+    "label": "Requirements",
+    "unit": {
+      "years_one": "{{value}} year",
+      "years_other": "{{value}} years",
+      "months_one": "{{value}} month",
+      "months_other": "{{value}} months",
+      "days_one": "{{value}} day",
+      "days_other": "{{value}} days",
+      "hoursPerWeek_one": "{{value}} hour per week",
+      "hoursPerWeek_other": "{{value}} hours per week"
+    },
+    "minAge_one": "{{value}} year old or more",
+    "minAge_other": "{{value}} years old or more",
+    "daysApprox": "{{days}}, about {{approx}}",
+    "voice": {
+      "required": "Microphone required",
+      "notRequired": "Microphone not required"
+    },
+    "promise": {
+      "label": "Lineup check planned",
+      "hint": "Lineup will check this requirement when applications open on Lineup. Nothing is checked yet."
+    },
+    "viewer": {
+      "met": "You meet this requirement",
+      "notYet": "Not yet",
+      "hint": "Based on your account, for information only. This is not a check."
+    }
+  },
+  "experience": {
+    "title": "{{position}}, {{name}}",
+    "range": "{{start}} to {{end}}",
+    "present": "present",
+    "duration": {
+      "lessThanMonth": "less than a month",
+      "months_one": "{{value}} month",
+      "months_other": "{{value}} months",
+      "years_one": "{{value}} year",
+      "years_other": "{{value}} years",
+      "both": "{{years}} {{months}}"
+    },
+    "showMore": "Show more",
+    "showLess": "Show less",
+    "verification": {
+      "verified": "Verified",
+      "pending": "Pending",
+      "unverified": "Not verified",
+      "rejected": "Rejected",
+      "tip": {
+        "discord": "Verified through Discord on {{date}}",
+        "staff": "Verified by the Moddy team on {{date}}",
+        "generic": "Verified on {{date}}",
+        "pending": "The Moddy team is reviewing the request."
+      }
+    }
+  },
+  "report": {
+    "button": "Report",
+    "title": {
+      "post": "Report this post",
+      "user": "Report this profile",
+      "guild": "Report this server"
+    },
+    "intro": "Your report goes to the Moddy team. You will not receive a reply.",
+    "reason": "Reason",
+    "reasons": {
+      "spam": {
+        "label": "Spam",
+        "hint": "Advertising, repeated or unrelated messages."
+      },
+      "scam": {
+        "label": "Scam",
+        "hint": "Asks for money or personal data."
+      },
+      "inappropriate": {
+        "label": "Inappropriate content",
+        "hint": "Shocking or hateful content, or banned by Discord."
+      },
+      "impersonation": {
+        "label": "Impersonation",
+        "hint": "Pretends to be a person, a server or Moddy."
+      },
+      "other": {
+        "label": "Other",
+        "hint": "Another problem, described below."
+      }
+    },
+    "details": "Details (optional)",
+    "submit": "Send report",
+    "retryIn": "Try again in {{seconds}} s",
+    "sent": "Report sent. Thank you.",
+    "alreadyTitle": "Already reported",
+    "already": "You have already reported this content. The Moddy team is reviewing it."
+  },
+  "nsfw": {
+    "title": "Adults only",
+    "body": "This content is not suitable for minors. Confirm that you are 18 or older to view it.",
+    "confirm": "I am 18 or older, show it",
+    "back": "Back",
+    "dialog": {
+      "title": "Adult content",
+      "body": "NSFW posts and servers are for people aged 18 or older. Confirm your age to include them in the list.",
+      "confirm": "I am 18 or older, continue"
+    }
+  },
+  "errorState": {
+    "title": "Could not load this content",
+    "notFoundTitle": "Not found",
+    "retryIn": "Try again in {{seconds}} s"
+  },
+  "quota": {
+    "guild_one": "{{used}} / {{limit}} published post on this server",
+    "guild_other": "{{used}} / {{limit}} published posts on this server",
+    "user_one": "{{used}} / {{limit}} published post",
+    "user_other": "{{used}} / {{limit}} published posts",
+    "full": "Limit reached"
+  },
+  "stale": {
+    "text": "Discord data may be out of date"
+  },
+  "invite": {
+    "title": "Create a permanent invite",
+    "intro": "Lineup needs a link that never expires. In Discord:",
+    "steps": {
+      "open": "Open the server settings, then \"Invites\". You can also right-click a channel, then \"Invite People\" and \"Edit invite link\".",
+      "expire": "Set \"Expire after\" to \"Never\".",
+      "uses": "Leave \"Max number of uses\" on \"No limit\".",
+      "copy": "Copy the link and paste it here."
+    }
+  },
+  "application": {
+    "apply": "Apply",
+    "dm": "Contact by DM",
+    "dmHint": "Opens the author's profile. Contact happens in a Discord direct message."
+  }
+}

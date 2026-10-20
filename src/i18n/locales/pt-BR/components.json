@@ -1,0 +1,181 @@
+{
+  "badges": {
+    "label": "Selos",
+    "more_one": "mais {{count}} selo: {{list}}",
+    "more_other": "mais {{count}} selos: {{list}}"
+  },
+  "post": {
+    "kind": {
+      "guild": "Recruta",
+      "user": "Procura uma equipe"
+    },
+    "status": {
+      "draft": "Rascunho",
+      "published": "Publicado",
+      "closed": "Fechado",
+      "hidden": "Oculto",
+      "expired": "Expirado"
+    },
+    "unknownGuild": "Servidor sem nome",
+    "unknownAuthor": "Usuário do Discord",
+    "positions": "Cargos",
+    "hoursPerWeek": "{{value}} h por semana",
+    "openings_one": "{{value}} vaga",
+    "openings_other": "{{value}} vagas"
+  },
+  "expiry": {
+    "inHours_one": "Expira em {{value}} hora",
+    "inHours_other": "Expira em {{value}} horas",
+    "inDays_one": "Expira em {{value}} dia",
+    "inDays_other": "Expira em {{value}} dias",
+    "on": "Expira em {{date}}",
+    "expired": "Expirado",
+    "never": "Sem data de expiração"
+  },
+  "languages": {
+    "label": "Idiomas",
+    "more": "+{{count}}"
+  },
+  "timezone": {
+    "label": "Fuso horário",
+    "localTime": "{{time}}, horário local"
+  },
+  "links": {
+    "label": "Links"
+  },
+  "requirement": {
+    "label": "Requisitos",
+    "unit": {
+      "years_one": "{{value}} ano",
+      "years_other": "{{value}} anos",
+      "months_one": "{{value}} mês",
+      "months_other": "{{value}} meses",
+      "days_one": "{{value}} dia",
+      "days_other": "{{value}} dias",
+      "hoursPerWeek_one": "{{value}} hora por semana",
+      "hoursPerWeek_other": "{{value}} horas por semana"
+    },
+    "minAge_one": "{{value}} ano no mínimo",
+    "minAge_other": "{{value}} anos no mínimo",
+    "daysApprox": "{{days}}, cerca de {{approx}}",
+    "voice": {
+      "required": "Microfone obrigatório",
+      "notRequired": "Microfone não obrigatório"
+    },
+    "promise": {
+      "label": "Verificação do Lineup prevista",
+      "hint": "O Lineup vai verificar este requisito quando as candidaturas abrirem no Lineup. Nada é verificado por enquanto."
+    },
+    "viewer": {
+      "met": "Você cumpre este requisito",
+      "notYet": "Ainda não",
+      "hint": "Indicação baseada na sua conta, sem valor de verificação."
+    }
+  },
+  "experience": {
+    "title": "{{position}}, {{name}}",
+    "range": "{{start}} a {{end}}",
+    "present": "hoje",
+    "duration": {
+      "lessThanMonth": "menos de um mês",
+      "months_one": "{{value}} mês",
+      "months_other": "{{value}} meses",
+      "years_one": "{{value}} ano",
+      "years_other": "{{value}} anos",
+      "both": "{{years}} e {{months}}"
+    },
+    "showMore": "Ver mais",
+    "showLess": "Ver menos",
+    "verification": {
+      "verified": "Verificada",
+      "pending": "Pendente",
+      "unverified": "Não verificada",
+      "rejected": "Recusada",
+      "tip": {
+        "discord": "Verificada pelo Discord em {{date}}",
+        "staff": "Verificada pela equipe do Moddy em {{date}}",
+        "generic": "Verificada em {{date}}",
+        "pending": "A equipe do Moddy está analisando o pedido."
+      }
+    }
+  },
+  "report": {
+    "button": "Denunciar",
+    "title": {
+      "post": "Denunciar este anúncio",
+      "user": "Denunciar este perfil",
+      "guild": "Denunciar este servidor"
+    },
+    "intro": "Sua denúncia vai para a equipe do Moddy. Você não receberá resposta.",
+    "reason": "Motivo",
+    "reasons": {
+      "spam": {
+        "label": "Spam",
+        "hint": "Publicidade, mensagens repetidas ou sem relação."
+      },
+      "scam": {
+        "label": "Golpe",
+        "hint": "Pede dinheiro ou dados pessoais."
+      },
+      "inappropriate": {
+        "label": "Conteúdo inadequado",
+        "hint": "Conteúdo chocante, de ódio ou proibido pelo Discord."
+      },
+      "impersonation": {
+        "label": "Falsa identidade",
+        "hint": "Finge ser uma pessoa, um servidor ou o Moddy."
+      },
+      "other": {
+        "label": "Outro",
+        "hint": "Outro problema, que você pode detalhar abaixo."
+      }
+    },
+    "details": "Detalhes (opcional)",
+    "submit": "Enviar denúncia",
+    "retryIn": "Tentar de novo em {{seconds}} s",
+    "sent": "Denúncia enviada. Obrigado.",
+    "alreadyTitle": "Já denunciado",
+    "already": "Você já denunciou este conteúdo. A equipe do Moddy está analisando."
+  },
+  "nsfw": {
+    "title": "Conteúdo para maiores de idade",
+    "body": "Este conteúdo não é adequado para menores. Confirme que você tem 18 anos ou mais para vê-lo.",
+    "confirm": "Tenho 18 anos ou mais, mostrar",
+    "back": "Voltar",
+    "dialog": {
+      "title": "Conteúdo para adultos",
+      "body": "Anúncios e servidores NSFW são para pessoas com 18 anos ou mais. Confirme sua idade para incluí-los na lista.",
+      "confirm": "Tenho 18 anos ou mais, continuar"
+    }
+  },
+  "errorState": {
+    "title": "Não foi possível carregar este conteúdo",
+    "notFoundTitle": "Não encontrado",
+    "retryIn": "Tentar de novo em {{seconds}} s"
+  },
+  "quota": {
+    "guild_one": "{{used}} / {{limit}} anúncio publicado neste servidor",
+    "guild_other": "{{used}} / {{limit}} anúncios publicados neste servidor",
+    "user_one": "{{used}} / {{limit}} anúncio publicado",
+    "user_other": "{{used}} / {{limit}} anúncios publicados",
+    "full": "Limite atingido"
+  },
+  "stale": {
+    "text": "Os dados do Discord podem estar desatualizados"
+  },
+  "invite": {
+    "title": "Criar um convite permanente",
+    "intro": "O Lineup precisa de um link que nunca expire. No Discord:",
+    "steps": {
+      "open": "Abra as configurações do servidor e depois \"Convites\". Você também pode clicar com o botão direito em um canal e escolher \"Convidar pessoas\" e \"Editar link de convite\".",
+      "expire": "Defina \"Expirar após\" como \"Nunca\".",
+      "uses": "Deixe \"Número máximo de usos\" em \"Sem limite\".",
+      "copy": "Copie o link e cole aqui."
+    }
+  },
+  "application": {
+    "apply": "Candidatar-se",
+    "dm": "Contatar por DM",
+    "dmHint": "Abre o perfil do autor. O contato é feito por mensagem direta no Discord."
+  }
+}

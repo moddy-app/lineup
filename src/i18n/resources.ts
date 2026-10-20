@@ -7,6 +7,7 @@
 import deCatalog from './locales/de/catalog.json';
 import deClaim from './locales/de/claim.json';
 import deCommon from './locales/de/common.json';
+import deComponents from './locales/de/components.json';
 import deEditor from './locales/de/editor.json';
 import deErrors from './locales/de/errors.json';
 import deExperiences from './locales/de/experiences.json';
@@ -22,6 +23,7 @@ import deUserProfile from './locales/de/userProfile.json';
 import enCatalog from './locales/en/catalog.json';
 import enClaim from './locales/en/claim.json';
 import enCommon from './locales/en/common.json';
+import enComponents from './locales/en/components.json';
 import enEditor from './locales/en/editor.json';
 import enErrors from './locales/en/errors.json';
 import enExperiences from './locales/en/experiences.json';
@@ -37,6 +39,7 @@ import enUserProfile from './locales/en/userProfile.json';
 import esCatalog from './locales/es/catalog.json';
 import esClaim from './locales/es/claim.json';
 import esCommon from './locales/es/common.json';
+import esComponents from './locales/es/components.json';
 import esEditor from './locales/es/editor.json';
 import esErrors from './locales/es/errors.json';
 import esExperiences from './locales/es/experiences.json';
@@ -52,6 +55,7 @@ import esUserProfile from './locales/es/userProfile.json';
 import frCatalog from './locales/fr/catalog.json';
 import frClaim from './locales/fr/claim.json';
 import frCommon from './locales/fr/common.json';
+import frComponents from './locales/fr/components.json';
 import frEditor from './locales/fr/editor.json';
 import frErrors from './locales/fr/errors.json';
 import frExperiences from './locales/fr/experiences.json';
@@ -67,6 +71,7 @@ import frUserProfile from './locales/fr/userProfile.json';
 import ptBRCatalog from './locales/pt-BR/catalog.json';
 import ptBRClaim from './locales/pt-BR/claim.json';
 import ptBRCommon from './locales/pt-BR/common.json';
+import ptBRComponents from './locales/pt-BR/components.json';
 import ptBREditor from './locales/pt-BR/editor.json';
 import ptBRErrors from './locales/pt-BR/errors.json';
 import ptBRExperiences from './locales/pt-BR/experiences.json';
@@ -82,6 +87,7 @@ import ptBRUserProfile from './locales/pt-BR/userProfile.json';
 
 export const en = {
   common: enCommon,
+  components: enComponents,
   errors: enErrors,
   feed: enFeed,
   post: enPost,
@@ -105,6 +111,7 @@ export const resources = {
   en,
   fr: {
     common: frCommon,
+    components: frComponents,
     errors: frErrors,
     feed: frFeed,
     post: frPost,
@@ -122,6 +129,7 @@ export const resources = {
   },
   es: {
     common: esCommon,
+    components: esComponents,
     errors: esErrors,
     feed: esFeed,
     post: esPost,
@@ -139,6 +147,7 @@ export const resources = {
   },
   'pt-BR': {
     common: ptBRCommon,
+    components: ptBRComponents,
     errors: ptBRErrors,
     feed: ptBRFeed,
     post: ptBRPost,
@@ -156,6 +165,7 @@ export const resources = {
   },
   de: {
     common: deCommon,
+    components: deComponents,
     errors: deErrors,
     feed: deFeed,
     post: dePost,
