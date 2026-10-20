@@ -1,3 +1,4 @@
+export {AppLayout, Section, SingleColumn} from './appLayout';
 export {Avatar, type AvatarSize} from './Avatar';
 export {Pill, Status, type StatusVariant, VisuallyHidden} from './Badges';
 export {Card, type CardProps, type CardVariant, type Span} from './Card';

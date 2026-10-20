@@ -28,6 +28,7 @@ import {
   Row,
   RowBody,
   Rows,
+  Section,
   Select,
   Shape,
   type ShapeName,
@@ -71,6 +72,28 @@ export function Component() {
         <Card variant="hero">
           <h1>UI gallery</h1>
           <p>Every primitive of src/ui, on the kit's classes.</p>
+        </Card>
+
+        <Card>
+          <h2>Functional layouts</h2>
+          <p>
+            Section, and the classes of AppLayout (main and aside) and SingleColumn. Every placeholder page uses
+            SingleColumn.
+          </p>
+          <CardVisual>
+            <div className="app-layout has-aside">
+              <div className="app-main">
+                <Section title="Section" actions={<md-outlined-button>Action</md-outlined-button>}>
+                  <p>A card with a title row and its content.</p>
+                </Section>
+              </div>
+              <aside className="app-aside">
+                <Section title="Aside">
+                  <p>Side column.</p>
+                </Section>
+              </aside>
+            </div>
+          </CardVisual>
         </Card>
 
         {SHAPES.map(([shape, tone, icon], index) => (

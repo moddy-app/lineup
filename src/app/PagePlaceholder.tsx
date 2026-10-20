@@ -1,17 +1,14 @@
-import {Bento, Card, Page} from '@/ui';
+import {Section, SingleColumn} from '@/ui';
 
 /**
  * What every page shows until its feature is built: its name, in a card. A
- * feature replaces its page module's component and drops this.
+ * feature replaces its page module's component and drops this. Functional
+ * pages use AppLayout / SingleColumn / Section, not the bento grid.
  */
 export function PagePlaceholder({title}: {title: string}) {
   return (
-    <Page>
-      <Bento>
-        <Card variant="hero">
-          <h1>{title}</h1>
-        </Card>
-      </Bento>
-    </Page>
+    <SingleColumn>
+      <Section title={title} level={1} />
+    </SingleColumn>
   );
 }

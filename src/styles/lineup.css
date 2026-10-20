@@ -166,3 +166,78 @@ md-filled-button.destructive {
       visibility 200ms;
   }
 }
+
+/* ---------------------------------------------------------------------------
+ * Layouts for functional screens (see src/ui/appLayout.tsx). The bento grid is
+ * the brand's look; screens people work in use a main column with an optional
+ * side column, or one narrow column, with the same page gap and cards.
+ * ------------------------------------------------------------------------- */
+
+.app-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--page-gap);
+}
+
+.app-layout.has-aside {
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  align-items: start;
+}
+
+.app-main,
+.app-aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--page-gap);
+  min-width: 0;
+}
+
+.app-aside.sticky {
+  position: sticky;
+  top: calc(var(--app-bar-height) + var(--page-gap));
+}
+
+/* Same breakpoint as the bento: the side column goes under the main one. */
+@media (max-width: 1100px) {
+  .app-layout.has-aside {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .app-aside.sticky {
+    position: static;
+  }
+}
+
+.single-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--page-gap);
+  max-width: 760px;
+  margin-inline: auto;
+}
+
+/* A card with a title row: title on the left, actions on the right. The
+   title is the card's title size whatever its level (one h1 per page). */
+.card.section {
+  gap: var(--space);
+}
+
+.section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-m) var(--gap-l);
+}
+
+.section-head :is(h1, h2) {
+  margin: 0;
+  font-size: var(--text-title);
+  letter-spacing: normal;
+}
+
+.section-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-m);
+}
