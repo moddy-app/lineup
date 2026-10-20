@@ -41,6 +41,16 @@ export default defineConfig({
   },
   build: {
     target: 'es2022',
+    rollupOptions: {
+      output: {
+        // Long-lived vendor chunks: an app deploy does not invalidate them.
+        manualChunks(id) {
+          if (/node_modules\/(@material|lit|lit-html|lit-element|@lit)\//.test(id)) return 'material';
+          if (/node_modules\/(react|react-dom|react-router|scheduler|@tanstack|i18next|react-i18next)\//.test(id))
+            return 'vendor';
+        },
+      },
+    },
   },
   test: {
     environment: 'jsdom',

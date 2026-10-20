@@ -40,10 +40,19 @@ export function fontPreload(): Plugin {
         } else {
           href = posix.join(base, DEV_FONT_PATH);
         }
-        const link = href
-          ? `<link rel="preload" href="${href}" as="font" type="font/woff2" crossorigin />`
-          : '';
-        return html.replace(PLACEHOLDER, () => link);
+        const link = href ? `<link rel="preload" href="${href}" as="font" type="font/woff2" crossorigin />` : '';
+        // Build: Vite appends the stylesheet link after the app script. The
+        // README's order is stylesheet, then font preload, then icons, then
+        // the app: move it up, next to the preload.
+        let stylesheet = '';
+        const cssLink = /[ \t]*<link rel="stylesheet"[^>]*href="[^"]*\.css"[^>]*>\n?/;
+        if (ctx.bundle) {
+          html = html.replace(cssLink, (match) => {
+            stylesheet = `${match.trim()}\n    `;
+            return '';
+          });
+        }
+        return html.replace(PLACEHOLDER, () => `${stylesheet}${link}`);
       },
     },
   };

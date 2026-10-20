@@ -31,6 +31,7 @@ export function initI18n(): typeof i18n {
     initAsync: false,
     react: {useSuspense: false},
     interpolation: {escapeValue: false},
+    showSupportNotice: false,
   });
   applyLanguage(i18n.resolvedLanguage ?? FALLBACK_LANGUAGE);
   i18n.on('languageChanged', applyLanguage);

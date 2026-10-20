@@ -1,0 +1,31 @@
+{
+  // The design kit's sources (design-kit/src), checked the way the kit checks
+  // them (design-kit/tsconfig.json: no noUncheckedIndexedAccess), and exposed
+  // to the app as declarations. Without this project the app's stricter
+  // options would be applied to code we do not own and may not edit.
+  "compilerOptions": {
+    "composite": true,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "outDir": "./node_modules/.tmp/design-kit-types",
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.kit.tsbuildinfo",
+    "rootDir": "./design-kit",
+
+    "module": "ESNext",
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "types": [],
+
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false
+  },
+  "include": ["design-kit/src/**/*"]
+}

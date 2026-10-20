@@ -1,0 +1,168 @@
+/**
+ * Lineup's own styles, on top of the Moddy design system (design-kit).
+ *
+ * Only what the kit does not cover, and only its tokens: colors are Material
+ * theme tokens (--md-sys-color-*), never a hex value; sizes are the kit's
+ * spacing, radius and type tokens. No gradient, no shadow on cards, no
+ * decoration. Motion lives inside prefers-reduced-motion: no-preference.
+ */
+
+:root {
+  /* Fields and selects: the same 16px corners as md-outlined-text-field. */
+  --md-outlined-select-text-field-container-shape: var(--radius-l);
+}
+
+/* ---------------------------------------------------------------------------
+ * Special pages (404, errors) have no footer (DESIGN-SYSTEM §4). The shell
+ * leaves it out for routes that declare handle.special; this covers the
+ * error boundary, which no route declares.
+ * ------------------------------------------------------------------------- */
+
+.app:has(.page.special) > .app-footer {
+  display: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * Footer: the byline on the left, the language on the right; they wrap
+ * under each other on a narrow window.
+ * ------------------------------------------------------------------------- */
+
+.app-footer-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-l) var(--space);
+}
+
+.app-footer-byline {
+  margin: 0;
+}
+
+.field.language-select {
+  width: auto;
+  min-width: 220px;
+}
+
+/* ---------------------------------------------------------------------------
+ * Forms: fields fill their column, a toggle is its control and its label.
+ * ------------------------------------------------------------------------- */
+
+.field {
+  width: 100%;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-m);
+  cursor: pointer;
+  font-size: var(--text-body);
+  color: var(--md-sys-color-on-surface);
+}
+
+/* A destructive confirmation (delete): the filled button in the error colors. */
+md-filled-button.destructive {
+  --md-filled-button-container-color: var(--md-sys-color-error);
+  --md-filled-button-label-text-color: var(--md-sys-color-on-error);
+  --md-filled-button-hover-label-text-color: var(--md-sys-color-on-error);
+  --md-filled-button-focus-label-text-color: var(--md-sys-color-on-error);
+  --md-filled-button-pressed-label-text-color: var(--md-sys-color-on-error);
+  --md-filled-button-icon-color: var(--md-sys-color-on-error);
+  --md-filled-button-hover-icon-color: var(--md-sys-color-on-error);
+  --md-filled-button-focus-icon-color: var(--md-sys-color-on-error);
+  --md-filled-button-pressed-icon-color: var(--md-sys-color-on-error);
+  --md-filled-button-hover-state-layer-color: var(--md-sys-color-on-error);
+  --md-filled-button-pressed-state-layer-color: var(--md-sys-color-on-error);
+}
+
+/* ---------------------------------------------------------------------------
+ * Loading: a spinner centered in its card; a thin bar under the app bar while
+ * the next page loads (it shows after 200 ms, so quick navigations stay calm).
+ * ------------------------------------------------------------------------- */
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--space);
+}
+
+.nav-progress {
+  position: fixed;
+  top: var(--app-bar-height);
+  right: 0;
+  left: 0;
+  z-index: 9;
+  --md-linear-progress-track-height: 3px;
+  --md-linear-progress-active-indicator-height: 3px;
+  opacity: 0;
+  animation: nav-progress-in 0s 200ms forwards;
+}
+
+@keyframes nav-progress-in {
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Snackbar: a short message at the bottom of the window (Material 3). The kit
+ * has none, so it follows the kit's tooltip: inverse-surface, 4px corners.
+ * Above the footer (z-index 5) and the band under the cards (4).
+ * ------------------------------------------------------------------------- */
+
+.snackbar {
+  position: fixed;
+  bottom: calc(var(--page-gap) + var(--gap-m));
+  left: 50%;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-l);
+  box-sizing: border-box;
+  width: max-content;
+  max-width: min(560px, calc(100vw - 2 * var(--page-gap)));
+  min-height: 48px;
+  padding: var(--gap-s) var(--gap-l);
+  border-radius: var(--radius-xs);
+  background-color: var(--md-sys-color-inverse-surface);
+  color: var(--md-sys-color-inverse-on-surface);
+  font-size: 14px;
+  line-height: 1.4;
+  visibility: hidden;
+  opacity: 0;
+  translate: -50% var(--gap-s);
+}
+
+.snackbar[data-open='true'] {
+  visibility: visible;
+  opacity: 1;
+  translate: -50% 0;
+}
+
+.snackbar-message {
+  flex: 1;
+  min-width: 0;
+  padding-block: var(--gap-s);
+}
+
+.snackbar-action {
+  flex-shrink: 0;
+  margin-inline-end: calc(-1 * var(--gap-s));
+  --md-text-button-label-text-color: var(--md-sys-color-inverse-primary);
+  --md-text-button-hover-label-text-color: var(--md-sys-color-inverse-primary);
+  --md-text-button-focus-label-text-color: var(--md-sys-color-inverse-primary);
+  --md-text-button-pressed-label-text-color: var(--md-sys-color-inverse-primary);
+  --md-text-button-hover-state-layer-color: var(--md-sys-color-inverse-primary);
+  --md-text-button-pressed-state-layer-color: var(--md-sys-color-inverse-primary);
+  --md-focus-ring-color: var(--md-sys-color-inverse-primary);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .snackbar {
+    transition:
+      opacity 200ms var(--ease),
+      translate 200ms var(--ease),
+      visibility 200ms;
+  }
+}
