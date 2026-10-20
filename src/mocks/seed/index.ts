@@ -4,7 +4,6 @@
  * report for the notable cases; the ids are in ./ids.ts.
  */
 
-
 import {newRuntime, type Db} from '../env';
 import {compareKeyed} from '../logic/cursor';
 import {isLive, isNsfwGuild, isNsfwPost} from '../logic/visibility';
@@ -23,7 +22,8 @@ export const DB_VERSION = 1;
 const FEED_PAGE = 20;
 const DIRECTORY_PAGE = 24;
 
-const byKey = <T>(items: T[], key: (item: T) => {at: string; id: string}) => [...items].sort((a, b) => compareKeyed(true)(key(a), key(b)));
+const byKey = <T>(items: T[], key: (item: T) => {at: string; id: string}) =>
+  [...items].sort((a, b) => compareKeyed(true)(key(a), key(b)));
 
 export function createSeedDb(now: Date = new Date()): Db {
   const db: Db = {
@@ -92,7 +92,9 @@ function addFillers(db: Db, now: Date): void {
   // --- the directory -------------------------------------------------------------------------------------------
   const DIRECTORY_REAL_FIRST = 4;
   const directoryRows = byKey(
-    Object.values(db.profiles).filter((profile) => profile.listed && !isNsfwGuild(env, profile.guild_id) && !db.guilds[profile.guild_id]?.sanction),
+    Object.values(db.profiles).filter(
+      (profile) => profile.listed && !isNsfwGuild(env, profile.guild_id) && !db.guilds[profile.guild_id]?.sanction,
+    ),
     (profile) => ({at: profile.created_at, id: profile.guild_id}),
   );
   const first = directoryRows[DIRECTORY_REAL_FIRST - 1];

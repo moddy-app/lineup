@@ -3,14 +3,7 @@
  * invitation, editing, deleting, refreshing, and "my servers".
  */
 
-import type {
-  GuildCard,
-  GuildProfile,
-  MyGuild,
-  Paginated,
-  RefreshGuildsResponse,
-  Snowflake,
-} from '@/api/types';
+import type {GuildCard, GuildProfile, MyGuild, Paginated, RefreshGuildsResponse, Snowflake} from '@/api/types';
 
 import {conflict, forbidden, notFound, rateLimited, sanctionError, unprocessable} from '../errors';
 import type {Actor, Env, Viewer} from '../env';
@@ -65,7 +58,9 @@ export function listDirectory(env: Env, query: URLSearchParams): Paginated<Guild
     .filter((profile) => {
       if (!needle) return true;
       const guild = env.db.guilds[profile.guild_id];
-      return [guild?.name, profile.description, guild?.description].some((text) => text?.toLowerCase().includes(needle));
+      return [guild?.name, profile.description, guild?.description].some((text) =>
+        text?.toLowerCase().includes(needle),
+      );
     })
     .map((profile) => ({at: profile.created_at, id: profile.guild_id, profile}))
     .sort(compareKeyed(true));
@@ -152,11 +147,12 @@ export function updateGuild(env: Env, actor: Actor, guildId: Snowflake, body: Gu
   if (typeof body.invite === 'string') {
     const resolved = resolveInvite(env, body.invite);
     if (resolved.guild.id !== guildId) {
-      throw unprocessable('invite_guild_mismatch', "Cette invitation mène à un autre serveur.");
+      throw unprocessable('invite_guild_mismatch', 'Cette invitation mène à un autre serveur.');
     }
     inviteCode = resolved.invite.code;
   }
-  if (body.description !== undefined) profile.description = body.description && body.description !== '' ? body.description : null;
+  if (body.description !== undefined)
+    profile.description = body.description && body.description !== '' ? body.description : null;
   if (body.links !== undefined) profile.links = body.links;
   if (body.theme !== undefined) profile.theme = body.theme;
   if (body.tags !== undefined) profile.tags = body.tags;
@@ -243,4 +239,3 @@ export function refreshMyGuilds(env: Env, actor: Actor): RefreshGuildsResponse {
   const {guilds, stale} = manageableGuilds(env, actor, true);
   return {guilds: guilds.map((id) => toMyGuild(env, id)).sort(byName), stale};
 }
-

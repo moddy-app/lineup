@@ -364,7 +364,8 @@ export function seedGuildProfiles(now: Date): GuildProfileRow[] {
       invite_code: 'lumen-study',
       claimed_by: U.theo,
       daysAgo: 20,
-      description: "Un serveur d'entraide pour les élèves de lycée et de classes préparatoires, géré par d'anciens élèves.",
+      description:
+        "Un serveur d'entraide pour les élèves de lycée et de classes préparatoires, géré par d'anciens élèves.",
       theme: 'education',
       tags: ['etudes', 'entraide', 'lycee'],
       languages: ['fr'],
@@ -389,7 +390,8 @@ export function seedGuildProfiles(now: Date): GuildProfileRow[] {
       invite_code: 'arena-esport',
       claimed_by: U.karim,
       daysAgo: 9,
-      description: 'Des tournois amateurs chaque semaine, des scrims et un système de ligues. On cherche des casteurs et des managers.',
+      description:
+        'Des tournois amateurs chaque semaine, des scrims et un système de ligues. On cherche des casteurs et des managers.',
       links: links(['Classement', 'https://arena-esport.example.com/classement']),
       theme: 'esport',
       tags: ['tournoi', 'valorant', 'league'],

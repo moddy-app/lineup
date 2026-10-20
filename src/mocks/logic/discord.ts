@@ -77,11 +77,7 @@ export function resolveInvite(env: Env, input: string): ResolvedInvite {
   const guild = invite.kind === 'guild' && invite.guild_id ? env.db.guilds[invite.guild_id] : undefined;
   if (!guild) throw inviteInvalid();
   if (invite.expires_at !== null) {
-    throw lineupError(
-      422,
-      'invite_expiring',
-      "Cette invitation expire. Créez une invitation qui n'expire jamais.",
-    );
+    throw lineupError(422, 'invite_expiring', "Cette invitation expire. Créez une invitation qui n'expire jamais.");
   }
   return {invite, guild};
 }

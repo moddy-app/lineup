@@ -24,7 +24,11 @@ export interface ReportInput {
  * same person on the same target (200, `created: false`, no quota used) → the
  * limit of 10 per hour (429) → created (201).
  */
-export function createReport(env: Env, actor: Actor, input: ReportInput): {status: 200 | 201; body: CreateReportResponse} {
+export function createReport(
+  env: Env,
+  actor: Actor,
+  input: ReportInput,
+): {status: 200 | 201; body: CreateReportResponse} {
   const issues = new Issues();
   const loc = ['body', 'target_id'];
   if (input.target_type === 'post' ? !isUuid(input.target_id) : !/^\d{1,19}$/.test(input.target_id)) {
@@ -32,7 +36,7 @@ export function createReport(env: Env, actor: Actor, input: ReportInput): {statu
       'value_error',
       loc,
       input.target_type === 'post'
-        ? "Value error, target_id doit être un UUID pour une annonce."
+        ? 'Value error, target_id doit être un UUID pour une annonce.'
         : 'Value error, target_id doit être un identifiant Discord.',
       input.target_id,
       {error: {}},
@@ -55,7 +59,8 @@ export function createReport(env: Env, actor: Actor, input: ReportInput): {statu
     if (!profile) throw notFound('lineup_report_target_not_found');
     ownerId = profile.claimed_by;
   }
-  if (ownerId === actor.id) throw unprocessable('lineup_report_self', 'Vous ne pouvez pas signaler votre propre contenu.');
+  if (ownerId === actor.id)
+    throw unprocessable('lineup_report_self', 'Vous ne pouvez pas signaler votre propre contenu.');
 
   const duplicate = Object.values(env.db.reports).find(
     (report) =>
@@ -67,7 +72,8 @@ export function createReport(env: Env, actor: Actor, input: ReportInput): {statu
   if (duplicate) return {status: 200, body: {id: duplicate.id, status: 'open', created: false}};
 
   const hit = env.db.rt.limiter.hit(`reports_rate:${actor.id}`, REPORT_LIMIT, HOUR, env.now.getTime());
-  if (!hit.allowed) throw rateLimited(hit.retryAfter, 'Vous avez atteint la limite de signalements. Réessayez plus tard.');
+  if (!hit.allowed)
+    throw rateLimited(hit.retryAfter, 'Vous avez atteint la limite de signalements. Réessayez plus tard.');
 
   const id = newUuid();
   env.db.reports[id] = {

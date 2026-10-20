@@ -20,66 +20,100 @@ export function seedReports(now: Date): Report[] {
     ...seed,
   });
   return [
-    report(1, {
-      target_type: 'post',
-      target_id: postId(25),
-      reporter_id: U.sam,
-      reason: 'scam',
-      details: "L'annonce promet 500 € par semaine sans expérience et demande de passer en message privé pour recevoir des accès.",
-    }, 3),
-    report(2, {
-      target_type: 'user',
-      target_id: U.recrut,
-      reporter_id: U.lucie,
-      reason: 'spam',
-      details: 'Même message envoyé dans plusieurs serveurs de modération.',
-    }, 8),
-    report(3, {
-      target_type: 'post',
-      target_id: postId(26),
-      reporter_id: U.camille,
-      reason: 'scam',
-      details: "Un dépôt de départ est demandé pour activer le compte staff : c'est une arnaque.",
-    }, 20),
-    report(4, {
-      target_type: 'guild',
-      target_id: G.nox,
-      reporter_id: U.theo,
-      reason: 'inappropriate',
-      details: "Le serveur recrute des modérateurs en affichant des visuels qui n'ont pas leur place dans une annonce publique.",
-    }, 30),
-    report(5, {
-      target_type: 'post',
-      target_id: postId(23),
-      reporter_id: U.jonas,
-      reason: 'other',
-    }, 52),
-    report(6, {
-      target_type: 'post',
-      target_id: postId(42),
-      reporter_id: U.sam,
-      reason: 'spam',
-      details: 'Annonce publiée deux fois.',
-      status: 'resolved',
-      handled_by: U.noe,
-    }, 90),
-    report(7, {
-      target_type: 'guild',
-      target_id: G.velvet,
-      reporter_id: U.hugo,
-      reason: 'inappropriate',
-      status: 'dismissed',
-      handled_by: U.noe,
-    }, 120),
-    report(8, {
-      target_type: 'user',
-      target_id: U.dylan,
-      reporter_id: U.amira,
-      reason: 'impersonation',
-      details: "Cette personne se présente comme modérateur d'Anime Plaza, ce qu'il n'est pas.",
-      status: 'resolved',
-      handled_by: U.noe,
-    }, 200),
+    report(
+      1,
+      {
+        target_type: 'post',
+        target_id: postId(25),
+        reporter_id: U.sam,
+        reason: 'scam',
+        details:
+          "L'annonce promet 500 € par semaine sans expérience et demande de passer en message privé pour recevoir des accès.",
+      },
+      3,
+    ),
+    report(
+      2,
+      {
+        target_type: 'user',
+        target_id: U.recrut,
+        reporter_id: U.lucie,
+        reason: 'spam',
+        details: 'Même message envoyé dans plusieurs serveurs de modération.',
+      },
+      8,
+    ),
+    report(
+      3,
+      {
+        target_type: 'post',
+        target_id: postId(26),
+        reporter_id: U.camille,
+        reason: 'scam',
+        details: "Un dépôt de départ est demandé pour activer le compte staff : c'est une arnaque.",
+      },
+      20,
+    ),
+    report(
+      4,
+      {
+        target_type: 'guild',
+        target_id: G.nox,
+        reporter_id: U.theo,
+        reason: 'inappropriate',
+        details:
+          "Le serveur recrute des modérateurs en affichant des visuels qui n'ont pas leur place dans une annonce publique.",
+      },
+      30,
+    ),
+    report(
+      5,
+      {
+        target_type: 'post',
+        target_id: postId(23),
+        reporter_id: U.jonas,
+        reason: 'other',
+      },
+      52,
+    ),
+    report(
+      6,
+      {
+        target_type: 'post',
+        target_id: postId(42),
+        reporter_id: U.sam,
+        reason: 'spam',
+        details: 'Annonce publiée deux fois.',
+        status: 'resolved',
+        handled_by: U.noe,
+      },
+      90,
+    ),
+    report(
+      7,
+      {
+        target_type: 'guild',
+        target_id: G.velvet,
+        reporter_id: U.hugo,
+        reason: 'inappropriate',
+        status: 'dismissed',
+        handled_by: U.noe,
+      },
+      120,
+    ),
+    report(
+      8,
+      {
+        target_type: 'user',
+        target_id: U.dylan,
+        reporter_id: U.amira,
+        reason: 'impersonation',
+        details: "Cette personne se présente comme modérateur d'Anime Plaza, ce qu'il n'est pas.",
+        status: 'resolved',
+        handled_by: U.noe,
+      },
+      200,
+    ),
   ];
 }
 

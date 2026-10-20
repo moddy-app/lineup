@@ -1,5 +1,3 @@
-/* eslint-disable react-refresh/only-export-components -- test support, not a module that hot-reloads */
-
 /**
  * Rendering helpers for the component tests: French, the catalog already in
  * the query cache (the labels come from it), a memory router for links, and the

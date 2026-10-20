@@ -22,7 +22,7 @@ const DISCORD_EPOCH = 1_420_070_400_000n;
 /** A snowflake whose embedded creation time is `at` (Discord ids carry their date). */
 export function snowflake(at: Date | number, sequence = 1): Snowflake {
   const ms = BigInt(typeof at === 'number' ? at : at.getTime());
-  return ((ms - DISCORD_EPOCH) << 22n | (BigInt(sequence) & 0x3fffffn)).toString();
+  return (((ms - DISCORD_EPOCH) << 22n) | (BigInt(sequence) & 0x3fffffn)).toString();
 }
 
 /** When a snowflake was created (the account or server creation date, LINEUP.md §6.2, §6.3). */

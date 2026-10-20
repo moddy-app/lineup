@@ -34,7 +34,9 @@ export const membershipOf = (env: Env, userId: Snowflake, guildId: Snowflake): M
 /** The session's list: Moddy servers the person administers (set at login or `POST /auth/refresh`). */
 export function sessionGuildIds(env: Env, userId: Snowflake): Snowflake[] {
   return env.db.members
-    .filter((member) => member.user_id === userId && hasManageRights(member) && env.db.guilds[member.guild_id]?.has_moddy)
+    .filter(
+      (member) => member.user_id === userId && hasManageRights(member) && env.db.guilds[member.guild_id]?.has_moddy,
+    )
     .map((member) => member.guild_id);
 }
 

@@ -82,7 +82,7 @@ export function seedUsers(now: Date): Record<string, DbUser> {
         bio:
           "J'ai commencé par la modération d'un petit serveur de jeu de rôle, puis j'ai ouvert l'Atelier du Phénix. " +
           "Je m'occupe des équipes de modération, de l'accueil des nouveaux et des sessions de jeu du soir.\n\n" +
-          "Je cherche surtout à rejoindre une équipe qui prend le temps de former ses modérateurs.",
+          'Je cherche surtout à rejoindre une équipe qui prend le temps de former ses modérateurs.',
         links: [
           {label: 'Portfolio', url: 'https://camille-renard.example.com'},
           {label: 'Atelier du Phénix', url: 'https://atelier-phenix.example.com'},
@@ -107,7 +107,7 @@ export function seedUsers(now: Date): Record<string, DbUser> {
       premium: true,
       profile: {
         headline: 'Équipe Moddy : support et vérification Lineup',
-        bio: "Je réponds au support de Moddy et je traite la file de vérification des expériences sur Lineup. Écrivez-moi sur le serveur Moddy si une revue vous semble bloquée.",
+        bio: 'Je réponds au support de Moddy et je traite la file de vérification des expériences sur Lineup. Écrivez-moi sur le serveur Moddy si une revue vous semble bloquée.',
         links: [{label: 'Serveur Moddy', url: 'https://discord.gg/moddy'}],
         languages: ['fr', 'en'],
         timezone: 'Europe/Paris',
@@ -174,7 +174,7 @@ export function seedUsers(now: Date): Record<string, DbUser> {
       avatar_hash: '71c8e0b9f4',
       profile: {
         headline: 'Community moderator, five years on large servers',
-        bio: "I moderate communities of 10k+ members and I like building clear escalation paths for the team. Mostly evenings (UTC) and weekends.",
+        bio: 'I moderate communities of 10k+ members and I like building clear escalation paths for the team. Mostly evenings (UTC) and weekends.',
         links: [{label: 'LinkedIn', url: 'https://www.linkedin.com/in/sam-okafor-example'}],
         languages: ['en', 'fr'],
         timezone: 'Europe/London',
@@ -271,7 +271,7 @@ export function seedUsers(now: Date): Record<string, DbUser> {
       primary_guild: {identity_guild_id: G.cubelands, identity_enabled: true, tag: 'CBLD', badge: 'c1d2e3f4'},
       profile: {
         headline: 'Modérateur chez Cubelands FR',
-        bio: "Étudiant en informatique, je modère le vocal de Cubelands les soirs de semaine.",
+        bio: 'Étudiant en informatique, je modère le vocal de Cubelands les soirs de semaine.',
         links: [],
         languages: ['fr'],
         timezone: 'Europe/Paris',
@@ -286,7 +286,7 @@ export function seedUsers(now: Date): Record<string, DbUser> {
       global_name: 'Emma Collins',
       profile: {
         headline: 'Indie game developer, co-founder of Pixel Forge',
-        bio: "I make small games in Godot and run Pixel Forge, a friendly community for people who ship things. We run a game jam every quarter.",
+        bio: 'I make small games in Godot and run Pixel Forge, a friendly community for people who ship things. We run a game jam every quarter.',
         links: [{label: 'itch.io', url: 'https://emmac.itch.io'}],
         languages: ['en'],
         timezone: 'America/Toronto',

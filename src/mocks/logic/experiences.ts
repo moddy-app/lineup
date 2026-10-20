@@ -149,10 +149,12 @@ export function updateExperience(env: Env, actor: Actor, id: Uuid, patch: Experi
       ? null
       : (patch.position_other ?? row.position_other);
   if (position === 'other' && !positionOther) throw invalid('Précisez le poste (position_other).');
-  if (position !== 'other' && positionOther) throw invalid("position_other n'est autorisé que pour le poste « Autre ».");
+  if (position !== 'other' && positionOther)
+    throw invalid("position_other n'est autorisé que pour le poste « Autre ».");
   const startDate = patch.start_date ?? row.start_date;
   const endDate = patch.end_date !== undefined ? patch.end_date : row.end_date;
-  if (startDate > today || (endDate !== null && endDate > today)) throw invalid('Les dates ne peuvent pas être dans le futur.');
+  if (startDate > today || (endDate !== null && endDate > today))
+    throw invalid('Les dates ne peuvent pas être dans le futur.');
   if (endDate !== null && endDate < startDate) throw invalid('La date de fin précède la date de début.');
 
   // --- the new server, if an invitation was sent ---------------------------
@@ -252,18 +254,28 @@ function verificationFailed(reason: 'not_member' | 'no_staff_permission') {
 export function verifyExperience(env: Env, actor: Actor, id: Uuid): PrivateExperience {
   const row = loadOwnExperience(env, actor, id);
   if (row.kind !== 'guild' || !row.guild_id) {
-    throw unprocessable('lineup_verification_not_applicable', 'La vérification automatique ne concerne que les serveurs Discord.', {
-      reason: 'not_guild',
-    });
+    throw unprocessable(
+      'lineup_verification_not_applicable',
+      'La vérification automatique ne concerne que les serveurs Discord.',
+      {
+        reason: 'not_guild',
+      },
+    );
   }
   if (row.end_date !== null) {
-    throw unprocessable('lineup_verification_not_applicable', "La vérification automatique ne concerne que les expériences en cours.", {
-      reason: 'ended',
-    });
+    throw unprocessable(
+      'lineup_verification_not_applicable',
+      'La vérification automatique ne concerne que les expériences en cours.',
+      {
+        reason: 'ended',
+      },
+    );
   }
   if (row.status === 'verified') return toPrivateExperience(row);
   if (!actor.has_lineup_scopes) {
-    throw lineupError(403, 'lineup_reauth_required', 'Autorisez Lineup à lire vos serveurs.', {login_url: '/lineup/auth/login'});
+    throw lineupError(403, 'lineup_reauth_required', 'Autorisez Lineup à lire vos serveurs.', {
+      login_url: '/lineup/auth/login',
+    });
   }
   const hit = env.db.rt.limiter.hit(`verify_attempts:${actor.id}`, VERIFY_LIMIT, VERIFY_WINDOW_MS, env.now.getTime());
   if (!hit.allowed) throw rateLimited(hit.retryAfter, 'Trop de tentatives de vérification. Réessayez plus tard.');

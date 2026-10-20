@@ -8,9 +8,20 @@
 import type {DiscordGuild, GuildProfileRow} from '../model';
 import {iso, MINUTE, snowflake} from '../time';
 
-const NAMES = ['Bonus Crypto Club', 'Gain Rapide', 'Staff Cash Academy', 'Invest Together', 'Revenus Passifs FR', 'Signaux Pro'];
+const NAMES = [
+  'Bonus Crypto Club',
+  'Gain Rapide',
+  'Staff Cash Academy',
+  'Invest Together',
+  'Revenus Passifs FR',
+  'Signaux Pro',
+];
 
-export function seedFillerGuilds(count: number, newest: number, claimedBy: string): {
+export function seedFillerGuilds(
+  count: number,
+  newest: number,
+  claimedBy: string,
+): {
   guilds: DiscordGuild[];
   profiles: GuildProfileRow[];
 } {
@@ -37,7 +48,12 @@ export function seedFillerGuilds(count: number, newest: number, claimedBy: strin
       has_moddy: false,
       premium_effective: false,
       owner_id: claimedBy,
-      sanction: {level: 'ban', subject_type: 'guild', references: [`F${String(index).padStart(5, '0')}`], expires_at: null},
+      sanction: {
+        level: 'ban',
+        subject_type: 'guild',
+        references: [`F${String(index).padStart(5, '0')}`],
+        expires_at: null,
+      },
     });
     profiles.push({
       guild_id: id,

@@ -586,6 +586,12 @@ img.guild-icon.is-xl {
   color: var(--md-sys-color-on-surface-variant);
 }
 
+.meta-list,
+.requirement .row-meta,
+.experience-row .row-meta {
+  font-variant-numeric: tabular-nums;
+}
+
 .meta-item {
   display: inline-flex;
   align-items: center;

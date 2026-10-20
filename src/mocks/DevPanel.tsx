@@ -104,7 +104,12 @@ export function DevPanel() {
 
           <div className="mock-section">
             <h3>Latency</h3>
-            <Choices label="Latency" value={settings.latency} options={LATENCIES} onChange={(latency) => updateSettings({latency})} />
+            <Choices
+              label="Latency"
+              value={settings.latency}
+              options={LATENCIES}
+              onChange={(latency) => updateSettings({latency})}
+            />
             <p className="mock-note">Base delay of every answer, with ±40% of jitter.</p>
           </div>
 

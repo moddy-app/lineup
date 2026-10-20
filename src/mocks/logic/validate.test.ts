@@ -68,7 +68,10 @@ describe('Pydantic-style issues', () => {
       msg: 'List should have at least 1 item after validation, not 0',
       ctx: {field_type: 'List', min_length: 1, actual_length: 0},
     });
-    expect(issues.list[1]).toMatchObject({type: 'too_long', msg: 'List should have at most 2 items after validation, not 3'});
+    expect(issues.list[1]).toMatchObject({
+      type: 'too_long',
+      msg: 'List should have at most 2 items after validation, not 3',
+    });
   });
 
   it('checks integer bounds and literals', () => {
@@ -161,18 +164,34 @@ describe('the rules of LINEUP.md §4', () => {
       const result = requirement(input, ['body', 'requirements', 0], issues);
       return {result, issues: issues.list};
     };
-    expect(run({type: 'min_age', value: 16}).result).toEqual({type: 'min_age', value: 16, label: null, verified_by_lineup: false});
+    expect(run({type: 'min_age', value: 16}).result).toEqual({
+      type: 'min_age',
+      value: 16,
+      label: null,
+      verified_by_lineup: false,
+    });
     expect(run({type: 'min_age', value: 12}).issues[0]?.loc).toEqual(['body', 'requirements', 0, 'value']);
-    expect(run({type: 'verified_experience', verified_by_lineup: true}).result).toMatchObject({value: null, verified_by_lineup: true});
+    expect(run({type: 'verified_experience', verified_by_lineup: true}).result).toMatchObject({
+      value: null,
+      verified_by_lineup: true,
+    });
     expect(run({type: 'verified_experience', value: 3}).issues).toHaveLength(1);
     expect(run({type: 'languages', value: ['fr', 'en']}).result).toMatchObject({value: ['fr', 'en']});
     expect(run({type: 'languages', value: []}).issues).toHaveLength(1);
     expect(run({type: 'voice_required', value: true}).result).toMatchObject({value: true});
-    expect(run({type: 'custom', value: 'Savoir utiliser Moddy'}).issues[0]?.loc).toEqual(['body', 'requirements', 0, 'label']);
+    expect(run({type: 'custom', value: 'Savoir utiliser Moddy'}).issues[0]?.loc).toEqual([
+      'body',
+      'requirements',
+      0,
+      'label',
+    ]);
     expect(run({type: 'custom', value: 'x', label: 'Outils'}).result).toMatchObject({label: 'Outils'});
     // `verified_by_lineup` only where Lineup can check it (§4, §8).
     expect(run({type: 'experience_months', value: 12, verified_by_lineup: true}).issues[0]?.loc).toEqual([
-      'body', 'requirements', 0, 'verified_by_lineup',
+      'body',
+      'requirements',
+      0,
+      'verified_by_lineup',
     ]);
     expect(run({type: 'nope', value: 1}).issues).toHaveLength(1);
   });
@@ -221,12 +240,20 @@ describe('the rules of LINEUP.md §4', () => {
       return issues.list.map((issue) => issue.loc.join('.'));
     };
     expect(run({...base, kind: 'user', positions: ['other']})).toEqual(['body.positions_other']);
-    expect(run({...base, kind: 'user', positions: ['moderator'], positions_other: ['x']})).toEqual(['body.positions_other']);
+    expect(run({...base, kind: 'user', positions: ['moderator'], positions_other: ['x']})).toEqual([
+      'body.positions_other',
+    ]);
     expect(run({...base, kind: 'guild', positions: ['moderator']})).toEqual(['body.guild_id']);
     expect(run({...base, kind: 'user', guild_id: '1', positions: ['moderator']})).toEqual(['body.guild_id']);
-    expect(run({...base, kind: 'guild', guild_id: '1', positions: ['moderator'], featured_experience_id: 'a0000000-0000-4000-8000-000000000001'})).toEqual([
-      'body.featured_experience_id',
-    ]);
+    expect(
+      run({
+        ...base,
+        kind: 'guild',
+        guild_id: '1',
+        positions: ['moderator'],
+        featured_experience_id: 'a0000000-0000-4000-8000-000000000001',
+      }),
+    ).toEqual(['body.featured_experience_id']);
     expect(run({...base, kind: 'user', positions: ['moderator', 'moderator']})).toEqual(['body.positions']);
   });
 });

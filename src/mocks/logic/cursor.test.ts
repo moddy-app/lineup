@@ -12,7 +12,14 @@ describe('cursors', () => {
   });
 
   it('answers cursor_invalid to anything altered', () => {
-    for (const bad of ['%%%', 'abc', btoa('[1,2]'), btoa('{"a":1}'), btoa('["nope","1"]'), btoa('["2026-10-20T00:00:00+00:00","x"]')]) {
+    for (const bad of [
+      '%%%',
+      'abc',
+      btoa('[1,2]'),
+      btoa('{"a":1}'),
+      btoa('["nope","1"]'),
+      btoa('["2026-10-20T00:00:00+00:00","x"]'),
+    ]) {
       try {
         decodeCursor(bad, (id) => /^\d+$/.test(id));
         throw new Error(`accepted ${bad}`);
@@ -33,7 +40,12 @@ describe('cursors', () => {
     const after = decodeCursor(first.nextCursor ?? undefined, () => true);
     const second = pageRows(sorted, 2, after, true);
     expect(second.rows.map((row) => row.id)).toEqual(['3', '2']);
-    const last = pageRows(sorted, 2, decodeCursor(second.nextCursor ?? undefined, () => true), true);
+    const last = pageRows(
+      sorted,
+      2,
+      decodeCursor(second.nextCursor ?? undefined, () => true),
+      true,
+    );
     expect(last.rows.map((row) => row.id)).toEqual(['1']);
     expect(last.nextCursor).toBeNull();
     // Exactly `limit` rows left: no cursor.

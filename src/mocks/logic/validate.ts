@@ -96,7 +96,9 @@ export function int(options: {ge?: number; le?: number} = {}): Parser<number> {
       return BAD;
     }
     if (options.le !== undefined && value > options.le) {
-      issues.add('less_than_equal', loc, `Input should be less than or equal to ${options.le}`, value, {le: options.le});
+      issues.add('less_than_equal', loc, `Input should be less than or equal to ${options.le}`, value, {
+        le: options.le,
+      });
       return BAD;
     }
     return value;
@@ -337,7 +339,9 @@ export class Params {
       return options.def;
     }
     if (options.le !== undefined && value > options.le) {
-      this.issues.add('less_than_equal', loc, `Input should be less than or equal to ${options.le}`, raw, {le: options.le});
+      this.issues.add('less_than_equal', loc, `Input should be less than or equal to ${options.le}`, raw, {
+        le: options.le,
+      });
       return options.def;
     }
     return value;
@@ -347,7 +351,12 @@ export class Params {
   snowflake(name: string): string {
     const raw = this.raw(name) ?? '';
     if (!/^[+-]?\d+$/.test(raw)) {
-      this.issues.add('int_parsing', [this.where, name], 'Input should be a valid integer, unable to parse string as an integer', raw);
+      this.issues.add(
+        'int_parsing',
+        [this.where, name],
+        'Input should be a valid integer, unable to parse string as an integer',
+        raw,
+      );
       return '0';
     }
     return String(BigInt(raw));
@@ -357,7 +366,9 @@ export class Params {
     const raw = this.raw(name) ?? '';
     const problem = uuidProblem(raw);
     if (problem) {
-      this.issues.add('uuid_parsing', [this.where, name], `Input should be a valid UUID, ${problem}`, raw, {error: problem});
+      this.issues.add('uuid_parsing', [this.where, name], `Input should be a valid UUID, ${problem}`, raw, {
+        error: problem,
+      });
     }
     return raw.toLowerCase();
   }
@@ -391,7 +402,12 @@ export class Params {
     const text = raw.trim().toLowerCase();
     if (['true', '1', 'yes', 'on', 't', 'y'].includes(text)) return true;
     if (['false', '0', 'no', 'off', 'f', 'n'].includes(text)) return false;
-    this.issues.add('bool_parsing', [this.where, name], 'Input should be a valid boolean, unable to interpret input', raw);
+    this.issues.add(
+      'bool_parsing',
+      [this.where, name],
+      'Input should be a valid boolean, unable to interpret input',
+      raw,
+    );
     return def;
   }
 

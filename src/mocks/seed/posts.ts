@@ -58,8 +58,11 @@ export function seedPosts(now: Date): DbPost[] {
     };
   };
 
-  const guildPost = (guild: string, author: string, seed: Omit<PostSeed, 'kind' | 'author_id'> & {published?: number}) =>
-    ({kind: 'guild', guild_id: guild, author_id: author, ...seed}) as PostSeed & {published?: number};
+  const guildPost = (
+    guild: string,
+    author: string,
+    seed: Omit<PostSeed, 'kind' | 'author_id'> & {published?: number},
+  ) => ({kind: 'guild', guild_id: guild, author_id: author, ...seed}) as PostSeed & {published?: number};
   const userPost = (author: string, seed: Omit<PostSeed, 'kind' | 'author_id'> & {published?: number}) =>
     ({kind: 'user', author_id: author, ...seed}) as PostSeed & {published?: number};
 
@@ -146,8 +149,7 @@ export function seedPosts(now: Date): DbPost[] {
       6,
       guildPost(G.cubelands, U.alex, {
         title: 'Équipe de modération : saison 5',
-        description:
-          'Recrutement de la saison 5, clos depuis plusieurs jours. Les candidatures ne sont plus étudiées.',
+        description: 'Recrutement de la saison 5, clos depuis plusieurs jours. Les candidatures ne sont plus étudiées.',
         positions: ['moderator', 'support'],
         application: url('https://forms.example.com/saison-5'),
         expires_at: ago(5),
@@ -304,9 +306,12 @@ export function seedPosts(now: Date): DbPost[] {
       guildPost(G.pixel, U.camille, {
         title: 'Community moderators for a 2,700-member game dev server',
         description:
-          "Pixel Forge is looking for two moderators to help keep feedback threads constructive and the showcase channel tidy. You will work with the current team, follow a short written guide and escalate anything unclear to the admins.\n\nWe are in several time zones, so evenings in Europe and North America are the most useful.",
+          'Pixel Forge is looking for two moderators to help keep feedback threads constructive and the showcase channel tidy. You will work with the current team, follow a short written guide and escalate anything unclear to the admins.\n\nWe are in several time zones, so evenings in Europe and North America are the most useful.',
         positions: ['moderator'],
-        requirements: [requirement('languages', ['en']), requirement('account_age_days', 90, {verified_by_lineup: true})],
+        requirements: [
+          requirement('languages', ['en']),
+          requirement('account_age_days', 90, {verified_by_lineup: true}),
+        ],
         application: url('https://pixelforge.example.com/apply'),
         languages: ['en', 'fr'],
         timezone: 'UTC+00:00',
@@ -336,7 +341,8 @@ export function seedPosts(now: Date): DbPost[] {
       18,
       guildPost(G.pixel, U.camille, {
         title: 'Game jam organiser',
-        description: 'Draft: someone to coordinate our next quarterly game jam, from theme voting to the closing stream.',
+        description:
+          'Draft: someone to coordinate our next quarterly game jam, from theme voting to the closing stream.',
         positions: ['event_animator'],
         languages: ['en'],
         status: 'draft',
@@ -384,7 +390,7 @@ export function seedPosts(now: Date): DbPost[] {
       guildPost(G.velvet, U.jonas, {
         title: 'Modérateurs (18 ans minimum)',
         description:
-          "Velvet Lounge est un serveur réservé aux adultes. Nous cherchons des modérateurs calmes, attentifs au consentement et à la vie privée des membres, et capables de faire respecter un règlement strict sans en faire trop.",
+          'Velvet Lounge est un serveur réservé aux adultes. Nous cherchons des modérateurs calmes, attentifs au consentement et à la vie privée des membres, et capables de faire respecter un règlement strict sans en faire trop.',
         positions: ['moderator'],
         requirements: [requirement('min_age', 18, {verified_by_lineup: true})],
         application: dm,
@@ -429,7 +435,7 @@ export function seedPosts(now: Date): DbPost[] {
       guildPost(G.hyrule, U.leo, {
         title: 'Graphiste pour cartes et illustrations',
         description:
-          "Nous avons besoin de cartes du royaume et de quelques illustrations de personnages pour accompagner la bêta. Travail rémunéré à la pièce.",
+          'Nous avons besoin de cartes du royaume et de quelques illustrations de personnages pour accompagner la bêta. Travail rémunéré à la pièce.',
         positions: ['graphic_designer'],
         application: dm,
         commitment: commit(null, 'paid', 1),
@@ -487,7 +493,7 @@ export function seedPosts(now: Date): DbPost[] {
       guildPost(G.devcorner, U.leo, {
         title: 'Mainteneurs de bots communautaires',
         description:
-          "Dev Corner héberge quelques bots open source utilisés par plusieurs serveurs. Nous cherchons des mainteneurs pour relire les contributions, trier les tickets et publier des versions. TypeScript et discord.js de préférence.",
+          'Dev Corner héberge quelques bots open source utilisés par plusieurs serveurs. Nous cherchons des mainteneurs pour relire les contributions, trier les tickets et publier des versions. TypeScript et discord.js de préférence.',
         positions: ['developer'],
         requirements: [requirement('experience_months', 12), requirement('languages', ['fr', 'en'])],
         application: url('https://github.com/leo-vsr-example/community-bots'),
@@ -577,7 +583,8 @@ export function seedPosts(now: Date): DbPost[] {
       34,
       userPost(U.camille, {
         title: 'Recherche un serveur anime',
-        description: "J'ai trouvé une équipe, merci à celles et ceux qui m'ont écrit. L'annonce reste ici pour mémoire.",
+        description:
+          "J'ai trouvé une équipe, merci à celles et ceux qui m'ont écrit. L'annonce reste ici pour mémoire.",
         positions: ['moderator', 'event_animator'],
         status: 'closed',
         published: 50,
@@ -587,7 +594,8 @@ export function seedPosts(now: Date): DbPost[] {
       35,
       userPost(U.camille, {
         title: 'Animatrice de soirées jeux, disponible ce mois-ci',
-        description: "Annonce ponctuelle pour la période des fêtes. Je peux animer des soirées jeux de société en vocal.",
+        description:
+          'Annonce ponctuelle pour la période des fêtes. Je peux animer des soirées jeux de société en vocal.',
         positions: ['event_animator'],
         expires_at: ago(2),
         published: 25,
@@ -599,7 +607,7 @@ export function seedPosts(now: Date): DbPost[] {
       userPost(U.sam, {
         title: 'Experienced moderator available (EN, UTC)',
         description:
-          "Five years of moderation on communities of 10,000+ members. I can write escalation guides, train new moderators and cover the evening hours in UTC. I am looking for one team to settle with, not several side projects.",
+          'Five years of moderation on communities of 10,000+ members. I can write escalation guides, train new moderators and cover the evening hours in UTC. I am looking for one team to settle with, not several side projects.',
         positions: ['moderator'],
         requirements: [],
         application: dm,
@@ -675,7 +683,8 @@ export function seedPosts(now: Date): DbPost[] {
       41,
       userPost(U.hugo, {
         title: 'Modérateur vocal, créneaux de semaine',
-        description: "J'ai trouvé un créneau qui me convient chez Cubelands. L'annonce est fermée mais reste visible pour mon historique.",
+        description:
+          "J'ai trouvé un créneau qui me convient chez Cubelands. L'annonce est fermée mais reste visible pour mon historique.",
         positions: ['moderator'],
         status: 'closed',
         published: 35,
@@ -685,11 +694,13 @@ export function seedPosts(now: Date): DbPost[] {
       42,
       userPost(U.marta, {
         title: 'Suporte e moderação em português',
-        description: 'Disponível para apoiar comunidades lusófonas com moderação e atendimento. Posso trabalhar de manhã e à noite.',
+        description:
+          'Disponível para apoiar comunidades lusófonas com moderação e atendimento. Posso trabalhar de manhã e à noite.',
         positions: ['support', 'moderator'],
         languages: ['pt'],
         status: 'hidden',
-        hidden_reason: 'Annonce en double : une annonce identique est déjà en ligne. Fermez-la ou supprimez-la, puis republiez celle qui reste.',
+        hidden_reason:
+          'Annonce en double : une annonce identique est déjà en ligne. Fermez-la ou supprimez-la, puis republiez celle qui reste.',
         published: 12,
       }),
     ),
@@ -759,4 +770,3 @@ export function seedFillerPosts(count: number, newest: number, step = MINUTE): D
     };
   });
 }
-

@@ -10,7 +10,11 @@ export const NOW = new Date('2026-10-20T14:00:00.000Z');
 export interface TestApi {
   server: ServerContext;
   state: {session: Session | null; discordDown: boolean; verifyOutcome: VerifyOutcome; feedCache: boolean; now: Date};
-  call: (method: string, path: string, options?: {body?: unknown; rawBody?: string; query?: Record<string, string | string[]>}) => Promise<TestResponse>;
+  call: (
+    method: string,
+    path: string,
+    options?: {body?: unknown; rawBody?: string; query?: Record<string, string | string[]>},
+  ) => Promise<TestResponse>;
   as: (who: keyof typeof U | null, options?: {scopes?: boolean}) => void;
 }
 
@@ -23,7 +27,13 @@ export interface TestResponse {
 
 export function createTestApi(initial: keyof typeof U | null = null): TestApi {
   const db = createSeedDb(NOW);
-  const state: TestApi['state'] = {session: null, discordDown: false, verifyOutcome: 'auto', feedCache: false, now: NOW};
+  const state: TestApi['state'] = {
+    session: null,
+    discordDown: false,
+    verifyOutcome: 'auto',
+    feedCache: false,
+    now: NOW,
+  };
   const server: ServerContext = {
     db,
     now: () => state.now,
@@ -52,7 +62,11 @@ export function createTestApi(initial: keyof typeof U | null = null): TestApi {
       const body = options.rawBody ?? (options.body === undefined ? undefined : JSON.stringify(options.body));
       const response = await dispatch(
         server,
-        new Request(url, {method, body, headers: body === undefined ? undefined : {'Content-Type': 'application/json'}}),
+        new Request(url, {
+          method,
+          body,
+          headers: body === undefined ? undefined : {'Content-Type': 'application/json'},
+        }),
       );
       const text = await response.text();
       return {status: response.status, json: text ? JSON.parse(text) : undefined, headers: response.headers};

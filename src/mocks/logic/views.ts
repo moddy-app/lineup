@@ -146,7 +146,9 @@ export const toStaffExperience = (row: DbExperience): StaffExperience => ({
 
 /** "In their order": `sort_index`, then `start_date` descending (§6.6). */
 export function sortExperiences(rows: DbExperience[]): DbExperience[] {
-  return [...rows].sort((a, b) => a.sort_index - b.sort_index || (a.start_date < b.start_date ? 1 : a.start_date > b.start_date ? -1 : 0));
+  return [...rows].sort(
+    (a, b) => a.sort_index - b.sort_index || (a.start_date < b.start_date ? 1 : a.start_date > b.start_date ? -1 : 0),
+  );
 }
 
 export const experiencesOf = (env: Env, userId: Snowflake): DbExperience[] =>
@@ -216,7 +218,12 @@ export function teamOf(env: Env, guildId: Snowflake): TeamMember[] {
   for (const [userId, row] of byPerson) {
     const user = env.db.users[userId];
     if (!user || user.sanction) continue;
-    team.push({user: userSummary(user), position: row.position, position_other: row.position_other, since: row.start_date});
+    team.push({
+      user: userSummary(user),
+      position: row.position,
+      position_other: row.position_other,
+      since: row.start_date,
+    });
   }
   return team;
 }
@@ -224,7 +231,10 @@ export function teamOf(env: Env, guildId: Snowflake): TeamMember[] {
 /** A server's published, unexpired posts for its profile: 20 at most, newest first, NSFW included (§8). */
 export function liveGuildPosts(env: Env, guildId: Snowflake): Post[] {
   return Object.values(env.db.posts)
-    .filter((post) => post.kind === 'guild' && post.guild_id === guildId && post.status === 'published' && !isExpired(post, env.now))
+    .filter(
+      (post) =>
+        post.kind === 'guild' && post.guild_id === guildId && post.status === 'published' && !isExpired(post, env.now),
+    )
     .filter((post) => !isUserSuspended(env, post.author_id))
     .sort(byPublishedDesc)
     .slice(0, MAX_PROFILE_POSTS)
@@ -238,7 +248,12 @@ export function byPublishedDesc(a: DbPost, b: DbPost): number {
 }
 
 /** The full server profile (§6.2). The caller has already decided the viewer may read it. */
-export function toGuildProfile(env: Env, profile: GuildProfileRow, actor: Actor | null, suspendedViewer = false): GuildProfile {
+export function toGuildProfile(
+  env: Env,
+  profile: GuildProfileRow,
+  actor: Actor | null,
+  suspendedViewer = false,
+): GuildProfile {
   const guild: DiscordGuild | undefined = env.db.guilds[profile.guild_id];
   const stale = refreshGuildSnapshot(env, profile);
   return {
@@ -318,7 +333,10 @@ export function toMeProfileRow(user: DbUser): MeProfileRow | null {
 /** A user's live `user` posts for their profile: 20 at most (§8). */
 export function livePostsOf(env: Env, userId: Snowflake): Post[] {
   return Object.values(env.db.posts)
-    .filter((post) => post.kind === 'user' && post.author_id === userId && post.status === 'published' && !isExpired(post, env.now))
+    .filter(
+      (post) =>
+        post.kind === 'user' && post.author_id === userId && post.status === 'published' && !isExpired(post, env.now),
+    )
     .sort(byPublishedDesc)
     .slice(0, MAX_PROFILE_POSTS)
     .map((post) => toPost(env, post));

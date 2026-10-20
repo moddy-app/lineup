@@ -16,14 +16,7 @@ import type {
   Uuid,
 } from '@/api/types';
 
-import {
-  conflict,
-  forbidden,
-
-  notFound,
-  sanctionError,
-  unprocessable,
-} from '../errors';
+import {conflict, forbidden, notFound, sanctionError, unprocessable} from '../errors';
 import type {Actor, Env, Viewer} from '../env';
 import {newUuid} from '../ids';
 import type {DbPost} from '../model';
@@ -47,8 +40,7 @@ import {
 // Feed
 // ---------------------------------------------------------------------------
 
-const filterInvalid = (field: string, message: string) =>
-  unprocessable('lineup_filter_invalid', message, {field});
+const filterInvalid = (field: string, message: string) => unprocessable('lineup_filter_invalid', message, {field});
 
 /**
  * `GET /lineup/posts`. Standard validation first (limit bounds, numeric ids),
@@ -91,7 +83,9 @@ export function listFeed(env: Env, query: URLSearchParams): Paginated<Post> {
   const rows = Object.values(env.db.posts)
     .filter((post) => isLive(post, env.now))
     // Posts of an unlisted server (or one with no profile) are excluded in SQL (§6.4).
-    .filter((post) => post.kind === 'user' || (post.guild_id !== null && env.db.profiles[post.guild_id]?.listed === true))
+    .filter(
+      (post) => post.kind === 'user' || (post.guild_id !== null && env.db.profiles[post.guild_id]?.listed === true),
+    )
     .filter((post) => includeNsfw || !isNsfwPost(env, post))
     .filter((post) => kind === undefined || post.kind === kind)
     .filter((post) => positions.length === 0 || post.positions.some((id) => positions.includes(id)))
@@ -99,7 +93,9 @@ export function listFeed(env: Env, query: URLSearchParams): Paginated<Post> {
     .filter((post) => tags.length === 0 || post.tags.some((tag) => tags.includes(tag)))
     .filter((post) => theme === undefined || post.theme === theme)
     .filter((post) => compensation === undefined || post.commitment?.compensation === compensation)
-    .filter((post) => !needle || post.title.toLowerCase().includes(needle) || post.description.toLowerCase().includes(needle))
+    .filter(
+      (post) => !needle || post.title.toLowerCase().includes(needle) || post.description.toLowerCase().includes(needle),
+    )
     .filter((post) => guildId === undefined || post.guild_id === guildId)
     .filter((post) => authorId === undefined || post.author_id === authorId)
     .map((post) => ({at: post.published_at ?? post.created_at, id: post.id, post}))
@@ -107,7 +103,9 @@ export function listFeed(env: Env, query: URLSearchParams): Paginated<Post> {
 
   const {rows: page, nextCursor} = pageRows(rows, limit, after, true);
   const items = page
-    .filter(({post}) => !isUserSuspended(env, post.author_id) && !(post.guild_id && isGuildSuspended(env, post.guild_id)))
+    .filter(
+      ({post}) => !isUserSuspended(env, post.author_id) && !(post.guild_id && isGuildSuspended(env, post.guild_id)),
+    )
     .map(({post}) => toPost(env, post));
   return {items, next_cursor: nextCursor};
 }
@@ -185,8 +183,13 @@ export function assertQuota(env: Env, post: Pick<DbPost, 'kind' | 'guild_id' | '
   const live = Object.values(env.db.posts).filter((candidate) => candidate.id !== except && isLive(candidate, env.now));
   if (post.kind === 'guild') {
     const limit = limits.max_published_posts_per_guild;
-    if (live.filter((candidate) => candidate.kind === 'guild' && candidate.guild_id === post.guild_id).length >= limit) {
-      throw conflict('lineup_quota_exceeded', `Limite de ${limit} annonces publiées atteinte.`, {limit, scope: 'guild'});
+    if (
+      live.filter((candidate) => candidate.kind === 'guild' && candidate.guild_id === post.guild_id).length >= limit
+    ) {
+      throw conflict('lineup_quota_exceeded', `Limite de ${limit} annonces publiées atteinte.`, {
+        limit,
+        scope: 'guild',
+      });
     }
     return;
   }
@@ -335,17 +338,20 @@ export function updatePost(env: Env, actor: Actor, rawId: string, patch: UpdateP
   const positionsOther =
     patch.positions_other ?? (patch.positions !== undefined && !hasOther ? [] : post.positions_other);
   if (hasOther && positionsOther.length === 0) {
-    throw unprocessable('lineup_positions_other_required', "Précisez le ou les postes « Autre ».");
+    throw unprocessable('lineup_positions_other_required', 'Précisez le ou les postes « Autre ».');
   }
   if (!hasOther && positionsOther.length > 0) {
-    throw unprocessable('lineup_positions_other_unexpected', "Des postes « Autre » sont renseignés sans que « Autre » soit coché.");
+    throw unprocessable(
+      'lineup_positions_other_unexpected',
+      'Des postes « Autre » sont renseignés sans que « Autre » soit coché.',
+    );
   }
 
   if (patch.featured_experience_id) {
     if (post.kind === 'guild') {
       throw unprocessable(
         'lineup_featured_experience_user_only',
-        "Seule une annonce personnelle peut mettre en avant une expérience.",
+        'Seule une annonce personnelle peut mettre en avant une expérience.',
       );
     }
     assertFeaturedExperience(env, post.author_id, patch.featured_experience_id);
@@ -394,7 +400,7 @@ export function publishPost(env: Env, actor: Actor, rawId: string): PostWriteRes
   const post = loadEditable(env, actor, rawId);
   assertNotHiddenFor(actor, post);
   if (post.status !== 'draft' && post.status !== 'closed') {
-    throw conflict('lineup_post_invalid_status', "Cette annonce ne peut pas être publiée dans son état actuel.", {
+    throw conflict('lineup_post_invalid_status', 'Cette annonce ne peut pas être publiée dans son état actuel.', {
       current_status: post.status,
     });
   }
@@ -416,7 +422,7 @@ export function closePost(env: Env, actor: Actor, rawId: string): PostWriteResul
   const post = loadEditable(env, actor, rawId);
   assertNotHiddenFor(actor, post);
   if (post.status !== 'published') {
-    throw conflict('lineup_post_invalid_status', "Seule une annonce publiée peut être fermée.", {
+    throw conflict('lineup_post_invalid_status', 'Seule une annonce publiée peut être fermée.', {
       current_status: post.status,
     });
   }
@@ -431,4 +437,3 @@ export function deletePost(env: Env, actor: Actor, rawId: string): void {
   assertNotHiddenFor(actor, post);
   delete env.db.posts[post.id];
 }
-

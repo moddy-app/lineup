@@ -11,7 +11,16 @@ import {catalogFixture} from '@/api/catalog.fixture';
 import type {BadgeEntityType} from '@/api/types';
 
 import {unauthenticated} from '../errors';
-import {claimGuild, deleteGuild, getGuildProfile, listDirectory, listMyGuilds, refreshGuild, refreshMyGuilds, updateGuild} from '../logic/guilds';
+import {
+  claimGuild,
+  deleteGuild,
+  getGuildProfile,
+  listDirectory,
+  listMyGuilds,
+  refreshGuild,
+  refreshMyGuilds,
+  updateGuild,
+} from '../logic/guilds';
 import {
   createExperience,
   deleteExperience,
@@ -189,7 +198,10 @@ export const routes: Route[] = [
       // The real feed is cached in Redis for 60 s per combination of filters + cursor: a post published or
       // closed may linger a minute. Off by default in the mock (dev panel), because it is confusing to debug.
       if (!c.server.feedCache()) return ok(listFeed(c.env, c.query), CACHE_MINUTE);
-      const key = [...c.query.entries()].map(([name, value]) => `${name}=${value}`).sort().join('&');
+      const key = [...c.query.entries()]
+        .map(([name, value]) => `${name}=${value}`)
+        .sort()
+        .join('&');
       const hit = c.env.db.rt.feedCache.get(key);
       if (hit && c.env.now.getTime() - hit.at < FEED_TTL_MS) return ok(hit.body, CACHE_MINUTE);
       const body = listFeed(c.env, c.query);
@@ -197,7 +209,12 @@ export const routes: Route[] = [
       return ok(body, CACHE_MINUTE);
     },
   },
-  {method: 'GET', path: '/lineup/me/posts', auth: 'session', handler: (c) => ok(listMyPosts(c.env, actorOf(c), c.query))},
+  {
+    method: 'GET',
+    path: '/lineup/me/posts',
+    auth: 'session',
+    handler: (c) => ok(listMyPosts(c.env, actorOf(c), c.query)),
+  },
   {
     method: 'GET',
     path: '/lineup/posts/:postId',
@@ -208,14 +225,22 @@ export const routes: Route[] = [
     method: 'POST',
     path: '/lineup/posts',
     auth: 'session',
-    handler: (c) => created(createPost(c.env, actorOf(c), parseBody(c.rawBody, createPostBody(c.env.now), {required: true}))),
+    handler: (c) =>
+      created(createPost(c.env, actorOf(c), parseBody(c.rawBody, createPostBody(c.env.now), {required: true}))),
   },
   {
     method: 'PATCH',
     path: '/lineup/posts/:postId',
     auth: 'session',
     handler: (c) =>
-      ok(updatePost(c.env, actorOf(c), c.params.postId ?? '', parseBody(c.rawBody, updatePostBody(c.env.now), {required: true}))),
+      ok(
+        updatePost(
+          c.env,
+          actorOf(c),
+          c.params.postId ?? '',
+          parseBody(c.rawBody, updatePostBody(c.env.now), {required: true}),
+        ),
+      ),
   },
   {
     method: 'POST',
@@ -251,7 +276,12 @@ export const routes: Route[] = [
   },
 
   // ---- 6.6 Experiences -------------------------------------------------------
-  {method: 'GET', path: '/lineup/me/experiences', auth: 'session', handler: (c) => ok(listMyExperiences(c.env, actorOf(c)))},
+  {
+    method: 'GET',
+    path: '/lineup/me/experiences',
+    auth: 'session',
+    handler: (c) => ok(listMyExperiences(c.env, actorOf(c))),
+  },
   {
     method: 'POST',
     path: '/lineup/me/experiences',
@@ -307,7 +337,12 @@ export const routes: Route[] = [
   },
 
   // ---- 6.7 Staff -------------------------------------------------------------
-  {method: 'GET', path: '/lineup/staff/experiences', auth: 'staff', handler: (c) => ok(listStaffExperiences(c.env, c.query))},
+  {
+    method: 'GET',
+    path: '/lineup/staff/experiences',
+    auth: 'staff',
+    handler: (c) => ok(listStaffExperiences(c.env, c.query)),
+  },
   {
     method: 'POST',
     path: '/lineup/staff/experiences/:expId/verify',

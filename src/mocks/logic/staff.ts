@@ -36,9 +36,15 @@ export function listStaffExperiences(env: Env, query: URLSearchParams): Paginate
   const limit = params.int('limit', {def: 50, ge: 1, le: 100}) ?? 50;
   const status = params.get('status') ?? 'pending';
   if (!(EXPERIENCE_STATUSES as readonly string[]).includes(status)) {
-    issues.add('literal_error', ['query', 'status'], "Input should be 'pending', 'unverified', 'verified' or 'rejected'", status, {
-      expected: "'pending', 'unverified', 'verified' or 'rejected'",
-    });
+    issues.add(
+      'literal_error',
+      ['query', 'status'],
+      "Input should be 'pending', 'unverified', 'verified' or 'rejected'",
+      status,
+      {
+        expected: "'pending', 'unverified', 'verified' or 'rejected'",
+      },
+    );
   }
   const cursor = params.get('cursor');
   issues.throwIfAny();
@@ -61,9 +67,15 @@ export function listStaffReports(env: Env, query: URLSearchParams): Paginated<Re
   const limit = params.int('limit', {def: 50, ge: 1, le: 100}) ?? 50;
   const status = params.get('status') ?? 'open';
   if (!(REPORT_STATUSES as readonly string[]).includes(status)) {
-    issues.add('literal_error', ['query', 'status'], "Input should be 'open', 'resolved', 'dismissed' or 'all'", status, {
-      expected: "'open', 'resolved', 'dismissed' or 'all'",
-    });
+    issues.add(
+      'literal_error',
+      ['query', 'status'],
+      "Input should be 'open', 'resolved', 'dismissed' or 'all'",
+      status,
+      {
+        expected: "'open', 'resolved', 'dismissed' or 'all'",
+      },
+    );
   }
   const cursor = params.get('cursor');
   issues.throwIfAny();
@@ -97,7 +109,7 @@ export const dismissReport = (env: Env, staff: Actor, id: string) => closeReport
 // ---------------------------------------------------------------------------
 
 const entityTypeInvalid = () =>
-  unprocessable('lineup_entity_type_invalid', "entity_type doit valoir « user » ou « guild ».");
+  unprocessable('lineup_entity_type_invalid', 'entity_type doit valoir « user » ou « guild ».');
 
 function entityType(raw: string): BadgeEntityType {
   if (!(ENTITY_TYPES as readonly string[]).includes(raw)) throw entityTypeInvalid();

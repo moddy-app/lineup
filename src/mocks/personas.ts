@@ -35,7 +35,8 @@ export const PERSONAS: Persona[] = [
   {
     id: 'dashboard',
     label: 'Dashboard session (Camille)',
-    description: 'Same person, but the session comes from the dashboard: automatic verification answers 403 lineup_reauth_required.',
+    description:
+      'Same person, but the session comes from the dashboard: automatic verification answers 403 lineup_reauth_required.',
     session: {userId: U.camille, hasLineupScopes: false},
   },
   {

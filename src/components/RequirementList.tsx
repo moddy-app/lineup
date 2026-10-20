@@ -9,15 +9,47 @@
  * the viewer meets them, for information only.
  */
 
+import {useId} from 'react';
+
 import {useCatalogLabel} from '@/api/catalog';
 import {useCatalog} from '@/api/queries';
 import type {Requirement} from '@/api/types';
 import {useLanguage} from '@/i18n/useLanguage';
 import {useT} from '@/i18n/useT';
-import {Icon, Row, Rows, Shape} from '@/ui';
+import {Icon, Row, Rows, Shape, VisuallyHidden} from '@/ui';
 
+import {tooltipSideProps} from './tooltipSide';
 import {useNow} from './useNow';
 import {type RequirementViewer, requirementView, viewerMeets} from './requirements';
+
+interface NoteProps {
+  className: string;
+  icon: string;
+  filled?: boolean;
+  text: string;
+  /** What the note means, in a tooltip (and read as its description). */
+  hint: string;
+}
+
+/** A small line under a condition: an icon, a short text, its meaning in a tooltip. */
+function Note({className, icon, filled, text, hint}: NoteProps) {
+  const hintId = useId();
+  return (
+    <>
+      <span
+        className={`requirement-note tooltip-wrap ${className}`}
+        data-tooltip={hint}
+        tabIndex={0}
+        aria-describedby={hintId}
+        {...tooltipSideProps}
+      >
+        <Icon name={icon} filled={filled} />
+        {text}
+      </span>
+      <VisuallyHidden id={hintId}>{hint}</VisuallyHidden>
+    </>
+  );
+}
 
 interface RequirementListProps {
   requirements: readonly Requirement[];
@@ -47,28 +79,21 @@ export function RequirementList({requirements, viewer}: RequirementListProps) {
               <span className="row-title">{view.title}</span>
               {view.text && <span className="row-meta">{view.text}</span>}
               {view.promise && (
-                <span
-                  className="requirement-note promise tooltip-wrap"
-                  data-tooltip={t('requirement.promise.hint')}
-                  tabIndex={0}
-                  aria-label={`${t('requirement.promise.label')}. ${t('requirement.promise.hint')}`}
-                >
-                  <Icon name="schedule" />
-                  {t('requirement.promise.label')}
-                </span>
+                <Note
+                  className="promise"
+                  icon="schedule"
+                  text={t('requirement.promise.label')}
+                  hint={t('requirement.promise.hint')}
+                />
               )}
               {meets !== null && (
-                <span
-                  className={
-                    meets ? 'requirement-note viewer met tooltip-wrap' : 'requirement-note viewer tooltip-wrap'
-                  }
-                  data-tooltip={t('requirement.viewer.hint')}
-                  tabIndex={0}
-                  aria-label={`${meets ? t('requirement.viewer.met') : t('requirement.viewer.notYet')}. ${t('requirement.viewer.hint')}`}
-                >
-                  <Icon name={meets ? 'check_circle' : 'radio_button_unchecked'} filled={meets} />
-                  {meets ? t('requirement.viewer.met') : t('requirement.viewer.notYet')}
-                </span>
+                <Note
+                  className={meets ? 'viewer met' : 'viewer'}
+                  icon={meets ? 'check_circle' : 'radio_button_unchecked'}
+                  filled={meets}
+                  text={meets ? t('requirement.viewer.met') : t('requirement.viewer.notYet')}
+                  hint={t('requirement.viewer.hint')}
+                />
               )}
             </div>
           </Row>

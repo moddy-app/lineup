@@ -11,7 +11,8 @@ import type {DbExperience} from '../model';
 import {DAY, iso} from '../time';
 import {experienceId as xid, G, U} from './ids';
 
-type ExperienceSeed = Pick<DbExperience, 'user_id' | 'kind' | 'name' | 'position' | 'start_date'> & Partial<DbExperience>;
+type ExperienceSeed = Pick<DbExperience, 'user_id' | 'kind' | 'name' | 'position' | 'start_date'> &
+  Partial<DbExperience>;
 
 export function seedExperiences(now: Date): DbExperience[] {
   const ago = (days: number) => iso(now.getTime() - days * DAY);
@@ -73,7 +74,7 @@ export function seedExperiences(now: Date): DbExperience[] {
   ): ExperienceSeed => ({user_id, kind: 'service', name, position, start_date, end_date, ...extra});
 
   const staffNote: VerificationEvidence = {
-    staff_note: "Message du propriétaire du serveur confirmé en privé.",
+    staff_note: 'Message du propriétaire du serveur confirmé en privé.',
     verified_at_by_staff: ago(30),
   };
 
@@ -111,7 +112,8 @@ export function seedExperiences(now: Date): DbExperience[] {
         description: 'Modération du chat pendant les directs, environ 800 spectateurs en moyenne.',
         status: 'pending',
         evidence: {
-          review_note: "Lien du compte : twitch.tv/kaelis (exemple). Je peux fournir une capture de la liste des modérateurs.",
+          review_note:
+            'Lien du compte : twitch.tv/kaelis (exemple). Je peux fournir une capture de la liste des modérateurs.',
           requested_at: ago(2),
         },
         updated_at: ago(2),
@@ -148,7 +150,18 @@ export function seedExperiences(now: Date): DbExperience[] {
     make(guild(U.camille, G.cafe, 'Café des Mods', 'cafe-des-mods', 'admin', '2025-05-20'), 9, 5),
 
     // ---- The teams of the servers (verified, current) -------------------------------------------------------
-    make(guild(U.alex, G.cubelands, 'Cubelands FR', 'cubelands', 'admin', '2021-02-14', oauth(100, ['ADMINISTRATOR'], true, 9)), 10),
+    make(
+      guild(
+        U.alex,
+        G.cubelands,
+        'Cubelands FR',
+        'cubelands',
+        'admin',
+        '2021-02-14',
+        oauth(100, ['ADMINISTRATOR'], true, 9),
+      ),
+      10,
+    ),
     make(
       guild(
         U.hugo,
@@ -174,7 +187,18 @@ export function seedExperiences(now: Date): DbExperience[] {
       12,
     ),
     // A suspended account never appears in a team, whatever its experiences.
-    make(guild(U.dylan, G.cubelands, 'Cubelands FR', 'cubelands', 'moderator', '2022-09-01', oauth(150, ['MANAGE_MESSAGES'], false, 2)), 13),
+    make(
+      guild(
+        U.dylan,
+        G.cubelands,
+        'Cubelands FR',
+        'cubelands',
+        'moderator',
+        '2022-09-01',
+        oauth(150, ['MANAGE_MESSAGES'], false, 2),
+      ),
+      13,
+    ),
     make(
       guild(U.noe, G.moddy, 'Moddy', 'moddy', 'support', '2023-11-20', {
         status: 'verified',
@@ -186,7 +210,18 @@ export function seedExperiences(now: Date): DbExperience[] {
       }),
       14,
     ),
-    make(guild(U.amira, G.anime, 'Anime Plaza', 'animeplaza', 'partnership_manager', '2020-01-12', oauth(90, ['ADMINISTRATOR'], false, 7)), 15),
+    make(
+      guild(
+        U.amira,
+        G.anime,
+        'Anime Plaza',
+        'animeplaza',
+        'partnership_manager',
+        '2020-01-12',
+        oauth(90, ['ADMINISTRATOR'], false, 7),
+      ),
+      15,
+    ),
     make(
       guild(
         U.sam,
@@ -199,9 +234,42 @@ export function seedExperiences(now: Date): DbExperience[] {
       ),
       16,
     ),
-    make(guild(U.emma, G.pixel, 'Pixel Forge', 'pixelforge', 'admin', '2020-11-08', oauth(110, ['ADMINISTRATOR'], true, 6)), 17),
-    make(guild(U.karim, G.arena, 'Arena Esport FR', 'arena-esport', 'manager', '2021-05-05', oauth(75, ['ADMINISTRATOR'], true, 8)), 18),
-    make(guild(U.leo, G.devcorner, 'Dev Corner', 'devcorner', 'developer', '2021-07-27', oauth(55, ['ADMINISTRATOR'], true, 4)), 19),
+    make(
+      guild(
+        U.emma,
+        G.pixel,
+        'Pixel Forge',
+        'pixelforge',
+        'admin',
+        '2020-11-08',
+        oauth(110, ['ADMINISTRATOR'], true, 6),
+      ),
+      17,
+    ),
+    make(
+      guild(
+        U.karim,
+        G.arena,
+        'Arena Esport FR',
+        'arena-esport',
+        'manager',
+        '2021-05-05',
+        oauth(75, ['ADMINISTRATOR'], true, 8),
+      ),
+      18,
+    ),
+    make(
+      guild(
+        U.leo,
+        G.devcorner,
+        'Dev Corner',
+        'devcorner',
+        'developer',
+        '2021-07-27',
+        oauth(55, ['ADMINISTRATOR'], true, 4),
+      ),
+      19,
+    ),
     // Sam: a past service, verified, shown to everyone.
     make(
       service(U.sam, 'Réseau de serveurs StreamHub', 'moderator', '2019-10-01', '2022-02-28', {
@@ -227,7 +295,8 @@ export function seedExperiences(now: Date): DbExperience[] {
       service(U.jonas, 'Clan Nachtwache', 'admin', '2020-05-01', '2021-12-31', {
         status: 'rejected',
         verified_by: U.noe,
-        rejection_reason: "Le clan n'a pas pu être confirmé. Indiquez un moyen de contacter un ancien membre de l'équipe.",
+        rejection_reason:
+          "Le clan n'a pas pu être confirmé. Indiquez un moyen de contacter un ancien membre de l'équipe.",
         updated_at: ago(20),
       }),
       22,

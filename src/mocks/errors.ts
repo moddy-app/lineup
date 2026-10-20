@@ -14,14 +14,20 @@ export class ApiFailure extends Error {
     readonly body: unknown,
     readonly headers: Record<string, string> = {},
   ) {
-    super(typeof body === 'object' && body !== null && 'code' in body ? String((body as {code: unknown}).code) : `HTTP ${status}`);
+    super(
+      typeof body === 'object' && body !== null && 'code' in body
+        ? String((body as {code: unknown}).code)
+        : `HTTP ${status}`,
+    );
     this.name = 'ApiFailure';
   }
 
   /** The `code` of a Lineup or sanction error, if any. */
   get code(): string | null {
     const error = (this.body as {error?: unknown} | null)?.error;
-    return typeof error === 'object' && error !== null && 'code' in error ? String((error as {code: unknown}).code) : null;
+    return typeof error === 'object' && error !== null && 'code' in error
+      ? String((error as {code: unknown}).code)
+      : null;
   }
 }
 
@@ -60,13 +66,8 @@ const SANCTION_VIOLATIONS_URL = 'https://moddy.app/violations';
  * Shape 2: a global sanction. `error` is an object and NOT copied at the root
  * (the one difference with shape 1).
  */
-export function sanctionError(
-  code: SanctionInfo['code'],
-  subjectId: Snowflake,
-  sanction: SanctionSpec,
-): ApiFailure {
-  const message =
-    code === 'user_suspended' ? 'Votre accès à Moddy est suspendu.' : 'Ce serveur est suspendu.';
+export function sanctionError(code: SanctionInfo['code'], subjectId: Snowflake, sanction: SanctionSpec): ApiFailure {
+  const message = code === 'user_suspended' ? 'Votre accès à Moddy est suspendu.' : 'Ce serveur est suspendu.';
   return new ApiFailure(403, {
     error: {
       code,

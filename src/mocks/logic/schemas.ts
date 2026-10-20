@@ -142,9 +142,15 @@ export const calendarDateField: Parser<string> = (value, loc, issues) => {
     return BAD;
   }
   if (!isCalendarDate(value)) {
-    issues.add('date_parsing', loc, 'Input should be a valid date in the format YYYY-MM-DD, invalid character in year', value, {
-      error: 'invalid character in year',
-    });
+    issues.add(
+      'date_parsing',
+      loc,
+      'Input should be a valid date in the format YYYY-MM-DD, invalid character in year',
+      value,
+      {
+        error: 'invalid character in year',
+      },
+    );
     return BAD;
   }
   return value;
@@ -161,9 +167,15 @@ export const awareDatetime: Parser<Date> = (value, loc, issues) => {
   const match = DATETIME.exec(value.trim());
   const date = match ? new Date(value.trim().replace(' ', 'T')) : null;
   if (!match || !date || Number.isNaN(date.getTime())) {
-    issues.add('datetime_from_date_parsing', loc, 'Input should be a valid datetime or date, invalid datetime separator', value, {
-      error: 'invalid datetime separator',
-    });
+    issues.add(
+      'datetime_from_date_parsing',
+      loc,
+      'Input should be a valid datetime or date, invalid datetime separator',
+      value,
+      {
+        error: 'invalid datetime separator',
+      },
+    );
     return BAD;
   }
   if (!match[4]) {
@@ -218,7 +230,8 @@ export const requirement: Parser<ParsedRequirement> = (input, loc, issues) => {
     case 'text': {
       const max = 'max_len' in entry ? (entry.max_len ?? 200) : 200;
       const text = typeof raw === 'string' ? raw.trim() : '';
-      if (text === '' || text.length > max) return fail(valueLoc, `La valeur doit être un texte de 1 à ${max} caractères.`, raw);
+      if (text === '' || text.length > max)
+        return fail(valueLoc, `La valeur doit être un texte de 1 à ${max} caractères.`, raw);
       value = text;
       break;
     }
@@ -244,14 +257,15 @@ export const requirement: Parser<ParsedRequirement> = (input, loc, issues) => {
     const max = 'label_max_len' in entry ? (entry.label_max_len ?? 80) : 80;
     const text = typeof shape.label === 'string' ? shape.label.trim() : '';
     if (text === '') return fail([...loc, 'label'], 'Cette condition exige un titre (label).', shape.label ?? null);
-    if (text.length > max) return fail([...loc, 'label'], `Le titre ne doit pas dépasser ${max} caractères.`, shape.label);
+    if (text.length > max)
+      return fail([...loc, 'label'], `Le titre ne doit pas dépasser ${max} caractères.`, shape.label);
     label = text;
   }
 
   // §4: "Vérifié par Lineup" only where Lineup can (or will be able to) check it.
   const verified = shape.verified_by_lineup ?? false;
   if (verified && entry.verifiable === 'no') {
-    return fail([...loc, 'verified_by_lineup'], "Cette condition ne peut pas être vérifiée par Lineup.", true);
+    return fail([...loc, 'verified_by_lineup'], 'Cette condition ne peut pas être vérifiée par Lineup.', true);
   }
   return {type: entry.id, value, label, verified_by_lineup: verified};
 };
@@ -270,7 +284,12 @@ export interface ParsedApplication {
  */
 export const application: Parser<ParsedApplication> = (input, loc, issues) => {
   if (!isRecord(input)) {
-    issues.add('model_attributes_type', loc, 'Input should be a valid dictionary or object to extract fields from', input);
+    issues.add(
+      'model_attributes_type',
+      loc,
+      'Input should be a valid dictionary or object to extract fields from',
+      input,
+    );
     return BAD;
   }
   const type = literal(['external_url', 'discord_dm', 'lineup_form'] as const)(input.type, [...loc, 'type'], issues);
@@ -367,25 +386,37 @@ export function createPostBody(now: Date): Parser<CreatePostInput> {
     };
     let bad = false;
     if (parsed.kind === 'guild' && parsed.guild_id === undefined) {
-      rule('guild_id', "guild_id est obligatoire pour une annonce de serveur.", null);
+      rule('guild_id', 'guild_id est obligatoire pour une annonce de serveur.', null);
       bad = true;
     }
     if (parsed.kind === 'user' && parsed.guild_id !== undefined) {
-      rule('guild_id', "guild_id est interdit pour une annonce personnelle.", parsed.guild_id);
+      rule('guild_id', 'guild_id est interdit pour une annonce personnelle.', parsed.guild_id);
       bad = true;
     }
     if (parsed.kind === 'guild' && parsed.featured_experience_id) {
-      rule('featured_experience_id', "Une annonce de serveur ne peut pas mettre en avant une expérience.", parsed.featured_experience_id);
+      rule(
+        'featured_experience_id',
+        'Une annonce de serveur ne peut pas mettre en avant une expérience.',
+        parsed.featured_experience_id,
+      );
       bad = true;
     }
     // §6.4: `other` ↔ positions_other, on the body itself, is a standard 422 at creation.
     const hasOther = parsed.positions.includes('other');
     const others = parsed.positions_other ?? [];
     if (hasOther && others.length === 0) {
-      rule('positions_other', 'positions_other est obligatoire quand « other » fait partie des postes.', parsed.positions_other ?? null);
+      rule(
+        'positions_other',
+        'positions_other est obligatoire quand « other » fait partie des postes.',
+        parsed.positions_other ?? null,
+      );
       bad = true;
     } else if (!hasOther && others.length > 0) {
-      rule('positions_other', "positions_other n'est autorisé que si « other » fait partie des postes.", parsed.positions_other);
+      rule(
+        'positions_other',
+        "positions_other n'est autorisé que si « other » fait partie des postes.",
+        parsed.positions_other,
+      );
       bad = true;
     }
     return bad ? BAD : parsed;
@@ -506,7 +537,7 @@ export function createExperienceBody(today: string): Parser<CreateExperienceInpu
         bad = true;
       }
       if (parsed.invite !== undefined) {
-        rule('invite', "invite est interdit pour une expérience de type service.", parsed.invite);
+        rule('invite', 'invite est interdit pour une expérience de type service.', parsed.invite);
         bad = true;
       }
     }
@@ -549,4 +580,4 @@ export const reportBody = model({
 
 export const reasonBody = model({reason: req(str({min: 1, max: 500}))});
 
-export type { Field, Issues };
+export type {Field, Issues};
