@@ -1,0 +1,6 @@
+dist
+node_modules
+design-kit
+artifacts
+LINEUP.md
+package-lock.json

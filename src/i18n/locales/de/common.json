@@ -1,0 +1,49 @@
+{
+  "meta": {
+    "description": "Lineup verbindet Discord-Server, die Staff suchen, mit Menschen, die ein Team suchen."
+  },
+  "nav": {
+    "label": "Hauptnavigation",
+    "feed": "Anzeigen",
+    "guilds": "Server",
+    "staff": "Staff"
+  },
+  "auth": {
+    "login": "Anmelden",
+    "loginWithDiscord": "Mit Discord anmelden"
+  },
+  "userMenu": {
+    "profile": "Mein Profil",
+    "editProfile": "Profil bearbeiten",
+    "experiences": "Meine Erfahrung",
+    "posts": "Meine Anzeigen",
+    "guilds": "Meine Server"
+  },
+  "footer": {
+    "byline": "Lineup, ein Dienst von <moddy>Moddy</moddy>",
+    "language": "Sprache"
+  },
+  "actions": {
+    "retry": "Erneut versuchen",
+    "loadMore": "Mehr laden",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "delete": "Löschen",
+    "close": "Schließen",
+    "confirm": "Bestätigen",
+    "back": "Zurück",
+    "backToFeed": "Zurück zu den Anzeigen",
+    "reload": "Seite neu laden"
+  },
+  "status": {
+    "loading": "Wird geladen"
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "body": "Diese Seite hat den Server verlassen, oder die Adresse ist falsch."
+  },
+  "routeError": {
+    "title": "Es ist ein Fehler aufgetreten",
+    "body": "Diese Seite konnte nicht angezeigt werden. Laden Sie sie neu oder gehen Sie zurück zu den Anzeigen."
+  }
+}

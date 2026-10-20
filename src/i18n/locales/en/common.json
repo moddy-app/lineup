@@ -1,0 +1,49 @@
+{
+  "meta": {
+    "description": "Lineup connects Discord servers that recruit staff with people looking for a team."
+  },
+  "nav": {
+    "label": "Main navigation",
+    "feed": "Posts",
+    "guilds": "Servers",
+    "staff": "Staff"
+  },
+  "auth": {
+    "login": "Sign in",
+    "loginWithDiscord": "Sign in with Discord"
+  },
+  "userMenu": {
+    "profile": "My profile",
+    "editProfile": "Edit my profile",
+    "experiences": "My experience",
+    "posts": "My posts",
+    "guilds": "My servers"
+  },
+  "footer": {
+    "byline": "Lineup, a <moddy>Moddy</moddy> service",
+    "language": "Language"
+  },
+  "actions": {
+    "retry": "Try again",
+    "loadMore": "Load more",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "close": "Close",
+    "confirm": "Confirm",
+    "back": "Back",
+    "backToFeed": "Back to posts",
+    "reload": "Reload page"
+  },
+  "status": {
+    "loading": "Loading"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "This page left the server, or the address is wrong."
+  },
+  "routeError": {
+    "title": "Something went wrong",
+    "body": "This page could not be displayed. Reload it or go back to the posts."
+  }
+}
