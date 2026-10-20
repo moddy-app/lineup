@@ -1,6 +1,7 @@
 import type {ApiError} from '@/api/client';
 import {errorMessage} from '@/api/errors';
 import {useT} from '@/i18n/useT';
+import {safeHttpsUrl} from '@/lib/url';
 import {Icon, Pill} from '@/ui';
 
 /**
@@ -11,6 +12,7 @@ export function SanctionNotice({error}: {error: ApiError}) {
   const {t: tErrors} = useT('errors');
   const {t: tCommon} = useT('common');
   const sanction = error.sanction;
+  const url = safeHttpsUrl(sanction?.violations_url);
   return (
     <div className="sanction-notice" role="alert">
       <p>
@@ -25,8 +27,8 @@ export function SanctionNotice({error}: {error: ApiError}) {
           ))}
         </p>
       )}
-      {sanction?.violations_url && (
-        <a href={sanction.violations_url} target="_blank" rel="noopener noreferrer">
+      {url && (
+        <a href={url} target="_blank" rel="noopener noreferrer">
           {tCommon('suspended.viewSanction')}
         </a>
       )}

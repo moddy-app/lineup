@@ -1,0 +1,99 @@
+/* The directory (/guilds). Tokens only. */
+
+.guilds-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--page-gap);
+}
+
+.guilds-header p {
+  max-width: 62ch;
+}
+
+.guilds-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--gap-l);
+  margin-top: var(--space);
+}
+
+@media (max-width: 900px) {
+  .guilds-filters {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: stretch;
+  }
+}
+
+.guild-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--page-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.guild-grid > li {
+  display: flex;
+  min-width: 0;
+}
+
+.guild-grid > li > .card {
+  flex: 1;
+}
+
+@media (max-width: 1100px) {
+  .guild-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .guild-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.guild-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-l);
+}
+
+.guild-card-head {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-l);
+  min-width: 0;
+}
+
+.guild-card-title {
+  min-width: 0;
+}
+
+.guild-card-title h2 {
+  margin: 0;
+  overflow: hidden;
+  font-size: var(--text-subtitle);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.guild-card-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--gap-m);
+  margin: 2px 0 0;
+  font-size: var(--text-small);
+}
+
+.guild-card-chips {
+  margin: 0;
+}
+
+.guilds-more {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--gap-m);
+}

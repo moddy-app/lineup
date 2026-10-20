@@ -1,0 +1,128 @@
+/* The feed: header, list, filters. Tokens only. */
+
+.feed-head {
+  gap: var(--gap-m);
+}
+
+.feed-head-text > p {
+  margin-block: var(--gap-s) 0;
+}
+
+.feed-title {
+  margin: 0;
+  font-size: var(--text-title);
+  line-height: 1.2;
+}
+
+.feed-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--page-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.feed-list[aria-busy='true'] {
+  opacity: 0.6;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .feed-list {
+    transition: opacity 200ms var(--ease);
+  }
+}
+
+.feed-more {
+  display: flex;
+  justify-content: center;
+  min-height: 48px;
+  padding-block: var(--gap-s);
+}
+
+.feed-end,
+.feed-more-error p {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-s);
+  margin: 0;
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.feed-end {
+  justify-content: center;
+}
+
+.feed-more-error p {
+  color: var(--md-sys-color-error);
+}
+
+.publish-card,
+.filters-card {
+  gap: var(--gap-m);
+}
+
+.publish-card > h2,
+.filters-card > h2 {
+  margin: 0;
+}
+
+.quota-card {
+  --card-padding: 20px;
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-l);
+}
+
+.filters-dialog .filters {
+  min-width: min(100%, 360px);
+  padding-top: var(--gap-s);
+}
+
+.filter-group {
+  border-radius: var(--radius-l);
+  background: var(--md-sys-color-surface-container);
+}
+
+.filter-group > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-m);
+  min-height: 48px;
+  padding-inline: var(--gap-l);
+  border-radius: var(--radius-l);
+  cursor: pointer;
+  font-size: var(--text-body-small);
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface);
+}
+
+.filter-group > summary:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+.filter-count {
+  min-width: 24px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  text-align: center;
+  font-size: var(--text-label);
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+.filter-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+  max-height: 260px;
+  padding: var(--gap-s) var(--gap-l) var(--gap-l);
+  overflow-y: auto;
+  font-size: var(--text-body-small);
+}

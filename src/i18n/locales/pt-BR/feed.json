@@ -1,3 +1,46 @@
 {
-  "title": "Anúncios"
+  "title": "Anúncios",
+  "intro": "Servidores que buscam equipe e pessoas que procuram um time.",
+  "list": "Lista de anúncios",
+  "updating": "Atualizando os resultados",
+  "loadingMore": "Carregando mais anúncios",
+  "end": "Fim da lista, {{count}} anúncios exibidos.",
+  "publish": {
+    "title": "Publicar um anúncio",
+    "body": "Para um servidor que você gerencia ou para você.",
+    "action": "Publicar um anúncio"
+  },
+  "filters": {
+    "title": "Filtros",
+    "open": "Filtros",
+    "openCount": "Filtros ({{count}})",
+    "show": "Ver anúncios",
+    "reset": "Redefinir filtros",
+    "kind": {
+      "label": "Tipo de anúncio",
+      "all": "Todos os anúncios",
+      "guild": "Servidores recrutando",
+      "user": "Pessoas procurando"
+    },
+    "q": "Busca",
+    "positions": "Cargos",
+    "languages": "Idiomas",
+    "theme": "Tema",
+    "allThemes": "Todos os temas",
+    "compensation": "Remuneração",
+    "anyCompensation": "Todas",
+    "tags": "Tags",
+    "tagsHelp": "Separadas por vírgulas.",
+    "nsfw": "Incluir conteúdo adulto"
+  },
+  "empty": {
+    "noneTitle": "Nenhum anúncio ainda",
+    "noneBody": "Os anúncios publicados aparecem aqui. Publique o primeiro.",
+    "filteredTitle": "Nenhum anúncio corresponde a estes filtros",
+    "filteredBody": "Remova um filtro ou redefina todos para ver todos os anúncios."
+  },
+  "invalid": {
+    "title": "Não foi possível aplicar esta busca",
+    "restart": "Recomeçar"
+  }
 }

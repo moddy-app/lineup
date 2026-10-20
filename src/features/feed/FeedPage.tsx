@@ -13,7 +13,7 @@ import {usePageTitle} from '@/app/usePageTitle';
 import {useSession} from '@/auth/session';
 import {EmptyState, ErrorState, PostCard, QuotaMeter, useNsfwConfirmed} from '@/components';
 import {useT} from '@/i18n/useT';
-import {Bento, Card, CardActions, Dialog, Icon, LinkButton, Page, Shape, Spinner, Stack} from '@/ui';
+import {Bento, Card, CardActions, Dialog, Icon, LinkButton, Page, Spinner, Stack} from '@/ui';
 
 import {
   activeFilterCount,
@@ -57,7 +57,6 @@ function FeedContent({catalog}: {catalog: Catalog}) {
   const {t} = useT('feed');
   const wide = useMediaQuery(WIDE);
   const [params, setParams] = useSearchParams();
-  const {confirmed} = useNsfwConfirmed();
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   // Parsing returns a new object each render; the string key keeps the identity steady.
@@ -307,6 +306,3 @@ function FeedList({filters, active, onReset}: {filters: UiFilters; active: numbe
     </>
   );
 }
-
-// Shape is kept for the placeholder icon of the head on narrow screens.
-void Shape;

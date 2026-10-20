@@ -1,3 +1,46 @@
 {
-  "title": "Anzeigen"
+  "title": "Anzeigen",
+  "intro": "Server, die Personal suchen, und Personen, die ein Team suchen.",
+  "list": "Liste der Anzeigen",
+  "updating": "Ergebnisse werden aktualisiert",
+  "loadingMore": "Weitere Anzeigen werden geladen",
+  "end": "Ende der Liste, {{count}} Anzeigen angezeigt.",
+  "publish": {
+    "title": "Anzeige veröffentlichen",
+    "body": "Für einen Server, den du verwaltest, oder für dich selbst.",
+    "action": "Anzeige veröffentlichen"
+  },
+  "filters": {
+    "title": "Filter",
+    "open": "Filter",
+    "openCount": "Filter ({{count}})",
+    "show": "Anzeigen ansehen",
+    "reset": "Filter zurücksetzen",
+    "kind": {
+      "label": "Art der Anzeige",
+      "all": "Alle Anzeigen",
+      "guild": "Server, die Personal suchen",
+      "user": "Personen auf der Suche"
+    },
+    "q": "Suche",
+    "positions": "Positionen",
+    "languages": "Sprachen",
+    "theme": "Thema",
+    "allThemes": "Alle Themen",
+    "compensation": "Vergütung",
+    "anyCompensation": "Alle",
+    "tags": "Tags",
+    "tagsHelp": "Durch Kommas getrennt.",
+    "nsfw": "Inhalte für Erwachsene einbeziehen"
+  },
+  "empty": {
+    "noneTitle": "Noch keine Anzeigen",
+    "noneBody": "Veröffentlichte Anzeigen erscheinen hier. Veröffentliche die erste.",
+    "filteredTitle": "Keine Anzeige passt zu diesen Filtern",
+    "filteredBody": "Entferne einen Filter oder setze alle zurück, um alle Anzeigen zu sehen."
+  },
+  "invalid": {
+    "title": "Diese Suche konnte nicht angewendet werden",
+    "restart": "Neu beginnen"
+  }
 }

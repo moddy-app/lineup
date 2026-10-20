@@ -1,3 +1,46 @@
 {
-  "title": "Anuncios"
+  "title": "Anuncios",
+  "intro": "Servidores que buscan personal y personas que buscan equipo.",
+  "list": "Lista de anuncios",
+  "updating": "Actualizando los resultados",
+  "loadingMore": "Cargando más anuncios",
+  "end": "Fin de la lista, {{count}} anuncios mostrados.",
+  "publish": {
+    "title": "Publicar un anuncio",
+    "body": "Para un servidor que gestionas o para ti.",
+    "action": "Publicar un anuncio"
+  },
+  "filters": {
+    "title": "Filtros",
+    "open": "Filtros",
+    "openCount": "Filtros ({{count}})",
+    "show": "Ver anuncios",
+    "reset": "Restablecer filtros",
+    "kind": {
+      "label": "Tipo de anuncio",
+      "all": "Todos los anuncios",
+      "guild": "Servidores que reclutan",
+      "user": "Personas que buscan"
+    },
+    "q": "Búsqueda",
+    "positions": "Puestos",
+    "languages": "Idiomas",
+    "theme": "Temática",
+    "allThemes": "Todas las temáticas",
+    "compensation": "Remuneración",
+    "anyCompensation": "Todas",
+    "tags": "Etiquetas",
+    "tagsHelp": "Separadas por comas.",
+    "nsfw": "Incluir contenido para adultos"
+  },
+  "empty": {
+    "noneTitle": "Todavía no hay anuncios",
+    "noneBody": "Los anuncios publicados aparecen aquí. Publica el primero.",
+    "filteredTitle": "Ningún anuncio coincide con estos filtros",
+    "filteredBody": "Quita un filtro o restablécelos para ver todos los anuncios."
+  },
+  "invalid": {
+    "title": "No se pudo aplicar esta búsqueda",
+    "restart": "Empezar de nuevo"
+  }
 }

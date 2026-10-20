@@ -1,3 +1,46 @@
 {
-  "title": "Annonces"
+  "title": "Annonces",
+  "intro": "Serveurs qui recrutent du staff et personnes qui cherchent une équipe.",
+  "list": "Liste des annonces",
+  "updating": "Mise à jour des résultats",
+  "loadingMore": "Chargement des annonces suivantes",
+  "end": "Fin de la liste, {{count}} annonces affichées.",
+  "publish": {
+    "title": "Publier une annonce",
+    "body": "Pour un serveur que vous gérez, ou pour vous-même.",
+    "action": "Publier une annonce"
+  },
+  "filters": {
+    "title": "Filtres",
+    "open": "Filtres",
+    "openCount": "Filtres ({{count}})",
+    "show": "Voir les annonces",
+    "reset": "Réinitialiser les filtres",
+    "kind": {
+      "label": "Type d'annonce",
+      "all": "Toutes les annonces",
+      "guild": "Serveurs qui recrutent",
+      "user": "Personnes qui cherchent"
+    },
+    "q": "Recherche",
+    "positions": "Postes",
+    "languages": "Langues",
+    "theme": "Thème",
+    "allThemes": "Tous les thèmes",
+    "compensation": "Rémunération",
+    "anyCompensation": "Toutes",
+    "tags": "Étiquettes",
+    "tagsHelp": "Séparées par des virgules.",
+    "nsfw": "Inclure les contenus pour adultes"
+  },
+  "empty": {
+    "noneTitle": "Aucune annonce pour le moment",
+    "noneBody": "Les annonces publiées apparaissent ici. Publiez la première.",
+    "filteredTitle": "Aucune annonce pour ces filtres",
+    "filteredBody": "Retirez un filtre ou réinitialisez-les pour voir toutes les annonces."
+  },
+  "invalid": {
+    "title": "Cette recherche n'a pas pu être appliquée",
+    "restart": "Recommencer depuis le début"
+  }
 }
