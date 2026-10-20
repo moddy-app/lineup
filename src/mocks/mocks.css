@@ -8,30 +8,6 @@
   bottom: 12px;
   left: 12px;
   z-index: 1000;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--gap-s);
-  box-sizing: border-box;
-  height: 40px;
-  padding: 0 14px 0 10px;
-  border: 1px solid var(--md-sys-color-outline-variant);
-  border-radius: var(--radius-full);
-  background-color: var(--md-sys-color-tertiary-container);
-  color: var(--md-sys-color-on-tertiary-container);
-  font: inherit;
-  font-size: var(--text-label);
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  opacity: 0.92;
-}
-
-.mock-fab:hover,
-.mock-fab:focus-visible {
-  opacity: 1;
-}
-
-.mock-fab .material-symbols-outlined {
-  font-size: 20px;
 }
 
 .mock-panel {
@@ -68,7 +44,7 @@
 .mock-section {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-s);
+  gap: var(--gap-m);
 }
 
 .mock-section h3 {
@@ -85,42 +61,18 @@
   color: var(--md-sys-color-on-surface-variant);
 }
 
-.mock-choices {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap-s);
-}
-
-.mock-choice {
-  box-sizing: border-box;
-  min-height: 36px;
-  padding: 0 14px;
-  border: 1px solid var(--md-sys-color-outline-variant);
-  border-radius: var(--radius-s);
-  background-color: transparent;
-  color: var(--md-sys-color-on-surface);
-  font: inherit;
-  font-size: var(--text-body-small);
-  cursor: pointer;
-}
-
-.mock-choice[aria-pressed='true'] {
-  border-color: transparent;
-  background-color: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container);
-}
-
-.mock-choice:hover {
-  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
-}
-
-.mock-choice[aria-pressed='true']:hover {
-  background-color: var(--md-sys-color-secondary-container);
-}
-
 /* The login page. */
 .mock-login .row-meta {
   white-space: normal;
+}
+
+.mock-login .row-title {
+  white-space: normal;
+}
+
+.mock-login .row-body .status {
+  align-self: flex-start;
+  margin-top: var(--gap-s);
 }
 
 .mock-login a.row {

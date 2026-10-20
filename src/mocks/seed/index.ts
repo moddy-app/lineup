@@ -17,7 +17,7 @@ import {seedFillerPosts, seedPosts} from './posts';
 import {seedUsers} from './users';
 
 /** Bump when the seed's shape changes: a stored database of another version is thrown away. */
-export const DB_VERSION = 1;
+export const DB_VERSION = 2;
 
 const FEED_PAGE = 20;
 const DIRECTORY_PAGE = 24;
@@ -50,6 +50,7 @@ export function createSeedDb(now: Date = new Date()): Db {
           {id: G.studio, owner: false, permissions: ['MANAGE_GUILD', 'MANAGE_MESSAGES']},
           {id: G.cubelands, owner: false, permissions: ['MANAGE_MESSAGES', 'MODERATE_MEMBERS']},
           {id: G.anime, owner: false, permissions: []},
+          {id: G.marche, owner: true, permissions: ['ADMINISTRATOR']},
         ],
       },
     },

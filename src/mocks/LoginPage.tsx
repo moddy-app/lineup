@@ -10,13 +10,30 @@
 import {useEffect} from 'react';
 
 import {sanitizeRedirect} from '@/api/endpoints';
+import {Shape, type ShapeName, type ShapeTone} from '@/ui';
 
 import './mocks.css';
 import {PERSONAS, setPersonaId, type PersonaId} from './personas';
 
+/** One shape and tone per persona, varied between neighbours (design system, section 6). */
+const LOOK: Record<PersonaId, {icon: string; shape: ShapeName; tone: ShapeTone}> = {
+  anonymous: {icon: 'person_off', shape: 'square', tone: 'primary'},
+  member: {icon: 'person', shape: 'hexagon', tone: 'primary'},
+  dashboard: {icon: 'dashboard', shape: 'diamond', tone: 'secondary'},
+  staff: {icon: 'shield_person', shape: 'octagon', tone: 'tertiary'},
+  suspended: {icon: 'block', shape: 'pentagon', tone: 'secondary'},
+  newcomer: {icon: 'waving_hand', shape: 'heptagon', tone: 'tertiary'},
+};
+
 function destination(search: string): {path: string; reauth: boolean} {
   const params = new URLSearchParams(search);
-  return {path: sanitizeRedirect(params.get('redirect') ?? '/'), reauth: params.get('reauth') === '1'};
+  let path = sanitizeRedirect(params.get('redirect') ?? '/');
+  // The real API would send an absolute moddy.app URL to the production site; the mock stays on this origin.
+  if (/^https?:\/\//i.test(path)) {
+    const url = new URL(path);
+    path = url.pathname + url.search + url.hash;
+  }
+  return {path, reauth: params.get('reauth') === '1'};
 }
 
 /** The destination with `auth_error=access_denied` added, every other parameter kept. */
@@ -26,7 +43,7 @@ function declined(path: string): string {
   return url.pathname + url.search + url.hash;
 }
 
-export function MockLoginPage() {
+export function MockLoginPage({navigate = (url) => window.location.assign(url)}: {navigate?: (url: string) => void}) {
   const {path, reauth} = destination(window.location.search);
   useEffect(() => {
     document.title = 'Mock sign-in';
@@ -34,7 +51,7 @@ export function MockLoginPage() {
 
   const choose = (id: PersonaId) => {
     setPersonaId(id);
-    window.location.assign(path);
+    navigate(path);
   };
 
   return (
@@ -68,16 +85,19 @@ export function MockLoginPage() {
                         choose(persona.id);
                       }}
                     >
-                      <span className="shape small">
-                        <span className="material-symbols-outlined" aria-hidden="true">
-                          {persona.id === 'staff' ? 'shield_person' : persona.id === 'suspended' ? 'block' : 'person'}
-                        </span>
-                      </span>
+                      <Shape
+                        small
+                        shape={LOOK[persona.id].shape}
+                        tone={LOOK[persona.id].tone}
+                        icon={LOOK[persona.id].icon}
+                      />
                       <span className="row-body">
                         <span className="row-title">{persona.label}</span>
                         <span className="row-meta">{persona.description}</span>
+                        <span className="status">
+                          {persona.session?.hasLineupScopes ? 'Lineup scopes' : 'No Lineup scopes'}
+                        </span>
                       </span>
-                      <span className="status">{persona.session?.hasLineupScopes ? 'Lineup scopes' : 'No scopes'}</span>
                     </a>
                   </li>
                 ))}
@@ -85,7 +105,7 @@ export function MockLoginPage() {
               <div className="card-actions">
                 <md-outlined-button
                   onclick={() => {
-                    window.location.assign(declined(path));
+                    navigate(declined(path));
                   }}
                 >
                   Refuser (access_denied)

@@ -137,41 +137,41 @@ export const routes: Route[] = [
   },
   {
     method: 'GET',
-    path: '/lineup/guilds/:guildId',
+    path: '/lineup/guilds/:guild_id',
     auth: 'optional',
-    handler: (c) => ok(getGuildProfile(c.env, c.viewer, pathSnowflake(c, 'guildId'))),
+    handler: (c) => ok(getGuildProfile(c.env, c.viewer, pathSnowflake(c, 'guild_id'))),
   },
   {
     method: 'PUT',
-    path: '/lineup/guilds/:guildId',
+    path: '/lineup/guilds/:guild_id',
     auth: 'session',
     handler: (c) => {
-      const guildId = pathSnowflake(c, 'guildId');
+      const guildId = pathSnowflake(c, 'guild_id');
       return ok(updateGuild(c.env, actorOf(c), guildId, parseBody(c.rawBody, guildUpdateBody)));
     },
   },
   {
     method: 'DELETE',
-    path: '/lineup/guilds/:guildId',
+    path: '/lineup/guilds/:guild_id',
     auth: 'session',
     handler: (c) => {
-      deleteGuild(c.env, actorOf(c), pathSnowflake(c, 'guildId'));
+      deleteGuild(c.env, actorOf(c), pathSnowflake(c, 'guild_id'));
       return noContent();
     },
   },
   {
     method: 'POST',
-    path: '/lineup/guilds/:guildId/refresh',
+    path: '/lineup/guilds/:guild_id/refresh',
     auth: 'session',
-    handler: (c) => ok(refreshGuild(c.env, actorOf(c), pathSnowflake(c, 'guildId'))),
+    handler: (c) => ok(refreshGuild(c.env, actorOf(c), pathSnowflake(c, 'guild_id'))),
   },
 
   // ---- 6.3 People ------------------------------------------------------------
   {
     method: 'GET',
-    path: '/lineup/users/:userId',
+    path: '/lineup/users/:user_id',
     auth: 'optional',
-    handler: (c) => ok(getUserProfile(c.env, c.viewer, pathSnowflake(c, 'userId'))),
+    handler: (c) => ok(getUserProfile(c.env, c.viewer, pathSnowflake(c, 'user_id'))),
   },
   {
     method: 'GET',
@@ -217,9 +217,9 @@ export const routes: Route[] = [
   },
   {
     method: 'GET',
-    path: '/lineup/posts/:postId',
+    path: '/lineup/posts/:post_id',
     auth: 'optional',
-    handler: (c) => ok(getPostDetail(c.env, c.viewer, c.params.postId ?? '')),
+    handler: (c) => ok(getPostDetail(c.env, c.viewer, c.params.post_id ?? '')),
   },
   {
     method: 'POST',
@@ -230,36 +230,36 @@ export const routes: Route[] = [
   },
   {
     method: 'PATCH',
-    path: '/lineup/posts/:postId',
+    path: '/lineup/posts/:post_id',
     auth: 'session',
     handler: (c) =>
       ok(
         updatePost(
           c.env,
           actorOf(c),
-          c.params.postId ?? '',
+          c.params.post_id ?? '',
           parseBody(c.rawBody, updatePostBody(c.env.now), {required: true}),
         ),
       ),
   },
   {
     method: 'POST',
-    path: '/lineup/posts/:postId/publish',
+    path: '/lineup/posts/:post_id/publish',
     auth: 'session',
-    handler: (c) => ok(publishPost(c.env, actorOf(c), c.params.postId ?? '')),
+    handler: (c) => ok(publishPost(c.env, actorOf(c), c.params.post_id ?? '')),
   },
   {
     method: 'POST',
-    path: '/lineup/posts/:postId/close',
+    path: '/lineup/posts/:post_id/close',
     auth: 'session',
-    handler: (c) => ok(closePost(c.env, actorOf(c), c.params.postId ?? '')),
+    handler: (c) => ok(closePost(c.env, actorOf(c), c.params.post_id ?? '')),
   },
   {
     method: 'DELETE',
-    path: '/lineup/posts/:postId',
+    path: '/lineup/posts/:post_id',
     auth: 'session',
     handler: (c) => {
-      deletePost(c.env, actorOf(c), c.params.postId ?? '');
+      deletePost(c.env, actorOf(c), c.params.post_id ?? '');
       return noContent();
     },
   },
@@ -303,34 +303,34 @@ export const routes: Route[] = [
   },
   {
     method: 'PATCH',
-    path: '/lineup/me/experiences/:expId',
+    path: '/lineup/me/experiences/:exp_id',
     auth: 'session',
     handler: (c) => {
-      const id = pathUuid(c, 'expId');
+      const id = pathUuid(c, 'exp_id');
       return ok(updateExperience(c.env, actorOf(c), id, parseBody(c.rawBody, updateExperienceBody, {required: true})));
     },
   },
   {
     method: 'DELETE',
-    path: '/lineup/me/experiences/:expId',
+    path: '/lineup/me/experiences/:exp_id',
     auth: 'session',
     handler: (c) => {
-      deleteExperience(c.env, actorOf(c), pathUuid(c, 'expId'));
+      deleteExperience(c.env, actorOf(c), pathUuid(c, 'exp_id'));
       return noContent();
     },
   },
   {
     method: 'POST',
-    path: '/lineup/me/experiences/:expId/verify',
+    path: '/lineup/me/experiences/:exp_id/verify',
     auth: 'session',
-    handler: (c) => ok(verifyExperience(c.env, actorOf(c), pathUuid(c, 'expId'))),
+    handler: (c) => ok(verifyExperience(c.env, actorOf(c), pathUuid(c, 'exp_id'))),
   },
   {
     method: 'POST',
-    path: '/lineup/me/experiences/:expId/request-review',
+    path: '/lineup/me/experiences/:exp_id/request-review',
     auth: 'session',
     handler: (c) => {
-      const id = pathUuid(c, 'expId');
+      const id = pathUuid(c, 'exp_id');
       const body = parseBody(c.rawBody, noteBody(500));
       return ok(requestReview(c.env, actorOf(c), id, body.note));
     },
@@ -345,20 +345,20 @@ export const routes: Route[] = [
   },
   {
     method: 'POST',
-    path: '/lineup/staff/experiences/:expId/verify',
+    path: '/lineup/staff/experiences/:exp_id/verify',
     auth: 'staff',
     handler: (c) => {
-      const id = pathUuid(c, 'expId');
+      const id = pathUuid(c, 'exp_id');
       const body = parseBody(c.rawBody, noteBody(500));
       return ok(staffVerifyExperience(c.env, actorOf(c), id, body.note));
     },
   },
   {
     method: 'POST',
-    path: '/lineup/staff/experiences/:expId/reject',
+    path: '/lineup/staff/experiences/:exp_id/reject',
     auth: 'staff',
     handler: (c) => {
-      const id = pathUuid(c, 'expId');
+      const id = pathUuid(c, 'exp_id');
       const body = parseBody(c.rawBody, reasonBody, {required: true});
       return ok(staffRejectExperience(c.env, actorOf(c), id, body.reason));
     },
@@ -366,51 +366,51 @@ export const routes: Route[] = [
   {method: 'GET', path: '/lineup/staff/badges', auth: 'staff', handler: (c) => ok(listBadgeGrants(c.env, c.query))},
   {
     method: 'PUT',
-    path: '/lineup/staff/badges/:entityType/:entityId/:badge',
+    path: '/lineup/staff/badges/:entity_type/:entity_id/:badge',
     auth: 'staff',
     handler: (c) => {
-      const entityId = pathSnowflake(c, 'entityId');
+      const entityId = pathSnowflake(c, 'entity_id');
       const body = parseBody(c.rawBody, noteBody(200));
-      return ok(grantBadge(c.env, actorOf(c), c.params.entityType ?? '', entityId, c.params.badge ?? '', body.note));
+      return ok(grantBadge(c.env, actorOf(c), c.params.entity_type ?? '', entityId, c.params.badge ?? '', body.note));
     },
   },
   {
     method: 'DELETE',
-    path: '/lineup/staff/badges/:entityType/:entityId/:badge',
+    path: '/lineup/staff/badges/:entity_type/:entity_id/:badge',
     auth: 'staff',
     handler: (c) => {
-      const entityId = pathSnowflake(c, 'entityId');
-      revokeBadge(c.env, (c.params.entityType ?? '') as BadgeEntityType, entityId, c.params.badge ?? '');
+      const entityId = pathSnowflake(c, 'entity_id');
+      revokeBadge(c.env, (c.params.entity_type ?? '') as BadgeEntityType, entityId, c.params.badge ?? '');
       return noContent();
     },
   },
   {
     method: 'POST',
-    path: '/lineup/staff/posts/:postId/hide',
+    path: '/lineup/staff/posts/:post_id/hide',
     auth: 'staff',
     handler: (c) => {
-      const id = pathUuid(c, 'postId');
+      const id = pathUuid(c, 'post_id');
       return ok(hidePost(c.env, id, parseBody(c.rawBody, reasonBody, {required: true}).reason));
     },
   },
   {
     method: 'POST',
-    path: '/lineup/staff/posts/:postId/unhide',
+    path: '/lineup/staff/posts/:post_id/unhide',
     auth: 'staff',
-    handler: (c) => ok(unhidePost(c.env, pathUuid(c, 'postId'))),
+    handler: (c) => ok(unhidePost(c.env, pathUuid(c, 'post_id'))),
   },
   {method: 'GET', path: '/lineup/staff/reports', auth: 'staff', handler: (c) => ok(listStaffReports(c.env, c.query))},
   {
     method: 'POST',
-    path: '/lineup/staff/reports/:reportId/resolve',
+    path: '/lineup/staff/reports/:report_id/resolve',
     auth: 'staff',
-    handler: (c) => ok(resolveReport(c.env, actorOf(c), pathUuid(c, 'reportId'))),
+    handler: (c) => ok(resolveReport(c.env, actorOf(c), pathUuid(c, 'report_id'))),
   },
   {
     method: 'POST',
-    path: '/lineup/staff/reports/:reportId/dismiss',
+    path: '/lineup/staff/reports/:report_id/dismiss',
     auth: 'staff',
-    handler: (c) => ok(dismissReport(c.env, actorOf(c), pathUuid(c, 'reportId'))),
+    handler: (c) => ok(dismissReport(c.env, actorOf(c), pathUuid(c, 'report_id'))),
   },
 
   // ---- The dashboard's sign-out (same cookie) ---------------------------------

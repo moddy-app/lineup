@@ -50,6 +50,8 @@ export const G = {
   corbeau: at(2022, 10, 10, 223),
   lumiere: at(2022, 12, 1, 224),
   chroniqueurs: at(2024, 10, 18, 225),
+  // Not claimed, and suspended globally: claiming it answers 403 `guild_suspended`.
+  marche: at(2023, 5, 9, 226),
 } as const;
 
 const uuid = (kind: string, n: number) => `${kind}0000000-0000-4000-8000-${String(n).padStart(12, '0')}`;

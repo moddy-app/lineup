@@ -3,6 +3,7 @@ import {beforeEach, describe, expect, it} from 'vitest';
 import {getDb, resetDb, saveDb} from './db';
 import {currentSession, getPersonaId, PERSONAS, setPersonaId} from './personas';
 import {U} from './seed/ids';
+import {DB_VERSION} from './seed';
 import {DEFAULT_SETTINGS, getSettings, takeFailNext, updateSettings} from './settings';
 
 beforeEach(() => {
@@ -19,7 +20,7 @@ describe('the persisted database', () => {
     post.title = 'Changed by the test';
     saveDb();
     const stored = JSON.parse(window.localStorage.getItem('lineup-mock-db') ?? '{}');
-    expect(stored.version).toBe(1);
+    expect(stored.version).toBe(DB_VERSION);
     expect(stored.data).not.toHaveProperty('rt');
     // A "reload": the in-memory copy is dropped and read back.
     resetDbMemoryOnly();

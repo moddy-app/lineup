@@ -29,7 +29,7 @@ export const PERSONAS: Persona[] = [
     id: 'member',
     label: 'Member (Camille)',
     description:
-      'Normal account with Lineup scopes. Manages 5 servers, owns posts in every status (Atelier du Phénix is at its quota of 5), experiences in every status.',
+      'Normal account with Lineup scopes. Manages Atelier du Phénix (Moddy, at its quota of 5 posts) and Pixel Forge (no Moddy), Café des Mods (Moddy) and Studio Nocturne (no Moddy) to claim, a suspended server, and Guilde du Corbeau after refreshing the list. Posts and experiences in every status.',
     session: {userId: U.camille, hasLineupScopes: true},
   },
   {
@@ -66,8 +66,19 @@ export function getPersonaId(): PersonaId {
   return PERSONAS.some((persona) => persona.id === stored) ? (stored as PersonaId) : 'anonymous';
 }
 
+const listeners = new Set<() => void>();
+
 export function setPersonaId(id: PersonaId): void {
   setString(KEY, id);
+  for (const listener of listeners) listener();
+}
+
+/** For `useSyncExternalStore`: the dev panel shows who is signed in, also after a sign-out from the app. */
+export function subscribePersona(listener: () => void): () => void {
+  listeners.add(listener);
+  return () => {
+    listeners.delete(listener);
+  };
 }
 
 export function currentSession(): Session | null {

@@ -122,9 +122,11 @@ describe('query and path parameters', () => {
 
   it('keeps a snowflake path id exact', () => {
     const issues = new Issues();
-    expect(new Params('path', {guildId: '812345678901234567'}, issues).snowflake('guildId')).toBe('812345678901234567');
-    new Params('path', {guildId: 'abc'}, issues).snowflake('guildId');
-    expect(issues.list[0]).toMatchObject({type: 'int_parsing', loc: ['path', 'guildId']});
+    expect(new Params('path', {guild_id: '812345678901234567'}, issues).snowflake('guild_id')).toBe(
+      '812345678901234567',
+    );
+    new Params('path', {guild_id: 'abc'}, issues).snowflake('guild_id');
+    expect(issues.list[0]).toMatchObject({type: 'int_parsing', loc: ['path', 'guild_id']});
   });
 });
 

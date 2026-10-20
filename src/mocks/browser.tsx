@@ -28,6 +28,7 @@ import {routes} from './server/routes';
 import {getSettings, takeFailNext} from './settings';
 
 export const LOGIN_PAGE_PATH = '/__mock/login';
+const WORKER_URL = '/mockServiceWorker.js';
 
 const server: ServerContext = {
   get db() {
@@ -84,17 +85,44 @@ function mountDevPanel(): void {
 }
 
 /**
+ * MSW calls `registration.update()` without waiting for it or catching it. When the page is being reloaded at that
+ * very moment (MSW itself reloads once after a hard refresh, which leaves the page uncontrolled), the update is
+ * refused with "Failed to update a ServiceWorker … Not found" and the browser reports an unhandled rejection. It is
+ * noise: the worker is registered and answering. Only that one is silenced.
+ */
+function silenceWorkerUpdateNoise(): void {
+  window.addEventListener('unhandledrejection', (event) => {
+    const reason: unknown = event.reason;
+    const message = reason instanceof Error ? reason.message : String(reason);
+    if (message.includes('Failed to update a ServiceWorker')) event.preventDefault();
+  });
+}
+
+/**
  * Starts the mock. Returns the element to render INSTEAD of the app when the
  * address is the mock's login page, or null for the normal app.
  */
 export async function startMocks(): Promise<ReactNode | null> {
   setLoginUrlBuilder(mockLoginUrl);
+  silenceWorkerUpdateNoise();
   const worker = setupWorker(...handlers());
-  await worker.start({
-    serviceWorker: {url: '/mockServiceWorker.js'},
-    onUnhandledRequest: 'bypass',
-    quiet: true,
-  });
+  try {
+    await worker.start({
+      serviceWorker: {url: WORKER_URL},
+      onUnhandledRequest: 'bypass',
+      quiet: true,
+    });
+  } catch (error) {
+    // The mock was asked for but cannot run: say why, and let the app load (its API calls will then fail visibly
+    // against the real API, which is the honest picture of "no mock").
+    console.error(
+      `[mock api] could not start: ${WORKER_URL} is not being served (or service workers are unavailable).\n` +
+        'Run `npm run dev:mock`, or set VITE_MOCK_API=1 and restart the dev server: the Vite plugin ' +
+        '(scripts/vite-plugin-mock-worker.ts) serves the worker only then.',
+      error,
+    );
+    return null;
+  }
   getDb();
   mountDevPanel();
   console.info(`[mock api] running, persona: ${getPersonaId()}. Panel: bottom left.`);

@@ -39,7 +39,9 @@ window.addEventListener('vite:preloadError', (event) => {
 
 // Development mock API (`npm run dev:mock`, `npm run build:mock`): starts the MSW worker BEFORE anything renders and
 // may return its own page (the mock sign-in) to render instead of the app. The condition is a constant in a normal
-// production build, so neither src/mocks nor msw is in it (the dynamic import is dropped).
+// production build, so neither src/mocks nor msw is in it (the dynamic import is dropped). It is the same rule as
+// scripts/vite-plugin-mock-worker.ts, which serves the worker script exactly when this condition can hold:
+// VITE_MOCK_API=1 and (the dev server or `--mode mock`).
 let mockPage: ReactNode = null;
 if (import.meta.env.VITE_MOCK_API === '1' && (import.meta.env.DEV || import.meta.env.MODE === 'mock')) {
   const {startMocks} = await import('./mocks/browser');

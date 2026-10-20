@@ -220,6 +220,16 @@ export function seedDiscordGuilds(): DiscordGuild[] {
       member_count: 430,
       presence_count: 52,
     }),
+    // Banned after reports, never claimed: the person who runs it hits `guild_suspended` when she tries.
+    makeGuild({
+      id: G.marche,
+      name: 'Marché des Arcanes',
+      owner_id: U.camille,
+      description: "Place d'échange de cartes à collectionner et de comptes de jeu.",
+      member_count: 880,
+      presence_count: 95,
+      sanction: banGuild(['R5T3N7']),
+    }),
   ];
 }
 
@@ -419,6 +429,7 @@ export function seedMembers(): Member[] {
     m(U.camille, G.cafe, true, perms('ADMINISTRATOR'), 4),
     m(U.camille, G.studio, false, perms('MANAGE_GUILD', 'MANAGE_MESSAGES'), 3),
     m(U.camille, G.corbeau, true, perms('ADMINISTRATOR'), 5),
+    m(U.camille, G.marche, true, perms('ADMINISTRATOR'), 4),
     m(U.camille, G.cubelands, false, perms('MANAGE_MESSAGES', 'MODERATE_MEMBERS'), 4),
     m(U.camille, G.anime, false, perms(), 2),
     // (Camille is not on Lumière Studio at all.)
@@ -444,6 +455,7 @@ export function seedMembers(): Member[] {
 /**
  * Invitations as Discord resolves them (§3). A code that is not here is
  * unknown (`invite_not_found`). Every claimable server has a permanent one.
+ * The full table of test codes is in ../README.md.
  */
 export function seedInvites(now: Date): Invite[] {
   const permanent = (code: string, guild_id: string): Invite => ({code, kind: 'guild', guild_id, expires_at: null});
@@ -465,6 +477,7 @@ export function seedInvites(now: Date): Invite[] {
     permanent('corbeau-guilde', G.corbeau),
     permanent('lumiere', G.lumiere),
     permanent('chroniqueurs', G.chroniqueurs),
+    permanent('marche-arcanes', G.marche),
     // Permanent invitations of a second kind: a second code to the same server (to change a profile's invitation).
     permanent('cubelands-fr', G.cubelands),
     permanent('atelier', G.atelier),

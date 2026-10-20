@@ -55,7 +55,7 @@ type Compiled = {route: Route; regex: RegExp; names: string[]};
 
 const compiled: Compiled[] = routes.map((route) => {
   const names: string[] = [];
-  const source = route.path.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/:([A-Za-z]+)/g, (_match, name: string) => {
+  const source = route.path.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/:([A-Za-z_]+)/g, (_match, name: string) => {
     names.push(name);
     return '([^/]+)';
   });

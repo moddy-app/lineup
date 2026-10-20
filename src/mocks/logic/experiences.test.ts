@@ -242,7 +242,7 @@ describe('what resets a verification (§7)', () => {
     const api = createTestApi('camille');
     expect((await patch(api, x(10), {description: 'x'})).json.code).toBe('lineup_experience_not_found');
     expect((await patch(api, 'nope', {description: 'x'})).json).toMatchObject({
-      detail: [{type: 'uuid_parsing', loc: ['path', 'expId']}],
+      detail: [{type: 'uuid_parsing', loc: ['path', 'exp_id']}],
     });
   });
 });

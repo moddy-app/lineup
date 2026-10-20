@@ -168,7 +168,7 @@ describe('a server profile', () => {
     expect(code(await api.call('GET', '/lineup/guilds/123'))).toBe('lineup_guild_not_found');
     expect((await api.call('GET', '/lineup/guilds/abc')).json.detail[0]).toMatchObject({
       type: 'int_parsing',
-      loc: ['path', 'guildId'],
+      loc: ['path', 'guild_id'],
     });
   });
 
@@ -262,21 +262,25 @@ describe('claiming a server by invitation (§3)', () => {
     });
   });
 
-  it('answers a sanction object for a suspended server the person manages', async () => {
+  it('answers a sanction object for a suspended server the person manages (the seed has one for Camille)', async () => {
     const api = createTestApi('camille');
-    api.server.db.members.push({
-      user_id: U.camille,
-      guild_id: G.trade,
-      owner: true,
-      permissions: ['ADMINISTRATOR'],
-      role_count: 1,
-    });
-    delete api.server.db.guildListCache[U.camille];
-    delete api.server.db.profiles[G.trade];
-    const response = await claim(api, 'tradehub');
+    const response = await claim(api, 'marche-arcanes');
     expect(response.status).toBe(403);
-    expect(response.json.error.code).toBe('guild_suspended');
-    expect(response.json).not.toHaveProperty('code');
+    expect(response.json).toEqual({
+      error: {
+        code: 'guild_suspended',
+        level: 'ban',
+        subject_type: 'guild',
+        subject_id: G.marche,
+        references: ['R5T3N7'],
+        expires_at: null,
+        message: 'Ce serveur est suspendu.',
+        violations_url: 'https://moddy.app/violations',
+      },
+    });
+    // The staff pass the sanction (a server nobody claimed yet becomes claimable for them).
+    const staff = createTestApi('noe');
+    expect((await claim(staff, 'marche-arcanes')).status).toBe(201);
   });
 
   it('shows the stale-cache flow: forbidden until the list is refreshed', async () => {
@@ -428,6 +432,7 @@ describe('editing, refreshing and my servers', () => {
     expect(response.json).toEqual([
       {id: G.atelier, name: 'Atelier du Phénix', icon_url: null, has_moddy: true, claimed: true},
       {id: G.cafe, name: 'Café des Mods', icon_url: null, has_moddy: true, claimed: false},
+      {id: G.marche, name: 'Marché des Arcanes', icon_url: null, has_moddy: false, claimed: false},
       {id: G.pixel, name: 'Pixel Forge', icon_url: null, has_moddy: false, claimed: true},
       {id: G.studio, name: 'Studio Nocturne', icon_url: null, has_moddy: false, claimed: false},
     ]);
