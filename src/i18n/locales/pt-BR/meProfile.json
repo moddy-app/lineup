@@ -1,6 +1,5 @@
 {
-  "title": "Editar meu perfil",
-  "intro": "Este perfil é público. Somente os campos alterados são salvos.",
+  "title": "Perfil",
   "saved": "Perfil salvo",
   "saving": "Salvando",
   "save": "Salvar",
@@ -9,7 +8,7 @@
     "headline": "Título",
     "headlineHelp": "Uma linha abaixo do seu nome, por exemplo \"Moderadora há 4 anos\".",
     "bio": "Apresentação",
-    "bioHelp": "Texto simples. As quebras de linha são mantidas.",
+    "bioHelp": "Markdown aceito: negrito, listas, links.",
     "openToWork": "Aberto a propostas",
     "openToWorkHelp": "Seu perfil mostra a marca \"Aberto a propostas\"."
   },
@@ -33,18 +32,6 @@
     "suggestion": "Fuso do seu navegador:",
     "use": "Usar"
   },
-  "summary": {
-    "title": "Prévia",
-    "noHeadline": "Sem título",
-    "languages_one": "{{count}} idioma: {{list}}",
-    "languages_other": "{{count}} idiomas: {{list}}",
-    "noLanguages": "Nenhum idioma",
-    "links_one": "{{count}} link",
-    "links_other": "{{count}} links",
-    "open": "Aberto a propostas",
-    "closed": "Sem procurar",
-    "view": "Ver meu perfil público"
-  },
   "problems": {
     "linkLabelRequired": "Dê um nome ao link.",
     "linkLabelTooLong": "O nome tem no máximo {{count}} caracteres.",
@@ -54,5 +41,27 @@
     "timezoneInvalid": "Fuso desconhecido. Exemplos: Europe/Paris, UTC+02:00.",
     "tooLong": "No máximo {{count}} caracteres.",
     "tooMany": "No máximo {{count}} itens."
+  },
+  "description": "O que as outras pessoas veem no seu perfil público.",
+  "viewPublic": "Ver meu perfil público",
+  "unsaved": "Alterações não salvas",
+  "panels": {
+    "presentation": {
+      "title": "Apresentação",
+      "description": "Seu título e seu texto de apresentação."
+    },
+    "availability": {
+      "title": "Disponibilidade",
+      "description": "Diga se você está aberto a propostas."
+    },
+    "locale": {
+      "title": "Idiomas e fuso horário",
+      "description": "Os idiomas que você fala e seu horário local."
+    }
+  },
+  "preview": {
+    "show": "Mostrar prévia",
+    "hide": "Ocultar prévia",
+    "empty": "Nada para mostrar."
   }
 }

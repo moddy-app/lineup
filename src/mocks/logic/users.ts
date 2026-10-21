@@ -5,10 +5,11 @@ import type {Me, Snowflake, UserProfile} from '@/api/types';
 import {notFound} from '../errors';
 import type {Actor, Env, Viewer} from '../env';
 import {iso} from '../time';
+import {summaryBadges, userBadges} from './badges';
 import {discordSnapshot, toMeProfileRow, toUserProfile} from './views';
 
 /** `GET /lineup/me`: the session summary. Never an e-mail or a token. */
-export function toMe(actor: Actor): Me {
+export function toMe(env: Env, actor: Actor): Me {
   const {user} = actor;
   return {
     user: {
@@ -19,6 +20,7 @@ export function toMe(actor: Actor): Me {
       banner_url: user.banner_url,
       avatar_decoration_data: discordSnapshot(user).avatar_decoration_data,
       is_staff: user.is_staff,
+      badges: summaryBadges(userBadges(env, user)),
     },
     has_lineup_scopes: actor.has_lineup_scopes,
     login_url: '/lineup/auth/login',

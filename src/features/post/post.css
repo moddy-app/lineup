@@ -1,133 +1,111 @@
-/* Post page. Tokens only. */
+/* The post page: a status line, the head (title, who, actions), then the body. Tokens only. */
 
-.post-banner {
-  --card-padding: 20px;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: var(--gap-l);
-}
-
-.post-banner-text {
+.post-state {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
+  justify-content: center;
+  padding-block: var(--page-gap);
 }
 
-.post-banner-text p {
+/* One quiet line above the title: draft, closed, hidden, expired. */
+.post-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-s);
   margin: 0;
   font-size: var(--text-body-small);
   color: var(--md-sys-color-on-surface-variant);
 }
 
-.post-banner-reason {
-  overflow-wrap: anywhere;
+.post-banner .material-symbols-outlined {
+  flex-shrink: 0;
+  font-size: 18px;
 }
 
-.post-banner-link {
-  align-self: flex-start;
-  font-size: var(--text-body-small);
+.post-link {
   color: var(--md-sys-color-primary);
   text-decoration: none;
 }
 
-.post-banner-link:is(:hover, :focus-visible) {
+.post-link:is(:hover, :focus-visible) {
   text-decoration: underline;
 }
 
-.post-main-top {
+/* Head */
+
+.post-header-card {
+  --card-padding: 24px;
+}
+
+.post-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--gap-m) var(--gap-l);
+  min-width: 0;
+}
+
+.post-heading {
+  display: flex;
+  flex: 1 1 18rem;
+  flex-direction: column;
+  gap: var(--gap-s);
+  min-width: 0;
+}
+
+h1.post-title {
+  margin: 0;
+  font-size: var(--text-title);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.post-byline {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--gap-m);
+  gap: 4px var(--gap-m);
+  margin: 0;
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
-.post-main .post-tags {
-  margin-inline-start: 0;
-}
-
-.post-author {
+.post-poster-link {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-m);
+  gap: var(--gap-s);
   min-width: 0;
+  font-weight: 500;
   color: var(--md-sys-color-on-surface);
   text-decoration: none;
 }
 
-.post-author strong {
-  overflow-wrap: anywhere;
-}
-
-.post-author:is(:hover, :focus-visible) strong {
+.post-poster-link:is(:hover, :focus-visible) .display-name-text {
   color: var(--md-sys-color-primary);
   text-decoration: underline;
 }
 
-.post-main h1.post-page-title {
-  margin: 20px 0 10px;
-  font-size: var(--text-title);
-  line-height: 1.2;
-  overflow-wrap: anywhere;
-}
-
-.post-description {
-  max-width: 68ch;
-  margin: 0;
-  white-space: pre-line;
-  overflow-wrap: anywhere;
-}
-
 .post-dates {
-  margin-top: var(--space);
   font-variant-numeric: tabular-nums;
 }
 
-.post-facts {
+.post-dates::before {
+  content: '·';
+  margin-inline-end: var(--gap-m);
+}
+
+.post-actions {
   display: flex;
-  flex-direction: column;
-  gap: var(--gap-l);
-  margin: 0;
-}
-
-.post-facts > div {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-s);
-}
-
-.post-facts dt {
-  font-size: var(--text-small);
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-.post-facts dd {
-  margin: 0;
-  min-width: 0;
-}
-
-.post-author-card {
-  display: flex;
-  align-items: center;
-  gap: var(--gap-l);
-  min-width: 0;
-}
-
-.post-author-name {
-  display: flex;
-  flex-direction: column;
   align-items: flex-start;
   gap: var(--gap-s);
-  min-width: 0;
+  margin-inline-start: auto;
 }
 
-.post-author-name strong {
-  overflow-wrap: anywhere;
+.post-menu {
+  position: relative;
+  display: inline-flex;
 }
 
 .post-error {
-  margin-top: var(--gap-l);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -143,15 +121,84 @@
   color: var(--md-sys-color-error);
 }
 
-.post-report {
-  --card-padding: 12px;
-  align-items: flex-start;
+/* Body: one column, the summary first; two columns from 1100px. */
+
+.post-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--page-gap);
+  align-items: start;
 }
 
-.post-commitment {
-  margin-top: var(--gap-l);
+@media (min-width: 1101px) {
+  .post-body {
+    grid-template-columns: minmax(0, 1fr) 20rem;
+  }
+
+  .post-content {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .post-summary,
+  .post-poster {
+    grid-column: 2;
+  }
+
+  .post-summary {
+    grid-row: 1;
+  }
+
+  .post-poster {
+    grid-row: 2;
+  }
 }
 
-.post-main .post-description {
+.post-content {
+  gap: var(--page-gap);
+  min-width: 0;
+}
+
+.post-description {
+  max-width: 68ch;
+  overflow-wrap: anywhere;
+}
+
+.post-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+}
+
+.post-section > h2,
+.post-summary > h2 {
   margin: 0;
+  font-size: var(--text-subtitle);
+  font-weight: 600;
+}
+
+.post-summary {
+  gap: var(--gap-l);
+  min-width: 0;
+}
+
+/* The server or the person */
+
+.post-poster {
+  gap: var(--gap-m);
+}
+
+.post-poster-head {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-m);
+  min-width: 0;
+}
+
+.post-poster-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
 }

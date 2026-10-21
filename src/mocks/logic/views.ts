@@ -30,7 +30,7 @@ import type {Actor, Env, Viewer} from '../env';
 import type {DbExperience, DbPost, DbUser, DiscordGuild, GuildProfileRow} from '../model';
 import {iso, snowflakeDate} from '../time';
 import {canManageGuildQuietly} from './access';
-import {guildBadges, userBadges} from './badges';
+import {guildBadges, summaryBadges, userBadges} from './badges';
 import {canEditPost, isExpired, isUserSuspended} from './visibility';
 
 export const MAX_PROFILE_POSTS = 20;
@@ -44,7 +44,12 @@ const USER_REFRESH_AFTER_MS = 24 * 3600_000;
 function postGuild(env: Env, guildId: Snowflake | null): PostGuild | null {
   if (!guildId) return null;
   const guild = env.db.guilds[guildId];
-  return {id: guildId, name: guild?.name ?? null, icon_url: guild?.icon_url ?? null};
+  return {
+    id: guildId,
+    name: guild?.name ?? null,
+    icon_url: guild?.icon_url ?? null,
+    badges: summaryBadges(guildBadges(env, guildId, {includePremium: false})),
+  };
 }
 
 function postAuthor(env: Env, authorId: Snowflake): PostAuthor {
@@ -54,6 +59,7 @@ function postAuthor(env: Env, authorId: Snowflake): PostAuthor {
     username: user?.username ?? null,
     global_name: user?.global_name ?? null,
     avatar_url: user?.avatar_url ?? null,
+    badges: user ? summaryBadges(userBadges(env, user)) : [],
   };
 }
 
@@ -191,7 +197,7 @@ export function guildCard(env: Env, profile: GuildProfileRow): GuildCard {
   };
 }
 
-export function userSummary(user: DbUser): UserSummary {
+export function userSummary(env: Env, user: DbUser): UserSummary {
   return {
     id: user.id,
     username: user.username,
@@ -199,6 +205,7 @@ export function userSummary(user: DbUser): UserSummary {
     display_name: user.global_name ?? user.username,
     avatar_url: user.avatar_url,
     avatar_decoration: user.avatar_decoration ? {...user.avatar_decoration} : null,
+    badges: summaryBadges(userBadges(env, user)),
   };
 }
 
@@ -219,7 +226,7 @@ export function teamOf(env: Env, guildId: Snowflake): TeamMember[] {
     const user = env.db.users[userId];
     if (!user || user.sanction) continue;
     team.push({
-      user: userSummary(user),
+      user: userSummary(env, user),
       position: row.position,
       position_other: row.position_other,
       since: row.start_date,

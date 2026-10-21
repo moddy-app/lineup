@@ -7,9 +7,9 @@ import {usePost} from '@/api/queries';
 import {usePageTitle} from '@/app/usePageTitle';
 import {PostCard} from '@/components';
 import {useT} from '@/i18n/useT';
-import {Bento, Card, Rows, Section, Shape, Spinner, Stack, TextField} from '@/ui';
+import {Card, InnerCards, Spinner, TextField} from '@/ui';
 
-import {ActionDialog, StaffListError} from './parts';
+import {ActionDialog, Rules, SectionHead, StaffListError} from './parts';
 import {extractPostId, REASON_MAX} from './staffLogic';
 
 export function Component() {
@@ -56,9 +56,14 @@ export function Component() {
   };
 
   return (
-    <Bento>
-      <Stack span={8}>
-        <Section title={t('nav.posts')}>
+    <>
+      <section className="staff-section">
+        <SectionHead title={t('nav.posts')} />
+        <Rules title={t('posts.help.title')}>
+          <li>{t('posts.help.hide')}</li>
+          <li>{t('posts.help.unhide')}</li>
+        </Rules>
+        <Card className="staff-card">
           <form
             className="staff-lookup"
             noValidate
@@ -82,13 +87,7 @@ export function Component() {
           </form>
 
           {postId === undefined ? (
-            <div className="empty-state compact">
-              <Shape shape="hexagon" tone="secondary" icon="search" small />
-              <div className="empty-state-text">
-                <h3>{t('posts.empty.title')}</h3>
-                <p>{t('posts.empty.text')}</p>
-              </div>
-            </div>
+            <p className="staff-item-meta">{t('posts.empty.text')}</p>
           ) : post.isPending ? (
             <Spinner />
           ) : post.isError ? (
@@ -96,9 +95,9 @@ export function Component() {
           ) : (
             data && (
               <div className="staff-found">
-                <Rows>
+                <InnerCards>
                   <PostCard post={data} variant="row" showStatus />
-                </Rows>
+                </InnerCards>
                 {hidden && data.hidden_reason && (
                   <p className="staff-reason">
                     <strong>{t('posts.reason')}</strong> {data.hidden_reason}
@@ -116,18 +115,8 @@ export function Component() {
               </div>
             )
           )}
-        </Section>
-      </Stack>
-      <Stack span={4} sticky>
-        <Card>
-          <Shape shape="octagon" tone="tertiary" icon="visibility_off" />
-          <h2>{t('posts.help.title')}</h2>
-          <ol className="staff-steps">
-            <li>{t('posts.help.hide')}</li>
-            <li>{t('posts.help.unhide')}</li>
-          </ol>
         </Card>
-      </Stack>
+      </section>
 
       <ActionDialog
         open={dialog === 'hide' || autoHide}
@@ -150,6 +139,6 @@ export function Component() {
         onSubmit={() => unhide.mutateAsync(postId!)}
         onFailure={staleHidden}
       />
-    </Bento>
+    </>
   );
 }

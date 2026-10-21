@@ -28,6 +28,8 @@ interface TextFieldProps {
   /** Puts the field in its error state and replaces the supporting text. */
   errorText?: string;
   error?: boolean;
+  /** A Material Symbol before the text (a search field's magnifier). */
+  leadingIcon?: string;
   className?: string;
   ref?: Ref<MdOutlinedTextField>;
   id?: string;
@@ -48,6 +50,7 @@ export function TextField({
   className,
   counter = true,
   maxLength,
+  leadingIcon,
   ref: forwardedRef,
   ...props
 }: TextFieldProps) {
@@ -85,6 +88,12 @@ export function TextField({
       error={Boolean(error || errorText)}
       errorText={errorText ?? ''}
       oninput={handleChange}
-    />
+    >
+      {leadingIcon && (
+        <md-icon slot="leading-icon" aria-hidden="true">
+          {leadingIcon}
+        </md-icon>
+      )}
+    </md-outlined-text-field>
   );
 }

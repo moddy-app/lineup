@@ -5,13 +5,14 @@ import {useGuild} from '@/api/queries';
 import type {GuildProfile} from '@/api/types';
 import {paths} from '@/app/paths';
 import {usePageTitle} from '@/app/usePageTitle';
-import {EmptyState, ErrorState, GuildIcon} from '@/components';
+import {DisplayName, EmptyState, ErrorState} from '@/components';
 import {useT} from '@/i18n/useT';
-import {AppLayout, Card, LinkButton, PageLoading, Status} from '@/ui';
+import {LinkButton, PageLoading, SettingsLayout} from '@/ui';
 
 import {DangerZone} from './DangerZone';
 import {GuildPosts} from './GuildPosts';
 import {ProfileEditor} from './ProfileEditor';
+import {SectionNav} from './SectionNav';
 import {SnapshotCard} from './SnapshotCard';
 import './guildManage.css';
 
@@ -26,7 +27,7 @@ export function Component() {
 
   if (query.isError || !guild) {
     return (
-      <AppLayout>
+      <SettingsLayout title={t('title')}>
         {hasCode(query.error, 'lineup_guild_not_found') ? (
           <EmptyState
             icon="search_off"
@@ -44,13 +45,13 @@ export function Component() {
         ) : (
           <ErrorState error={query.error} onRetry={() => void query.refetch()} retrying={query.isFetching} />
         )}
-      </AppLayout>
+      </SettingsLayout>
     );
   }
 
   if (!guild.can_manage) {
     return (
-      <AppLayout>
+      <SettingsLayout title={t('title')}>
         <EmptyState
           icon="lock"
           shape="pentagon"
@@ -64,7 +65,7 @@ export function Component() {
         >
           {t('forbidden.body')}
         </EmptyState>
-      </AppLayout>
+      </SettingsLayout>
     );
   }
 
@@ -75,31 +76,21 @@ function ManageView({guild}: {guild: GuildProfile}) {
   const {t} = useT('guildManage');
   const name = guild.name ?? t('unknownName');
   return (
-    <AppLayout
-      stickyAside
-      aside={
-        <>
-          <SnapshotCard guild={guild} />
-          <DangerZone guild={guild} />
-        </>
-      }
-    >
-      <Card as="section" className="manage-head">
-        <GuildIcon id={guild.id} iconUrl={guild.icon_url} size="large" />
-        <div className="manage-head-text">
-          <h1>{t('heading', {name})}</h1>
-          <p>
-            <Status variant={guild.listed ? 'accent' : 'default'}>
-              {guild.listed ? t('status.listed') : t('status.unlisted')}
-            </Status>
-          </p>
-        </div>
+    <SettingsLayout
+      className="manage-page"
+      title={<DisplayName name={name} badges={guild.badges} entity="guild" />}
+      description={t('pageDescription')}
+      actions={
         <LinkButton to={paths.guild(guild.id)} variant="outlined" icon="visibility">
           {t('viewProfile')}
         </LinkButton>
-      </Card>
+      }
+    >
+      <SectionNav />
       <ProfileEditor guild={guild} />
       <GuildPosts guild={guild} />
-    </AppLayout>
+      <SnapshotCard guild={guild} />
+      <DangerZone guild={guild} />
+    </SettingsLayout>
   );
 }

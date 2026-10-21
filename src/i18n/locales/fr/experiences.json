@@ -1,26 +1,26 @@
 {
-  "title": "Mes expériences",
+  "title": "Expériences",
   "list": {
     "intro": "Glissez une expérience par sa poignée, ou utilisez les flèches, pour changer l'ordre affiché sur votre profil.",
     "add": "Ajouter une expérience",
     "edit": "Modifier",
-    "delete": "Supprimer",
     "drag": "Déplacer {{title}}",
     "moveUp": "Monter {{title}}",
     "moveDown": "Descendre {{title}}",
     "moved": "{{title}} : position {{position}} sur {{total}}",
     "reordered": "Ordre enregistré",
     "orderOutdated": "La liste avait changé ailleurs. Elle est rechargée, refaites le déplacement.",
-    "title": "{{position}}, {{name}}"
+    "title": "{{position}}, {{name}}",
+    "more": "Autres actions",
+    "up": "Monter",
+    "down": "Descendre"
   },
   "empty": {
     "title": "Aucune expérience",
     "body": "Ajoutez les serveurs ou les services où vous avez travaillé. Une expérience vérifiée peut être mise en avant dans une annonce."
   },
   "aside": {
-    "countTitle": "Expériences",
     "count": "{{used}} / {{max}}",
-    "profile": "Modifier mon profil",
     "verifyTitle": "Vérification",
     "auto": "Automatique : pour un serveur où vous êtes en poste, Lineup lit vos permissions sur ce serveur via Discord.",
     "manual": "Revue manuelle : pour un poste passé ou un service, l'équipe Moddy examine votre demande.",
@@ -110,12 +110,7 @@
     "pending": "Demande de revue envoyée, en attente de l'équipe Moddy.",
     "rejected": "Refusée.",
     "rejectedNoReason": "Aucun motif n'a été indiqué.",
-    "rejectedHelp": "Corrigez l'expérience si besoin, puis redemandez une vérification.",
-    "unverified": {
-      "service": "Non vérifiée. Un service se vérifie par une revue manuelle.",
-      "current": "Non vérifiée. Seule une expérience vérifiée peut être mise en avant dans une annonce.",
-      "ended": "Non vérifiée. Un poste terminé se vérifie par une revue manuelle."
-    }
+    "rejectedHelp": "Corrigez l'expérience si besoin, puis redemandez une vérification."
   },
   "evidence": {
     "summary": "Voir ce qui a été vérifié",

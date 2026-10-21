@@ -16,21 +16,18 @@ import {usePageTitle} from '@/app/usePageTitle';
 import {registerBeforeLogin} from '@/auth/beforeLogin';
 import {useSession} from '@/auth/session';
 import {useAuthAction} from '@/auth/useAuthAction';
-import {ErrorState, TimezoneLabel, UserAvatar} from '@/components';
+import {ErrorState, Markdown, TimezoneLabel} from '@/components';
+import {flagUrl} from '@/components/languageFlags';
 import {useT} from '@/i18n/useT';
 import {getItem, removeItem, setItem} from '@/lib/storage';
 import {
-  AppLayout,
-  Card,
-  CardActions,
   Checkbox,
-  Icon,
   LinkButton,
   PageLoading,
   Pill,
-  Section,
+  SettingsLayout,
+  SettingsPanel,
   Shape,
-  Status,
   Switch,
   TextField,
   useSnackbar,
@@ -64,9 +61,9 @@ export function Component() {
   if (query.isPending) return <PageLoading />;
   if (query.isError) {
     return (
-      <AppLayout>
+      <SettingsLayout title={t('title')}>
         <ErrorState error={query.error} onRetry={() => void query.refetch()} retrying={query.isFetching} />
-      </AppLayout>
+      </SettingsLayout>
     );
   }
   return <Editor profile={query.data} />;
@@ -91,6 +88,7 @@ function Editor({profile}: {profile: UserProfile}) {
   const [submitted, setSubmitted] = useState(false);
   const [serverErrors, setServerErrors] = useState<Record<string, string>>({});
   const [failure, setFailure] = useState<unknown>(null);
+  const [preview, setPreview] = useState(false);
 
   // The sign-in redirect keeps the form (a session that expired while writing).
   const latest = useRef(form);
@@ -157,59 +155,17 @@ function Editor({profile}: {profile: UserProfile}) {
 
   const zone = browserTimezone();
   const zoneValid = isValidTimezone(form.timezone.trim());
-  const languageNames = form.languages.map((id) => label('languages', id));
-  const name = profile.display_name ?? profile.username ?? profile.id;
   const formError = failure && Object.keys(serverErrors).length === 0 ? errorMessage(failure, tErrors) : null;
+  const languageOptions = catalog?.languages ?? [];
 
   return (
-    <AppLayout
-      stickyAside
-      aside={
-        <Card className="me-summary">
-          <div className="me-summary-head">
-            <UserAvatar id={profile.id} src={profile.avatar_url} decoration={profile.avatar_decoration} size="large" />
-            <div className="row-body">
-              <span className="row-title">
-                <strong>{name}</strong>
-              </span>
-              {profile.username && <Pill>@{profile.username}</Pill>}
-            </div>
-          </div>
-          <h2>{t('summary.title')}</h2>
-          <ul className="me-summary-list">
-            <li>
-              <Icon name="badge" />
-              <span>{form.headline.trim() || t('summary.noHeadline')}</span>
-            </li>
-            <li>
-              <Icon name="translate" />
-              <span className="numeric">
-                {languageNames.length > 0
-                  ? t('summary.languages', {count: languageNames.length, list: languageNames.join(', ')})
-                  : t('summary.noLanguages')}
-              </span>
-            </li>
-            <li>
-              <Icon name="link" />
-              <span className="numeric">{t('summary.links', {count: form.links.length})}</span>
-            </li>
-            {zoneValid && (
-              <li>
-                <TimezoneLabel timezone={form.timezone.trim()} />
-              </li>
-            )}
-          </ul>
-          <div>
-            <Status variant={form.open_to_work ? 'accent' : 'default'}>
-              {form.open_to_work ? t('summary.open') : t('summary.closed')}
-            </Status>
-          </div>
-          <CardActions>
-            <LinkButton to={paths.user(profile.id)} variant="outlined" icon="visibility">
-              {t('summary.view')}
-            </LinkButton>
-          </CardActions>
-        </Card>
+    <SettingsLayout
+      title={t('title')}
+      description={t('description')}
+      actions={
+        <LinkButton to={paths.user(profile.id)} variant="outlined" icon="visibility">
+          {t('viewPublic')}
+        </LinkButton>
       }
     >
       <form
@@ -220,8 +176,7 @@ function Editor({profile}: {profile: UserProfile}) {
           void save();
         }}
       >
-        <Section title={t('title')} level={1}>
-          <p className="me-intro">{t('intro')}</p>
+        <SettingsPanel title={t('panels.presentation.title')} description={t('panels.presentation.description')}>
           <TextField
             label={t('fields.headline')}
             value={form.headline}
@@ -239,16 +194,108 @@ function Editor({profile}: {profile: UserProfile}) {
             supportingText={t('fields.bioHelp')}
             errorText={problemText('bio')}
           />
+          <div className="me-preview">
+            <md-text-button type="button" aria-expanded={preview} onclick={() => setPreview((on) => !on)}>
+              <md-icon slot="icon" className="filled" aria-hidden="true">
+                {preview ? 'visibility_off' : 'visibility'}
+              </md-icon>
+              {preview ? t('preview.hide') : t('preview.show')}
+            </md-text-button>
+            {preview &&
+              (form.bio.trim() ? (
+                <div className="me-preview-body">
+                  <Markdown>{form.bio}</Markdown>
+                </div>
+              ) : (
+                <p className="me-help">{t('preview.empty')}</p>
+              ))}
+          </div>
+        </SettingsPanel>
+
+        <SettingsPanel title={t('panels.availability.title')} description={t('panels.availability.description')}>
           <Switch
             checked={form.open_to_work}
             onCheckedChange={(on) => set('open_to_work', on)}
             label={t('fields.openToWork')}
           />
           <p className="me-help">{t('fields.openToWorkHelp')}</p>
-        </Section>
+        </SettingsPanel>
 
-        <Section title={t('links.title')}>
-          <p className="me-help">{t('links.help', {count: linkLimit})}</p>
+        <SettingsPanel title={t('panels.locale.title')} description={t('panels.locale.description')}>
+          <p className="me-help numeric">{t('languages.help', {count: form.languages.length, max: languageLimit})}</p>
+          <div className="me-languages" role="group" aria-label={t('languages.title')}>
+            {languageOptions.map((language) => {
+              const checked = form.languages.includes(language.id);
+              const name = label('languages', language.id, language.label);
+              const url = flagUrl(language.id);
+              return (
+                <Checkbox
+                  key={language.id}
+                  checked={checked}
+                  disabled={!checked && form.languages.length >= languageLimit}
+                  onCheckedChange={(on) =>
+                    set(
+                      'languages',
+                      on ? [...form.languages, language.id] : form.languages.filter((id) => id !== language.id),
+                    )
+                  }
+                  ariaLabel={name}
+                  label={
+                    <span className="me-language">
+                      {url && <img src={url} alt="" width={21} height={16} loading="lazy" decoding="async" />}
+                      {name}
+                    </span>
+                  }
+                />
+              );
+            })}
+          </div>
+          {problemText('languages') && (
+            <p className="me-error" role="alert">
+              {problemText('languages')}
+            </p>
+          )}
+          <TextField
+            label={t('timezone.label')}
+            value={form.timezone}
+            onValueChange={(value) => set('timezone', value)}
+            maxLength={TIMEZONE_MAX}
+            placeholder="Europe/Paris"
+            supportingText={t('timezone.help')}
+            errorText={problemText('timezone')}
+          />
+          {zoneValid && <TimezoneLabel timezone={form.timezone.trim()} inline />}
+          {zone && zone !== form.timezone.trim() && (
+            <div className="me-zone-suggestion">
+              <Shape shape="pentagon" tone="tertiary" icon="schedule" small />
+              <p>{t('timezone.suggestion')}</p>
+              <Pill>{zone}</Pill>
+              <md-text-button type="button" onclick={() => set('timezone', zone)}>
+                {t('timezone.use')}
+              </md-text-button>
+            </div>
+          )}
+        </SettingsPanel>
+
+        <SettingsPanel
+          title={t('links.title')}
+          description={t('links.help', {count: linkLimit})}
+          actions={
+            <>
+              <span className="me-count numeric">{t('links.count', {count: form.links.length, max: linkLimit})}</span>
+              <md-outlined-button
+                type="button"
+                disabled={form.links.length >= linkLimit}
+                onclick={() => set('links', [...form.links, {label: '', url: ''}])}
+              >
+                <md-icon slot="icon" className="filled" aria-hidden="true">
+                  add_link
+                </md-icon>
+                {t('links.add')}
+              </md-outlined-button>
+            </>
+          }
+        >
           {form.links.length > 0 && (
             <ul className="me-links">
               {form.links.map((link, index) => (
@@ -290,87 +337,24 @@ function Editor({profile}: {profile: UserProfile}) {
               {problemText('links')}
             </p>
           )}
-          <CardActions>
-            <md-outlined-button
-              type="button"
-              disabled={form.links.length >= linkLimit}
-              onclick={() => set('links', [...form.links, {label: '', url: ''}])}
-            >
-              <md-icon slot="icon" className="filled" aria-hidden="true">
-                add_link
-              </md-icon>
-              {t('links.add')}
-            </md-outlined-button>
-            <span className="me-count numeric">{t('links.count', {count: form.links.length, max: linkLimit})}</span>
-          </CardActions>
-        </Section>
+        </SettingsPanel>
 
-        <Section title={t('languages.title')}>
-          <p className="me-help numeric">{t('languages.help', {count: form.languages.length, max: languageLimit})}</p>
-          <div className="me-languages" role="group" aria-label={t('languages.title')}>
-            {(catalog?.languages ?? []).map((language) => {
-              const checked = form.languages.includes(language.id);
-              return (
-                <Checkbox
-                  key={language.id}
-                  checked={checked}
-                  disabled={!checked && form.languages.length >= languageLimit}
-                  onCheckedChange={(on) =>
-                    set(
-                      'languages',
-                      on ? [...form.languages, language.id] : form.languages.filter((id) => id !== language.id),
-                    )
-                  }
-                  label={label('languages', language.id, language.label)}
-                />
-              );
-            })}
-          </div>
-          {problemText('languages') && (
-            <p className="me-error" role="alert">
-              {problemText('languages')}
+        {(dirty || formError) && (
+          <div className="me-actionbar" role="group" aria-label={t('unsaved')}>
+            <p className={formError ? 'me-error' : 'me-help'} role={formError ? 'alert' : undefined}>
+              {formError ?? t('unsaved')}
             </p>
-          )}
-        </Section>
-
-        <Section title={t('timezone.title')}>
-          <TextField
-            label={t('timezone.label')}
-            value={form.timezone}
-            onValueChange={(value) => set('timezone', value)}
-            maxLength={TIMEZONE_MAX}
-            placeholder="Europe/Paris"
-            supportingText={t('timezone.help')}
-            errorText={problemText('timezone')}
-          />
-          {zone && zone !== form.timezone.trim() && (
-            <div className="me-zone-suggestion">
-              <Shape shape="pentagon" tone="tertiary" icon="schedule" small />
-              <p>{t('timezone.suggestion')}</p>
-              <Pill>{zone}</Pill>
-              <md-text-button type="button" onclick={() => set('timezone', zone)}>
-                {t('timezone.use')}
-              </md-text-button>
+            <div className="me-actionbar-buttons">
+              <md-outlined-button type="button" disabled={!dirty || update.isPending} onclick={reset}>
+                {t('reset')}
+              </md-outlined-button>
+              <md-filled-button type="submit" disabled={!canWrite || update.isPending || !dirty}>
+                {update.isPending ? t('saving') : t('save')}
+              </md-filled-button>
             </div>
-          )}
-        </Section>
-
-        <Card className="me-actions">
-          {formError && (
-            <p className="me-error" role="alert">
-              {formError}
-            </p>
-          )}
-          <CardActions>
-            <md-filled-button type="submit" disabled={!canWrite || update.isPending || !dirty}>
-              {update.isPending ? t('saving') : t('save')}
-            </md-filled-button>
-            <md-outlined-button type="button" disabled={!dirty || update.isPending} onclick={reset}>
-              {t('reset')}
-            </md-outlined-button>
-          </CardActions>
-        </Card>
+          </div>
+        )}
       </form>
-    </AppLayout>
+    </SettingsLayout>
   );
 }

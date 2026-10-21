@@ -9,7 +9,14 @@ export const NOW = new Date('2026-10-20T14:00:00.000Z');
 
 export interface TestApi {
   server: ServerContext;
-  state: {session: Session | null; expired: boolean; discordDown: boolean; verifyOutcome: VerifyOutcome; feedCache: boolean; now: Date};
+  state: {
+    session: Session | null;
+    expired: boolean;
+    discordDown: boolean;
+    verifyOutcome: VerifyOutcome;
+    feedCache: boolean;
+    now: Date;
+  };
   call: (
     method: string,
     path: string,

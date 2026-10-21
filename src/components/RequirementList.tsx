@@ -1,5 +1,6 @@
 /**
- * The conditions of a post. One row each: the condition's name, then its value
+ * The conditions of a post, one inner card each: an icon (a check, or an
+ * info mark when Lineup's check is planned), the condition's name and its value
  * ("16 ans minimum", "180 jours, environ 6 mois", "Français, Anglais").
  *
  * `verified_by_lineup` is a promise, never a verification (LINEUP.md §8): the
@@ -16,7 +17,7 @@ import {useCatalog} from '@/api/queries';
 import type {Requirement} from '@/api/types';
 import {useLanguage} from '@/i18n/useLanguage';
 import {useT} from '@/i18n/useT';
-import {Icon, Row, Rows, Shape, VisuallyHidden} from '@/ui';
+import {Icon, InnerCard, InnerCards, VisuallyHidden} from '@/ui';
 
 import {tooltipSideProps} from './tooltipSide';
 import {useNow} from './useNow';
@@ -24,7 +25,7 @@ import {type RequirementViewer, requirementView, viewerMeets} from './requiremen
 
 interface NoteProps {
   className: string;
-  icon: string;
+  icon?: string;
   filled?: boolean;
   text: string;
   /** What the note means, in a tooltip (and read as its description). */
@@ -43,7 +44,7 @@ function Note({className, icon, filled, text, hint}: NoteProps) {
         aria-describedby={hintId}
         {...tooltipSideProps}
       >
-        <Icon name={icon} filled={filled} />
+        {icon && <Icon name={icon} filled={filled} />}
         {text}
       </span>
       <VisuallyHidden id={hintId}>{hint}</VisuallyHidden>
@@ -67,24 +68,19 @@ export function RequirementList({requirements, viewer}: RequirementListProps) {
   const ctx = {t, languageName: (id: string) => label('languages', id)};
 
   return (
-    <Rows as="ul" className="requirements" aria-label={t('requirement.label')}>
+    <InnerCards className="requirements" aria-label={t('requirement.label')}>
       {requirements.map((requirement, index) => {
         const entry = catalog?.requirements.find((candidate) => candidate.id === requirement.type);
         const view = requirementView(requirement, entry, label('requirements', requirement.type), ctx);
         const meets = viewer ? viewerMeets(requirement, viewer, now) : null;
         return (
-          <Row key={`${requirement.type}:${index}`} className="requirement">
-            <Shape small shape="square" tone="secondary" icon={view.icon} />
-            <div className="row-body">
-              <span className="row-title">{view.title}</span>
-              {view.text && <span className="row-meta">{view.text}</span>}
+          <InnerCard as="li" key={`${requirement.type}:${index}`} className="requirement">
+            <Icon name={view.promise ? 'info' : 'check'} className="requirement-icon" />
+            <div className="requirement-body">
+              <span className="requirement-title">{view.title}</span>
+              {view.text && <span className="requirement-text">{view.text}</span>}
               {view.promise && (
-                <Note
-                  className="promise"
-                  icon="schedule"
-                  text={t('requirement.promise.label')}
-                  hint={t('requirement.promise.hint')}
-                />
+                <Note className="promise" text={t('requirement.promise.label')} hint={t('requirement.promise.hint')} />
               )}
               {meets !== null && (
                 <Note
@@ -96,9 +92,9 @@ export function RequirementList({requirements, viewer}: RequirementListProps) {
                 />
               )}
             </div>
-          </Row>
+          </InnerCard>
         );
       })}
-    </Rows>
+    </InnerCards>
   );
 }

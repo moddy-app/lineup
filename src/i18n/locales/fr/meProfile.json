@@ -1,6 +1,5 @@
 {
-  "title": "Modifier mon profil",
-  "intro": "Ce profil est public. Seuls les champs modifiés sont enregistrés.",
+  "title": "Profil",
   "saved": "Profil enregistré",
   "saving": "Enregistrement",
   "save": "Enregistrer",
@@ -9,7 +8,7 @@
     "headline": "Titre",
     "headlineHelp": "Une ligne sous votre nom, par exemple « Modératrice depuis 4 ans ».",
     "bio": "Présentation",
-    "bioHelp": "Texte brut. Les retours à la ligne sont conservés.",
+    "bioHelp": "Markdown accepté : gras, listes, liens.",
     "openToWork": "Ouvert aux propositions",
     "openToWorkHelp": "Un repère « Ouvert aux propositions » s'affiche sur votre profil."
   },
@@ -33,18 +32,6 @@
     "suggestion": "Fuseau de votre navigateur :",
     "use": "Utiliser"
   },
-  "summary": {
-    "title": "Aperçu",
-    "noHeadline": "Pas de titre",
-    "languages_one": "{{count}} langue : {{list}}",
-    "languages_other": "{{count}} langues : {{list}}",
-    "noLanguages": "Aucune langue",
-    "links_one": "{{count}} lien",
-    "links_other": "{{count}} liens",
-    "open": "Ouvert aux propositions",
-    "closed": "Pas de recherche indiquée",
-    "view": "Voir mon profil public"
-  },
   "problems": {
     "linkLabelRequired": "Donnez un nom au lien.",
     "linkLabelTooLong": "Le nom fait {{count}} caractères au plus.",
@@ -54,5 +41,27 @@
     "timezoneInvalid": "Fuseau inconnu. Exemples : Europe/Paris, UTC+02:00.",
     "tooLong": "{{count}} caractères au plus.",
     "tooMany": "{{count}} éléments au plus."
+  },
+  "description": "Ce que les autres voient sur votre profil public.",
+  "viewPublic": "Voir mon profil public",
+  "unsaved": "Modifications non enregistrées",
+  "panels": {
+    "presentation": {
+      "title": "Présentation",
+      "description": "Votre titre et votre texte de présentation."
+    },
+    "availability": {
+      "title": "Disponibilité",
+      "description": "Indiquez si vous êtes ouvert à des propositions."
+    },
+    "locale": {
+      "title": "Langues et fuseau",
+      "description": "Les langues que vous parlez et votre heure locale."
+    }
+  },
+  "preview": {
+    "show": "Afficher l'aperçu",
+    "hide": "Masquer l'aperçu",
+    "empty": "Rien à afficher."
   }
 }

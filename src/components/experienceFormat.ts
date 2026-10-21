@@ -48,12 +48,9 @@ export function formatDuration(months: number, t: ComponentsT): string {
   return rest === 0 ? yearsText : t('experience.duration.both', {years: yearsText, months: monthsText});
 }
 
-/** "mars 2024 à aujourd'hui", "janvier 2021 à mars 2023". */
+/** "mars 2024 – aujourd'hui", "janvier 2021 – mars 2023" (an en dash, the same in every language). */
 export function formatRange(start: string, end: string | null, t: ComponentsT): string {
-  return t('experience.range', {
-    start: formatMonthYear(start),
-    end: end ? formatMonthYear(end) : t('experience.present'),
-  });
+  return `${formatMonthYear(start)} – ${end ? formatMonthYear(end) : t('experience.present')}`;
 }
 
 export type VerificationKey = 'verified' | 'pending' | 'unverified' | 'rejected';

@@ -12,29 +12,12 @@ import {paths} from '@/app/paths';
 import {usePageTitle} from '@/app/usePageTitle';
 import {RelativeTime} from '@/components';
 import {useT} from '@/i18n/useT';
-import {formatNumber} from '@/lib/format';
-import {
-  Bento,
-  Card,
-  Chip,
-  LinkButton,
-  Section,
-  Select,
-  Shape,
-  type ShapeName,
-  type ShapeTone,
-  Stack,
-  Status,
-} from '@/ui';
+import {Card, Chip, Icon, LinkButton, Status} from '@/ui';
 
-import {ActionDialog, ListBody, PersonLink} from './parts';
+import {ActionDialog, EntityName, ListBody, PersonLink, Rules, SectionHead, StatusChips} from './parts';
 import {parseReportStatus, REPORT_STATUSES} from './staffLogic';
 
-const TARGET_VIEW: Record<ReportTargetType, {icon: string; shape: ShapeName; tone: ShapeTone}> = {
-  post: {icon: 'campaign', shape: 'square', tone: 'primary'},
-  user: {icon: 'person', shape: 'diamond', tone: 'tertiary'},
-  guild: {icon: 'groups', shape: 'octagon', tone: 'secondary'},
-};
+const TARGET_ICON: Record<ReportTargetType, string> = {post: 'campaign', user: 'person', guild: 'groups'};
 
 function targetPath(report: Report): string {
   switch (report.target_type) {
@@ -70,25 +53,26 @@ export function Component() {
   };
 
   return (
-    <Bento>
-      <Stack span={8}>
-        <Section
-          title={t('nav.reports')}
-          actions={
-            <Select
-              className="staff-filter"
-              label={t('reports.status')}
-              value={status}
-              onValueChange={(value) => {
-                const next = new URLSearchParams(params);
-                if (value === 'open') next.delete('status');
-                else next.set('status', value);
-                setParams(next, {replace: true});
-              }}
-              options={REPORT_STATUSES.map((value) => ({value, label: t(`reports.statuses.${value}`)}))}
-            />
-          }
-        >
+    <>
+      <section className="staff-section">
+        <SectionHead title={t('nav.reports')}>
+          <StatusChips
+            label={t('reports.status')}
+            value={status}
+            onChange={(value) => {
+              const next = new URLSearchParams(params);
+              if (value === 'open') next.delete('status');
+              else next.set('status', value);
+              setParams(next, {replace: true});
+            }}
+            options={REPORT_STATUSES.map((value) => ({value, label: t(`reports.statuses.${value}`)}))}
+          />
+        </SectionHead>
+        <Rules title={t('reports.help.title')}>
+          <li>{t('reports.help.target')}</li>
+          <li>{t('reports.help.once')}</li>
+        </Rules>
+        <Card className="staff-card">
           <ListBody
             list={list}
             emptyIcon="flag"
@@ -106,19 +90,8 @@ export function Component() {
               ))}
             </ul>
           </ListBody>
-        </Section>
-      </Stack>
-      <Stack span={4} sticky>
-        <Card>
-          <Shape shape="hexagon" tone="tertiary" icon="info" />
-          <h2>{t('reports.help.title')}</h2>
-          <ol className="staff-steps">
-            <li>{t('reports.help.target')}</li>
-            <li>{t('reports.help.once')}</li>
-          </ol>
-          {!list.isLoading && !list.isError && <p>{t('reports.loaded', {n: formatNumber(list.items.length)})}</p>}
         </Card>
-      </Stack>
+      </section>
 
       <ActionDialog
         open={pending?.kind === 'resolve'}
@@ -140,53 +113,49 @@ export function Component() {
         onSubmit={() => dismiss.mutateAsync(current!.id)}
         onFailure={reloadIfStale}
       />
-    </Bento>
+    </>
   );
 }
 
 function ReportItem({report, onResolve, onDismiss}: {report: Report; onResolve: () => void; onDismiss: () => void}) {
   const {t} = useT('staff');
-  const view = TARGET_VIEW[report.target_type];
   const open = report.status === 'open';
+  const target = t(`reports.targets.${report.target_type}`);
   return (
-    <li className="panel staff-item">
-      <div className="staff-item-head">
-        <span className="staff-person">
-          <Shape shape={view.shape} tone={view.tone} icon={view.icon} small />
-          <strong>{t(`reports.targets.${report.target_type}`)}</strong>
-          <Chip
-            to={targetPath(report)}
-            mono
-            aria-label={t('reports.open', {target: t(`reports.targets.${report.target_type}`)})}
-          >
-            {report.target_id}
-          </Chip>
-        </span>
-        <span className="staff-item-meta">
-          <Status variant={open ? 'accent' : 'default'}>{t(`reports.states.${report.status}`)}</Status>
-          <RelativeTime value={report.created_at} />
-        </span>
-      </div>
-      <p>
-        <strong>{t(`reports.reasons.${report.reason}`)}</strong>
-      </p>
-      {report.details ? <p>{report.details}</p> : <p className="staff-item-meta">{t('reports.noDetails')}</p>}
-      <dl className="staff-facts">
-        <div>
-          <dt>{t('reports.reporter')}</dt>
-          <dd>
-            <PersonLink id={report.reporter_id} />
-          </dd>
+    <li className="staff-item inner-card">
+      <div className="staff-item-main">
+        <div className="staff-item-head">
+          <span className="staff-person">
+            <Icon name={TARGET_ICON[report.target_type]} />
+            <strong>{target}</strong>
+            {report.target_type === 'post' ? (
+              <Chip to={targetPath(report)} mono aria-label={t('reports.open', {target})}>
+                {report.target_id.slice(0, 8)}
+              </Chip>
+            ) : (
+              <EntityName type={report.target_type} id={report.target_id} />
+            )}
+          </span>
+          <span className="staff-item-meta">
+            <Status variant={open ? 'accent' : 'default'}>{t(`reports.states.${report.status}`)}</Status>
+            <RelativeTime value={report.created_at} />
+          </span>
         </div>
-        {report.handled_by && (
-          <div>
-            <dt>{t('reports.handledBy')}</dt>
-            <dd>
+        <p>
+          <strong>{t(`reports.reasons.${report.reason}`)}</strong>
+        </p>
+        {report.details ? <p>{report.details}</p> : <p className="staff-item-meta">{t('reports.noDetails')}</p>}
+        <div className="staff-item-meta">
+          <span>{t('reports.reporter')}</span>
+          <PersonLink id={report.reporter_id} />
+          {report.handled_by && (
+            <>
+              <span>{t('reports.handledBy')}</span>
               <PersonLink id={report.handled_by} />
-            </dd>
-          </div>
-        )}
-      </dl>
+            </>
+          )}
+        </div>
+      </div>
       {open && (
         <div className="staff-item-actions">
           {report.target_type === 'post' && (

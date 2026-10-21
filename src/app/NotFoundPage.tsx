@@ -4,7 +4,7 @@ import {Bento, Card, CardActions, LinkButton, Page, Shape} from '@/ui';
 import {paths} from './paths';
 import {usePageTitle} from './usePageTitle';
 
-/** The 404: a real page (the router's catch-all), without footer. */
+/** The 404: a real page (the router's catch-all). */
 export function Component() {
   const {t} = useT('common');
   usePageTitle(t('notFound.title'));

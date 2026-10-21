@@ -1,6 +1,8 @@
-/* The post editor: stepper, fields, preview. Tokens of the kit only. */
+/* The post editor: progress, steps, fields, review. Tokens of the kit only. */
 
-.ed-sr-title {
+/* -- Restored draft, progress, stepper ---------------------------------------- */
+
+.ed-sr-only {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -9,25 +11,14 @@
   white-space: nowrap;
 }
 
-/* -- Head and stepper --------------------------------------------------------- */
-
-.ed-head {
-  gap: var(--gap-l);
-}
-
-.ed-head h1 {
-  margin: 0 0 var(--gap-s);
-  font-size: var(--text-title);
-  letter-spacing: normal;
-}
-
 .ed-restored {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--gap-m);
-  padding: var(--gap-m) var(--gap-l);
+  gap: var(--gap-s) var(--gap-m);
+  padding: var(--gap-s) var(--gap-m);
   border-radius: var(--radius-l);
+  background-color: var(--md-sys-color-surface-container-high);
 }
 
 .ed-restored .material-symbols-outlined {
@@ -37,98 +28,129 @@
 .ed-restored p {
   flex: 1 1 220px;
   max-width: none;
+  margin: 0;
   font-size: var(--text-body-small);
+}
+
+/* Under 1100px: "Step 3 of 8 · Positions" and a thin bar. */
+.ed-progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+}
+
+.ed-progress-text {
+  max-width: none;
+  margin: 0;
+  font-size: var(--text-body-small);
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.ed-progress md-linear-progress {
+  width: 100%;
+}
+
+.ed-body {
+  display: block;
+  min-width: 0;
+}
+
+.ed-stepper-nav {
+  display: none;
+}
+
+.ed-panel-title:focus {
+  outline: none;
+}
+
+/* From 1100px: the steps are a vertical list at the left of the form. */
+@media (min-width: 1100px) {
+  .ed-progress {
+    display: none;
+  }
+
+  .ed-body {
+    display: grid;
+    grid-template-columns: 10.5rem minmax(0, 1fr);
+    align-items: start;
+    gap: var(--card-padding);
+  }
+
+  .ed-stepper-nav {
+    position: sticky;
+    top: calc(var(--app-bar-height) + var(--page-gap));
+    display: block;
+  }
 }
 
 .ed-stepper {
   display: flex;
+  flex-direction: column;
   gap: 2px;
-  /* One line. If the names are too wide (long language, narrow card) the list
-     scrolls inside itself; the padding keeps the focus ring visible. */
-  margin: -4px;
-  padding: 4px;
-  overflow-x: auto;
+  margin: 0;
+  padding: 0;
   list-style: none;
-  scrollbar-width: thin;
 }
 
-.ed-step {
-  flex: 0 0 auto;
-}
-
-.ed-step md-text-button {
-  --md-text-button-leading-space: 10px;
-  --md-text-button-trailing-space: 12px;
-  --md-text-button-with-leading-icon-leading-space: 8px;
-  --md-text-button-with-leading-icon-trailing-space: 12px;
-  --md-text-button-icon-size: 18px;
-}
-
-.ed-step md-text-button {
-  --md-text-button-container-height: 40px;
-  --md-text-button-icon-label-space: 6px;
-  --md-text-button-label-text-size: var(--text-body-small);
-  --md-text-button-container-shape: var(--radius-full);
-}
-
-.ed-step.is-current md-text-button {
-  --md-text-button-label-text-color: var(--md-sys-color-on-secondary-container);
-  --md-text-button-icon-color: var(--md-sys-color-on-secondary-container);
-  background-color: var(--md-sys-color-secondary-container);
+.ed-step button {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-s);
+  width: 100%;
+  min-height: 36px;
+  padding: 0 12px 0 8px;
+  border: 0;
   border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--md-sys-color-on-surface-variant);
+  font: inherit;
+  font-size: var(--text-body-small);
+  font-weight: 500;
+  text-align: start;
+  cursor: pointer;
 }
 
-.ed-step.is-done md-text-button {
-  --md-text-button-icon-color: var(--md-sys-color-primary);
+.ed-step button .material-symbols-outlined {
+  flex-shrink: 0;
+  font-size: 18px;
 }
 
-.ed-step.is-error md-text-button {
-  --md-text-button-icon-color: var(--md-sys-color-error);
-  --md-text-button-label-text-color: var(--md-sys-color-error);
+.ed-step-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.ed-step.is-todo md-text-button {
-  --md-text-button-label-text-color: var(--md-sys-color-on-surface-variant);
-  --md-text-button-icon-color: var(--md-sys-color-on-surface-variant);
+.ed-step.is-done button .material-symbols-outlined {
+  color: var(--md-sys-color-primary);
 }
 
-@media (max-width: 600px) {
-  /* Only the current step keeps its name: the others are their icon and number. */
-  .ed-step:not(.is-current) .ed-step-label {
-    display: none;
+.ed-step.is-error button {
+  color: var(--md-sys-color-error);
+}
+
+.ed-step.is-current button {
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+@media (hover: hover) {
+  .ed-step:not(.is-current) button:hover {
+    background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
   }
+}
 
-  .ed-step:not(.is-current) md-text-button {
-    --md-text-button-leading-space: 12px;
-    --md-text-button-trailing-space: 12px;
-    --md-text-button-with-leading-icon-leading-space: 12px;
-    --md-text-button-with-leading-icon-trailing-space: 12px;
-  }
+.ed-step button:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
 }
 
 /* -- A step -------------------------------------------------------------------- */
 
-.ed-step-card {
-  gap: var(--space);
-}
-
-.ed-step-head h2 {
-  margin: 0 0 var(--gap-s);
-}
-
-.ed-step-head p {
-  max-width: none;
-}
-
-.ed-step-head .ed-step-count {
-  margin-bottom: var(--gap-s);
-  font-size: var(--text-label);
-  color: var(--md-sys-color-primary);
-  font-weight: 500;
-}
-
-.ed-step-card .card-actions {
-  margin-top: 0;
+.ed-panel .settings-panel-actions {
+  margin-top: var(--gap-l);
 }
 
 .ed-fields {
@@ -178,7 +200,7 @@
 }
 
 .ed-fields p.ed-hint,
-.ed-step-card p.ed-hint {
+.ed-panel p.ed-hint {
   max-width: none;
   font-size: var(--text-small);
   color: var(--md-sys-color-on-surface-variant);
@@ -242,6 +264,55 @@
   cursor: default;
 }
 
+/* The two big options of the first step. */
+.ed-kinds {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap-m);
+}
+
+.ed-kinds .ed-sr-only {
+  position: absolute;
+}
+
+.ed-kind {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-m);
+  padding: var(--gap-l);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--radius-l);
+  cursor: pointer;
+}
+
+.ed-kind.is-selected {
+  border-color: var(--md-sys-color-primary);
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+.ed-kind.is-selected .ed-choice-hint {
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+.ed-kind > .material-symbols-outlined {
+  flex-shrink: 0;
+  font-size: 24px;
+  color: var(--md-sys-color-primary);
+}
+
+@media (hover: hover) {
+  .ed-kind:not(.is-selected):hover {
+    background-color: var(--md-sys-color-surface-container);
+  }
+}
+
+@media (max-width: 600px) {
+  .ed-kinds {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .ed-choice md-radio {
   flex-shrink: 0;
 }
@@ -279,8 +350,8 @@
   display: flex;
   align-items: center;
   gap: var(--gap-m);
-  padding: var(--gap-m) var(--gap-l);
-  border-radius: var(--radius-l);
+  max-width: none;
+  margin: 0;
 }
 
 .ed-locked .material-symbols-outlined {
@@ -335,8 +406,9 @@
   display: flex;
   flex-direction: column;
   gap: var(--gap-m);
-  padding: var(--gap-l);
-  border-radius: var(--radius-xl);
+  padding: var(--gap-m) var(--gap-l) var(--gap-l);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--radius-l);
 }
 
 .ed-requirement-head {
@@ -381,7 +453,47 @@
 
 /* -- Review and banner --------------------------------------------------------- */
 
-.ed-review .row-meta {
+.ed-review {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ed-review-row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-m);
+  min-width: 0;
+  padding-block: var(--gap-s);
+}
+
+.ed-review-row > .material-symbols-outlined {
+  flex-shrink: 0;
+  font-size: 18px;
+  color: var(--md-sys-color-primary);
+}
+
+.ed-review-row.is-error > .material-symbols-outlined {
+  color: var(--md-sys-color-error);
+}
+
+.ed-review-text {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ed-review-title {
+  font-size: var(--text-body-small);
+  font-weight: 600;
+}
+
+.ed-review-summary {
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
   overflow-wrap: anywhere;
 }
 
@@ -424,29 +536,36 @@
   display: none;
 }
 
-/* -- Preview ------------------------------------------------------------------- */
+/* -- Preview (in the review) ---------------------------------------------------- */
 
 .ed-preview {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-m);
+  gap: var(--gap-s);
   min-width: 0;
+  padding: var(--gap-l);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--radius-l);
 }
 
-.ed-preview h2 {
-  margin: 0;
-  font-size: var(--text-subtitle);
-  font-weight: 600;
-  color: var(--md-sys-color-on-surface);
-}
-
-.ed-preview p {
-  margin: 0;
+.ed-preview-label {
   max-width: none;
-  font-size: var(--text-small);
+  margin: 0;
+  font-size: var(--text-label);
+  font-weight: 600;
   color: var(--md-sys-color-on-surface-variant);
 }
 
-.ed-preview-card {
-  min-width: 0;
+.ed-preview h3 {
+  margin: 0;
+  font-size: var(--text-subtitle);
+  overflow-wrap: anywhere;
+}
+
+.ed-preview .is-placeholder {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.ed-preview .markdown {
+  overflow-wrap: anywhere;
 }

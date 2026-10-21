@@ -1,35 +1,48 @@
 {
-  "title": "Revendiquer un serveur",
-  "intro": "Revendiquer un serveur crée son profil sur Lineup. Seuls apparaissent les serveurs dont vous êtes propriétaire ou où vous avez la permission Administrateur ou Gérer le serveur.",
+  "title": "Serveurs",
+  "description": "Les serveurs Discord que vous gérez",
   "unknownName": "Serveur sans nom",
   "success": "{{name}} est sur Lineup.",
-  "list": {
-    "title": "Vos serveurs",
-    "label": "Serveurs que vous pouvez gérer",
-    "refresh": "Actualiser la liste",
-    "refreshIn": "Actualiser dans {{seconds}} s",
-    "refreshed": "Liste relue depuis Discord.",
-    "withModdy": "Moddy est installé",
-    "withoutModdy": "Sans Moddy",
-    "claimed": "Sur Lineup",
-    "profile": "Profil",
+  "refresh": {
+    "label": "Actualiser la liste",
+    "in": "Actualiser dans {{seconds}} s",
+    "done": "Liste relue depuis Discord."
+  },
+  "onLineup": {
+    "title": "Sur Lineup",
+    "label": "Serveurs sur Lineup",
+    "listed": "Dans l'annuaire",
+    "unlisted": "Masqué",
     "manage": "Gérer",
-    "claim": "Revendiquer",
-    "emptyTitle": "Aucun serveur à revendiquer",
+    "profile": "Voir le profil"
+  },
+  "toAdd": {
+    "title": "À ajouter",
+    "label": "Serveurs à ajouter",
+    "withModdy": "Moddy installé",
+    "add": "Ajouter",
+    "withInvite": "Ajouter avec une invitation",
+    "none": "Tous vos serveurs sont déjà sur Lineup."
+  },
+  "list": {
+    "emptyTitle": "Aucun serveur à gérer",
     "emptyBody": "Seuls les serveurs dont vous êtes propriétaire, ou où vous avez la permission Administrateur ou Gérer le serveur, apparaissent ici. Si vous venez d'en créer un, actualisez la liste.",
     "reauthTitle": "Autorisez Lineup à lire vos serveurs",
     "reauthBody": "Votre session vient du tableau de bord Moddy et n'a pas cette autorisation. Reconnectez-vous avec Discord.",
     "reauthAction": "Se reconnecter"
   },
-  "form": {
-    "title": "Invitation du serveur",
-    "body": "Collez un lien d'invitation qui n'expire jamais. Il prouve que le serveur est le vôtre et devient le bouton Rejoindre du profil.",
+  "dialog": {
+    "title": "Ajouter {{name}}",
+    "titleFree": "Ajouter un serveur",
+    "intro": "Collez un lien d'invitation de {{name}} qui n'expire jamais. Il devient le bouton Rejoindre du profil.",
+    "introModdy": "Moddy est déjà sur {{name}}, mais Lineup demande encore une invitation qui n'expire jamais. Créez-en une sur Discord et collez-la ici.",
+    "introFree": "Collez un lien d'invitation qui n'expire jamais vers un serveur que vous gérez. Il prouve que le serveur est le vôtre et devient le bouton Rejoindre du profil.",
+    "how": "Comment créer une invitation permanente",
     "label": "Lien ou code d'invitation",
     "placeholder": "https://discord.gg/votre-code",
     "hint": "Le code seul fonctionne aussi.",
-    "selected": "Invitation de {{name}}",
-    "deselect": "Retirer",
-    "submit": "Revendiquer",
+    "cancel": "Annuler",
+    "submit": "Ajouter",
     "submitting": "Vérification..."
   },
   "errors": {

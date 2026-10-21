@@ -64,7 +64,7 @@ describe('errors, byte for byte (§0)', () => {
     });
   });
 
-  it('answers Staff only as a plain text, Not Found and Method Not Allowed in FastAPI\'s `detail` shape', async () => {
+  it("answers Staff only as a plain text, Not Found and Method Not Allowed in FastAPI's `detail` shape", async () => {
     const api = createTestApi('camille');
     for (const path of ['/lineup/staff/experiences', '/lineup/staff/reports', '/lineup/staff/badges']) {
       expect(await api.call('GET', path)).toMatchObject({status: 403, json: {error: 'Staff only'}});
@@ -173,7 +173,10 @@ describe('the session', () => {
     const api = createTestApi('camille');
     api.state.expired = true;
     expect(await api.call('GET', '/lineup/me')).toMatchObject({status: 401, json: {error: 'Session expiree'}});
-    expect(await api.call('GET', `/lineup/staff/reports`)).toMatchObject({status: 401, json: {error: 'Session expiree'}});
+    expect(await api.call('GET', `/lineup/staff/reports`)).toMatchObject({
+      status: 401,
+      json: {error: 'Session expiree'},
+    });
     // Public and optional routes keep working as anonymous, with no no-store.
     const feed = await api.call('GET', '/lineup/posts');
     expect(feed.status).toBe(200);

@@ -1,43 +1,36 @@
 {
-  "title": "Posts",
-  "intro": "Servers hiring staff and people looking for a team.",
-  "list": "Posts",
-  "updating": "Updating results",
-  "loadingMore": "Loading more posts",
-  "end": "End of the list, {{count}} posts shown.",
-  "publish": {
-    "title": "Publish a post",
-    "body": "For a server you manage, or for yourself.",
-    "action": "Publish a post"
+  "guild": {
+    "title": "Recruiting",
+    "subtitle": "Discord servers are looking for staff.",
+    "action": "Post a listing",
+    "emptyTitle": "No server is recruiting right now",
+    "emptyBody": "Server listings appear here as soon as they are published."
   },
+  "user": {
+    "title": "Candidates",
+    "subtitle": "People offer their services to servers.",
+    "action": "Offer my services",
+    "emptyTitle": "No candidate right now",
+    "emptyBody": "Listings from people appear here as soon as they are published."
+  },
+  "list": "Listings",
+  "updating": "Updating results",
+  "loadingMore": "Loading more listings",
+  "end": "End of the list, {{count}} listings shown.",
   "filters": {
-    "title": "Filters",
-    "open": "Filters",
-    "openCount": "Filters ({{count}})",
-    "show": "Show posts",
-    "reset": "Reset filters",
-    "kind": {
-      "label": "Post type",
-      "all": "All posts",
-      "guild": "Servers recruiting",
-      "user": "People looking"
-    },
-    "q": "Search",
+    "search": "Search",
     "positions": "Positions",
     "languages": "Languages",
     "theme": "Theme",
-    "allThemes": "All themes",
     "compensation": "Compensation",
-    "anyCompensation": "Any",
-    "tags": "Tags",
-    "tagsHelp": "Separated by commas.",
-    "nsfw": "Include adult content"
+    "nsfw": "Adult content",
+    "nsfwHide": "Hide",
+    "nsfwShow": "Show",
+    "reset": "Reset filters"
   },
   "empty": {
-    "noneTitle": "No posts yet",
-    "noneBody": "Published posts appear here. Publish the first one.",
-    "filteredTitle": "No posts match these filters",
-    "filteredBody": "Remove a filter or reset them to see every post."
+    "filteredTitle": "No listing for these filters",
+    "filteredBody": "Remove a filter to see more listings."
   },
   "invalid": {
     "title": "This search could not be applied",

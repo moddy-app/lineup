@@ -1,17 +1,19 @@
 import {useState} from 'react';
 import {useNavigate} from 'react-router';
 
+import {hasCode, isApiError} from '@/api/client';
 import {errorMessage} from '@/api/errors';
 import {useDeleteGuild} from '@/api/mutations';
 import type {GuildProfile} from '@/api/types';
 import {paths} from '@/app/paths';
-import {useAuthAction} from '@/auth/useAuthAction';
 import {useSession} from '@/auth/session';
+import {useAuthAction} from '@/auth/useAuthAction';
 import {RetryButton} from '@/components';
-import {hasCode, isApiError} from '@/api/client';
 import {useT} from '@/i18n/useT';
-import {ConfirmDialog, Section, useSnackbar} from '@/ui';
+import {ConfirmDialog, SettingsPanel, useSnackbar} from '@/ui';
 import {SanctionNotice} from '../guilds/SanctionNotice';
+
+import {SECTION_IDS} from './sectionIds';
 
 /** Deleting the profile. Always behind a confirmation that says what happens to the posts. */
 export function DangerZone({guild}: {guild: GuildProfile}) {
@@ -43,22 +45,28 @@ export function DangerZone({guild}: {guild: GuildProfile}) {
   };
 
   return (
-    <Section title={t('danger.title')}>
-      <p>{t('danger.body')}</p>
-      <div className="card-actions">
-        <md-outlined-button
-          disabled={!canWrite}
-          onclick={() => {
-            setError(null);
-            setOpen(true);
-          }}
-        >
-          <md-icon slot="icon" className="filled" aria-hidden="true">
-            delete
-          </md-icon>
-          {t('danger.action')}
-        </md-outlined-button>
-      </div>
+    <>
+      <SettingsPanel
+        id={SECTION_IDS.danger}
+        className="manage-panel manage-danger"
+        title={t('danger.title')}
+        description={t('danger.body')}
+        actions={
+          <md-outlined-button
+            className="manage-danger-button"
+            disabled={!canWrite}
+            onclick={() => {
+              setError(null);
+              setOpen(true);
+            }}
+          >
+            <md-icon slot="icon" className="filled" aria-hidden="true">
+              delete
+            </md-icon>
+            {t('danger.action')}
+          </md-outlined-button>
+        }
+      />
       <ConfirmDialog
         open={open}
         destructive
@@ -89,6 +97,6 @@ export function DangerZone({guild}: {guild: GuildProfile}) {
           </div>
         }
       />
-    </Section>
+    </>
   );
 }

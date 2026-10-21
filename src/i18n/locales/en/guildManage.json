@@ -1,38 +1,48 @@
 {
   "title": "Server management",
   "pageTitle": "Manage {{name}}",
-  "heading": "Manage {{name}}",
+  "pageDescription": "Lineup profile management",
   "unknownName": "Unnamed server",
   "notFound": {
     "title": "Server not found",
-    "body": "This server has no Lineup profile. Claim it first from the claim page.",
+    "body": "This server has no Lineup profile. Add it first from the Servers page.",
     "action": "Browse servers"
   },
   "forbidden": {
     "title": "You do not manage this server",
-    "body": "You must own the server, or have the Administrator or Manage Server permission. If you just received these rights, read your servers again from the claim page.",
+    "body": "You must own the server, or have the Administrator or Manage Server permission. If you just received these rights, refresh the list from the Servers page.",
     "action": "View the profile"
   },
-  "status": {
-    "listed": "In the directory",
-    "unlisted": "Unlisted"
-  },
-  "viewProfile": "View the profile",
+  "viewProfile": "View public profile",
   "saved": "Profile saved.",
-  "editor": {
+  "sections": {
+    "label": "Page sections",
+    "profile": "Public profile",
+    "invite": "Invitation",
+    "visibility": "Visibility",
+    "posts": "Posts",
+    "discord": "Discord data",
+    "danger": "Danger zone"
+  },
+  "profile": {
     "title": "Public profile",
+    "description": "What people see when they open the server."
+  },
+  "bar": {
     "unsaved": "Unsaved changes",
     "save": "Save",
     "saving": "Saving...",
-    "reset": "Discard changes"
+    "reset": "Cancel"
   },
   "description": {
     "title": "Description",
     "label": "Server description",
-    "hint": "Leave empty to show the Discord description.",
-    "discordTitle": "Discord description",
+    "hint": "Markdown accepted. Leave empty to show the Discord description.",
+    "discordTitle": "Discord description:",
     "discordNone": "This server has no description on Discord.",
-    "useDiscord": "Use the Discord description"
+    "useDiscord": "Use the Discord description",
+    "preview": "Preview",
+    "hidePreview": "Hide preview"
   },
   "links": {
     "title": "Links",
@@ -43,7 +53,7 @@
     "add": "Add a link"
   },
   "topics": {
-    "title": "Theme, tags and languages"
+    "title": "Theme and tags"
   },
   "theme": {
     "label": "Theme",
@@ -58,9 +68,11 @@
   },
   "invite": {
     "title": "Invitation",
-    "current": "Current invitation:",
-    "valid": "It works.",
-    "lost": "It no longer exists on Discord: replace it.",
+    "description": "The link behind the Join button on the profile.",
+    "current": "Current invitation",
+    "valid": "Valid",
+    "lost": "Not found on Discord",
+    "lostHelp": "It no longer exists on Discord: replace it.",
     "none": "No invitation saved.",
     "label": "New invitation",
     "placeholder": "https://discord.gg/your-code",
@@ -88,11 +100,6 @@
     "title": "Discord data",
     "body": "Name, icon and counts are read again every 6 hours. You can force a new read once a minute.",
     "members": "Members",
-    "online": "Online",
-    "invite": "Invitation:",
-    "inviteValid": "valid",
-    "inviteLost": "not found on Discord",
-    "noInvite": "none",
     "done": "Discord data refreshed.",
     "staleDone": "Discord did not answer: the old data is kept.",
     "refresh": "Refresh now",
@@ -100,8 +107,8 @@
     "waitIn": "Available in {{seconds}} s"
   },
   "danger": {
-    "title": "Delete the profile",
-    "body": "The profile leaves the directory and the server's posts are closed. The Discord server is not affected.",
+    "title": "Danger zone",
+    "body": "Deleting the profile removes it from the directory and closes the server's posts. The Discord server is not affected.",
     "action": "Delete the profile",
     "confirmTitle": "Delete the profile of {{name}}?",
     "confirmBody": "What happens:",
@@ -114,14 +121,15 @@
   "posts": {
     "title": "Server posts",
     "create": "New post",
-    "tabs": "Post status",
-    "tab": {
+    "filters": "Filter by status",
+    "filter": {
       "all": "All",
       "published": "Published",
       "draft": "Drafts",
       "closed": "Closed",
       "hidden": "Hidden"
     },
+    "menu": "Actions for post {{title}}",
     "emptyTitle": "No posts",
     "emptyAll": "This server has no posts yet. Everyone who manages the server can edit all of them.",
     "emptyTab": "No posts with this status.",

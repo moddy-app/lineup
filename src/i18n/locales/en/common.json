@@ -4,9 +4,10 @@
   },
   "nav": {
     "label": "Main navigation",
-    "feed": "Posts",
+    "feed": "Recruiting",
     "guilds": "Servers",
-    "staff": "Staff"
+    "staff": "Staff",
+    "people": "Talent"
   },
   "auth": {
     "login": "Sign in",
@@ -32,15 +33,11 @@
     }
   },
   "userMenu": {
-    "profile": "My profile",
-    "editProfile": "Edit my profile",
-    "experiences": "My experience",
+    "profile": "View my public profile",
+    "experiences": "Experience",
     "posts": "My posts",
-    "guilds": "My servers"
-  },
-  "footer": {
-    "byline": "Lineup, a <moddy>Moddy</moddy> service",
-    "language": "Language"
+    "guilds": "My servers",
+    "space": "My space"
   },
   "actions": {
     "retry": "Try again",
@@ -73,5 +70,8 @@
     "until": "Until {{date}}",
     "noEnd": "No end date",
     "viewSanction": "View the sanction"
+  },
+  "language": {
+    "label": "Language"
   }
 }

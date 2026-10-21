@@ -10,12 +10,14 @@ import type {GuildProfile} from '@/api/types';
 import {registerBeforeLogin} from '@/auth/beforeLogin';
 import {useSession} from '@/auth/session';
 import {useAuthAction} from '@/auth/useAuthAction';
-import {InviteHelp, RetryButton} from '@/components';
+import {InviteHelp, Markdown, RetryButton} from '@/components';
+import {flagUrl} from '@/components/languageFlags';
 import {useT} from '@/i18n/useT';
 import {getItem, removeItem, setItem} from '@/lib/storage';
-import {Checkbox, Icon, Panel, Pill, Section, Select, Switch, TextField, useSnackbar} from '@/ui';
+import {Checkbox, Icon, Pill, SettingsPanel, Select, Status, Switch, TextField, useSnackbar} from '@/ui';
 import {SanctionNotice} from '../guilds/SanctionNotice';
 
+import {SECTION_IDS} from './sectionIds';
 import {
   buildUpdate,
   hasChanges,
@@ -47,6 +49,7 @@ export function ProfileEditor({guild}: {guild: GuildProfile}) {
   });
   const [error, setError] = useState<unknown>(null);
   const [showLocal, setShowLocal] = useState(false);
+  const [preview, setPreview] = useState(false);
   const inviteDetails = useRef<HTMLDetailsElement>(null);
 
   // Signing in leaves the page: keep the form.
@@ -132,17 +135,19 @@ export function ProfileEditor({guild}: {guild: GuildProfile}) {
   const discordText = guild.discord_description?.trim();
 
   return (
-    <Section
-      title={t('editor.title')}
-      actions={dirty ? <span className="manage-dirty">{t('editor.unsaved')}</span> : undefined}
+    <form
+      className="manage-form"
+      noValidate
+      onSubmit={(event) => {
+        event.preventDefault();
+        void save();
+      }}
     >
-      <form
-        className="manage-form"
-        noValidate
-        onSubmit={(event) => {
-          event.preventDefault();
-          void save();
-        }}
+      <SettingsPanel
+        id={SECTION_IDS.profile}
+        className="manage-panel"
+        title={t('profile.title')}
+        description={t('profile.description')}
       >
         <fieldset className="manage-group">
           <legend>{t('description.title')}</legend>
@@ -155,15 +160,83 @@ export function ProfileEditor({guild}: {guild: GuildProfile}) {
             supportingText={t('description.hint')}
             errorText={fieldError('description')}
           />
-          <Panel className="manage-discord-text">
-            <p>
-              <strong>{t('description.discordTitle')}</strong>
-            </p>
-            <p>{discordText ? discordText : t('description.discordNone')}</p>
+          <div className="manage-tools">
+            <md-text-button type="button" onclick={() => setPreview((on) => !on)}>
+              <md-icon slot="icon" className="filled" aria-hidden="true">
+                {preview ? 'visibility_off' : 'visibility'}
+              </md-icon>
+              {preview ? t('description.hidePreview') : t('description.preview')}
+            </md-text-button>
             {values.description !== '' && (
-              <md-text-button onclick={() => set({description: ''})}>{t('description.useDiscord')}</md-text-button>
+              <md-text-button type="button" onclick={() => set({description: ''})}>
+                {t('description.useDiscord')}
+              </md-text-button>
             )}
-          </Panel>
+          </div>
+          {preview && (
+            <div className="manage-preview" aria-live="polite">
+              {values.description.trim() !== '' ? (
+                <Markdown>{values.description}</Markdown>
+              ) : (
+                <p className="manage-help">{discordText ? discordText : t('description.discordNone')}</p>
+              )}
+            </div>
+          )}
+          {!preview && values.description === '' && (
+            <p className="manage-help manage-discord-text">
+              <strong>{t('description.discordTitle')}</strong>{' '}
+              {discordText ? discordText : t('description.discordNone')}
+            </p>
+          )}
+        </fieldset>
+
+        <fieldset className="manage-group">
+          <legend>{t('topics.title')}</legend>
+          <div className="manage-pair">
+            <Select
+              label={t('theme.label')}
+              value={values.theme}
+              options={themeOptions}
+              onValueChange={(theme) => set({theme})}
+              errorText={fieldError('theme')}
+            />
+            <TextField
+              label={t('tags.label')}
+              value={values.tags}
+              onValueChange={(tags) => set({tags})}
+              supportingText={t('tags.hint', {count: tagList.length, max: limits?.max_tags ?? 10})}
+              errorText={fieldError('tags')}
+              autocomplete="off"
+            />
+          </div>
+        </fieldset>
+
+        <fieldset className="manage-group">
+          <legend>{t('languages.label', {count: values.languages.length, max: languageMax})}</legend>
+          <div className="manage-checks">
+            {(catalog.data?.languages ?? []).map((language) => {
+              const checked = values.languages.includes(language.id);
+              const name = label('languages', language.id);
+              const flag = flagUrl(language.id);
+              return (
+                <Checkbox
+                  key={language.id}
+                  className="manage-check"
+                  checked={checked}
+                  disabled={!checked && values.languages.length >= languageMax}
+                  onCheckedChange={(on) => toggleLanguage(language.id, on)}
+                  ariaLabel={name}
+                  label={
+                    <span className="manage-lang">
+                      {flag && <img src={flag} alt="" width={21} height={16} loading="lazy" decoding="async" />}
+                      {name}
+                    </span>
+                  }
+                />
+              );
+            })}
+          </div>
+          {fieldError('languages') && <p className="manage-field-error">{fieldError('languages')}</p>}
         </fieldset>
 
         <fieldset className="manage-group">
@@ -189,6 +262,7 @@ export function ProfileEditor({guild}: {guild: GuildProfile}) {
                 errorText={fieldError(`links.${index}.url`)}
               />
               <md-icon-button
+                type="button"
                 aria-label={t('links.remove', {n: index + 1})}
                 onclick={() => set({links: values.links.filter((_, at) => at !== index)})}
               >
@@ -199,6 +273,7 @@ export function ProfileEditor({guild}: {guild: GuildProfile}) {
           {fieldError('links') && <p className="manage-field-error">{fieldError('links')}</p>}
           <div>
             <md-outlined-button
+              type="button"
               disabled={values.links.length >= linkSlots}
               onclick={() => set({links: [...values.links, {label: '', url: ''}]})}
             >
@@ -209,108 +284,82 @@ export function ProfileEditor({guild}: {guild: GuildProfile}) {
             </md-outlined-button>
           </div>
         </fieldset>
+      </SettingsPanel>
 
-        <fieldset className="manage-group">
-          <legend>{t('topics.title')}</legend>
-          <Select
-            label={t('theme.label')}
-            value={values.theme}
-            options={themeOptions}
-            onValueChange={(theme) => set({theme})}
-            errorText={fieldError('theme')}
-          />
-          <TextField
-            label={t('tags.label')}
-            value={values.tags}
-            onValueChange={(tags) => set({tags})}
-            supportingText={t('tags.hint', {count: tagList.length, max: limits?.max_tags ?? 10})}
-            errorText={fieldError('tags')}
-            autocomplete="off"
-          />
-          <div role="group" aria-labelledby="manage-languages">
-            <p id="manage-languages" className="manage-label">
-              {t('languages.label', {count: values.languages.length, max: languageMax})}
-            </p>
-            <div className="manage-checks">
-              {(catalog.data?.languages ?? []).map((language) => {
-                const checked = values.languages.includes(language.id);
-                return (
-                  <Checkbox
-                    key={language.id}
-                    checked={checked}
-                    disabled={!checked && values.languages.length >= languageMax}
-                    onCheckedChange={(on) => toggleLanguage(language.id, on)}
-                    label={label('languages', language.id)}
-                  />
-                );
-              })}
-            </div>
-            {fieldError('languages') && <p className="manage-field-error">{fieldError('languages')}</p>}
-          </div>
-        </fieldset>
-
-        <fieldset className="manage-group">
-          <legend>{t('invite.title')}</legend>
-          <p className="manage-help">
-            {guild.invite ? (
-              <>
-                {t('invite.current')} <Pill>{guild.invite.code}</Pill>{' '}
+      <SettingsPanel
+        id={SECTION_IDS.invite}
+        className="manage-panel"
+        title={t('invite.title')}
+        description={t('invite.description')}
+      >
+        <p className="manage-current">
+          {guild.invite ? (
+            <>
+              <span>{t('invite.current')}</span>
+              <Pill>{guild.invite.code}</Pill>
+              <Status variant={guild.invite.valid ? 'accent' : 'error'}>
                 {guild.invite.valid ? t('invite.valid') : t('invite.lost')}
-              </>
-            ) : (
-              t('invite.none')
-            )}
-          </p>
-          <TextField
-            label={t('invite.label')}
-            value={values.invite}
-            onValueChange={(invite) => set({invite})}
-            placeholder={t('invite.placeholder')}
-            supportingText={t('invite.hint')}
-            errorText={inviteError}
-            maxLength={FIELD_LIMITS.guild.inviteMax}
-            autocomplete="off"
-            inputMode="url"
-          />
-          <details className="manage-details" ref={inviteDetails}>
-            <summary>{t('invite.how')}</summary>
-            <InviteHelp headingLevel={4} />
-          </details>
-        </fieldset>
+              </Status>
+            </>
+          ) : (
+            t('invite.none')
+          )}
+        </p>
+        {guild.invite && !guild.invite.valid && <p className="manage-help">{t('invite.lostHelp')}</p>}
+        <TextField
+          label={t('invite.label')}
+          value={values.invite}
+          onValueChange={(invite) => set({invite})}
+          placeholder={t('invite.placeholder')}
+          supportingText={t('invite.hint')}
+          errorText={inviteError}
+          maxLength={FIELD_LIMITS.guild.inviteMax}
+          autocomplete="off"
+          inputMode="url"
+        />
+        <details className="manage-details" ref={inviteDetails}>
+          <summary>{t('invite.how')}</summary>
+          <InviteHelp hideTitle />
+        </details>
+      </SettingsPanel>
 
-        <fieldset className="manage-group">
-          <legend>{t('visibility.title')}</legend>
-          <Switch checked={values.listed} onCheckedChange={(listed) => set({listed})} label={t('visibility.label')} />
-          <p className="manage-help">{values.listed ? t('visibility.on') : t('visibility.off')}</p>
-        </fieldset>
+      <SettingsPanel id={SECTION_IDS.visibility} className="manage-panel" title={t('visibility.title')}>
+        <Switch checked={values.listed} onCheckedChange={(listed) => set({listed})} label={t('visibility.label')} />
+        <p className="manage-help">{values.listed ? t('visibility.on') : t('visibility.off')}</p>
+      </SettingsPanel>
 
-        {error !== null &&
-          (hasCode(error, 'guild_suspended') && isApiError(error) ? (
-            <SanctionNotice error={error} />
-          ) : inviteCode ? null : (
-            <div className="manage-error" role="alert">
-              <p>
-                <Icon name="error" filled />
-                <span>{validation ? t('errors.fixFields') : errorMessage(error, tErrors, {context: 'manage'})}</span>
-              </p>
-              {unmapped.map((message) => (
-                <p key={message}>{message}</p>
-              ))}
-              {hasCode(error, 'discord_unavailable') && (
-                <RetryButton error={error} onRetry={() => void save()} busy={update.isPending} />
-              )}
+      {(dirty || error !== null) && (
+        <div className="manage-savebar">
+          {error !== null &&
+            (hasCode(error, 'guild_suspended') && isApiError(error) ? (
+              <SanctionNotice error={error} />
+            ) : inviteCode ? null : (
+              <div className="manage-error" role="alert">
+                <p>
+                  <Icon name="error" filled />
+                  <span>{validation ? t('errors.fixFields') : errorMessage(error, tErrors, {context: 'manage'})}</span>
+                </p>
+                {unmapped.map((message) => (
+                  <p key={message}>{message}</p>
+                ))}
+                {hasCode(error, 'discord_unavailable') && (
+                  <RetryButton error={error} onRetry={() => void save()} busy={update.isPending} />
+                )}
+              </div>
+            ))}
+          <div className="manage-savebar-row">
+            <span className="manage-dirty">{dirty ? t('bar.unsaved') : ''}</span>
+            <div className="manage-savebar-actions">
+              <md-outlined-button type="button" disabled={!dirty || update.isPending} onclick={reset}>
+                {t('bar.reset')}
+              </md-outlined-button>
+              <md-filled-button type="submit" disabled={!dirty || update.isPending || !canWrite}>
+                {update.isPending ? t('bar.saving') : t('bar.save')}
+              </md-filled-button>
             </div>
-          ))}
-
-        <div className="card-actions">
-          <md-filled-button type="submit" disabled={!dirty || update.isPending || !canWrite}>
-            {update.isPending ? t('editor.saving') : t('editor.save')}
-          </md-filled-button>
-          <md-text-button type="button" disabled={!dirty || update.isPending} onclick={reset}>
-            {t('editor.reset')}
-          </md-text-button>
+          </div>
         </div>
-      </form>
-    </Section>
+      )}
+    </form>
   );
 }

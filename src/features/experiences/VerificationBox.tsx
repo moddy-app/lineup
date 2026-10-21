@@ -20,7 +20,6 @@ import {useAuthAction} from '@/auth/useAuthAction';
 import {RelativeTime, RetryButton} from '@/components';
 import {useLanguage} from '@/i18n/useLanguage';
 import {useT} from '@/i18n/useT';
-import {formatDate} from '@/lib/format';
 import {Chip, Chips, Icon, TextField, useSnackbar} from '@/ui';
 
 import {NOTE_MAX, verificationOffer} from './experienceForm';
@@ -103,17 +102,6 @@ export function VerificationBox({experience}: {experience: PrivateExperience}) {
     <div className="exp-verification">
       {verification.status === 'verified' && (
         <div className="exp-status-text">
-          <p>
-            <Icon name="verified" filled />
-            <span>
-              {verification.method === 'discord_oauth'
-                ? t('status.verified.discord')
-                : verification.method
-                  ? t('status.verified.staff')
-                  : t('status.verified.generic')}
-              {verification.verified_at && <> {t('status.on', {date: formatDate(verification.verified_at, 'long')})}</>}
-            </span>
-          </p>
           {evidence &&
             (evidence.permissions?.length || evidence.owner || evidence.staff_note || evidence.checked_at) && (
               <details className="exp-evidence">
@@ -191,16 +179,6 @@ export function VerificationBox({experience}: {experience: PrivateExperience}) {
           </p>
           <p className="exp-note">{t('status.rejectedHelp')}</p>
         </div>
-      )}
-
-      {verification.status === 'unverified' && (
-        <p className="exp-note">
-          {experience.kind === 'service'
-            ? t('status.unverified.service')
-            : experience.is_current
-              ? t('status.unverified.current')
-              : t('status.unverified.ended')}
-        </p>
       )}
 
       {mode === 'reauth' && (

@@ -1,26 +1,26 @@
 {
-  "title": "Meine Erfahrungen",
+  "title": "Erfahrung",
   "list": {
     "intro": "Ziehen Sie eine Erfahrung am Griff oder nutzen Sie die Pfeile, um die Reihenfolge auf Ihrem Profil zu ändern.",
     "add": "Erfahrung hinzufügen",
     "edit": "Bearbeiten",
-    "delete": "Löschen",
     "drag": "{{title}} verschieben",
     "moveUp": "{{title}} nach oben",
     "moveDown": "{{title}} nach unten",
     "moved": "{{title}}: Position {{position}} von {{total}}",
     "reordered": "Reihenfolge gespeichert",
     "orderOutdated": "Die Liste wurde anderswo geändert. Sie wurde neu geladen, verschiebe erneut.",
-    "title": "{{position}}, {{name}}"
+    "title": "{{position}}, {{name}}",
+    "more": "Weitere Aktionen",
+    "up": "Nach oben",
+    "down": "Nach unten"
   },
   "empty": {
     "title": "Keine Erfahrung",
     "body": "Fügen Sie die Server oder Dienste hinzu, für die Sie gearbeitet haben. Eine verifizierte Erfahrung kann in einer Anzeige hervorgehoben werden."
   },
   "aside": {
-    "countTitle": "Erfahrungen",
     "count": "{{used}} / {{max}}",
-    "profile": "Mein Profil bearbeiten",
     "verifyTitle": "Verifizierung",
     "auto": "Automatisch: Für einen Server, auf dem Sie gerade arbeiten, liest Lineup Ihre Berechtigungen dort über Discord.",
     "manual": "Manuelle Prüfung: Für eine frühere Rolle oder einen Dienst prüft das Moddy-Team Ihre Anfrage.",
@@ -110,12 +110,7 @@
     "pending": "Prüfungsanfrage gesendet, das Moddy-Team ist noch dran.",
     "rejected": "Abgelehnt.",
     "rejectedNoReason": "Es wurde kein Grund angegeben.",
-    "rejectedHelp": "Korrigieren Sie die Erfahrung bei Bedarf und fragen Sie die Verifizierung erneut an.",
-    "unverified": {
-      "service": "Nicht verifiziert. Ein Dienst wird durch eine manuelle Prüfung verifiziert.",
-      "current": "Nicht verifiziert. Nur eine verifizierte Erfahrung kann in einer Anzeige hervorgehoben werden.",
-      "ended": "Nicht verifiziert. Eine beendete Rolle wird durch eine manuelle Prüfung verifiziert."
-    }
+    "rejectedHelp": "Korrigieren Sie die Erfahrung bei Bedarf und fragen Sie die Verifizierung erneut an."
   },
   "evidence": {
     "summary": "Geprüftes ansehen",

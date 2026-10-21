@@ -1,6 +1,5 @@
 {
-  "title": "Edit my profile",
-  "intro": "This profile is public. Only the fields you change are saved.",
+  "title": "Profile",
   "saved": "Profile saved",
   "saving": "Saving",
   "save": "Save",
@@ -9,7 +8,7 @@
     "headline": "Headline",
     "headlineHelp": "One line under your name, for example \"Moderator for 4 years\".",
     "bio": "Bio",
-    "bioHelp": "Plain text. Line breaks are kept.",
+    "bioHelp": "Markdown accepted: bold, lists, links.",
     "openToWork": "Open to work",
     "openToWorkHelp": "An \"Open to work\" marker shows on your profile."
   },
@@ -33,18 +32,6 @@
     "suggestion": "Your browser's zone:",
     "use": "Use it"
   },
-  "summary": {
-    "title": "Preview",
-    "noHeadline": "No headline",
-    "languages_one": "{{count}} language: {{list}}",
-    "languages_other": "{{count}} languages: {{list}}",
-    "noLanguages": "No language",
-    "links_one": "{{count}} link",
-    "links_other": "{{count}} links",
-    "open": "Open to work",
-    "closed": "Not looking",
-    "view": "View my public profile"
-  },
   "problems": {
     "linkLabelRequired": "Give the link a name.",
     "linkLabelTooLong": "The name is {{count}} characters at most.",
@@ -54,5 +41,27 @@
     "timezoneInvalid": "Unknown zone. Examples: Europe/Paris, UTC+02:00.",
     "tooLong": "{{count}} characters at most.",
     "tooMany": "{{count}} items at most."
+  },
+  "description": "What others see on your public profile.",
+  "viewPublic": "View my public profile",
+  "unsaved": "Unsaved changes",
+  "panels": {
+    "presentation": {
+      "title": "About",
+      "description": "Your headline and your introduction."
+    },
+    "availability": {
+      "title": "Availability",
+      "description": "Say whether you are open to offers."
+    },
+    "locale": {
+      "title": "Languages and time zone",
+      "description": "The languages you speak and your local time."
+    }
+  },
+  "preview": {
+    "show": "Show preview",
+    "hide": "Hide preview",
+    "empty": "Nothing to show."
   }
 }

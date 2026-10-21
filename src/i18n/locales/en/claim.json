@@ -1,35 +1,48 @@
 {
-  "title": "Claim a server",
-  "intro": "Claiming a server creates its Lineup profile. Only servers you own, or where you have the Administrator or Manage Server permission, are listed.",
+  "title": "Servers",
+  "description": "The Discord servers you manage",
   "unknownName": "Unnamed server",
   "success": "{{name}} is on Lineup.",
-  "list": {
-    "title": "Your servers",
-    "label": "Servers you can manage",
-    "refresh": "Refresh the list",
-    "refreshIn": "Refresh in {{seconds}} s",
-    "refreshed": "List read again from Discord.",
-    "withModdy": "Moddy is installed",
-    "withoutModdy": "Without Moddy",
-    "claimed": "On Lineup",
-    "profile": "Profile",
+  "refresh": {
+    "label": "Refresh the list",
+    "in": "Refresh in {{seconds}} s",
+    "done": "List read again from Discord."
+  },
+  "onLineup": {
+    "title": "On Lineup",
+    "label": "Servers on Lineup",
+    "listed": "In the directory",
+    "unlisted": "Hidden",
     "manage": "Manage",
-    "claim": "Claim",
-    "emptyTitle": "No server to claim",
+    "profile": "View profile"
+  },
+  "toAdd": {
+    "title": "To add",
+    "label": "Servers to add",
+    "withModdy": "Moddy installed",
+    "add": "Add",
+    "withInvite": "Add with an invitation",
+    "none": "All your servers are already on Lineup."
+  },
+  "list": {
+    "emptyTitle": "No server to manage",
     "emptyBody": "Only servers you own, or where you have the Administrator or Manage Server permission, appear here. If you just created one, refresh the list.",
     "reauthTitle": "Allow Lineup to read your servers",
     "reauthBody": "Your session comes from the Moddy dashboard and lacks this permission. Sign in again with Discord.",
     "reauthAction": "Sign in again"
   },
-  "form": {
-    "title": "Server invitation",
-    "body": "Paste an invitation link that never expires. It proves the server is yours and becomes the Join button on the profile.",
+  "dialog": {
+    "title": "Add {{name}}",
+    "titleFree": "Add a server",
+    "intro": "Paste an invitation link to {{name}} that never expires. It becomes the Join button on the profile.",
+    "introModdy": "Moddy is already on {{name}}, but Lineup still asks for an invitation that never expires. Create one on Discord and paste it here.",
+    "introFree": "Paste an invitation link that never expires to a server you manage. It proves the server is yours and becomes the Join button on the profile.",
+    "how": "How to create a permanent invitation",
     "label": "Invitation link or code",
     "placeholder": "https://discord.gg/your-code",
     "hint": "The bare code works too.",
-    "selected": "Invitation for {{name}}",
-    "deselect": "Remove",
-    "submit": "Claim",
+    "cancel": "Cancel",
+    "submit": "Add",
     "submitting": "Checking..."
   },
   "errors": {

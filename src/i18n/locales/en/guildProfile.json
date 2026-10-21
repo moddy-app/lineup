@@ -6,51 +6,55 @@
     "action": "Browse servers"
   },
   "stats": {
-    "members": "Members",
-    "online": "Online",
-    "boosts": "Boosts",
+    "members_one": "member",
+    "members_other": "members",
+    "boosts_one": "boost",
+    "boosts_other": "boosts",
     "created": "Created"
   },
+  "info": {
+    "title": "Details",
+    "theme": "Theme"
+  },
   "join": {
-    "action": "Join the server",
-    "unavailable": "This server's invitation is no longer available."
+    "action": "Join the server"
   },
-  "unlisted": {
-    "title": "Unlisted profile",
-    "body": "This profile is not in the directory. Only managers and the Moddy staff can see it, and its posts."
+  "manage": {
+    "action": "Manage"
   },
-  "inviteLost": {
-    "title": "Invitation to replace",
-    "body": "The saved invitation no longer exists on Discord, so the Join button is hidden. Save an invitation that never expires.",
-    "action": "Replace the invitation"
+  "notices": {
+    "unlisted": "This profile is not in the directory. Only managers and the Moddy staff see it.",
+    "inviteLost": "The saved invite no longer exists: the Join button is hidden.",
+    "inviteLostAction": "Replace the invite"
+  },
+  "menu": {
+    "label": "More actions",
+    "report": "Report this server",
+    "copyLink": "Copy link",
+    "copied": "Link copied.",
+    "copyFailed": "Could not copy.",
+    "copyId": "Copy the server ID",
+    "idCopied": "Server ID copied."
   },
   "about": {
     "title": "About",
     "none": "This server has no description yet.",
-    "topics": "Theme and tags"
+    "topics": "Tags"
+  },
+  "links": {
+    "title": "Links"
   },
   "posts": {
     "title_one": "{{count}} open post",
     "title_other": "{{count}} open posts",
     "titleEmpty": "Open posts",
     "label": "Server posts",
-    "emptyTitle": "No open posts",
-    "emptyBody": "This server is not recruiting right now."
+    "empty": "This server is not recruiting right now."
   },
   "team": {
     "title": "Team",
     "label": "Server team",
     "since": "{{position}}, since {{date}}",
-    "emptyTitle": "No team listed",
-    "emptyBody": "Only people with a verified experience on this server appear here."
-  },
-  "manage": {
-    "title": "Server management",
-    "body": "You manage this server. Edit the profile, follow the posts or delete the profile.",
-    "action": "Manage server"
-  },
-  "report": {
-    "title": "Report this server",
-    "body": "Report a misleading profile, impersonation or inappropriate content. The Moddy team reviews every report."
+    "empty": "Only people with a verified experience on this server appear here."
   }
 }

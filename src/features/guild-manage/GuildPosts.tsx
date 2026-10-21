@@ -1,18 +1,23 @@
-import {useState} from 'react';
+import type {MdMenu} from '@material/web/menu/menu.js';
+import {type ReactNode, useEffect, useLayoutEffect, useRef, useState} from 'react';
+import {Link, useNavigate} from 'react-router';
 
 import {errorMessage} from '@/api/errors';
 import {useClosePost, useDeletePost, usePublishPost} from '@/api/mutations';
 import {useInfiniteList} from '@/api/pagination';
-import {useMyPosts} from '@/api/queries';
+import {useCatalog, useMyPosts} from '@/api/queries';
 import type {GuildProfile, PostStatus, PrivatePost} from '@/api/types';
 import {paths} from '@/app/paths';
-import {useAuthAction} from '@/auth/useAuthAction';
 import {useSession} from '@/auth/session';
-import {EmptyState, ErrorState, PostCard} from '@/components';
+import {useAuthAction} from '@/auth/useAuthAction';
+import {EmptyState, ErrorState, PostStatusBadge, QuotaMeter, RelativeTime} from '@/components';
 import {useT} from '@/i18n/useT';
-import {ConfirmDialog, LinkButton, Section, Spinner, useSnackbar} from '@/ui';
+import {ConfirmDialog, Icon, LinkButton, SettingsPanel, Spinner, useSnackbar} from '@/ui';
 
-const TABS: ReadonlyArray<PostStatus | 'all'> = ['all', 'published', 'draft', 'closed', 'hidden'];
+import {countLivePosts} from './postsQuota';
+import {SECTION_IDS} from './sectionIds';
+
+const FILTERS: ReadonlyArray<PostStatus | 'all'> = ['all', 'published', 'draft', 'closed', 'hidden'];
 
 /** Every post of the server, whoever wrote it, in every status. */
 export function GuildPosts({guild}: {guild: GuildProfile}) {
@@ -22,8 +27,9 @@ export function GuildPosts({guild}: {guild: GuildProfile}) {
   const auth = useAuthAction();
   const {canWrite} = useSession();
   const snackbar = useSnackbar();
-  const [tab, setTab] = useState<PostStatus | 'all'>('all');
-  const query = useMyPosts({guildId: guild.id, status: tab === 'all' ? undefined : tab});
+  const navigate = useNavigate();
+  const [filter, setFilter] = useState<PostStatus | 'all'>('all');
+  const query = useMyPosts({guildId: guild.id, status: filter === 'all' ? undefined : filter});
   const list = useInfiniteList<PrivatePost, NonNullable<typeof query.data>['pages'][number]>(query);
   const close = useClosePost();
   const publish = usePublishPost();
@@ -44,75 +50,79 @@ export function GuildPosts({guild}: {guild: GuildProfile}) {
   };
 
   return (
-    <Section
-      title={t('posts.title')}
-      actions={
-        <LinkButton to={`${paths.postNew()}?guild=${encodeURIComponent(guild.id)}`} icon="add">
-          {t('posts.create')}
-        </LinkButton>
-      }
-    >
-      <md-tabs
-        aria-label={t('posts.tabs')}
-        activeTabIndex={TABS.indexOf(tab)}
-        onchange={(event) => setTab(TABS[event.currentTarget.activeTabIndex] ?? 'all')}
-      >
-        {TABS.map((status) => (
-          <md-primary-tab key={status} id={`manage-tab-${status}`} aria-controls="manage-posts-panel">
-            {t(`posts.tab.${status}`)}
-          </md-primary-tab>
-        ))}
-      </md-tabs>
-      <div id="manage-posts-panel" role="tabpanel" aria-labelledby={`manage-tab-${tab}`} className="manage-posts">
+    <>
+      <SettingsPanel id={SECTION_IDS.posts} className="manage-panel" title={t('posts.title')}>
+        <div className="manage-posts-head">
+          <div className="manage-filters" role="group" aria-label={t('posts.filters')}>
+            {FILTERS.map((status) => (
+              <button
+                key={status}
+                type="button"
+                className="manage-filter"
+                aria-pressed={filter === status}
+                onClick={() => setFilter(status)}
+              >
+                {t(`posts.filter.${status}`)}
+              </button>
+            ))}
+          </div>
+          <LinkButton to={`${paths.postNew()}?guild=${encodeURIComponent(guild.id)}`} variant="outlined" icon="add">
+            {t('posts.create')}
+          </LinkButton>
+        </div>
+        <GuildQuota guildId={guild.id} />
         {list.isLoading ? (
           <Spinner />
         ) : list.isError ? (
           <ErrorState compact error={list.error} onRetry={list.refetch} />
         ) : list.isEmpty ? (
           <EmptyState compact icon="campaign" title={t('posts.emptyTitle')}>
-            {tab === 'all' ? t('posts.emptyAll') : t('posts.emptyTab')}
+            {filter === 'all' ? t('posts.emptyAll') : t('posts.emptyTab')}
           </EmptyState>
         ) : (
           <>
             <ul className="manage-post-list">
               {list.items.map((post) => (
-                <li key={post.id} className="manage-post">
-                  <PostCard post={post} variant="row" showStatus />
+                <li key={post.id} className="manage-post inner-card">
+                  <Link to={paths.post(post.id)} className="manage-post-title">
+                    {post.title}
+                  </Link>
+                  <span className="manage-post-status">
+                    <PostStatusBadge status={post.status} isExpired={post.is_expired} />
+                  </span>
+                  <RelativeTime className="manage-post-date" value={post.published_at ?? post.created_at} />
                   {post.status === 'hidden' ? (
-                    <p className="manage-help">{t('posts.hidden')}</p>
+                    <span className="manage-post-locked" title={t('posts.hidden')}>
+                      <Icon name="lock" label={t('posts.hidden')} />
+                    </span>
                   ) : (
-                    <div className="manage-post-actions">
-                      <LinkButton to={paths.postEdit(post.id)} variant="text" icon="edit">
-                        {t('posts.edit')}
-                      </LinkButton>
+                    <PostMenu label={t('posts.menu', {title: post.title})} disabled={busy === post.id}>
+                      <md-menu-item onclick={() => void navigate(paths.postEdit(post.id))}>
+                        <md-icon slot="start">edit</md-icon>
+                        <div slot="headline">{t('posts.edit')}</div>
+                      </md-menu-item>
                       {post.status === 'published' ? (
-                        <md-text-button
-                          disabled={!canWrite || busy === post.id}
+                        <md-menu-item
+                          disabled={!canWrite}
                           onclick={() => void act(post, () => close.mutateAsync(post.id), t('posts.closed'))}
                         >
-                          <md-icon slot="icon" className="filled" aria-hidden="true">
-                            lock
-                          </md-icon>
-                          {t('posts.close')}
-                        </md-text-button>
+                          <md-icon slot="start">lock</md-icon>
+                          <div slot="headline">{t('posts.close')}</div>
+                        </md-menu-item>
                       ) : (
-                        <md-text-button
-                          disabled={!canWrite || busy === post.id}
+                        <md-menu-item
+                          disabled={!canWrite}
                           onclick={() => void act(post, () => publish.mutateAsync(post.id), t('posts.published'))}
                         >
-                          <md-icon slot="icon" className="filled" aria-hidden="true">
-                            {post.status === 'closed' ? 'lock_open' : 'publish'}
-                          </md-icon>
-                          {post.status === 'closed' ? t('posts.reopen') : t('posts.publish')}
-                        </md-text-button>
+                          <md-icon slot="start">{post.status === 'closed' ? 'lock_open' : 'publish'}</md-icon>
+                          <div slot="headline">{post.status === 'closed' ? t('posts.reopen') : t('posts.publish')}</div>
+                        </md-menu-item>
                       )}
-                      <md-text-button disabled={!canWrite || busy === post.id} onclick={() => setToDelete(post)}>
-                        <md-icon slot="icon" className="filled" aria-hidden="true">
-                          delete
-                        </md-icon>
-                        {t('posts.delete')}
-                      </md-text-button>
-                    </div>
+                      <md-menu-item disabled={!canWrite} onclick={() => setToDelete(post)}>
+                        <md-icon slot="start">delete</md-icon>
+                        <div slot="headline">{t('posts.delete')}</div>
+                      </md-menu-item>
+                    </PostMenu>
                   )}
                 </li>
               ))}
@@ -129,7 +139,7 @@ export function GuildPosts({guild}: {guild: GuildProfile}) {
             )}
           </>
         )}
-      </div>
+      </SettingsPanel>
       <ConfirmDialog
         open={toDelete !== null}
         destructive
@@ -145,6 +155,67 @@ export function GuildPosts({guild}: {guild: GuildProfile}) {
           void act(post, async () => (await remove.mutateAsync(post.id), true), t('posts.deleted'));
         }}
       />
-    </Section>
+    </>
+  );
+}
+
+/**
+ * Published, unexpired posts of the server out of the catalog's limit. Nothing
+ * while it loads or if it cannot be read (the editor enforces the quota).
+ */
+function GuildQuota({guildId}: {guildId: string}) {
+  const {data: catalog} = useCatalog();
+  const published = useMyPosts({guildId, status: 'published'});
+  const list = useInfiniteList<PrivatePost, NonNullable<typeof published.data>['pages'][number]>(published);
+
+  // Expired posts stay "published" in the list: follow the pages until every one is read.
+  const {hasMore, isLoadingMore, loadMore, isError} = list;
+  useEffect(() => {
+    if (hasMore && !isLoadingMore && !isError) loadMore();
+  }, [hasMore, isLoadingMore, isError, loadMore]);
+
+  if (!catalog || list.isLoading || list.isError || hasMore) return null;
+  return (
+    <QuotaMeter
+      className="manage-quota"
+      used={countLivePosts(list.items)}
+      limit={catalog.limits.max_published_posts_per_guild}
+      scope="guild"
+    />
+  );
+}
+
+interface PostMenuProps {
+  label: string;
+  disabled?: boolean;
+  children: ReactNode;
+}
+
+/** The actions of one row, behind a "more" button. */
+function PostMenu({label, disabled, children}: PostMenuProps) {
+  const [open, setOpen] = useState(false);
+  const [anchor, setAnchor] = useState<HTMLElement | null>(null);
+  const menuRef = useRef<MdMenu | null>(null);
+
+  useLayoutEffect(() => {
+    if (menuRef.current) menuRef.current.anchorElement = anchor;
+  }, [anchor]);
+
+  return (
+    <span className="manage-menu-wrap">
+      <md-icon-button
+        ref={setAnchor}
+        aria-label={label}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        disabled={disabled}
+        onclick={() => setOpen((previous) => !previous)}
+      >
+        <Icon name="more_vert" />
+      </md-icon-button>
+      <md-menu ref={menuRef} open={open} onclose={() => setOpen(false)} className="manage-menu">
+        {children}
+      </md-menu>
+    </span>
   );
 }

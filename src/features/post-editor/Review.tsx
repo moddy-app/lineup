@@ -1,18 +1,15 @@
 /** The last step: what will be sent, step by step, and the banner of a failed submit. */
 
-import {useMemo} from 'react';
+import {type ReactNode, useMemo} from 'react';
 
 import {isApiError} from '@/api/client';
 import {errorMessage} from '@/api/errors';
 import {paths} from '@/app/paths';
 import {isRetryable, QuotaMeter, RetryButton} from '@/components';
 import {useT} from '@/i18n/useT';
-import {Icon, LinkButton, Row, RowBody, Rows, Shape} from '@/ui';
+import {Icon, LinkButton} from '@/ui';
 
 import type {StepId} from './form';
-
-const SHAPES = ['hexagon', 'square', 'pentagon', 'diamond', 'heptagon', 'octagon'] as const;
-const TONES = ['primary', 'tertiary', 'secondary'] as const;
 
 export interface ReviewRow {
   step: StepId;
@@ -25,9 +22,11 @@ interface ReviewStepProps {
   rows: ReviewRow[];
   onGo: (step: StepId) => void;
   quota?: {used: number; limit: number} | null;
+  /** The text of the post, as it will read. */
+  preview?: ReactNode;
 }
 
-export function ReviewStep({rows, onGo, quota}: ReviewStepProps) {
+export function ReviewStep({rows, onGo, quota, preview}: ReviewStepProps) {
   const {t} = useT('editor');
   const invalid = rows.filter((row) => row.state === 'error').length;
   return (
@@ -38,22 +37,21 @@ export function ReviewStep({rows, onGo, quota}: ReviewStepProps) {
           {t('review.invalid', {count: invalid})}
         </p>
       )}
-      <Rows as="ul" className="ed-review">
-        {rows.map((row, index) => (
-          <Row key={row.step}>
-            <Shape
-              small
-              shape={SHAPES[index % SHAPES.length]}
-              tone={row.state === 'error' ? 'solid' : TONES[index % TONES.length]}
-              icon={row.state === 'error' ? 'priority_high' : row.state === 'done' ? 'check' : 'more_horiz'}
-            />
-            <RowBody title={row.title} meta={row.summary} />
+      <ul className="ed-review">
+        {rows.map((row) => (
+          <li key={row.step} className={`ed-review-row${row.state === 'error' ? ' is-error' : ''}`}>
+            <Icon name={row.state === 'error' ? 'error' : 'check_circle'} filled />
+            <div className="ed-review-text">
+              <span className="ed-review-title">{row.title}</span>
+              <span className="ed-review-summary">{row.summary}</span>
+            </div>
             <md-text-button aria-label={t('review.edit', {step: row.title})} onclick={() => onGo(row.step)}>
               {t('review.editShort')}
             </md-text-button>
-          </Row>
+          </li>
         ))}
-      </Rows>
+      </ul>
+      {preview}
       {quota && <QuotaMeter used={quota.used} limit={quota.limit} scope="user" />}
       {quota && quota.used >= quota.limit && <p className="ed-hint">{t('review.quotaFull')}</p>}
     </div>
@@ -66,7 +64,12 @@ export function ReviewStep({rows, onGo, quota}: ReviewStepProps) {
 
 const QUOTA_CODES = ['lineup_quota_exceeded'];
 const CLAIM_CODES = ['lineup_guild_profile_missing', 'guild_suspended', 'lineup_guild_forbidden'];
-const LEAVE_CODES = ['lineup_post_hidden', 'lineup_post_forbidden', 'lineup_post_not_found', 'lineup_post_invalid_status'];
+const LEAVE_CODES = [
+  'lineup_post_hidden',
+  'lineup_post_forbidden',
+  'lineup_post_not_found',
+  'lineup_post_invalid_status',
+];
 
 interface SubmitBannerProps {
   error: unknown;
@@ -109,7 +112,9 @@ export function SubmitBanner({error, editing, onSaveDraft, onRetry, busy}: Submi
               {t('banner.claim')}
             </LinkButton>
           )}
-          {!quota && !leave && !claim && isRetryable(error) && <RetryButton onRetry={onRetry} error={error} busy={busy} />}
+          {!quota && !leave && !claim && isRetryable(error) && (
+            <RetryButton onRetry={onRetry} error={error} busy={busy} />
+          )}
         </div>
       </div>
     </div>

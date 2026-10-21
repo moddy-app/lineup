@@ -1,26 +1,26 @@
 {
-  "title": "Minhas experiências",
+  "title": "Experiência",
   "list": {
     "intro": "Arraste uma experiência pela alça, ou use as setas, para mudar a ordem exibida no seu perfil.",
     "add": "Adicionar uma experiência",
     "edit": "Editar",
-    "delete": "Excluir",
     "drag": "Mover {{title}}",
     "moveUp": "Subir {{title}}",
     "moveDown": "Descer {{title}}",
     "moved": "{{title}}: posição {{position}} de {{total}}",
     "reordered": "Ordem salva",
     "orderOutdated": "A lista tinha mudado em outro lugar. Ela foi recarregada, refaça o movimento.",
-    "title": "{{position}}, {{name}}"
+    "title": "{{position}}, {{name}}",
+    "more": "Mais ações",
+    "up": "Subir",
+    "down": "Descer"
   },
   "empty": {
     "title": "Nenhuma experiência",
     "body": "Adicione os servidores ou serviços em que você trabalhou. Uma experiência verificada pode ser destacada em um anúncio."
   },
   "aside": {
-    "countTitle": "Experiências",
     "count": "{{used}} / {{max}}",
-    "profile": "Editar meu perfil",
     "verifyTitle": "Verificação",
     "auto": "Automática: para um servidor em que você atua agora, o Lineup lê suas permissões nesse servidor pelo Discord.",
     "manual": "Revisão manual: para um cargo passado ou um serviço, a equipe Moddy analisa seu pedido.",
@@ -110,12 +110,7 @@
     "pending": "Pedido de revisão enviado, aguardando a equipe Moddy.",
     "rejected": "Recusada.",
     "rejectedNoReason": "Nenhum motivo foi informado.",
-    "rejectedHelp": "Corrija a experiência se necessário e peça uma verificação de novo.",
-    "unverified": {
-      "service": "Não verificada. Um serviço é verificado por uma revisão manual.",
-      "current": "Não verificada. Somente uma experiência verificada pode ser destacada em um anúncio.",
-      "ended": "Não verificada. Um cargo encerrado é verificado por uma revisão manual."
-    }
+    "rejectedHelp": "Corrija a experiência se necessário e peça uma verificação de novo."
   },
   "evidence": {
     "summary": "Ver o que foi verificado",

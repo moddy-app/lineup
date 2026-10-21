@@ -41,7 +41,7 @@
       "verify": "Verificar mantém a prova existente e acrescenta sua nota.",
       "reject": "Recusar exige um motivo, que a pessoa pode ler."
     },
-    "loaded": "{{n}} carregadas nesta lista.",
+    "evidence": "Prova",
     "updated": "Alterada",
     "facts": {
       "requestedAt": "Revisão solicitada",
@@ -114,7 +114,6 @@
       "target": "Abra o alvo antes. Resolver ou arquivar não altera o alvo: oculte o anúncio à parte.",
       "once": "Uma denúncia decidida não pode ser decidida de novo."
     },
-    "loaded": "{{n}} carregadas nesta lista.",
     "resolve": {
       "action": "Resolver",
       "title": "Marcar como resolvida",
@@ -147,7 +146,6 @@
       "text": "Nenhum selo foi concedido para este filtro."
     },
     "grantedBy": "Concedido por",
-    "openEntity": "Abrir perfil ({{badge}}, {{id}})",
     "revoke": {
       "action": "Remover",
       "title": "Remover este selo",
@@ -176,10 +174,9 @@
       "label": "ID ou link do anúncio",
       "hint": "Cole o UUID ou o endereço do anúncio.",
       "invalid": "Nenhum ID de anúncio reconhecido.",
-      "submit": "Buscar"
+      "submit": "Carregar"
     },
     "empty": {
-      "title": "Nenhum anúncio selecionado",
       "text": "Cole um ID ou um link para ver o status e ocultá-lo."
     },
     "reason": "Motivo:",

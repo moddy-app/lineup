@@ -1,130 +1,140 @@
-/* User profile page: header, facts of the side column. Tokens only. */
+/* Public profile of a person: banner, header, two columns. Tokens only. */
+
+.profile-banner {
+  height: 160px;
+  margin: calc(var(--card-padding) * -1) calc(var(--card-padding) * -1) 0;
+  overflow: hidden;
+  background-color: var(--md-sys-color-surface-container-high);
+}
+
+.profile-banner img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 .profile-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space);
-}
-
-.profile-identity {
-  display: flex;
-  flex: 1 1 280px;
-  flex-direction: column;
   align-items: flex-start;
-  gap: var(--gap-m);
-  min-width: 0;
+  gap: var(--gap-l) var(--card-padding);
 }
 
-.profile-identity h1 {
-  margin: 0;
+.profile-header .page-header-leading {
+  padding: 4px;
+}
+
+.profile-header .page-header-title {
   font-size: var(--text-title);
-  letter-spacing: normal;
-  overflow-wrap: anywhere;
 }
 
-.profile-handles {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--gap-s) var(--gap-m);
+.profile-header .page-header-text {
+  gap: 0;
 }
 
-.profile-handles .pill {
-  overflow-wrap: anywhere;
+.profile-header .page-header-title {
+  line-height: 1.15;
 }
 
-.profile-headline {
-  margin: 0;
-  max-width: none;
-  color: var(--md-sys-color-on-surface-variant);
-  overflow-wrap: anywhere;
-}
-
-.profile-bio {
-  margin: 0;
-  max-width: 70ch;
-  white-space: pre-line;
-  overflow-wrap: anywhere;
-}
-
-.profile-facts {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space);
-}
-
-.profile-fact {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--gap-m);
-}
-
-.profile-fact > * {
-  max-width: 100%;
-}
-
-.profile-fact h3 {
-  margin: 0;
-  font-size: var(--text-subtitle);
-}
-
-.profile-fact .link-list {
-  width: 100%;
-}
-
-.profile-account {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-l);
-}
-
-.profile-created {
-  display: flex;
-  align-items: center;
-  gap: var(--gap-s);
-  margin: 0;
+/* Name, then the handle right under it, then the headline. */
+.profile-header .page-header-subtitle {
+  margin: 2px 0 0;
   font-size: var(--text-body-small);
   color: var(--md-sys-color-on-surface-variant);
 }
 
-.profile-created .material-symbols-outlined {
-  font-size: 20px;
+.profile-headline {
+  margin: var(--gap-s) 0 0;
+}
+
+.profile-meta-line:empty {
+  display: none;
+}
+
+.profile-meta-line {
+  margin-top: var(--gap-s);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-s) var(--gap-l);
+  min-width: 0;
+}
+
+.profile-menu {
+  position: relative;
+  display: inline-flex;
+}
+
+/* Two columns from 1100px; one below. */
+.profile-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: var(--page-gap);
+}
+
+@media (min-width: 1100px) {
+  .profile-columns {
+    grid-template-columns: minmax(0, 1fr) 20rem;
+  }
+}
+
+.profile-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--page-gap);
+  min-width: 0;
+}
+
+.profile-card {
+  gap: var(--gap-l);
+  min-width: 0;
+}
+
+.profile-card h2 {
+  margin: 0;
+  font-size: var(--text-subtitle);
+  font-weight: 600;
+  color: var(--md-sys-color-on-surface);
+}
+
+.profile-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-m);
+  min-height: 32px;
+}
+
+.profile-section-head md-text-button {
+  --md-text-button-container-height: 32px;
+  margin-inline-end: -12px;
 }
 
 .profile-empty {
   margin: 0;
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-.profile-empty-with-shape {
-  display: flex;
-  align-items: center;
-  gap: var(--gap-l);
-}
-
-.profile-count {
-  margin: 0 0 var(--gap-m);
+  max-width: none;
   font-size: var(--text-body-small);
   color: var(--md-sys-color-on-surface-variant);
 }
 
-.card.profile-header {
-  flex-direction: row;
-}
-
-.profile-report {
+.profile-side {
   display: flex;
-  justify-content: flex-start;
-  padding-inline: var(--gap-s);
+  flex-direction: column;
+  gap: var(--page-gap);
+  min-width: 0;
 }
 
-/* A fact row of "À propos": icon and text, like the others. */
-.profile-facts > .profile-created {
-  color: var(--md-sys-color-on-surface-variant);
-}
+@media (max-width: 600px) {
+  .profile-banner {
+    height: 110px;
+  }
 
-.profile-account .card-actions {
-  padding-top: 0;
+  .profile-header .user-avatar.xl {
+    --avatar-size: 72px;
+  }
+
+  .profile-header .avatar.xl {
+    width: 72px;
+    height: 72px;
+  }
 }

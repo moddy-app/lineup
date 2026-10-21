@@ -6,51 +6,55 @@
     "action": "Server ansehen"
   },
   "stats": {
-    "members": "Mitglieder",
-    "online": "Online",
-    "boosts": "Boosts",
-    "created": "Erstellt am"
+    "members_one": "Mitglied",
+    "members_other": "Mitglieder",
+    "boosts_one": "Boost",
+    "boosts_other": "Boosts",
+    "created": "Erstellt im"
+  },
+  "info": {
+    "title": "Informationen",
+    "theme": "Thema"
   },
   "join": {
-    "action": "Server beitreten",
-    "unavailable": "Die Einladung dieses Servers ist nicht mehr verfügbar."
+    "action": "Server beitreten"
   },
-  "unlisted": {
-    "title": "Nicht gelistetes Profil",
-    "body": "Dieses Profil steht nicht im Verzeichnis. Nur Verwalter und das Moddy-Staff sehen es, ebenso seine Anzeigen."
+  "manage": {
+    "action": "Verwalten"
   },
-  "inviteLost": {
-    "title": "Einladung ersetzen",
-    "body": "Die gespeicherte Einladung existiert auf Discord nicht mehr, der Beitreten-Button ist ausgeblendet. Speichern Sie eine Einladung, die nie abläuft.",
-    "action": "Einladung ersetzen"
+  "notices": {
+    "unlisted": "Dieses Profil steht nicht im Verzeichnis. Nur Verwalter und das Moddy-Team sehen es.",
+    "inviteLost": "Die gespeicherte Einladung existiert nicht mehr: Die Schaltfläche Beitreten ist ausgeblendet.",
+    "inviteLostAction": "Einladung ersetzen"
+  },
+  "menu": {
+    "label": "Weitere Aktionen",
+    "report": "Diesen Server melden",
+    "copyLink": "Link kopieren",
+    "copied": "Link kopiert.",
+    "copyFailed": "Kopieren nicht möglich.",
+    "copyId": "Server-ID kopieren",
+    "idCopied": "ID kopiert."
   },
   "about": {
     "title": "Über den Server",
     "none": "Dieser Server hat noch keine Beschreibung.",
-    "topics": "Thema und Tags"
+    "topics": "Tags"
+  },
+  "links": {
+    "title": "Links"
   },
   "posts": {
     "title_one": "{{count}} offene Anzeige",
     "title_other": "{{count}} offene Anzeigen",
     "titleEmpty": "Offene Anzeigen",
     "label": "Anzeigen des Servers",
-    "emptyTitle": "Keine offenen Anzeigen",
-    "emptyBody": "Dieser Server sucht gerade kein Staff."
+    "empty": "Dieser Server sucht gerade kein Staff."
   },
   "team": {
     "title": "Team",
     "label": "Team des Servers",
     "since": "{{position}}, seit {{date}}",
-    "emptyTitle": "Kein Team angegeben",
-    "emptyBody": "Hier erscheinen nur Personen mit verifizierter Erfahrung auf diesem Server."
-  },
-  "manage": {
-    "title": "Serververwaltung",
-    "body": "Sie verwalten diesen Server. Bearbeiten Sie das Profil, verfolgen Sie die Anzeigen oder löschen Sie das Profil.",
-    "action": "Server verwalten"
-  },
-  "report": {
-    "title": "Diesen Server melden",
-    "body": "Melden Sie ein irreführendes Profil, Identitätsmissbrauch oder unangemessene Inhalte. Das Moddy-Team prüft jede Meldung."
+    "empty": "Hier erscheinen nur Personen mit verifizierter Erfahrung auf diesem Server."
   }
 }

@@ -6,21 +6,14 @@
     "action": "Anzeigen ansehen"
   },
   "header": {
-    "created": "Discord-Konto erstellt am {{date}}",
-    "openToWork": "Offen für Angebote"
-  },
-  "about": {
-    "title": "Info",
-    "timezone": "Zeitzone",
-    "languages": "Sprachen",
-    "links": "Links"
-  },
-  "self": {
+    "created": "Discord-Konto erstellt im {{date}}",
+    "openToWork": "Offen für Angebote",
     "edit": "Mein Profil bearbeiten",
-    "experiences": "Meine Erfahrungen"
+    "more": "Weitere Aktionen"
   },
   "bio": {
-    "title": "Über mich"
+    "title": "Über mich",
+    "emptySelf": "Sie haben noch keine Vorstellung geschrieben."
   },
   "experiences": {
     "title": "Erfahrung",
@@ -30,9 +23,21 @@
   },
   "posts": {
     "title": "Anzeigen",
-    "count_one": "{{value}} veröffentlichte Anzeige",
-    "count_other": "{{value}} veröffentlichte Anzeigen",
     "empty": "Zurzeit keine veröffentlichte Anzeige.",
     "emptySelf": "Sie haben keine veröffentlichte Anzeige."
+  },
+  "links": {
+    "title": "Links",
+    "emptySelf": "Sie haben noch keinen Link hinzugefügt."
+  },
+  "about": {
+    "title": "Informationen"
+  },
+  "menu": {
+    "copyId": "ID kopieren",
+    "copyLink": "Profillink kopieren",
+    "idCopied": "ID kopiert.",
+    "linkCopied": "Link kopiert.",
+    "copyFailed": "Kopieren nicht möglich."
   }
 }

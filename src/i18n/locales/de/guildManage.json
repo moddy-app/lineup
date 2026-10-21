@@ -1,38 +1,48 @@
 {
   "title": "Serververwaltung",
   "pageTitle": "{{name}} verwalten",
-  "heading": "{{name}} verwalten",
+  "pageDescription": "Verwaltung des Lineup-Profils",
   "unknownName": "Server ohne Namen",
   "notFound": {
     "title": "Server nicht gefunden",
-    "body": "Dieser Server hat kein Lineup-Profil. Beanspruche ihn zuerst auf der Seite zum Beanspruchen.",
+    "body": "Dieser Server hat kein Lineup-Profil. Fügen Sie ihn zuerst auf der Seite Server hinzu.",
     "action": "Server ansehen"
   },
   "forbidden": {
     "title": "Sie verwalten diesen Server nicht",
-    "body": "Sie müssen den Server besitzen oder die Berechtigung Administrator oder Server verwalten haben. Haben Sie diese Rechte gerade erhalten, lesen Sie Ihre Server auf der Seite zum Beanspruchen neu ein.",
+    "body": "Sie müssen den Server besitzen oder die Berechtigung Administrator oder Server verwalten haben. Haben Sie diese Rechte gerade erhalten, aktualisieren Sie die Liste auf der Seite Server.",
     "action": "Profil ansehen"
   },
-  "status": {
-    "listed": "Im Verzeichnis",
-    "unlisted": "Nicht gelistet"
-  },
-  "viewProfile": "Profil ansehen",
+  "viewProfile": "Öffentliches Profil ansehen",
   "saved": "Profil gespeichert.",
-  "editor": {
+  "sections": {
+    "label": "Abschnitte der Seite",
+    "profile": "Öffentliches Profil",
+    "invite": "Einladung",
+    "visibility": "Sichtbarkeit",
+    "posts": "Anzeigen",
+    "discord": "Discord-Daten",
+    "danger": "Gefahrenzone"
+  },
+  "profile": {
     "title": "Öffentliches Profil",
+    "description": "Was Personen sehen, die den Server öffnen."
+  },
+  "bar": {
     "unsaved": "Nicht gespeicherte Änderungen",
     "save": "Speichern",
     "saving": "Speichern...",
-    "reset": "Änderungen verwerfen"
+    "reset": "Abbrechen"
   },
   "description": {
     "title": "Beschreibung",
     "label": "Serverbeschreibung",
-    "hint": "Leer lassen, um die Discord-Beschreibung zu zeigen.",
-    "discordTitle": "Discord-Beschreibung",
+    "hint": "Markdown wird unterstützt. Leer lassen, um die Discord-Beschreibung zu zeigen.",
+    "discordTitle": "Discord-Beschreibung:",
     "discordNone": "Dieser Server hat keine Beschreibung auf Discord.",
-    "useDiscord": "Discord-Beschreibung verwenden"
+    "useDiscord": "Discord-Beschreibung verwenden",
+    "preview": "Vorschau",
+    "hidePreview": "Vorschau ausblenden"
   },
   "links": {
     "title": "Links",
@@ -43,7 +53,7 @@
     "add": "Link hinzufügen"
   },
   "topics": {
-    "title": "Thema, Tags und Sprachen"
+    "title": "Thema und Tags"
   },
   "theme": {
     "label": "Thema",
@@ -58,9 +68,11 @@
   },
   "invite": {
     "title": "Einladung",
-    "current": "Aktuelle Einladung:",
-    "valid": "Sie funktioniert.",
-    "lost": "Sie existiert auf Discord nicht mehr: ersetze sie.",
+    "description": "Der Link hinter dem Beitreten-Button im Profil.",
+    "current": "Aktuelle Einladung",
+    "valid": "Gültig",
+    "lost": "Auf Discord nicht gefunden",
+    "lostHelp": "Sie existiert auf Discord nicht mehr: ersetzen Sie sie.",
     "none": "Keine Einladung gespeichert.",
     "label": "Neue Einladung",
     "placeholder": "https://discord.gg/ihr-code",
@@ -88,11 +100,6 @@
     "title": "Discord-Daten",
     "body": "Name, Symbol und Zahlen werden alle 6 Stunden neu gelesen. Sie können das Neulesen einmal pro Minute erzwingen.",
     "members": "Mitglieder",
-    "online": "Online",
-    "invite": "Einladung:",
-    "inviteValid": "gültig",
-    "inviteLost": "auf Discord nicht gefunden",
-    "noInvite": "keine",
     "done": "Discord-Daten aktualisiert.",
     "staleDone": "Discord hat nicht geantwortet: die alten Daten bleiben erhalten.",
     "refresh": "Jetzt aktualisieren",
@@ -100,8 +107,8 @@
     "waitIn": "Verfügbar in {{seconds}} s"
   },
   "danger": {
-    "title": "Profil löschen",
-    "body": "Das Profil verlässt das Verzeichnis und die Anzeigen des Servers werden geschlossen. Der Discord-Server bleibt unberührt.",
+    "title": "Gefahrenzone",
+    "body": "Wird das Profil gelöscht, verlässt es das Verzeichnis und die Anzeigen des Servers werden geschlossen. Der Discord-Server bleibt unberührt.",
     "action": "Profil löschen",
     "confirmTitle": "Profil von {{name}} löschen?",
     "confirmBody": "Was passiert:",
@@ -114,14 +121,15 @@
   "posts": {
     "title": "Anzeigen des Servers",
     "create": "Neue Anzeige",
-    "tabs": "Status der Anzeigen",
-    "tab": {
+    "filters": "Nach Status filtern",
+    "filter": {
       "all": "Alle",
       "published": "Veröffentlicht",
       "draft": "Entwürfe",
       "closed": "Geschlossen",
       "hidden": "Ausgeblendet"
     },
+    "menu": "Aktionen für die Anzeige {{title}}",
     "emptyTitle": "Keine Anzeigen",
     "emptyAll": "Dieser Server hat noch keine Anzeigen. Alle, die den Server verwalten, können sie bearbeiten.",
     "emptyTab": "Keine Anzeigen mit diesem Status.",

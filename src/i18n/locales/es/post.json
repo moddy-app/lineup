@@ -5,45 +5,30 @@
     "body": "Este anuncio no existe, se retiró o no es visible con su cuenta."
   },
   "banner": {
-    "draft": {
-      "title": "Borrador",
-      "body": "Solo las personas que pueden editarlo ven este anuncio. Publíquelo para que aparezca en la lista."
-    },
-    "closed": {
-      "title": "Anuncio cerrado",
-      "body": "Ya no aparece en la lista. Reábrelo para publicarlo de nuevo."
-    },
-    "hidden": {
-      "title": "Anuncio oculto",
-      "body": "El equipo de Moddy ocultó este anuncio. Ya no se puede editar.",
-      "reason": "Motivo: {{reason}}"
-    },
-    "expired": {
-      "title": "Este anuncio ha caducado",
-      "body": "Ya no está en la lista y no acepta candidaturas.",
-      "editor": "Ya no está en la lista. Elija una nueva fecha de caducidad para publicarlo de nuevo.",
-      "edit": "Cambiar la fecha de caducidad"
-    }
+    "draft": "Borrador: solo las personas que pueden editarlo ven este anuncio.",
+    "closed": "Anuncio cerrado: ya no aparece en las listas.",
+    "hidden": "Anuncio oculto por el equipo de Moddy: ya no se puede editar.",
+    "hiddenReason": "Motivo: {{reason}}",
+    "expired": "Este anuncio ha caducado y ya no acepta candidaturas.",
+    "expiredEditor": "Este anuncio ha caducado. Elija una nueva fecha para publicarlo de nuevo.",
+    "expiredEdit": "Editar la fecha de caducidad"
   },
   "dates": {
     "published": "Publicado",
     "updated": "Modificado"
   },
   "sections": {
-    "positions": "Puestos buscados",
     "requirements": "Requisitos",
-    "details": "Detalles"
+    "summary": "Resumen"
   },
   "facts": {
+    "positions": "Puestos",
+    "commitment": "Compromiso",
     "languages": "Idiomas",
     "timezone": "Zona horaria",
     "theme": "Temática",
-    "tags": "Etiquetas"
-  },
-  "apply": {
-    "title": "Candidatura",
-    "external": "La candidatura se hace en el sitio del reclutador.",
-    "dm": "La candidatura se hace por mensaje directo de Discord con quien publicó el anuncio."
+    "tags": "Etiquetas",
+    "expiry": "Caducidad"
   },
   "author": {
     "guild": "Servidor",
@@ -53,13 +38,6 @@
   },
   "featured": {
     "title": "Experiencia destacada"
-  },
-  "report": {
-    "label": "Denunciar este anuncio"
-  },
-  "manage": {
-    "title": "Gestionar el anuncio",
-    "body": "Puede editar este anuncio."
   },
   "actions": {
     "edit": "Editar",
@@ -80,5 +58,13 @@
   "errorLinks": {
     "myPosts": "Ver mis anuncios",
     "editExpiry": "Cambiar la fecha de caducidad"
+  },
+  "stats": {
+    "members_one": "miembro",
+    "members_other": "miembros"
+  },
+  "menu": {
+    "label": "Más acciones",
+    "report": "Denunciar este anuncio"
   }
 }

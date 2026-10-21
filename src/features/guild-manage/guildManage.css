@@ -1,51 +1,73 @@
 /* Manage a server (/guilds/:guildId/manage). Tokens only. */
 
-.card.manage-head {
-  flex-direction: row;
-  text-align: start;
+/* ---- Page sections -------------------------------------------------------- */
+
+.manage-sections ul {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: var(--gap-l) var(--space);
-}
-
-.manage-head-text {
-  flex: 1 1 220px;
-  min-width: 0;
-}
-
-.manage-head-text h1 {
+  gap: var(--gap-s);
   margin: 0;
-  overflow-wrap: anywhere;
-  font-size: var(--text-title);
+  padding: 0;
+  list-style: none;
 }
 
-.manage-head-text p {
-  margin: var(--gap-s) 0 0;
+.manage-sections a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding-inline: 12px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--radius-full);
+  font-size: var(--text-label);
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface-variant);
+  text-decoration: none;
 }
 
+@media (hover: hover) {
+  .manage-sections a:hover {
+    background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
+    color: var(--md-sys-color-on-surface);
+    text-decoration: none;
+  }
+}
+
+/* The sticky app bar must not cover the panel a link jumps to. */
+.card.manage-panel {
+  scroll-margin-top: calc(var(--app-bar-height) + var(--gap-l));
+}
+
+/* The form only groups the three profile panels and the save bar: they stay in the page's column. */
 .manage-form {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space);
+  display: contents;
 }
 
 .manage-group {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-l);
+  gap: var(--gap-m);
   min-width: 0;
   margin: 0;
   padding: 0;
   border: 0;
 }
 
+.manage-group + .manage-group {
+  padding-top: var(--gap-l);
+}
+
 .manage-group > legend {
+  float: left;
+  width: 100%;
   margin-bottom: var(--gap-m);
   padding: 0;
-  font-size: var(--text-subtitle);
+  font-size: var(--text-label);
   font-weight: 600;
   color: var(--md-sys-color-on-surface);
+}
+
+.manage-group > legend + * {
+  clear: both;
 }
 
 .manage-help {
@@ -55,37 +77,77 @@
   color: var(--md-sys-color-on-surface-variant);
 }
 
-.manage-label {
-  margin: 0 0 var(--gap-s);
-  font-size: var(--text-body-small);
-  color: var(--md-sys-color-on-surface-variant);
-}
-
 .manage-field-error {
   margin: var(--gap-s) 0 0;
   font-size: var(--text-small);
   color: var(--md-sys-color-error);
 }
 
-.manage-dirty {
-  font-size: var(--text-small);
-  color: var(--md-sys-color-primary);
+/* ---- Description ---------------------------------------------------------- */
+
+.manage-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-s);
+  margin-inline-start: calc(-1 * var(--gap-m));
 }
 
 .manage-discord-text {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--gap-s);
-}
-
-.manage-discord-text p {
-  margin: 0;
-  max-width: none;
-  font-size: var(--text-small);
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
   white-space: pre-line;
   overflow-wrap: anywhere;
 }
+
+.manage-preview {
+  padding: var(--gap-m) var(--gap-l);
+  border-radius: var(--radius-l);
+  background-color: var(--md-sys-color-surface-container);
+  overflow-wrap: anywhere;
+}
+
+/* ---- Theme, tags ---------------------------------------------------------- */
+
+.manage-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap-l);
+  align-items: start;
+}
+
+@media (max-width: 700px) {
+  .manage-pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---- Languages: compact checkboxes with a flag ---------------------------- */
+
+.manage-checks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+  gap: 0 var(--gap-m);
+}
+
+.manage-lang {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-s);
+  min-width: 0;
+  font-size: var(--text-body-small);
+}
+
+.manage-lang img {
+  flex-shrink: 0;
+  height: 16px;
+  width: auto;
+  border-radius: 2px;
+}
+
+/* ---- Links ---------------------------------------------------------------- */
 
 .manage-link {
   display: grid;
@@ -111,10 +173,15 @@
   }
 }
 
-.manage-checks {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: var(--gap-s) var(--gap-l);
+/* ---- Invitation ----------------------------------------------------------- */
+
+.manage-current {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-s) var(--gap-m);
+  margin: 0;
+  max-width: none;
 }
 
 .manage-details {
@@ -133,14 +200,52 @@
   margin-bottom: var(--gap-m);
 }
 
+/* ---- Save bar: one for the three profile panels --------------------------- */
+
+.manage-savebar {
+  position: sticky;
+  bottom: var(--gap-l);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+  max-height: 60vh;
+  padding: var(--gap-m) var(--gap-l);
+  overflow-y: auto;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--radius-l);
+  background-color: var(--md-sys-color-surface-container-lowest);
+}
+
+.manage-savebar-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-m);
+}
+
+.manage-savebar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-m);
+  margin-inline-start: auto;
+}
+
+.manage-dirty {
+  font-size: var(--text-small);
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
 .manage-error {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--gap-s);
-  padding: var(--gap-l);
+  padding: var(--gap-m) var(--gap-l);
   border-radius: var(--radius-l);
-  background-color: var(--md-sys-color-surface-container);
+  background-color: var(--md-sys-color-surface-container-high);
   color: var(--md-sys-color-on-surface);
 }
 
@@ -157,19 +262,150 @@
   color: var(--md-sys-color-error);
 }
 
-.manage-stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap-l) var(--space);
-}
+/* ---- Posts ---------------------------------------------------------------- */
 
-.manage-invite {
+.manage-posts-head {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-m);
+}
+
+.manage-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-s);
+}
+
+.manage-filter {
+  min-height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--radius-full);
+  background: none;
+  font: inherit;
+  font-size: var(--text-label);
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface-variant);
+  cursor: pointer;
+}
+
+.manage-filter[aria-pressed='true'] {
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+@media (hover: hover) {
+  .manage-filter:not([aria-pressed='true']):hover {
+    background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
+  }
+}
+
+.manage-filter:focus-visible,
+.manage-sections a:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+.manage-quota {
+  max-width: 20rem;
+}
+
+.manage-post-list {
+  display: flex;
+  flex-direction: column;
   gap: var(--gap-s);
   margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.manage-post {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 7.5rem 40px;
+  align-items: center;
+  gap: 0 var(--gap-m);
+}
+
+.manage-post-title {
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.manage-post-date {
   font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+  white-space: nowrap;
+}
+
+.manage-post-locked {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.manage-menu-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+@media (max-width: 600px) {
+  .manage-post {
+    grid-template-columns: minmax(0, 1fr) 40px;
+    grid-template-areas:
+      'title menu'
+      'status menu'
+      'date menu';
+    row-gap: 2px;
+  }
+
+  .manage-post-title {
+    grid-area: title;
+  }
+
+  .manage-post-status {
+    grid-area: status;
+    justify-self: start;
+  }
+
+  .manage-post-date {
+    grid-area: date;
+  }
+
+  .manage-menu-wrap,
+  .manage-post-locked {
+    grid-area: menu;
+  }
+}
+
+.manage-more {
+  display: flex;
+  justify-content: center;
+}
+
+/* ---- Danger zone ---------------------------------------------------------- */
+
+.card.manage-danger h2 {
+  color: var(--md-sys-color-error);
+}
+
+.manage-danger-button {
+  --md-outlined-button-label-text-color: var(--md-sys-color-error);
+  --md-outlined-button-hover-label-text-color: var(--md-sys-color-error);
+  --md-outlined-button-focus-label-text-color: var(--md-sys-color-error);
+  --md-outlined-button-pressed-label-text-color: var(--md-sys-color-error);
+  --md-outlined-button-icon-color: var(--md-sys-color-error);
+  --md-outlined-button-hover-icon-color: var(--md-sys-color-error);
+  --md-outlined-button-focus-icon-color: var(--md-sys-color-error);
+  --md-outlined-button-pressed-icon-color: var(--md-sys-color-error);
+  --md-outlined-button-outline-color: var(--md-sys-color-error);
 }
 
 .manage-confirm p {
@@ -179,38 +415,4 @@
 .manage-confirm ul {
   margin: 0 0 var(--gap-m);
   padding-inline-start: 1.25em;
-}
-
-.manage-posts {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-l);
-  margin-top: var(--gap-m);
-}
-
-.manage-post-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-m);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.manage-post {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-s);
-}
-
-.manage-post-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap-s);
-  padding-inline: var(--gap-s);
-}
-
-.manage-more {
-  display: flex;
-  justify-content: center;
 }

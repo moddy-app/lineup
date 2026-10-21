@@ -1,26 +1,26 @@
 {
-  "title": "Mis experiencias",
+  "title": "Experiencia",
   "list": {
     "intro": "Arrastre una experiencia por su asa, o use las flechas, para cambiar el orden que se muestra en su perfil.",
     "add": "Añadir una experiencia",
     "edit": "Editar",
-    "delete": "Eliminar",
     "drag": "Mover {{title}}",
     "moveUp": "Subir {{title}}",
     "moveDown": "Bajar {{title}}",
     "moved": "{{title}}: posición {{position}} de {{total}}",
     "reordered": "Orden guardado",
     "orderOutdated": "La lista había cambiado en otro sitio. Se ha recargado, repita el movimiento.",
-    "title": "{{position}}, {{name}}"
+    "title": "{{position}}, {{name}}",
+    "more": "Más acciones",
+    "up": "Subir",
+    "down": "Bajar"
   },
   "empty": {
     "title": "Ninguna experiencia",
     "body": "Añada los servidores o servicios en los que ha trabajado. Una experiencia verificada se puede destacar en un anuncio."
   },
   "aside": {
-    "countTitle": "Experiencias",
     "count": "{{used}} / {{max}}",
-    "profile": "Editar mi perfil",
     "verifyTitle": "Verificación",
     "auto": "Automática: para un servidor en el que trabaja ahora, Lineup lee sus permisos en ese servidor a través de Discord.",
     "manual": "Revisión manual: para un puesto pasado o un servicio, el equipo de Moddy examina su solicitud.",
@@ -110,12 +110,7 @@
     "pending": "Solicitud de revisión enviada, a la espera del equipo de Moddy.",
     "rejected": "Rechazada.",
     "rejectedNoReason": "No se indicó ningún motivo.",
-    "rejectedHelp": "Corrija la experiencia si hace falta y vuelva a pedir una verificación.",
-    "unverified": {
-      "service": "Sin verificar. Un servicio se verifica con una revisión manual.",
-      "current": "Sin verificar. Solo una experiencia verificada se puede destacar en un anuncio.",
-      "ended": "Sin verificar. Un puesto terminado se verifica con una revisión manual."
-    }
+    "rejectedHelp": "Corrija la experiencia si hace falta y vuelva a pedir una verificación."
   },
   "evidence": {
     "summary": "Ver qué se comprobó",

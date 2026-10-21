@@ -10,10 +10,13 @@ import type {Catalog, FeedFilters, PostKind} from '@/api/types';
 /** The theme that the "include adult content" switch governs, never a filter of its own. */
 const NSFW_THEME = 'nsfw';
 
-/** The filters the page lets people set (no `guild_id` / `author_id`). */
+/**
+ * The filters the page lets people set (no `guild_id` / `author_id`). The kind
+ * is not one of them: the route fixes it (`/` is `guild`, `/people` is `user`).
+ */
 export type UiFilters = Pick<
   FeedFilters,
-  'kind' | 'positions' | 'languages' | 'tags' | 'theme' | 'compensation' | 'q' | 'include_nsfw'
+  'positions' | 'languages' | 'tags' | 'theme' | 'compensation' | 'q' | 'include_nsfw'
 >;
 
 export const SEARCH_DEBOUNCE_MS = 350;
@@ -48,15 +51,17 @@ export function parseTags(value: string, catalog: Catalog): string[] {
   } catch {
     return [];
   }
-  return unique(value.split(',').map(normalizeTag).filter((tag) => pattern.test(tag))).slice(0, catalog.limits.max_tags);
+  return unique(
+    value
+      .split(',')
+      .map(normalizeTag)
+      .filter((tag) => pattern.test(tag)),
+  ).slice(0, catalog.limits.max_tags);
 }
 
 /** What the URL asks for, reduced to what the catalog knows. */
 export function parseFeedParams(params: URLSearchParams, catalog: Catalog): UiFilters {
   const filters: UiFilters = {};
-
-  const kind = params.get('kind');
-  if (kind === 'guild' || kind === 'user') filters.kind = kind as PostKind;
 
   const known = (list: readonly {id: string}[]) => new Set(list.map((entry) => entry.id));
   const positions = known(catalog.positions);
@@ -94,7 +99,6 @@ export function parseFeedParams(params: URLSearchParams, catalog: Catalog): UiFi
 /** The search params for a set of filters (empty ones left out). Lists are comma-separated. */
 export function serializeFeedFilters(filters: UiFilters): URLSearchParams {
   const params = new URLSearchParams();
-  if (filters.kind) params.set('kind', filters.kind);
   if (filters.positions?.length) params.set('positions', filters.positions.join(','));
   if (filters.languages?.length) params.set('languages', filters.languages.join(','));
   if (filters.theme) params.set('theme', filters.theme);
@@ -108,7 +112,6 @@ export function serializeFeedFilters(filters: UiFilters): URLSearchParams {
 /** How many filters are set (a list counts once). */
 export function activeFilterCount(filters: UiFilters): number {
   return [
-    filters.kind,
     filters.positions?.length,
     filters.languages?.length,
     filters.theme,
@@ -119,8 +122,26 @@ export function activeFilterCount(filters: UiFilters): number {
   ].filter(Boolean).length;
 }
 
-/** The filters sent to the API: the adult-content switch only counts once the age is confirmed. */
-export function effectiveFilters(filters: UiFilters, nsfwConfirmed: boolean): FeedFilters {
+/** The filters sent to the API: the route's kind, and adult content only once the age is confirmed. */
+export function effectiveFilters(filters: UiFilters, kind: PostKind, nsfwConfirmed: boolean): FeedFilters {
   const {include_nsfw: includeNsfw, ...rest} = filters;
-  return includeNsfw && nsfwConfirmed ? {...rest, include_nsfw: true} : rest;
+  return includeNsfw && nsfwConfirmed ? {...rest, kind, include_nsfw: true} : {...rest, kind};
+}
+
+/**
+ * An old address (`/?type=user`, `/?kind=user`) asks for the other page: the
+ * search to carry there, without the kind, or null when the address is fine.
+ */
+export function legacyKindRedirect(
+  params: URLSearchParams,
+  current: PostKind,
+): {kind: PostKind; search: URLSearchParams} | null {
+  const asked = params.get('type') ?? params.get('kind');
+  const had = params.has('type') || params.has('kind');
+  if (!had) return null;
+  const rest = new URLSearchParams(params);
+  rest.delete('type');
+  rest.delete('kind');
+  const kind: PostKind = asked === 'user' || asked === 'guild' ? asked : current;
+  return {kind, search: rest};
 }

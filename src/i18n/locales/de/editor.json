@@ -1,8 +1,6 @@
 {
   "titleNew": "Neue Anzeige",
   "titleEdit": "Anzeige bearbeiten",
-  "introNew": "Acht Schritte, die laufend auf diesem Gerät gespeichert werden. Am Ende veröffentlichen Sie oder speichern einen Entwurf.",
-  "introEdit": "Ändern Sie die gewünschten Schritte und speichern Sie im letzten. Nur geänderte Felder werden gesendet.",
   "count": "{{used}} / {{max}}",
   "restored": {
     "text": "Lokaler Entwurf wiederhergestellt, gespeichert",
@@ -10,29 +8,29 @@
   },
   "stepper": {
     "label": "Schritte der Anzeige",
-    "count": "Schritt {{current}} von {{total}}",
     "state": {
       "current": "aktueller Schritt",
       "done": "erledigt",
       "error": "zu korrigieren",
       "todo": "noch nicht angesehen"
-    }
+    },
+    "compact": "Schritt {{current}} von {{total}} · {{name}}"
   },
   "steps": {
     "type": {
       "short": "Art",
       "title": "Art der Anzeige",
-      "intro": "Eine Server-Anzeige sucht Verstärkung für einen Server, den Sie verwalten. Eine persönliche Anzeige stellt jemanden vor, der ein Team sucht."
+      "intro": "Wählen Sie, wer veröffentlicht. Das lässt sich später nicht ändern."
     },
     "content": {
       "short": "Inhalt",
       "title": "Titel und Beschreibung",
-      "intro": "Sagen Sie, wer Sie sind oder was der Server bietet, möglichst konkret."
+      "intro": "Sagen Sie, wer Sie sind oder was der Server bietet."
     },
     "positions": {
       "short": "Rollen",
       "title": "Rollen",
-      "intro": "Die gesuchten oder angestrebten Rollen. Wählen Sie „Andere“, um eigene Bezeichnungen zu schreiben."
+      "intro": "Wählen Sie die Rollen oder „Andere“ für eigene Bezeichnungen."
     },
     "requirements": {
       "short": "Voraussetzungen",
@@ -42,22 +40,22 @@
     "application": {
       "short": "Bewerbung",
       "title": "Bewerbung",
-      "intro": "Wie Interessierte Kontakt aufnehmen. Optional."
+      "intro": "Wie man Sie kontaktiert. Optional."
     },
     "commitment": {
       "short": "Aufwand",
       "title": "Aufwand, Sprachen und Zeitzone",
-      "intro": "Alle Felder sind optional."
+      "intro": "Alles ist optional."
     },
     "extras": {
       "short": "Optionen",
       "title": "Thema, Tags und Ablauf",
-      "intro": "Hilft beim Einordnen und Finden der Anzeige. Alles ist optional."
+      "intro": "Hilft beim Einordnen und Finden der Anzeige. Optional."
     },
     "review": {
       "short": "Prüfen",
       "title": "Prüfen und senden",
-      "intro": "Prüfen Sie jeden Schritt. Eine veröffentlichte Anzeige erscheint sofort im Feed."
+      "intro": "Prüfen Sie vor dem Senden. Eine veröffentlichte Anzeige erscheint sofort im Feed."
     }
   },
   "actions": {
@@ -92,8 +90,8 @@
         "hint": "Für einen Server, den Sie verwalten und der ein Lineup-Profil hat."
       },
       "user": {
-        "title": "Ich suche ein Team",
-        "hint": "Eine Anzeige in Ihrem Namen, mit Ihren verifizierten Erfahrungen."
+        "title": "Meine Dienste anbieten",
+        "hint": "Eine Anzeige in Ihrem Namen, um ein Team zu finden."
       }
     },
     "guildLegend": "Server",
@@ -111,11 +109,10 @@
     "title": "Titel",
     "titleHint": "{{min}} bis {{max}} Zeichen",
     "description": "Beschreibung",
-    "descriptionHint": "{{min}} bis {{max}} Zeichen"
+    "descriptionHint": "{{min}} bis {{max}} Zeichen. Markdown wird unterstützt."
   },
   "positions": {
     "legend": "Rollen",
-    "hint": "Bis zu {{max}} Rollen.",
     "otherLegend": "Bezeichnungen für „Andere“",
     "otherHint": "Eine Bezeichnung pro Rolle, höchstens {{max}} Zeichen.",
     "otherLabel": "Bezeichnung {{n}}",
@@ -123,7 +120,6 @@
     "addOther": "Bezeichnung hinzufügen"
   },
   "requirements": {
-    "hint": "Bis zu {{max}} Voraussetzungen.",
     "none": "Noch keine Voraussetzungen.",
     "add": "Voraussetzung hinzufügen",
     "item": "Voraussetzung {{n}}",
@@ -139,7 +135,8 @@
     "languages": "Geforderte Sprachen",
     "noValue": "Für diese Voraussetzung ist kein Wert nötig.",
     "verified": "Prüfung durch Lineup geplant",
-    "verifiedHint": "Lineup prüft noch keine Bewerbung: Die Anzeige zeigt nur, dass eine Prüfung geplant ist."
+    "verifiedHint": "Lineup prüft noch nichts: Die Anzeige zeigt nur, dass eine Prüfung geplant ist.",
+    "counter": "{{used}} von {{max}} Bedingungen"
   },
   "application": {
     "type": "Bewerbungsweg",
@@ -158,7 +155,6 @@
     "compensation": "Vergütung",
     "compensationNone": "Nicht angegeben",
     "languages": "Sprachen",
-    "languagesHint": "Bis zu {{max}} Sprachen.",
     "timezone": "Zeitzone",
     "timezoneHint": "IANA-Name (Europe/Paris) oder Versatz UTC+02:00",
     "useBrowserZone": "{{zone}} verwenden"
@@ -178,7 +174,6 @@
     "expiryClear": "Läuft nie ab",
     "featured": "Hervorgehobene Erfahrung",
     "featuredNone": "Keine",
-    "featuredHint": "Nur Ihre verifizierten Erfahrungen stehen zur Wahl.",
     "featuredEmpty": "Sie haben keine verifizierte Erfahrung.",
     "featuredLink": "Meine Erfahrungen verwalten",
     "featuredLoading": "Ihre Erfahrungen werden geladen.",
@@ -218,7 +213,6 @@
   },
   "preview": {
     "title": "Vorschau",
-    "hint": "Die Karte, wie sie im Feed erscheint.",
     "titlePlaceholder": "Der Titel Ihrer Anzeige",
     "descriptionPlaceholder": "Die Beschreibung erscheint hier."
   },

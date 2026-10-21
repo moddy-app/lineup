@@ -1,27 +1,72 @@
-/* My posts: tabs, rows with their actions, the quota card. Kit tokens only. */
-
-.mp-intro {
-  max-width: none;
-}
+/* My posts: quota line, status chips, one compact line per post. Kit tokens only. */
 
 .mp-quota {
-  gap: var(--gap-m);
+  max-width: 24rem;
 }
 
-.mp-quota h2 {
-  margin: 0;
-  font-size: var(--text-subtitle);
-}
-
-.mp-quota p {
+.mp-quota p,
+.card .mp-quota p {
   max-width: none;
+  margin: 0;
   font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* -- Status chips ----------------------------------------------------------- */
+
+.mp-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-s);
+}
+
+.mp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--md-sys-color-on-surface-variant);
+  font: inherit;
+  font-size: var(--text-label);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.mp-chip .material-symbols-outlined {
+  font-size: 14px;
+}
+
+.mp-chip[aria-pressed='true'] {
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+@media (hover: hover) {
+  .mp-chip:not([aria-pressed='true']):hover {
+    background-color: var(--md-sys-color-surface-container-high);
+    color: var(--md-sys-color-on-surface);
+  }
+}
+
+.mp-chip:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+/* -- The list ----------------------------------------------------------------- */
+
+.mp-card {
+  padding-block: var(--gap-s);
 }
 
 .mp-list {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-m);
+  gap: var(--gap-s);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -32,13 +77,72 @@
   flex-direction: column;
   gap: var(--gap-s);
   min-width: 0;
-  padding-bottom: var(--gap-m);
-  border-bottom: 1px solid var(--md-sys-color-surface-container-high);
 }
 
-.mp-item:last-child {
-  padding-bottom: 0;
-  border-bottom: 0;
+.mp-line {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-m);
+  min-width: 0;
+}
+
+.mp-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.mp-title {
+  margin: 0;
+  max-width: none;
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mp-title a {
+  color: var(--md-sys-color-on-surface);
+  text-decoration: none;
+}
+
+@media (hover: hover) {
+  .mp-title a:hover {
+    text-decoration: underline;
+  }
+}
+
+.mp-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px var(--gap-m);
+  max-width: none;
+  margin: 2px 0 0;
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.mp-owner {
+  max-width: 100%;
+  color: var(--md-sys-color-on-surface);
+  font-weight: 500;
+}
+
+.mp-actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 2px;
+}
+
+.mp-menu {
+  position: relative;
+  display: inline-flex;
+}
+
+md-menu-item.mp-menu-danger {
+  --md-menu-item-label-text-color: var(--md-sys-color-error);
+  --md-menu-item-leading-icon-color: var(--md-sys-color-error);
 }
 
 .mp-note,
@@ -48,39 +152,13 @@
   gap: var(--gap-s);
   max-width: none;
   margin: 0;
-  padding-inline: var(--gap-s);
   font-size: var(--text-small);
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-.mp-note.is-error,
-.card .mp-note.is-error {
   color: var(--md-sys-color-error);
 }
 
 .mp-note .material-symbols-outlined {
   flex-shrink: 0;
   font-size: 18px;
-}
-
-.mp-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap-s);
-  padding-inline: var(--gap-s);
-}
-
-md-text-button.mp-delete {
-  --md-text-button-label-text-color: var(--md-sys-color-error);
-  --md-text-button-icon-color: var(--md-sys-color-error);
-  --md-text-button-hover-label-text-color: var(--md-sys-color-error);
-  --md-text-button-focus-label-text-color: var(--md-sys-color-error);
-  --md-text-button-pressed-label-text-color: var(--md-sys-color-error);
-  --md-text-button-hover-icon-color: var(--md-sys-color-error);
-  --md-text-button-focus-icon-color: var(--md-sys-color-error);
-  --md-text-button-pressed-icon-color: var(--md-sys-color-error);
-  --md-text-button-hover-state-layer-color: var(--md-sys-color-error);
-  --md-text-button-pressed-state-layer-color: var(--md-sys-color-error);
 }
 
 .mp-error {
@@ -103,12 +181,23 @@ md-text-button.mp-delete {
 .mp-more {
   display: flex;
   justify-content: center;
-  padding-top: var(--gap-m);
 }
 
-#mp-panel {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-m);
-  min-width: 0;
+@media (max-width: 600px) {
+  .mp-line {
+    align-items: flex-start;
+  }
+}
+
+/* Inside a card, paragraphs get the card's text size: keep the compact line. */
+.mp-card .mp-title {
+  margin: 0;
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-on-surface);
+}
+
+.mp-card .mp-meta {
+  margin: 2px 0 0;
+  font-size: var(--text-small);
+  line-height: 1.4;
 }

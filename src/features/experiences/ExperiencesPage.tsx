@@ -24,7 +24,6 @@ import {useDeleteExperience, useReorderExperiences} from '@/api/mutations';
 import {useCatalog, useMyExperiences} from '@/api/queries';
 import {queryKeys} from '@/api/queryKeys';
 import type {PrivateExperience} from '@/api/types';
-import {paths} from '@/app/paths';
 import {usePageTitle} from '@/app/usePageTitle';
 import {useSession} from '@/auth/session';
 import {useAuthAction} from '@/auth/useAuthAction';
@@ -32,7 +31,7 @@ import {EmptyState, ErrorState} from '@/components';
 import {useT} from '@/i18n/useT';
 import {formatNumber} from '@/lib/format';
 import {getItem, removeItem} from '@/lib/storage';
-import {AppLayout, Card, ConfirmDialog, LinkButton, PageLoading, Section, Shape, useSnackbar} from '@/ui';
+import {Card, ConfirmDialog, PageLoading, SettingsLayout, Shape, useSnackbar} from '@/ui';
 
 import {ExperienceDialog, EXPERIENCE_DRAFT_KEY} from './ExperienceDialog';
 import {ExperienceItem} from './ExperienceItem';
@@ -156,9 +155,9 @@ export function Component() {
   if (query.isPending) return <PageLoading />;
   if (query.isError) {
     return (
-      <AppLayout>
+      <SettingsLayout title={t('title')}>
         <ErrorState error={query.error} onRetry={() => void query.refetch()} retrying={query.isFetching} />
-      </AppLayout>
+      </SettingsLayout>
     );
   }
 
@@ -174,101 +173,89 @@ export function Component() {
   );
 
   return (
-    <AppLayout
-      stickyAside
-      aside={
-        <>
-          <Card className="exp-aside">
-            <h2>{t('aside.countTitle')}</h2>
-            <p className="exp-count numeric">
-              {t('aside.count', {used: formatNumber(items.length), max: formatNumber(max)})}
-            </p>
-            <md-linear-progress value={Math.min(items.length, max)} max={max} aria-hidden="true" />
-            {full && <p className="exp-error">{t('dialog.limit', {count: items.length, max})}</p>}
-            <LinkButton to={paths.me()} variant="outlined" icon="person">
-              {t('aside.profile')}
-            </LinkButton>
-          </Card>
-          <Card className="exp-aside">
-            <h2>{t('aside.verifyTitle')}</h2>
-            <ul className="exp-rules">
-              <li>
-                <Shape shape="hexagon" tone="tertiary" icon="verified_user" small />
-                <span>{t('aside.auto')}</span>
-              </li>
-              <li>
-                <Shape shape="diamond" tone="secondary" icon="rate_review" small />
-                <span>{t('aside.manual')}</span>
-              </li>
-              <li>
-                <Shape shape="pentagon" icon="edit_note" small />
-                <span>{t('aside.reset')}</span>
-              </li>
-            </ul>
-          </Card>
-        </>
-      }
-    >
-      <Section title={t('title')} level={1} actions={items.length > 0 ? add : undefined}>
-        {items.length === 0 ? (
-          <EmptyState compact icon="work_history" title={t('empty.title')} action={add}>
-            {t('empty.body')}
-          </EmptyState>
-        ) : (
-          <>
-            <p className="exp-intro">{t('list.intro')}</p>
-            <DndContext
-              sensors={sensors}
-              collisionDetection={closestCenter}
-              onDragEnd={onDragEnd}
-              accessibility={{
-                screenReaderInstructions: {draggable: t('dnd.instructions')},
-                announcements: {
-                  onDragStart: ({active}) => t('dnd.start', {title: nameOf(active.id)}),
-                  onDragOver: ({active, over}) =>
-                    over
-                      ? t('dnd.over', {
-                          title: nameOf(active.id),
-                          position: items.findIndex((item) => item.id === over.id) + 1,
-                          total: items.length,
-                        })
-                      : undefined,
-                  onDragEnd: ({active, over}) =>
-                    over
-                      ? t('dnd.end', {
-                          title: nameOf(active.id),
-                          position: items.findIndex((item) => item.id === over.id) + 1,
-                          total: items.length,
-                        })
-                      : t('dnd.cancel', {title: nameOf(active.id)}),
-                  onDragCancel: ({active}) => t('dnd.cancel', {title: nameOf(active.id)}),
-                },
-              }}
-            >
-              <SortableContext items={items.map((item) => item.id)} strategy={verticalListSortingStrategy}>
-                <ul className="exp-list" aria-label={t('title')}>
-                  {items.map((experience, index) => (
-                    <ExperienceItem
-                      key={experience.id}
-                      experience={experience}
-                      index={index}
-                      total={items.length}
-                      title={titleOf(experience)}
-                      disabled={!canWrite || reorder.isPending}
-                      onMove={moveItem}
-                      onEdit={(item) => setDialog({id: item.id})}
-                      onDelete={(item) => {
-                        setDeleteError(null);
-                        setToDelete(item);
-                      }}
-                    />
-                  ))}
-                </ul>
-              </SortableContext>
-            </DndContext>
-          </>
-        )}
-      </Section>
+    <SettingsLayout title={t('title')} description={t('list.intro')} actions={add}>
+      <div className="exp-summary">
+        <p className="exp-count numeric">
+          {t('aside.count', {used: formatNumber(items.length), max: formatNumber(max)})}
+        </p>
+        <md-linear-progress value={Math.min(items.length, max)} max={max} aria-hidden="true" />
+        {full && <p className="exp-error">{t('dialog.limit', {count: items.length, max})}</p>}
+      </div>
+      {items.length === 0 ? (
+        <EmptyState compact icon="work_history" title={t('empty.title')}>
+          {t('empty.body')}
+        </EmptyState>
+      ) : (
+        <Card className="exp-card">
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={onDragEnd}
+            accessibility={{
+              screenReaderInstructions: {draggable: t('dnd.instructions')},
+              announcements: {
+                onDragStart: ({active}) => t('dnd.start', {title: nameOf(active.id)}),
+                onDragOver: ({active, over}) =>
+                  over
+                    ? t('dnd.over', {
+                        title: nameOf(active.id),
+                        position: items.findIndex((item) => item.id === over.id) + 1,
+                        total: items.length,
+                      })
+                    : undefined,
+                onDragEnd: ({active, over}) =>
+                  over
+                    ? t('dnd.end', {
+                        title: nameOf(active.id),
+                        position: items.findIndex((item) => item.id === over.id) + 1,
+                        total: items.length,
+                      })
+                    : t('dnd.cancel', {title: nameOf(active.id)}),
+                onDragCancel: ({active}) => t('dnd.cancel', {title: nameOf(active.id)}),
+              },
+            }}
+          >
+            <SortableContext items={items.map((item) => item.id)} strategy={verticalListSortingStrategy}>
+              <ul className="exp-list" aria-label={t('title')}>
+                {items.map((experience, index) => (
+                  <ExperienceItem
+                    key={experience.id}
+                    experience={experience}
+                    index={index}
+                    total={items.length}
+                    title={titleOf(experience)}
+                    disabled={!canWrite || reorder.isPending}
+                    onMove={moveItem}
+                    onEdit={(item) => setDialog({id: item.id})}
+                    onDelete={(item) => {
+                      setDeleteError(null);
+                      setToDelete(item);
+                    }}
+                  />
+                ))}
+              </ul>
+            </SortableContext>
+          </DndContext>
+        </Card>
+      )}
+
+      <details className="exp-rules">
+        <summary>{t('aside.verifyTitle')}</summary>
+        <ul>
+          <li>
+            <Shape shape="hexagon" tone="tertiary" icon="verified_user" small />
+            <span>{t('aside.auto')}</span>
+          </li>
+          <li>
+            <Shape shape="diamond" tone="secondary" icon="rate_review" small />
+            <span>{t('aside.manual')}</span>
+          </li>
+          <li>
+            <Shape shape="pentagon" icon="edit_note" small />
+            <span>{t('aside.reset')}</span>
+          </li>
+        </ul>
+      </details>
 
       {dialog && (dialog.id === null || editing) && (
         <ExperienceDialog
@@ -301,6 +288,6 @@ export function Component() {
           </>
         }
       />
-    </AppLayout>
+    </SettingsLayout>
   );
 }

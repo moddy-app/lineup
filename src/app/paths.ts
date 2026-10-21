@@ -7,12 +7,14 @@
 
 export const routePatterns = {
   feed: '/',
+  people: '/people',
   postNew: '/posts/new',
   post: '/posts/:postId',
   postEdit: '/posts/:postId/edit',
   myPosts: '/me/posts',
   guilds: '/guilds',
   guildClaim: '/guilds/claim',
+  myGuilds: '/me/guilds',
   guild: '/guilds/:guildId',
   guildManage: '/guilds/:guildId/manage',
   user: '/users/:userId',
@@ -30,12 +32,15 @@ const id = encodeURIComponent;
 export const paths = {
   home: () => '/',
   feed: () => '/',
-  postNew: () => '/posts/new',
+  people: () => '/people',
+  postNew: (kind?: 'user' | 'guild') => (kind ? `/posts/new?kind=${kind}` : '/posts/new'),
   post: (postId: string) => `/posts/${id(postId)}`,
   postEdit: (postId: string) => `/posts/${id(postId)}/edit`,
   myPosts: () => '/me/posts',
   guilds: () => '/guilds',
-  guildClaim: () => '/guilds/claim',
+  /** The old claim address, kept for existing links: it leads to `myGuilds`. */
+  guildClaim: () => '/me/guilds',
+  myGuilds: () => '/me/guilds',
   guild: (guildId: string) => `/guilds/${id(guildId)}`,
   guildManage: (guildId: string) => `/guilds/${id(guildId)}/manage`,
   user: (userId: string) => `/users/${id(userId)}`,

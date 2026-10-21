@@ -11,12 +11,21 @@ import type {GuildCard} from '@/api/types';
 import {paths} from '@/app/paths';
 import {usePageTitle} from '@/app/usePageTitle';
 import {useSession} from '@/auth/session';
-import {BadgeList, EmptyState, ErrorState, GuildIcon, NsfwConfirmDialog, useNsfwConfirmed} from '@/components';
+import {
+  BadgeStrip,
+  DisplayName,
+  TagLabel,
+  EmptyState,
+  ErrorState,
+  FilterBar,
+  GuildIcon,
+  InlineStats,
+  NsfwConfirmDialog,
+  useNsfwConfirmed,
+} from '@/components';
 import {useLanguage} from '@/i18n/useLanguage';
 import {useT} from '@/i18n/useT';
-import {formatCompact} from '@/lib/format';
-import {Card, CardActions, Chip, Chips, LinkButton, Page, Select, Spinner, Switch, TextField} from '@/ui';
-import {FIELD_LIMITS} from '@/api/limits';
+import {Card, LinkButton, PageHeader, ShowcasePage, Spinner} from '@/ui';
 
 import {
   type DirectoryUrlState,
@@ -28,7 +37,6 @@ import {
 import './guilds.css';
 
 const SEARCH_DELAY_MS = 300;
-const TAGS_SHOWN = 3;
 
 export function Component() {
   const {t} = useT('guilds');
@@ -78,11 +86,8 @@ export function Component() {
   const list = useInfiniteList<GuildCard, NonNullable<typeof query.data>['pages'][number]>(query);
 
   const themeOptions = useMemo(
-    () => [
-      {value: '', label: t('filters.themeAll')},
-      ...(catalog.data?.themes ?? []).map((theme) => ({value: theme.id, label: label('themes', theme.id)})),
-    ],
-    [catalog.data, label, t],
+    () => (catalog.data?.themes ?? []).map((theme) => ({value: theme.id, label: label('themes', theme.id)})),
+    [catalog.data, label],
   );
 
   const clear = () => {
@@ -90,18 +95,18 @@ export function Component() {
     setParams(new URLSearchParams(), {replace: true});
   };
 
-  const claimUrl = () => new URL(paths.guildClaim(), window.location.origin).href;
-  const claim =
+  const claimUrl = () => new URL(paths.myGuilds(), window.location.origin).href;
+  const add =
     status === 'anonymous' ? (
-      <md-filled-button onclick={() => login(claimUrl())}>
+      <md-outlined-button onclick={() => login(claimUrl())}>
         <md-icon slot="icon" className="filled" aria-hidden="true">
           add_circle
         </md-icon>
-        {t('claim.action')}
-      </md-filled-button>
+        {t('add')}
+      </md-outlined-button>
     ) : (
-      <LinkButton to={paths.guildClaim()} icon="add_circle">
-        {t('claim.action')}
+      <LinkButton to={paths.myGuilds()} variant="outlined" icon="add_circle">
+        {t('add')}
       </LinkButton>
     );
 
@@ -111,89 +116,84 @@ export function Component() {
   const active = hasActiveFilters(state);
 
   return (
-    <Page>
-      <div className="guilds-page">
-        <Card className="guilds-header" as="section">
-          <h1>{t('title')}</h1>
-          <p>{t('intro')}</p>
-          <div className="guilds-filters" role="search">
-            <TextField
-              label={t('filters.search')}
-              type="search"
-              value={text}
-              onValueChange={setText}
-              maxLength={FIELD_LIMITS.query.qMax}
-              counter={false}
-              autocomplete="off"
-            />
-            <Select
-              label={t('filters.theme')}
-              value={state.theme}
-              options={themeOptions}
-              onValueChange={(theme) => update({theme})}
-            />
-            <Switch checked={state.nsfw && confirmed} onCheckedChange={onNsfw} label={t('filters.nsfw')} />
-          </div>
-          <CardActions>
-            {claim}
-            {active && <md-text-button onclick={clear}>{t('filters.clear')}</md-text-button>}
-          </CardActions>
-        </Card>
+    <ShowcasePage className="guilds-page">
+      <PageHeader title={t('title')} subtitle={t('subtitle')} actions={add} />
 
-        {list.isLoading ? (
-          <Card>
-            <Spinner />
-          </Card>
-        ) : list.isError ? (
-          badFilter || badCursor ? (
-            <ErrorState
-              error={error}
-              onRetry={() => {
-                if (badCursor) void queryClient.resetQueries({queryKey: queryKeys.directories()});
-                else clear();
-              }}
-            />
-          ) : (
-            <ErrorState error={error} onRetry={list.refetch} />
-          )
-        ) : list.isEmpty ? (
-          active ? (
-            <EmptyState
-              icon="search_off"
-              title={t('emptyFiltered.title')}
-              action={<md-outlined-button onclick={clear}>{t('filters.clear')}</md-outlined-button>}
-            >
-              {t('emptyFiltered.body')}
-            </EmptyState>
-          ) : (
-            <EmptyState icon="groups" title={t('empty.title')}>
-              {t('empty.body')}
-            </EmptyState>
-          )
+      <FilterBar
+        search={{value: text, onChange: setText, placeholder: t('filters.search')}}
+        filters={{
+          theme: {
+            icon: 'category',
+            label: t('filters.theme'),
+            kind: 'single',
+            options: themeOptions,
+            value: state.theme ? [state.theme] : [],
+            onChange: (values) => update({theme: values[0] ?? ''}),
+          },
+          nsfw: {
+            icon: 'explicit',
+            label: t('filters.adult'),
+            kind: 'single',
+            options: [{value: '1', label: t('filters.adultYes')}],
+            value: state.nsfw && confirmed ? ['1'] : [],
+            onChange: (values) => onNsfw(values.length > 0),
+          },
+        }}
+      />
+
+      {list.isLoading ? (
+        <div className="guilds-more">
+          <Spinner />
+        </div>
+      ) : list.isError ? (
+        badFilter || badCursor ? (
+          <ErrorState
+            error={error}
+            onRetry={() => {
+              if (badCursor) void queryClient.resetQueries({queryKey: queryKeys.directories()});
+              else clear();
+            }}
+          />
         ) : (
-          <>
-            <ul className="guild-grid" aria-label={t('list.label')} aria-busy={list.isPlaceholderData}>
-              {list.items.map((guild) => (
-                <li key={guild.id}>
-                  <GuildCardLink guild={guild} />
-                </li>
-              ))}
-            </ul>
-            {list.isLoadMoreError && (
-              <ErrorState compact error={query.error} onRetry={list.loadMore} retrying={list.isLoadingMore} />
-            )}
-            {(list.hasMore || list.isLoadingMore) && !list.isLoadMoreError && (
-              <div className="guilds-more">
-                {list.isLoadingMore ? (
-                  <Spinner />
-                ) : (
-                  <md-outlined-button onclick={list.loadMore}>{tCommon('actions.loadMore')}</md-outlined-button>
-                )}
-              </div>
-            )}
-          </>
-        )}
-      </div>
+          <ErrorState error={error} onRetry={list.refetch} />
+        )
+      ) : list.isEmpty ? (
+        active ? (
+          <EmptyState
+            icon="search_off"
+            title={t('emptyFiltered.title')}
+            action={<md-outlined-button onclick={clear}>{t('filters.clear')}</md-outlined-button>}
+          >
+            {t('emptyFiltered.body')}
+          </EmptyState>
+        ) : (
+          <EmptyState icon="groups" title={t('empty.title')}>
+            {t('empty.body')}
+          </EmptyState>
+        )
+      ) : (
+        <>
+          <ul className="guild-grid" aria-label={t('list.label')} aria-busy={list.isPlaceholderData}>
+            {list.items.map((guild) => (
+              <li key={guild.id}>
+                <GuildCardLink guild={guild} />
+              </li>
+            ))}
+          </ul>
+          {list.isLoadMoreError && (
+            <ErrorState compact error={query.error} onRetry={list.loadMore} retrying={list.isLoadingMore} />
+          )}
+          {(list.hasMore || list.isLoadingMore) && !list.isLoadMoreError && (
+            <div className="guilds-more">
+              {list.isLoadingMore ? (
+                <Spinner />
+              ) : (
+                <md-outlined-button onclick={list.loadMore}>{tCommon('actions.loadMore')}</md-outlined-button>
+              )}
+            </div>
+          )}
+        </>
+      )}
       <NsfwConfirmDialog
         open={askAge}
         onConfirmed={() => {
@@ -202,7 +202,7 @@ export function Component() {
         }}
         onCancel={() => setAskAge(false)}
       />
-    </Page>
+    </ShowcasePage>
   );
 }
 
@@ -211,44 +211,30 @@ function GuildCardLink({guild}: {guild: GuildCard}) {
   const {label} = useCatalogLabel();
   useLanguage();
   const name = guild.name ?? t('card.unknownName');
-  const tags = guild.tags.slice(0, TAGS_SHOWN);
-  const more = guild.tags.length - tags.length;
   return (
     <Card to={paths.guild(guild.id)} className="guild-card">
-      <div className="guild-card-head">
-        <GuildIcon id={guild.id} iconUrl={guild.icon_url} size="large" />
-        <div className="guild-card-title">
-          <h2>{name}</h2>
-          <p className="guild-card-counts numeric">
-            {guild.member_count === null && guild.presence_count === null ? (
-              t('card.noCounts')
-            ) : (
-              <>
-                {guild.member_count !== null && (
-                  <span>
-                    {t('card.members', {count: guild.member_count, value: formatCompact(guild.member_count)})}
-                  </span>
-                )}
-                {guild.presence_count !== null && (
-                  <span>{t('card.online', {value: formatCompact(guild.presence_count)})}</span>
-                )}
-              </>
-            )}
-          </p>
-        </div>
+      <GuildIcon id={guild.id} iconUrl={guild.icon_url} />
+      <div className="guild-card-body">
+        <h2 className="guild-card-title">
+          <DisplayName name={name} badges={guild.badges} entity="guild" focusable={false} />
+        </h2>
+        <InlineStats
+          compact
+          items={[
+            {
+              icon: 'group',
+              value: guild.member_count,
+              label: t('card.members', {count: guild.member_count ?? 0}),
+            },
+          ]}
+        />
+        {(guild.theme || guild.badges.length > 0) && (
+          <div className="guild-card-foot">
+            {guild.theme && <TagLabel icon="category">{label('themes', guild.theme)}</TagLabel>}
+            <BadgeStrip badges={guild.badges} focusable={false} />
+          </div>
+        )}
       </div>
-      {(guild.theme || tags.length > 0) && (
-        <Chips className="guild-card-chips">
-          {guild.theme && <Chip icon="category">{label('themes', guild.theme)}</Chip>}
-          {tags.map((tag) => (
-            <Chip key={tag} mono>
-              {tag}
-            </Chip>
-          ))}
-          {more > 0 && <Chip>+{more}</Chip>}
-        </Chips>
-      )}
-      {guild.badges.length > 0 && <BadgeList badges={guild.badges} max={3} focusable={false} />}
     </Card>
   );
 }

@@ -1,43 +1,36 @@
 {
-  "title": "Annonces",
-  "intro": "Serveurs qui recrutent du staff et personnes qui cherchent une équipe.",
+  "guild": {
+    "title": "Recrutements",
+    "subtitle": "Des serveurs Discord cherchent du staff.",
+    "action": "Publier une annonce",
+    "emptyTitle": "Aucun recrutement pour le moment",
+    "emptyBody": "Les annonces de serveurs apparaissent ici dès qu'elles sont publiées."
+  },
+  "user": {
+    "title": "Candidats",
+    "subtitle": "Des personnes proposent leurs services à des serveurs.",
+    "action": "Proposer mes services",
+    "emptyTitle": "Aucun candidat pour le moment",
+    "emptyBody": "Les annonces de personnes apparaissent ici dès qu'elles sont publiées."
+  },
   "list": "Liste des annonces",
   "updating": "Mise à jour des résultats",
   "loadingMore": "Chargement des annonces suivantes",
   "end": "Fin de la liste, {{count}} annonces affichées.",
-  "publish": {
-    "title": "Publier une annonce",
-    "body": "Pour un serveur que vous gérez, ou pour vous-même.",
-    "action": "Publier une annonce"
-  },
   "filters": {
-    "title": "Filtres",
-    "open": "Filtres",
-    "openCount": "Filtres ({{count}})",
-    "show": "Voir les annonces",
-    "reset": "Réinitialiser les filtres",
-    "kind": {
-      "label": "Type d'annonce",
-      "all": "Toutes les annonces",
-      "guild": "Serveurs qui recrutent",
-      "user": "Personnes qui cherchent"
-    },
-    "q": "Recherche",
+    "search": "Rechercher",
     "positions": "Postes",
     "languages": "Langues",
     "theme": "Thème",
-    "allThemes": "Tous les thèmes",
     "compensation": "Rémunération",
-    "anyCompensation": "Toutes",
-    "tags": "Étiquettes",
-    "tagsHelp": "Séparées par des virgules.",
-    "nsfw": "Inclure les contenus pour adultes"
+    "nsfw": "Contenu adulte",
+    "nsfwHide": "Masquer",
+    "nsfwShow": "Afficher",
+    "reset": "Réinitialiser les filtres"
   },
   "empty": {
-    "noneTitle": "Aucune annonce pour le moment",
-    "noneBody": "Les annonces publiées apparaissent ici. Publiez la première.",
     "filteredTitle": "Aucune annonce pour ces filtres",
-    "filteredBody": "Retirez un filtre ou réinitialisez-les pour voir toutes les annonces."
+    "filteredBody": "Retirez un filtre pour voir plus d'annonces."
   },
   "invalid": {
     "title": "Cette recherche n'a pas pu être appliquée",

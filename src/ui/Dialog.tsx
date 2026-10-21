@@ -1,5 +1,6 @@
 import type {MdDialog} from '@material/web/dialog/dialog.js';
 import type {ReactNode} from 'react';
+import {createPortal} from 'react-dom';
 
 import {useT} from '@/i18n/useT';
 
@@ -19,9 +20,16 @@ interface DialogProps {
 /**
  * md-dialog, controlled by `open`. Content is always in the DOM (the dialog
  * animates in and out), so keep heavy content out of it until `open`.
+ *
+ * Rendered in a portal on `document.body`. md-dialog draws its scrim as a
+ * fixed `div` in its own shadow root, not in the top layer, so the scrim only
+ * covers what is below its stacking context. Under `body`, the host gets its
+ * own stacking context above the app bar and the cards' edge caps
+ * (`md-dialog` in lineup.css): the scrim then dims the whole window. Every
+ * dialog of the app goes through this component; never use `md-dialog` directly.
  */
 export function Dialog({open, onClose, headline, children, actions, type, className}: DialogProps) {
-  return (
+  return createPortal(
     <md-dialog
       className={className}
       open={open}
@@ -34,7 +42,8 @@ export function Dialog({open, onClose, headline, children, actions, type, classN
       <div slot="headline">{headline}</div>
       <div slot="content">{children}</div>
       {actions && <div slot="actions">{actions}</div>}
-    </md-dialog>
+    </md-dialog>,
+    document.body,
   );
 }
 
