@@ -709,14 +709,24 @@ img.guild-icon.is-xl {
  * LinkList and TimezoneLabel
  * ------------------------------------------------------------------------- */
 
+.link-list .row-body {
+  align-items: flex-start;
+  gap: var(--gap-s);
+}
+
+/* The label has priority: up to two lines. The host sits under it. */
 .link-list .row-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  max-width: 100%;
   overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 
 .link-list .pill {
-  flex-shrink: 1;
-  max-width: 45%;
+  max-width: 100%;
 }
 
 .timezone {

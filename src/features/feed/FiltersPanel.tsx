@@ -61,6 +61,7 @@ export function FiltersPanel({catalog, filters, onChange, onReset, active}: Filt
         value={q}
         onValueChange={setQ}
         maxLength={FIELD_LIMITS.query.qMax}
+        counter={false}
         autocomplete="off"
       />
 

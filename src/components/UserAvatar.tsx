@@ -34,21 +34,33 @@ function fallbackUrl(id: string): string {
 export function UserAvatar({id, src, decoration, size = 'default', alt = '', className}: UserAvatarProps) {
   // A picture that fails to load (a deleted avatar) gives way to the default one.
   const [failed, setFailed] = useState<string | null>(null);
+  // A decoration that fails to load is hidden, never shown as a broken image.
+  const [decorationFailed, setDecorationFailed] = useState<string | null>(null);
+  const decorationUrl = decoration?.url && decoration.url !== decorationFailed ? decoration.url : null;
   const url = src && src !== failed ? src : fallbackUrl(id);
   const picture = (
     <Avatar
       src={url}
       size={size}
       alt={alt}
-      className={decoration?.url ? undefined : className}
-      onError={() => setFailed(url)}
+      className={decorationUrl ? undefined : className}
+      onError={(event) => {
+        if (url === fallbackUrl(id)) event.currentTarget.style.visibility = 'hidden';
+        else setFailed(url);
+      }}
     />
   );
-  if (!decoration?.url) return picture;
+  if (!decorationUrl) return picture;
   return (
     <span className={cx('user-avatar', size !== 'default' && size, className)}>
       {picture}
-      <img className="avatar-decoration" src={decoration.url} alt="" aria-hidden="true" loading="lazy" />
+      <img
+        className="avatar-decoration"
+        src={decorationUrl}
+        alt=""
+        aria-hidden="true"
+        onError={() => setDecorationFailed(decorationUrl)}
+      />
     </span>
   );
 }

@@ -42,15 +42,31 @@
 
 .ed-stepper {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap-s);
-  margin: 0;
-  padding: 0;
+  gap: 2px;
+  /* One line. If the names are too wide (long language, narrow card) the list
+     scrolls inside itself; the padding keeps the focus ring visible. */
+  margin: -4px;
+  padding: 4px;
+  overflow-x: auto;
   list-style: none;
+  scrollbar-width: thin;
+}
+
+.ed-step {
+  flex: 0 0 auto;
+}
+
+.ed-step md-text-button {
+  --md-text-button-leading-space: 10px;
+  --md-text-button-trailing-space: 12px;
+  --md-text-button-with-leading-icon-leading-space: 8px;
+  --md-text-button-with-leading-icon-trailing-space: 12px;
+  --md-text-button-icon-size: 18px;
 }
 
 .ed-step md-text-button {
   --md-text-button-container-height: 40px;
+  --md-text-button-icon-label-space: 6px;
   --md-text-button-label-text-size: var(--text-body-small);
   --md-text-button-container-shape: var(--radius-full);
 }

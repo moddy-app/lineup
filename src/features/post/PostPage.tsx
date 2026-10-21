@@ -358,7 +358,9 @@ function ApplyCard({post}: {post: PostDetail}) {
     <Card as="section" aria-labelledby="post-apply">
       <h2 id="post-apply">{t('apply.title')}</h2>
       <p>{application.type === 'external_url' ? t('apply.external') : t('apply.dm')}</p>
-      <ApplicationAction post={post} />
+      <CardActions>
+        <ApplicationAction post={post} />
+      </CardActions>
     </Card>
   );
 }

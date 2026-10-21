@@ -1,5 +1,5 @@
 import {useEffect, useMemo, useRef, useState} from 'react';
-import {useNavigate, useParams} from 'react-router';
+import {useNavigate, useParams, useSearchParams} from 'react-router';
 
 import {useCatalogLabel} from '@/api/catalog';
 import {isApiError} from '@/api/client';
@@ -139,6 +139,7 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
   const {label} = useCatalogLabel();
   const language = useLanguage();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const snackbar = useSnackbar();
   const auth = useAuthAction();
   const {me, canWrite} = useSession();
@@ -193,6 +194,16 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
       unregister();
     };
   }, [form, step, pristine, key]);
+
+  // `?guild=<id>` (from a server's page) preselects that server, if it is one of mine.
+  const guildParam = searchParams.get('guild');
+  const [preselected, setPreselected] = useState(false);
+  if (!preselected && !editing && guildParam && guilds.data) {
+    setPreselected(true);
+    if (guilds.data.some((entry) => entry.claimed && entry.id === guildParam) && form.kind === '' && form.guildId === '') {
+      setForm({...form, kind: 'guild', guildId: guildParam});
+    }
+  }
 
   const rules = useMemo(
     () => ({

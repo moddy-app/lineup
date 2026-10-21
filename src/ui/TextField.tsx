@@ -23,6 +23,8 @@ interface TextFieldProps {
   /** Shows a character counter under the field, and stops typing at the limit. */
   maxLength?: number;
   supportingText?: string;
+  /** `false` keeps the limit but hides the counter (a search field). Default `true`. */
+  counter?: boolean;
   /** Puts the field in its error state and replaces the supporting text. */
   errorText?: string;
   error?: boolean;
@@ -44,6 +46,8 @@ export function TextField({
   errorText,
   error,
   className,
+  counter = true,
+  maxLength,
   ref: forwardedRef,
   ...props
 }: TextFieldProps) {
@@ -58,6 +62,13 @@ export function TextField({
 
   const setRef = (element: MdOutlinedTextField | null) => {
     ref.current = element;
+    if (element && !counter && maxLength) {
+      // Material Web draws the counter whenever `maxlength` is set on the field:
+      // put the limit on the native input instead.
+      void element.updateComplete.then(() => {
+        element.renderRoot?.querySelector('input')?.setAttribute('maxlength', String(maxLength));
+      });
+    }
     if (typeof forwardedRef === 'function') forwardedRef(element);
     else if (forwardedRef) forwardedRef.current = element;
   };
@@ -65,6 +76,7 @@ export function TextField({
   return (
     <md-outlined-text-field
       {...props}
+      maxLength={counter ? maxLength : undefined}
       ref={setRef}
       className={cx('field', className)}
       value={value}

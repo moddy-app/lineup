@@ -27,7 +27,7 @@ import {
 import {useLanguage} from '@/i18n/useLanguage';
 import {useT} from '@/i18n/useT';
 import {formatDate, formatNumber} from '@/lib/format';
-import {AppLayout, Card, CardActions, Icon, LinkButton, PageLoading, Pill, Rows, Section, Shape, Status} from '@/ui';
+import {AppLayout, Card, CardActions, Icon, LinkButton, PageLoading, Pill, Rows, Section, Status} from '@/ui';
 
 import './user-profile.css';
 
@@ -69,16 +69,18 @@ function Profile({profile}: {profile: UserProfile}) {
   const {t} = useT('userProfile');
   useLanguage();
   const name = profile.display_name ?? profile.username ?? profile.id;
-  const hasSide = profile.links.length > 0 || profile.languages.length > 0 || profile.timezone !== null;
 
   return (
     <AppLayout
       stickyAside
       aside={
         <>
-          {hasSide && (
-            <Section title={t('about.title')}>
+          <Section title={t('about.title')}>
               <div className="profile-facts">
+                <p className="profile-created">
+                  <Icon name="calendar_month" />
+                  {t('header.created', {date: formatDate(profile.created_at, 'long')})}
+                </p>
                 {profile.timezone && (
                   <div className="profile-fact">
                     <h3>{t('about.timezone')}</h3>
@@ -99,13 +101,8 @@ function Profile({profile}: {profile: UserProfile}) {
                 )}
               </div>
             </Section>
-          )}
-          <Card className="profile-account">
-            <p className="profile-created">
-              <Icon name="calendar_month" />
-              {t('header.created', {date: formatDate(profile.created_at, 'long')})}
-            </p>
-            {profile.is_self ? (
+          {profile.is_self ? (
+            <Card className="profile-account">
               <CardActions>
                 <LinkButton to={paths.me()} variant="outlined" icon="edit">
                   {t('self.edit')}
@@ -114,12 +111,12 @@ function Profile({profile}: {profile: UserProfile}) {
                   {t('self.experiences')}
                 </LinkButton>
               </CardActions>
-            ) : (
-              <CardActions>
-                <ReportButton target={{type: 'user', id: profile.id}} />
-              </CardActions>
-            )}
-          </Card>
+            </Card>
+          ) : (
+            <div className="profile-report">
+              <ReportButton target={{type: 'user', id: profile.id}} />
+            </div>
+          )}
         </>
       }
     >
@@ -171,10 +168,12 @@ function Profile({profile}: {profile: UserProfile}) {
 
       <Section title={t('posts.title')}>
         {profile.posts.length === 0 ? (
-          <div className="profile-empty-with-shape">
-            <Shape shape="diamond" tone="secondary" icon="campaign" small />
-            <p className="profile-empty">{profile.is_self ? t('posts.emptySelf') : t('posts.empty')}</p>
-          </div>
+          <EmptyState
+            compact
+            icon="campaign"
+            shape="diamond"
+            title={profile.is_self ? t('posts.emptySelf') : t('posts.empty')}
+          />
         ) : (
           <>
             <p className="profile-count numeric">

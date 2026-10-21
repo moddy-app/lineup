@@ -113,3 +113,14 @@
 .card.profile-header {
   flex-direction: row;
 }
+
+.profile-report {
+  display: flex;
+  justify-content: flex-start;
+  padding-inline: var(--gap-s);
+}
+
+/* A fact row of "À propos": icon and text, like the others. */
+.profile-facts > .profile-created {
+  color: var(--md-sys-color-on-surface-variant);
+}

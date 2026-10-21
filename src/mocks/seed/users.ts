@@ -9,6 +9,8 @@ import type {AvatarDecoration} from '@/api/types';
 
 import type {DbUser, SanctionSpec} from '../model';
 import {HOUR, iso} from '../time';
+import decorationRing2 from '../assets/decoration-ring-2.svg?url';
+import decorationRing from '../assets/decoration-ring.svg?url';
 import {avatars} from './assets';
 import {G, U} from './ids';
 
@@ -30,7 +32,8 @@ const FLAG = {
 const decoration = (asset: string, sku: string): AvatarDecoration => ({
   asset,
   sku_id: sku,
-  url: `https://cdn.discordapp.com/avatar-decoration-presets/${asset}.png`,
+  // A ring served by the app itself: the mock must work offline.
+  url: asset.endsWith('b1c') ? decorationRing : decorationRing2,
 });
 
 const ban = (references: string[]): SanctionSpec => ({

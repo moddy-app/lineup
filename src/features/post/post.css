@@ -66,7 +66,7 @@
 }
 
 .post-main h1.post-page-title {
-  margin: 0;
+  margin: 20px 0 10px;
   font-size: var(--text-title);
   line-height: 1.2;
   overflow-wrap: anywhere;
@@ -80,7 +80,7 @@
 }
 
 .post-dates {
-  margin-top: var(--gap-s);
+  margin-top: var(--space);
   font-variant-numeric: tabular-nums;
 }
 
@@ -127,6 +127,7 @@
 }
 
 .post-error {
+  margin-top: var(--gap-l);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -147,6 +148,10 @@
   align-items: flex-start;
 }
 
-.post-main {
-  gap: var(--gap-m);
+.post-commitment {
+  margin-top: var(--gap-l);
+}
+
+.post-main .post-description {
+  margin: 0;
 }

@@ -123,6 +123,7 @@ export function Component() {
               value={text}
               onValueChange={setText}
               maxLength={FIELD_LIMITS.query.qMax}
+              counter={false}
               autocomplete="off"
             />
             <Select
@@ -247,7 +248,7 @@ function GuildCardLink({guild}: {guild: GuildCard}) {
           {more > 0 && <Chip>+{more}</Chip>}
         </Chips>
       )}
-      {guild.badges.length > 0 && <BadgeList badges={guild.badges} variant="compact" max={5} focusable={false} />}
+      {guild.badges.length > 0 && <BadgeList badges={guild.badges} max={3} focusable={false} />}
     </Card>
   );
 }

@@ -11,6 +11,11 @@ import {Pill, Shape} from '@/ui';
 
 import {safeLinks} from './links';
 
+/** The host without `www.`: the part worth reading. */
+function displayHost(host: string): string {
+  return host.replace(/^www\./i, '');
+}
+
 export function LinkList({links}: {links: readonly Link[]}) {
   const {t} = useT('components');
   const safe = safeLinks(links);
@@ -23,8 +28,8 @@ export function LinkList({links}: {links: readonly Link[]}) {
             <Shape shape="square" icon="link" small />
             <span className="row-body">
               <span className="row-title">{link.label}</span>
+              <Pill title={link.host}>{displayHost(link.host)}</Pill>
             </span>
-            <Pill>{link.host}</Pill>
           </a>
         </li>
       ))}
