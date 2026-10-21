@@ -180,31 +180,42 @@ function PostList({list, tab, guild}: {list: InfiniteList<PrivatePost>; tab: Tab
     }
   };
 
-  if (list.isLoading) return <Spinner />;
+  if (list.isLoading)
+    return (
+      <Card className="mp-card">
+        <Spinner />
+      </Card>
+    );
   if (list.isError)
-    return <ErrorState compact error={list.error} onRetry={list.refetch} retrying={list.isRefetching} />;
+    return (
+      <Card className="mp-card">
+        <ErrorState compact error={list.error} onRetry={list.refetch} retrying={list.isRefetching} />
+      </Card>
+    );
   if (list.isEmpty) {
     return (
-      <EmptyState
-        compact
-        icon={
-          tab === 'hidden'
-            ? 'visibility_off'
-            : tab === 'draft'
-              ? 'draft'
-              : tab === 'closed'
-                ? 'inventory_2'
-                : 'campaign'
-        }
-        title={t(`empty.${tab}.title`)}
-        action={
-          <LinkButton to={paths.postNew(guild ? {guildId: guild.id} : {kind: 'user'})} icon="add">
-            {t('new')}
-          </LinkButton>
-        }
-      >
-        {t(`empty.${tab}.body`)}
-      </EmptyState>
+      <Card className="mp-card">
+        <EmptyState
+          compact
+          icon={
+            tab === 'hidden'
+              ? 'visibility_off'
+              : tab === 'draft'
+                ? 'draft'
+                : tab === 'closed'
+                  ? 'inventory_2'
+                  : 'campaign'
+          }
+          title={t(`empty.${tab}.title`)}
+          action={
+            <LinkButton to={paths.postNew(guild ? {guildId: guild.id} : {kind: 'user'})} icon="add">
+              {t('new')}
+            </LinkButton>
+          }
+        >
+          {t(`empty.${tab}.body`)}
+        </EmptyState>
+      </Card>
     );
   }
 

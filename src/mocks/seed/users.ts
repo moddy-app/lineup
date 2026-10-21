@@ -107,6 +107,7 @@ export function seedUsers(now: Date): Record<string, DbUser> {
       accent_color: 0x2f6df6,
       public_flags: FLAG.activeDeveloper | FLAG.bugHunter1,
       is_staff: true,
+      avatar_decoration: decoration('a_2c9d41f78e5b4a0b93d6', '1167008329651912835'),
       premium: true,
       profile: {
         headline: 'Équipe Moddy : support et vérification Lineup',

@@ -182,10 +182,9 @@
     "dmHint": "Abre o perfil do autor. O contato é feito por mensagem direta no Discord."
   },
   "verification": {
-    "moddy_staff": "Equipe Moddy",
-    "moddy_server": "Servidor oficial da Moddy",
-    "lineup_verified_guild": "Servidor verificado",
-    "lineup_verified_user": "Conta verificada"
+    "moddy_staff": "Equipe do Moddy",
+    "moddy_server": "Servidor oficial do Moddy",
+    "lineup_verified": "Verificado"
   },
   "settings": {
     "nav": {

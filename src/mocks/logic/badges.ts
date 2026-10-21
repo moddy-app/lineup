@@ -9,6 +9,23 @@ import type {Badge, Snowflake} from '@/api/types';
 import type {Env} from '../env';
 import type {DbUser} from '../model';
 
+/**
+ * The mock's labels for a few badges: what the API should say (no "by whom"),
+ * over the verbatim catalog of LINEUP.md §4. The site overrides them locally
+ * anyway (`src/api/badgeLabels.ts`).
+ */
+const MOCK_BADGE_LABELS: Readonly<Record<string, {fr: string; en: string}>> = {
+  lineup_verified: {fr: 'Vérifié', en: 'Verified'},
+  moddy_partner: {fr: 'Partenaire', en: 'Partner'},
+  moddy_server: {fr: 'Serveur officiel de Moddy', en: 'Official Moddy server'},
+};
+
+/** The catalog the mock serves: the fixture with the labels above. */
+export const mockCatalog = {
+  ...catalogFixture,
+  badges: catalogFixture.badges.map((entry) => ({...entry, label: {...(MOCK_BADGE_LABELS[entry.id] ?? entry.label)}})),
+};
+
 const ORDER = catalogFixture.badges.map((badge) => badge.id as string);
 
 /** Discord `public_flags` bits → badge ids (`catalog.DISCORD_FLAG_BADGES`; TEAM_PSEUDO_USER and BOT_HTTP_INTERACTIONS are left out). */
@@ -29,7 +46,7 @@ export const DISCORD_FLAG_BADGES: ReadonlyArray<readonly [bit: number, badge: st
 ];
 
 export function badge(id: string): Badge {
-  const entry = catalogFixture.badges.find((candidate) => candidate.id === id);
+  const entry = mockCatalog.badges.find((candidate) => candidate.id === id);
   if (!entry) throw new Error(`Unknown badge ${id}`);
   return {id: entry.id, label: {...entry.label}, source: entry.source};
 }

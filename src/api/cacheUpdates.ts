@@ -20,12 +20,10 @@ import type {InfiniteData} from '@tanstack/react-query';
 import type {
   Badge,
   Catalog,
-  GuildCard,
   GuildProfile,
   ManualBadgeGrant,
   MyGuild,
   MyPostsParams,
-  Paginated,
   Post,
   PostModeration,
   PrivateExperience,
@@ -354,38 +352,6 @@ export function unclaimMyGuild(list: MyGuild[], guildId: Snowflake): MyGuild[] {
 }
 
 const byName = (a: MyGuild, b: MyGuild) => (a.name ?? '').localeCompare(b.name ?? '');
-
-/** The directory's description: the profile's text cut at 160 characters, with "…" when it was longer. */
-export function cardDescription(description: string | null): string | null {
-  if (!description) return null;
-  return description.length > 160 ? `${description.slice(0, 160)}…` : description;
-}
-
-/** The directory card of a server, from its full profile. Cards leave out Discord's badges and `moddy_premium`. */
-export function toGuildCard(profile: GuildProfile): GuildCard {
-  return {
-    id: profile.id,
-    name: profile.name,
-    icon_url: profile.icon_url,
-    member_count: profile.member_count,
-    presence_count: profile.presence_count,
-    theme: profile.theme,
-    tags: profile.tags,
-    badges: profile.badges.filter((badge) => badge.id !== 'moddy_premium' && badge.source !== 'discord'),
-    description: cardDescription(profile.description),
-    nsfw: profile.theme === 'nsfw' || profile.badges.some((badge) => badge.id === 'nsfw'),
-  };
-}
-
-/** The directory after a profile write: an unlisted server leaves it; a listed one is updated where it shows. */
-export function withGuildInDirectory<P>(
-  data: InfiniteData<Paginated<GuildCard>, P> | undefined,
-  profile: GuildProfile,
-): InfiniteData<Paginated<GuildCard>, P> | undefined {
-  if (!profile.listed) return removeItems(data, (card) => card.id === profile.id);
-  const next = toGuildCard(profile);
-  return mapItems(data, (card) => (card.id === profile.id ? next : card));
-}
 
 // ---------------------------------------------------------------------------
 // Badges

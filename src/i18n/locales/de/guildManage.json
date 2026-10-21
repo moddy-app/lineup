@@ -5,7 +5,7 @@
   "notFound": {
     "title": "Server nicht gefunden",
     "body": "Dieser Server hat kein Lineup-Profil. Fügen Sie ihn zuerst auf der Seite Server hinzu.",
-    "action": "Server ansehen"
+    "action": "Projekte ansehen"
   },
   "forbidden": {
     "title": "Sie verwalten diesen Server nicht",
@@ -58,27 +58,25 @@
   },
   "invite": {
     "title": "Einladung",
-    "description": "Der Link hinter dem Beitreten-Button im Profil.",
-    "current": "Aktuelle Einladung",
-    "valid": "Gültig",
     "lost": "Auf Discord nicht gefunden",
-    "lostHelp": "Sie existiert auf Discord nicht mehr: ersetzen Sie sie.",
-    "none": "Keine aktive Einladung.",
+    "none": "Keine Einladung",
     "label": "Neue Einladung",
     "placeholder": "https://discord.gg/ihr-code",
-    "hint": "Optional. Sie darf nie ablaufen und muss zu demselben Server führen.",
+    "hint": "Sie darf nie ablaufen und muss zu diesem Server führen.",
     "how": "So erstellen Sie eine dauerhafte Einladung",
     "regenerate": "Neue Einladung erzeugen",
     "regenerating": "Wird erzeugt...",
     "regenerated": "Neue Einladung erzeugt.",
-    "regenerateHelp": "Moddy erstellt eine dauerhafte Einladung auf dem Server.",
-    "manualFallback": "Fügen Sie unten eine dauerhafte Einladung ein.",
-    "waitIn": "Verfügbar in {{seconds}} s"
+    "waitIn": "Verfügbar in {{seconds}} s",
+    "paste": "Andere Einladung einfügen",
+    "copy": "Link kopieren",
+    "copied": "Einladung kopiert.",
+    "copyFailed": "Kopieren nicht möglich."
   },
   "visibility": {
     "title": "Sichtbarkeit",
-    "label": "Server im Verzeichnis anzeigen",
-    "on": "Jeder kann dieses Profil im Verzeichnis finden.",
+    "label": "Server auf Lineup sichtbar machen",
+    "on": "Profil und Anzeigen des Servers sind für alle sichtbar.",
     "off": "Profil und Anzeigen verschwinden für alle, außer für Verwalter und das Moddy-Staff."
   },
   "errors": {
@@ -105,7 +103,7 @@
   },
   "danger": {
     "title": "Gefahrenzone",
-    "body": "Wird das Profil gelöscht, verlässt es das Verzeichnis und die Anzeigen des Servers werden geschlossen. Der Discord-Server bleibt unberührt.",
+    "body": "Wird das Profil gelöscht, ist es unsichtbar und die Anzeigen des Servers werden geschlossen. Der Discord-Server bleibt unberührt.",
     "action": "Profil löschen",
     "confirmTitle": "Profil von {{name}} löschen?",
     "confirmBody": "Was passiert:",
@@ -118,7 +116,7 @@
   "newPost": "Neue Anzeige",
   "pages": {
     "profile": "Beschreibung, Thema, Tags, Sprachen und Links.",
-    "invite": "Die Einladung hinter dem Beitreten-Button.",
+    "invite": "Der Link hinter dem Beitreten-Button in Ihrem Profil.",
     "posts": "Die Anzeigen dieses Servers.",
     "discord": "Was Lineup von Discord liest.",
     "settings": "Sichtbarkeit und Löschung."

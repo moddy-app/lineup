@@ -6,10 +6,10 @@ import {paths, routePatterns} from './paths';
 import {routes} from './routes';
 
 describe('paths', () => {
-  it('has the talent page, "my servers", and keeps the old claim path leading to it', () => {
+  it('has the talent page, and the server dialogs as parameters of the dashboard', () => {
     expect(paths.people()).toBe('/people');
-    expect(paths.myGuilds()).toBe('/me/guilds');
-    expect(paths.guildClaim()).toBe('/me/guilds');
+    expect(paths.myGuilds()).toBe('/me?servers=manage');
+    expect(paths.guildClaim()).toBe('/me?servers=add');
     expect(routePatterns.people).toBe('/people');
     expect(routePatterns.myGuilds).toBe('/me/guilds');
     // The old address is still a route pattern, for the redirect.
@@ -32,7 +32,7 @@ describe('paths', () => {
 describe('routes', () => {
   const router = (path: string) => createMemoryRouter(routes, {initialEntries: [path]});
 
-  it('redirects /guilds/claim to /me/guilds, replacing the history entry', () => {
+  it('redirects /guilds/claim to the add dialog, replacing the history entry', () => {
     const find = (list: RouteObject[]): RouteObject | undefined => {
       for (const route of list) {
         if (route.path === routePatterns.guildClaim) return route;
@@ -46,13 +46,14 @@ describe('routes', () => {
     const r = createMemoryRouter(
       [
         {path: routePatterns.guildClaim, element: route?.element},
-        {path: routePatterns.myGuilds, element: <p>Mes serveurs</p>},
+        {path: routePatterns.me, element: <p>Mes serveurs</p>},
       ],
       {initialEntries: ['/', '/guilds/claim'], initialIndex: 1},
     );
     render(<RouterProvider router={r} />);
     expect(screen.getByText('Mes serveurs')).toBeTruthy();
-    expect(r.state.location.pathname).toBe('/me/guilds');
+    expect(r.state.location.pathname).toBe('/me');
+    expect(r.state.location.search).toBe('?servers=add');
     // Replaced: going back leaves the app's previous page, not the old address.
     expect(r.state.historyAction).toBe('REPLACE');
   });

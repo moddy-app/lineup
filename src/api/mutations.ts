@@ -134,7 +134,7 @@ export function useClaimGuild() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (body: ClaimGuildBody) => claimGuild(body),
-    onSuccess: (profile) => syncGuildProfile(queryClient, profile, {claimed: true}),
+    onSuccess: (profile) => syncGuildProfile(queryClient, profile),
   });
 }
 

@@ -75,10 +75,10 @@ describe('SettingsLayout', () => {
     ).toBe(false);
   });
 
-  it('offers a selector: you, the claimed servers, then "Gérer mes serveurs"', async () => {
+  it('offers a selector: you, the claimed servers, then "Ajouter un serveur" and "Gérer les serveurs"', async () => {
     const {container} = settle('me/posts');
     const button = await waitFor(() => {
-      const found = container.querySelector<HTMLElement>('.settings-context md-outlined-button');
+      const found = container.querySelector<HTMLElement>('.settings-context button');
       expect(found).not.toBeNull();
       return found!;
     });
@@ -89,7 +89,8 @@ describe('SettingsLayout', () => {
     expect(items.map((item) => item.textContent?.replace(/^[a-z_]+/, '').replace(/check$/, ''))).toEqual([
       expect.stringContaining('Alex'),
       'Atelier du Phénix',
-      'Gérer mes serveurs',
+      'Ajouter un serveur',
+      'Gérer les serveurs',
     ]);
     expect(items[0]?.getAttribute('aria-checked')).toBe('true');
   });
@@ -108,9 +109,18 @@ describe('SettingsLayout', () => {
     });
     const {container} = renderApp([settingsRoute('me')], {path: '/me'});
     expect(await screen.findByText('Contenu')).toBeTruthy();
-    fireEvent.click(container.querySelector<HTMLElement>('.settings-context md-outlined-button')!);
+    fireEvent.click(container.querySelector<HTMLElement>('.settings-context button')!);
     const menu = await screen.findByRole('menu', {name: 'Gérer'});
-    expect([...menu.querySelectorAll<HTMLElement>('[role^="menuitem"]')]).toHaveLength(2);
+    expect([...menu.querySelectorAll<HTMLElement>('[role^="menuitem"]')]).toHaveLength(3);
+  });
+
+  it('opens the server dialogs from the menu, through ?servers=', async () => {
+    const {container} = settle('me');
+    await waitFor(() => expect(container.querySelector('.settings-context button')?.textContent).toContain('Alex'));
+    fireEvent.click(container.querySelector<HTMLElement>('.settings-context button')!);
+    const menu = await screen.findByRole('menu', {name: 'Gérer'});
+    fireEvent.click(within(menu).getByText('Gérer les serveurs'));
+    await waitFor(() => expect(document.querySelector('md-dialog[open]')).not.toBeNull());
   });
 
   it('offers a compact button with the current page and a menu with the same entries', async () => {

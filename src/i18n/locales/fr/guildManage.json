@@ -5,7 +5,7 @@
   "notFound": {
     "title": "Serveur introuvable",
     "body": "Ce serveur n'a pas de profil Lineup. Ajoutez-le d'abord depuis la page Serveurs.",
-    "action": "Voir les serveurs"
+    "action": "Voir les projets"
   },
   "forbidden": {
     "title": "Vous ne gérez pas ce serveur",
@@ -58,27 +58,25 @@
   },
   "invite": {
     "title": "Invitation",
-    "description": "Le lien du bouton Rejoindre du profil.",
-    "current": "Invitation actuelle",
-    "valid": "Valide",
     "lost": "Introuvable sur Discord",
-    "lostHelp": "Elle n'existe plus sur Discord : remplacez-la.",
-    "none": "Aucune invitation active.",
+    "none": "Aucune invitation",
     "label": "Nouvelle invitation",
     "placeholder": "https://discord.gg/votre-code",
-    "hint": "Facultatif. Elle doit n'expirer jamais et mener à ce même serveur.",
+    "hint": "Elle ne doit jamais expirer et mener à ce serveur.",
     "how": "Comment créer une invitation permanente",
     "regenerate": "Générer une nouvelle invitation",
     "regenerating": "Génération...",
     "regenerated": "Nouvelle invitation générée.",
-    "regenerateHelp": "Moddy crée une invitation permanente sur le serveur.",
-    "manualFallback": "Collez une invitation permanente dans le champ ci-dessous.",
-    "waitIn": "Disponible dans {{seconds}} s"
+    "waitIn": "Disponible dans {{seconds}} s",
+    "paste": "Coller une autre invitation",
+    "copy": "Copier le lien",
+    "copied": "Invitation copiée.",
+    "copyFailed": "Copie impossible."
   },
   "visibility": {
     "title": "Visibilité",
-    "label": "Afficher le serveur dans l'annuaire",
-    "on": "Tout le monde peut trouver ce profil dans l'annuaire.",
+    "label": "Rendre le serveur visible sur Lineup",
+    "on": "Le profil et les annonces du serveur sont visibles par tout le monde.",
     "off": "Le profil et ses annonces disparaissent pour tout le monde, sauf pour les gestionnaires et le staff Moddy."
   },
   "errors": {
@@ -105,7 +103,7 @@
   },
   "danger": {
     "title": "Zone de danger",
-    "body": "Supprimer le profil le retire de l'annuaire et ferme les annonces du serveur. Le serveur Discord n'est pas touché.",
+    "body": "Supprimer le profil le rend invisible et ferme les annonces du serveur. Le serveur Discord n'est pas touché.",
     "action": "Supprimer le profil",
     "confirmTitle": "Supprimer le profil de {{name}} ?",
     "confirmBody": "Ce qui se passe :",
@@ -118,7 +116,7 @@
   "newPost": "Nouvelle annonce",
   "pages": {
     "profile": "Description, thème, étiquettes, langues et liens.",
-    "invite": "L’invitation derrière le bouton Rejoindre.",
+    "invite": "Le lien du bouton Rejoindre sur votre profil.",
     "posts": "Les annonces de ce serveur.",
     "discord": "Ce que Lineup lit sur Discord.",
     "settings": "Visibilité et suppression."

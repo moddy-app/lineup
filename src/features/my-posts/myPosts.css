@@ -59,10 +59,6 @@
 
 /* -- The list ----------------------------------------------------------------- */
 
-.mp-card {
-  padding-block: var(--gap-s);
-}
-
 .mp-list {
   display: flex;
   flex-direction: column;

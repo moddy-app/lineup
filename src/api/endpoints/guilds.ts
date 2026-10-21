@@ -1,36 +1,8 @@
 /** Servers (LINEUP.md §6.1 `me/guilds`, §6.2). */
 
 import {apiFetch} from '../client';
-import type {
-  ClaimGuildBody,
-  DirectoryFilters,
-  GuildCard,
-  GuildProfile,
-  MyGuild,
-  Paginated,
-  RefreshGuildsResponse,
-  Snowflake,
-  UpdateGuildBody,
-} from '../types';
-import {enc, type PageOptions, type ReadOptions} from './shared';
-
-/** `GET /lineup/guilds`: the public directory, newest claims first. */
-export function getGuildDirectory(
-  filters: DirectoryFilters = {},
-  {cursor, limit, signal}: PageOptions = {},
-): Promise<Paginated<GuildCard>> {
-  return apiFetch<Paginated<GuildCard>>('/lineup/guilds', {
-    signal,
-    query: {
-      theme: filters.theme,
-      q: filters.q?.trim(),
-      // Left out when false: the default, and one cache entry fewer.
-      include_nsfw: filters.include_nsfw ? true : undefined,
-      limit,
-      cursor,
-    },
-  });
-}
+import type {ClaimGuildBody, GuildProfile, MyGuild, RefreshGuildsResponse, Snowflake, UpdateGuildBody} from '../types';
+import {enc, type ReadOptions} from './shared';
 
 /** `POST /lineup/guilds/claim`: 201 with the full profile. */
 export function claimGuild(body: ClaimGuildBody): Promise<GuildProfile> {

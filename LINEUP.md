@@ -713,7 +713,7 @@ Navigation, pas `fetch`. Aucune erreur JSON.
 
 #### `GET /lineup/me`
 
-Auth : session. Résumé de la session. **Jamais d'e-mail ni de jeton.**
+Auth : session. Résumé de la session. **Jamais de jeton.** Côté front : `user.email` est attendu (facultatif, scope `email` déjà demandé), voir `docs/backend-notes.md` ; il n'est pas encore renvoyé.
 
 ```json
 {

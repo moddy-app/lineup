@@ -9,7 +9,6 @@ import {
   mapItems,
   removeItems,
   removeExperience,
-  toGuildCard,
   toPublicPost,
   unclaimMyGuild,
   upsertExperience,
@@ -19,7 +18,6 @@ import {
   withBadgeGrant,
   withExperience,
   withExperienceOrder,
-  withGuildInDirectory,
   withManualBadge,
   withModeration,
   withoutBadgeGrant,
@@ -43,7 +41,7 @@ import {
   page,
   postCreatedAt,
 } from './fixtures';
-import type {GuildCard, ManualBadgeGrant, PrivatePost} from './types';
+import type {ManualBadgeGrant, PrivatePost} from './types';
 
 const ids = (data: {pages: Array<{items: Array<{id: string}>}>} | undefined) =>
   data?.pages.map((p) => p.items.map((item) => item.id));
@@ -355,46 +353,6 @@ describe('servers', () => {
     expect(unclaimMyGuild(list, GUILD_ID)).toEqual([makeMyGuild({claimed: false, listed: false})]);
     const already = [makeMyGuild({claimed: false})];
     expect(unclaimMyGuild(already, GUILD_ID)).toBe(already);
-  });
-
-  it('cuts a card description at 160 characters and flags a NSFW server', () => {
-    expect(toGuildCard(makeGuildProfile({description: 'Court.'})).description).toBe('Court.');
-    expect(toGuildCard(makeGuildProfile({description: null})).description).toBeNull();
-    expect(toGuildCard(makeGuildProfile({description: 'x'.repeat(200)})).description).toBe(`${'x'.repeat(160)}…`);
-    expect(toGuildCard(makeGuildProfile({description: 'x'.repeat(160)})).description).toBe('x'.repeat(160));
-    expect(toGuildCard(makeGuildProfile()).nsfw).toBe(false);
-    expect(toGuildCard(makeGuildProfile({theme: 'nsfw'})).nsfw).toBe(true);
-    expect(
-      toGuildCard(makeGuildProfile({badges: [{id: 'nsfw', label: {fr: 'a', en: 'a'}, source: 'computed'}]})).nsfw,
-    ).toBe(true);
-  });
-
-  it('makes a directory card without the premium badge', () => {
-    const profile = makeGuildProfile({
-      badges: [
-        {id: 'moddy_installed', label: {fr: 'a', en: 'a'}, source: 'computed'},
-        {id: 'moddy_premium', label: {fr: 'b', en: 'b'}, source: 'computed'},
-      ],
-    });
-    expect(toGuildCard(profile).badges.map((b) => b.id)).toEqual(['moddy_installed']);
-    const withDiscord = makeGuildProfile({
-      badges: [
-        {id: 'discord_verified', label: {fr: 'v', en: 'v'}, source: 'discord'},
-        {id: 'moddy_installed', label: {fr: 'a', en: 'a'}, source: 'computed'},
-      ],
-    });
-    expect(toGuildCard(withDiscord).badges.map((b) => b.id)).toEqual(['moddy_installed']);
-  });
-
-  it('updates a listed card in the directory and removes an unlisted one', () => {
-    const card: GuildCard = toGuildCard(makeGuildProfile({tags: ['old']}));
-    const other = toGuildCard(makeGuildProfile({id: '2'}));
-    const data = infinite(page([card, other]));
-    const updated = withGuildInDirectory(data, makeGuildProfile({tags: ['new']}))!;
-    expect(updated.pages[0]!.items[0]!.tags).toEqual(['new']);
-    expect(updated.pages[0]!.items[1]).toBe(other);
-    expect(ids(withGuildInDirectory(data, makeGuildProfile({listed: false})))).toEqual([['2']]);
-    expect(withGuildInDirectory(undefined, makeGuildProfile())).toBeUndefined();
   });
 });
 

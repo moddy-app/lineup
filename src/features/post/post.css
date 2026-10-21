@@ -88,9 +88,10 @@ h1.post-title {
   font-variant-numeric: tabular-nums;
 }
 
-.post-dates::before {
+/* The separator closes the item before it, so it ends a line and never starts one. */
+.post-byline-item:not(:last-child)::after {
   content: '·';
-  margin-inline-end: var(--gap-s);
+  margin-inline-start: var(--gap-s);
 }
 
 .post-actions {

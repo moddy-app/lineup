@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {type ReactNode, useState} from 'react';
 
 import {hasCode} from '@/api/client';
 import {errorMessage} from '@/api/errors';
@@ -7,16 +7,25 @@ import type {GuildProfile} from '@/api/types';
 import {useRetryAfter} from '@/api/useRetryAfter';
 import {useSession} from '@/auth/session';
 import {useAuthAction} from '@/auth/useAuthAction';
-import {RetryButton} from '@/components';
 import {useT} from '@/i18n/useT';
 import {useSnackbar} from '@/ui';
 
 /**
  * Moddy is on the server: it can create the permanent invitation itself
  * (`PUT` with `invite: null`). The cache is updated from the response, so the
- * new code shows in the page. The manual field stays available.
+ * new code shows in the page. `children` sit next to the button (the link to
+ * paste an invitation); `onManual` is called when the API asks for one
+ * (`invite_required`), so the page opens the field. An error is one line under the button.
  */
-export function RegenerateInvite({guild}: {guild: GuildProfile}) {
+export function RegenerateInvite({
+  guild,
+  onManual,
+  children,
+}: {
+  guild: GuildProfile;
+  onManual?: () => void;
+  children?: ReactNode;
+}) {
   const {t} = useT('guildManage');
   const {t: tErrors} = useT('errors');
   const update = useUpdateGuild();
@@ -33,30 +42,32 @@ export function RegenerateInvite({guild}: {guild: GuildProfile}) {
       if (profile) snackbar.show({message: t('invite.regenerated')});
     } catch (caught) {
       setError(caught);
+      if (hasCode(caught, 'invite_required')) onManual?.();
     }
   };
 
   const rateLimited = hasCode(error, 'lineup_rate_limited');
   const counting = wait.active && (rateLimited || hasCode(error, 'discord_unavailable'));
   return (
-    <div className="manage-regenerate">
-      <md-outlined-button disabled={update.isPending || counting || !canWrite} onclick={() => void run()}>
-        <md-icon slot="icon" className="filled" aria-hidden="true">
-          autorenew
-        </md-icon>
-        {counting
-          ? t('invite.waitIn', {seconds: wait.seconds})
-          : update.isPending
-            ? t('invite.regenerating')
-            : t('invite.regenerate')}
-      </md-outlined-button>
-      <p className="manage-help">{t('invite.regenerateHelp')}</p>
+    <div className="invite-actions">
+      <div className="invite-buttons">
+        <md-outlined-button
+          type="button"
+          disabled={update.isPending || counting || !canWrite}
+          onclick={() => void run()}
+        >
+          {counting
+            ? t('invite.waitIn', {seconds: wait.seconds})
+            : update.isPending
+              ? t('invite.regenerating')
+              : t('invite.regenerate')}
+        </md-outlined-button>
+        {children}
+      </div>
       {error !== null && !rateLimited && (
-        <div className="manage-error" role="alert">
-          <p>{errorMessage(error, tErrors, {context: 'manage', seconds: wait.seconds})}</p>
-          {hasCode(error, 'invite_required') && <p>{t('invite.manualFallback')}</p>}
-          {hasCode(error, 'discord_unavailable') && <RetryButton error={error} onRetry={() => void run()} />}
-        </div>
+        <p className="manage-field-error" role="alert">
+          {errorMessage(error, tErrors, {context: 'manage', seconds: wait.seconds})}
+        </p>
       )}
     </div>
   );

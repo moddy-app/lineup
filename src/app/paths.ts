@@ -12,6 +12,7 @@ export const routePatterns = {
   post: '/posts/:postId',
   postEdit: '/posts/:postId/edit',
   myPosts: '/me/posts',
+  /** Legacy: the directory is gone, the route only redirects to the feed. */
   guilds: '/guilds',
   guildClaim: '/guilds/claim',
   myGuilds: '/me/guilds',
@@ -54,10 +55,10 @@ export const paths = {
   post: (postId: string) => `/posts/${id(postId)}`,
   postEdit: (postId: string) => `/posts/${id(postId)}/edit`,
   myPosts: () => '/me/posts',
-  guilds: () => '/guilds',
-  /** The old claim address, kept for existing links: it leads to `myGuilds`. */
-  guildClaim: () => '/me/guilds',
-  myGuilds: () => '/me/guilds',
+  /** The "Add a server" dialog, over the dashboard (`?servers=add`). `/guilds/claim` redirects here. */
+  guildClaim: () => '/me?servers=add',
+  /** The "Manage servers" dialog, over the dashboard (`?servers=manage`). `/me/guilds` redirects here. */
+  myGuilds: () => '/me?servers=manage',
   guild: (guildId: string) => `/guilds/${id(guildId)}`,
   guildManage: (guildId: string) => `/guilds/${id(guildId)}/manage`,
   guildManageInvite: (guildId: string) => `/guilds/${id(guildId)}/manage/invite`,

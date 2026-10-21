@@ -5,7 +5,7 @@
   "notFound": {
     "title": "Servidor não encontrado",
     "body": "Este servidor não tem perfil no Lineup. Adicione-o primeiro na página Servidores.",
-    "action": "Ver servidores"
+    "action": "Ver projetos"
   },
   "forbidden": {
     "title": "Você não gerencia este servidor",
@@ -58,27 +58,25 @@
   },
   "invite": {
     "title": "Convite",
-    "description": "O link do botão Entrar do perfil.",
-    "current": "Convite atual",
-    "valid": "Válido",
     "lost": "Não encontrado no Discord",
-    "lostHelp": "Ele não existe mais no Discord: substitua-o.",
-    "none": "Nenhum convite ativo.",
+    "none": "Nenhum convite",
     "label": "Novo convite",
     "placeholder": "https://discord.gg/seu-codigo",
-    "hint": "Opcional. Não pode expirar e deve levar a este mesmo servidor.",
+    "hint": "Não pode expirar e deve levar a este servidor.",
     "how": "Como criar um convite permanente",
     "regenerate": "Gerar um novo convite",
     "regenerating": "Gerando...",
     "regenerated": "Novo convite gerado.",
-    "regenerateHelp": "O Moddy cria um convite permanente no servidor.",
-    "manualFallback": "Cole um convite permanente no campo abaixo.",
-    "waitIn": "Disponível em {{seconds}} s"
+    "waitIn": "Disponível em {{seconds}} s",
+    "paste": "Colar outro convite",
+    "copy": "Copiar link",
+    "copied": "Convite copiado.",
+    "copyFailed": "Não foi possível copiar."
   },
   "visibility": {
     "title": "Visibilidade",
-    "label": "Mostrar o servidor no diretório",
-    "on": "Qualquer pessoa pode encontrar este perfil no diretório.",
+    "label": "Tornar o servidor visível no Lineup",
+    "on": "O perfil e os anúncios do servidor são visíveis para todos.",
     "off": "O perfil e os anúncios somem para todos, exceto gestores e o staff do Moddy."
   },
   "errors": {
@@ -105,7 +103,7 @@
   },
   "danger": {
     "title": "Zona de perigo",
-    "body": "Excluir o perfil o tira do diretório e fecha os anúncios do servidor. O servidor do Discord não é afetado.",
+    "body": "Excluir o perfil o torna invisível e fecha os anúncios do servidor. O servidor do Discord não é afetado.",
     "action": "Excluir o perfil",
     "confirmTitle": "Excluir o perfil de {{name}}?",
     "confirmBody": "O que acontece:",
@@ -118,7 +116,7 @@
   "newPost": "Novo anúncio",
   "pages": {
     "profile": "Descrição, tema, tags, idiomas e links.",
-    "invite": "O convite por trás do botão Entrar.",
+    "invite": "O link do botão Entrar no seu perfil.",
     "posts": "Os anúncios deste servidor.",
     "discord": "O que o Lineup lê no Discord.",
     "settings": "Visibilidade e exclusão."

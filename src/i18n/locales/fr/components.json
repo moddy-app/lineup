@@ -183,9 +183,8 @@
   },
   "verification": {
     "moddy_staff": "Équipe Moddy",
-    "moddy_server": "Serveur officiel Moddy",
-    "lineup_verified_guild": "Serveur vérifié",
-    "lineup_verified_user": "Compte vérifié"
+    "moddy_server": "Serveur officiel de Moddy",
+    "lineup_verified": "Vérifié"
   },
   "settings": {
     "nav": {

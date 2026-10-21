@@ -1,6 +1,4 @@
 {
-  "title": "Servers",
-  "description": "The Discord servers you manage",
   "unknownName": "Unnamed server",
   "success": "{{name}} is on Lineup.",
   "refresh": {
@@ -9,15 +7,15 @@
     "done": "List read again from Discord."
   },
   "onLineup": {
-    "title": "On Lineup",
     "label": "Servers on Lineup",
-    "listed": "In the directory",
+    "listed": "Visible",
     "unlisted": "Hidden",
     "manage": "Manage",
-    "profile": "View profile"
+    "profile": "View profile",
+    "emptyTitle": "No server on Lineup",
+    "emptyBody": "The servers you add appear here."
   },
   "toAdd": {
-    "title": "To add",
     "label": "Servers to add",
     "withModdy": "Moddy installed",
     "add": "Add",
@@ -33,7 +31,6 @@
   },
   "dialog": {
     "title": "Add {{name}}",
-    "titleFree": "Add a server",
     "intro": "Paste an invitation link to {{name}} that never expires. It becomes the Join button on the profile.",
     "introModdy": "Moddy is already on {{name}}. Lineup reads the server and creates the permanent invitation for you.",
     "introFree": "Paste an invitation link that never expires to a server you manage. It proves the server is yours and becomes the Join button on the profile.",
@@ -41,10 +38,11 @@
     "label": "Invitation link or code",
     "placeholder": "https://discord.gg/your-code",
     "hint": "The bare code works too.",
-    "cancel": "Cancel",
     "submit": "Add",
     "submitting": "Checking...",
-    "adding": "Adding..."
+    "adding": "Adding...",
+    "back": "Back to the list",
+    "close": "Close"
   },
   "errors": {
     "tooShort": "Enter at least {{count}} characters.",
@@ -52,5 +50,9 @@
     "rightsChanged": "I changed my rights",
     "rightsChecking": "Reading rights...",
     "openProfile": "Open the profile"
+  },
+  "menu": {
+    "add": "Add a server",
+    "manage": "Manage servers"
   }
 }

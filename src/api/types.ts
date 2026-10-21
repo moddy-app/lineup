@@ -518,6 +518,8 @@ export interface MeUser {
   avatar_url: string | null;
   banner_url: string | null;
   avatar_decoration_data: DiscordFreeObject | null;
+  /** Expected (the `email` scope is already requested): not returned by the API yet. Shown in the account menu when present. */
+  email?: string | null;
   is_staff: boolean;
   /** Without Discord's badges and `moddy_premium` (summaries only). */
   badges: Badge[];

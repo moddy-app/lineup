@@ -3,7 +3,7 @@
   "notFound": {
     "title": "Serveur introuvable",
     "body": "Ce serveur n'a pas de profil Lineup, ou son profil n'est pas public.",
-    "action": "Voir les serveurs"
+    "action": "Voir les projets"
   },
   "stats": {
     "members_one": "membre",
@@ -23,7 +23,7 @@
     "action": "Gérer"
   },
   "notices": {
-    "unlisted": "Ce profil est absent de l'annuaire. Seuls les gestionnaires et le staff Moddy le voient.",
+    "unlisted": "Ce profil est masqué : seuls les gestionnaires et le staff Moddy le voient, ainsi que ses annonces.",
     "inviteLost": "L'invitation enregistrée n'existe plus : le bouton Rejoindre est masqué.",
     "inviteLostAction": "Remplacer l'invitation"
   },

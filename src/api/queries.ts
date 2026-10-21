@@ -19,7 +19,6 @@ import {
   getCatalog,
   getFeed,
   getGuild,
-  getGuildDirectory,
   getMyExperiences,
   getMyGuilds,
   getMyPosts,
@@ -30,12 +29,11 @@ import {
   getStaffReports,
   getUser,
 } from './endpoints';
-import {normalizeDirectoryFilters, normalizeFeedFilters, normalizeMyPostsParams, queryKeys} from './queryKeys';
+import {normalizeFeedFilters, normalizeMyPostsParams, queryKeys} from './queryKeys';
 import {shouldRetry} from './retry';
 import {fetchSession} from './sessionSnapshot';
 import type {
   BadgeEntityType,
-  DirectoryFilters,
   FeedFilters,
   MyPostsParams,
   Paginated,
@@ -145,19 +143,6 @@ export function useMyPosts(params: MyPostsParams = {}) {
 // ---------------------------------------------------------------------------
 // Servers
 // ---------------------------------------------------------------------------
-
-/** The public directory of servers (60 s of cache on the server). */
-export function useGuildDirectory(filters: DirectoryFilters = {}) {
-  const normalized = normalizeDirectoryFilters(filters);
-  return useInfiniteQuery({
-    queryKey: queryKeys.directory(normalized),
-    queryFn: ({pageParam, signal}) => getGuildDirectory(normalized, {cursor: pageParam, signal}),
-    initialPageParam: FIRST_PAGE,
-    getNextPageParam: nextCursor,
-    staleTime: 60_000,
-    placeholderData: keepPreviousData,
-  });
-}
 
 /** A server's profile. */
 export function useGuild(guildId: Snowflake | undefined) {

@@ -1,8 +1,8 @@
 /**
  * One experience as an inner card: the server's icon or the service's image
- * (a shape without either), the position in 600, the server or service name
- * (with its verification mark when the server has a listed profile:
- * `experience.guild`), the member count of a server, the period and its
+ * (a shape without either), the server or service name in 600 (with its
+ * verification mark when the server has a listed profile: `experience.guild`),
+ * the position under it, the member count of a server, the period and its
  * duration, a short description and the verification. `actions` is a slot under the text
  * for the owner's controls; `href` makes the name a link to the server.
  *
@@ -94,15 +94,15 @@ export function ExperienceRow({experience, href, showStatus, actions, as: Tag = 
       </div>
       <div className="experience-body">
         <div className="experience-head">
-          <span className="experience-position">{position}</span>
+          <p className="experience-name">
+            {isGuild ? <DisplayName name={name} badges={guild?.badges} entity="guild" /> : name}
+          </p>
           <VerificationPill
             verification={experience.verification}
             showAll={showStatus ?? isPrivateExperience(experience)}
           />
         </div>
-        <p className="experience-name">
-          {isGuild ? <DisplayName name={name} badges={guild?.badges} entity="guild" /> : name}
-        </p>
+        <p className="experience-position">{position}</p>
         {isGuild && <InlineStats compact items={memberStats} />}
         <p className="experience-period numeric">
           {period} · {duration}

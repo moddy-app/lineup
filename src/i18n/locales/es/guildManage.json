@@ -5,7 +5,7 @@
   "notFound": {
     "title": "Servidor no encontrado",
     "body": "Este servidor no tiene perfil en Lineup. Añádalo primero desde la página Servidores.",
-    "action": "Ver servidores"
+    "action": "Ver proyectos"
   },
   "forbidden": {
     "title": "No gestionas este servidor",
@@ -58,27 +58,25 @@
   },
   "invite": {
     "title": "Invitación",
-    "description": "El enlace del botón Unirse del perfil.",
-    "current": "Invitación actual",
-    "valid": "Válida",
     "lost": "No encontrada en Discord",
-    "lostHelp": "Ya no existe en Discord: reemplácela.",
-    "none": "No hay ninguna invitación activa.",
+    "none": "Sin invitación",
     "label": "Nueva invitación",
     "placeholder": "https://discord.gg/su-codigo",
-    "hint": "Opcional. No debe caducar nunca y llevar a este mismo servidor.",
+    "hint": "No debe caducar nunca y debe llevar a este servidor.",
     "how": "Cómo crear una invitación permanente",
     "regenerate": "Generar una invitación nueva",
     "regenerating": "Generando...",
     "regenerated": "Invitación nueva generada.",
-    "regenerateHelp": "Moddy crea una invitación permanente en el servidor.",
-    "manualFallback": "Pegue una invitación permanente en el campo de abajo.",
-    "waitIn": "Disponible en {{seconds}} s"
+    "waitIn": "Disponible en {{seconds}} s",
+    "paste": "Pegar otra invitación",
+    "copy": "Copiar enlace",
+    "copied": "Invitación copiada.",
+    "copyFailed": "No se pudo copiar."
   },
   "visibility": {
     "title": "Visibilidad",
-    "label": "Mostrar el servidor en el directorio",
-    "on": "Cualquiera puede encontrar este perfil en el directorio.",
+    "label": "Hacer visible el servidor en Lineup",
+    "on": "El perfil y los anuncios del servidor son visibles para todos.",
     "off": "El perfil y sus anuncios desaparecen para todos, salvo para los gestores y el staff de Moddy."
   },
   "errors": {
@@ -105,7 +103,7 @@
   },
   "danger": {
     "title": "Zona de peligro",
-    "body": "Eliminar el perfil lo quita del directorio y cierra los anuncios del servidor. El servidor de Discord no se toca.",
+    "body": "Eliminar el perfil lo hace invisible y cierra los anuncios del servidor. El servidor de Discord no se toca.",
     "action": "Eliminar el perfil",
     "confirmTitle": "¿Eliminar el perfil de {{name}}?",
     "confirmBody": "Lo que ocurre:",
@@ -118,7 +116,7 @@
   "newPost": "Nuevo anuncio",
   "pages": {
     "profile": "Descripción, tema, etiquetas, idiomas y enlaces.",
-    "invite": "La invitación detrás del botón Unirse.",
+    "invite": "El enlace del botón Unirse en su perfil.",
     "posts": "Los anuncios de este servidor.",
     "discord": "Lo que Lineup lee de Discord.",
     "settings": "Visibilidad y eliminación."

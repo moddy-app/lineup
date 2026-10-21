@@ -56,6 +56,8 @@ interface DropdownProps {
   matchTrigger?: boolean;
   /** A line (icon and name, `--text-label`) above the choices, as in the filters. */
   header?: {icon?: string; label: string};
+  /** Free content above the choices (the account card of the user menu). */
+  top?: ReactNode;
   className?: string;
 }
 
@@ -87,6 +89,7 @@ export function Dropdown({
   wide = false,
   matchTrigger = false,
   header,
+  top,
   className,
 }: DropdownProps) {
   const [open, setOpen] = useState(false);
@@ -215,6 +218,7 @@ export function Dropdown({
             onKeyDown={onKeyDown}
             onClick={(event) => event.stopPropagation()}
           >
+            {top}
             {header && (
               <p className="filter-popover-head" aria-hidden="true">
                 {header.icon && <Icon name={header.icon} />}

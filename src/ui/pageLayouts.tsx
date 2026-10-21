@@ -1,9 +1,11 @@
-import {type HTMLAttributes, type ReactNode, useId} from 'react';
+import {type HTMLAttributes, lazy, type ReactNode, Suspense, useEffect, useId, useState} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router';
 
 import {paths} from '@/app/paths';
+import {CLAIM_DRAFT_KEY} from '@/features/claim/claimDraft';
 import {useT} from '@/i18n/useT';
 import {cx} from '@/lib/cx';
+import {getItem} from '@/lib/storage';
 
 import {Card} from './Card';
 import {ContextSwitcher} from './ContextSwitcher';
@@ -11,6 +13,10 @@ import {type DashboardContext, dashboardContext} from './dashboardContext';
 import {Dropdown} from './Dropdown';
 import {Icon} from './Icon';
 import {Page} from './layout';
+import {useServersDialog} from './serversDialog';
+
+// The two server dialogs load when the address first asks for one.
+const ServersDialogs = lazy(() => import('@/features/claim/ServersDialogs'));
 
 /**
  * The two page families of the redesign (docs/ui-redesign.md):
@@ -236,6 +242,15 @@ interface SettingsLayoutProps {
 export function SettingsLayout({title, description, actions, children, className, context}: SettingsLayoutProps) {
   const {pathname, search} = useLocation();
   const current = context ?? dashboardContext(pathname, search);
+  const servers = useServersDialog();
+  const [asked, setAsked] = useState(false);
+  if (servers.mode !== null && !asked) setAsked(true);
+  // A claim interrupted by the sign-in: come back to its dialog, wherever the sign-in landed.
+  useEffect(() => {
+    if (getItem<unknown>(CLAIM_DRAFT_KEY, null, 'session') !== null) servers.show('add');
+    // Once, when the page opens.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <Page className={cx('settings-page', className)}>
       <div className="settings-layout">
@@ -251,6 +266,11 @@ export function SettingsLayout({title, description, actions, children, className
           {children}
         </div>
       </div>
+      {asked && (
+        <Suspense fallback={null}>
+          <ServersDialogs mode={servers.mode} show={servers.show} />
+        </Suspense>
+      )}
     </Page>
   );
 }

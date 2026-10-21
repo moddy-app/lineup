@@ -1,34 +1,19 @@
 import {useEffect, useMemo, useRef} from 'react';
-import {Link, Outlet, useLocation, useMatches, useNavigate, useNavigation, useNavigationType} from 'react-router';
-import type {ModdyUser} from '@moddy/design-kit';
+import {Outlet, useLocation, useMatches, useNavigate, useNavigation, useNavigationType} from 'react-router';
 
 import {useSession} from '@/auth/session';
 import {kitLabels} from '@/i18n/kitLabels';
 import {useLanguage} from '@/i18n/useLanguage';
 import {useT} from '@/i18n/useT';
 import {clientNavigation} from '@/lib/clientNav';
-import {defaultAvatarUrl} from '@/lib/discord';
-import {verificationLabel, verificationOf} from '@/components/verification';
-import {Icon} from '@/ui';
 
 import type {RouteHandle} from './handle';
-import {isDashboard, isRecruiting, isServers, isStaffArea, isTalent} from './navMatch';
+import {isDashboard, isRecruiting, isStaffArea, isTalent} from './navMatch';
 import {paths} from './paths';
 import {LanguageMenu} from './LanguageMenu';
 import {SuspendedNotice} from './SuspendedNotice';
-
-/** Whether a nav destination covers the current page. */
-type Match = (pathname: string) => boolean;
-
-function NavItem({to, icon, label, match}: {to: string; icon: string; label: string; match: Match}) {
-  const {pathname} = useLocation();
-  return (
-    <Link to={to} aria-current={match(pathname) ? 'page' : undefined}>
-      <Icon name={icon} />
-      <span className="app-nav-label">{label}</span>
-    </Link>
-  );
-}
+import {UserMenu} from './UserMenu';
+import {AppLogo, type NavDestination, TopNav} from './TopNav';
 
 /**
  * The frame of every page: app bar and content (no footer: the language
@@ -42,7 +27,6 @@ function NavItem({to, icon, label, match}: {to: string; icon: string; label: str
  */
 export function AppShell() {
   const {t} = useT('common');
-  const {t: tc} = useT('components');
   const language = useLanguage();
   const labels = kitLabels(language);
   const session = useSession();
@@ -58,19 +42,19 @@ export function AppShell() {
     session.status === 'suspended' && !matches.some((match) => (match.handle as RouteHandle | undefined)?.requiresAuth);
 
   const me = session.me?.user;
-  const user = useMemo<ModdyUser | null>(() => {
-    if (!me) return null;
-    const verification = verificationOf(me.badges, 'user');
-    return {
-      handle: me.username,
-      name: me.global_name ?? undefined,
-      avatar: me.avatar_url ?? defaultAvatarUrl(me.id),
-      // The tooltip of the check in the menu: what kind of verification (from the badges, when the API gives them).
-      verified: verification ? verificationLabel(verification, 'user', tc) : undefined,
-      // The API does not give Moddy Max here.
-      max: false,
-    };
-  }, [me, tc]);
+  const destinations = useMemo<NavDestination[]>(
+    () => [
+      {key: 'feed', to: paths.feed(), icon: 'rocket_launch', label: t('nav.feed'), match: isRecruiting},
+      {key: 'people', to: paths.people(), icon: 'badge', label: t('nav.people'), match: isTalent},
+      ...(me
+        ? [{key: 'dashboard', to: paths.me(), icon: 'dashboard', label: t('nav.dashboard'), match: isDashboard}]
+        : []),
+      ...(isStaff
+        ? [{key: 'staff', to: paths.staff(), icon: 'shield_person', label: t('nav.staff'), match: isStaffArea}]
+        : []),
+    ],
+    [me, isStaff, t],
+  );
 
   const onKitLinkClick = useMemo(() => clientNavigation(navigate), [navigate]);
 
@@ -88,22 +72,12 @@ export function AppShell() {
   return (
     <div className="app">
       <moddy-app-bar home-href={paths.home()} labels={labels.appBar} onclick={onKitLinkClick}>
-        <nav slot="nav" className="app-nav" aria-label={t('nav.label')}>
-          <NavItem to={paths.feed()} icon="campaign" label={t('nav.feed')} match={isRecruiting} />
-          <NavItem to={paths.people()} icon="person_search" label={t('nav.people')} match={isTalent} />
-          <NavItem to={paths.guilds()} icon="groups" label={t('nav.guilds')} match={isServers} />
-          {me && <NavItem to={paths.me()} icon="dashboard" label={t('nav.dashboard')} match={isDashboard} />}
-          {isStaff && <NavItem to={paths.staff()} icon="shield_person" label={t('nav.staff')} match={isStaffArea} />}
-        </nav>
+        <AppLogo href={paths.home()} label={labels.appBar.home} />
+        <TopNav destinations={destinations} />
         <LanguageMenu />
         <moddy-theme-menu labels={labels.theme} />
-        {user && me ? (
-          <moddy-user-menu user={user} labels={labels.userMenu} onsign-out={() => void session.logout()}>
-            <UserMenuItem href={paths.user(me.id)} icon="person" label={t('userMenu.profile')} />
-            <UserMenuItem href={paths.me()} icon="dashboard" label={t('nav.dashboard')} />
-            <UserMenuItem href={paths.myPosts()} icon="campaign" label={t('userMenu.posts')} />
-            <UserMenuItem href={paths.myExperiences()} icon="work_history" label={t('userMenu.experiences')} />
-          </moddy-user-menu>
+        {me ? (
+          <UserMenu user={me} onSignOut={() => void session.logout()} />
         ) : (
           session.status === 'anonymous' && (
             <md-filled-button onclick={() => session.login()}>{t('auth.login')}</md-filled-button>
@@ -120,14 +94,5 @@ export function AppShell() {
         <Outlet />
       </main>
     </div>
-  );
-}
-
-function UserMenuItem({href, icon, label}: {href: string; icon: string; label: string}) {
-  return (
-    <md-menu-item href={href}>
-      <md-icon slot="start">{icon}</md-icon>
-      <div slot="headline">{label}</div>
-    </md-menu-item>
   );
 }

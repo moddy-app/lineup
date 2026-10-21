@@ -4,8 +4,8 @@
   },
   "nav": {
     "label": "Main navigation",
+    "menu": "Menu",
     "feed": "Projects",
-    "guilds": "Servers",
     "staff": "Staff",
     "people": "Profiles",
     "dashboard": "Dashboard"

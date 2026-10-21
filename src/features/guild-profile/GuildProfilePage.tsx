@@ -55,7 +55,7 @@ export function Component() {
             tone="tertiary"
             title={t('notFound.title')}
             action={
-              <LinkButton to={paths.guilds()} variant="filled" icon="groups">
+              <LinkButton to={paths.feed()} variant="filled" icon="rocket_launch">
                 {t('notFound.action')}
               </LinkButton>
             }
@@ -73,7 +73,7 @@ export function Component() {
   if (isNsfw(guild) && !confirmed) {
     return (
       <Page>
-        <NsfwGate nsfw backTo={paths.guilds()} headingLevel={1}>
+        <NsfwGate nsfw headingLevel={1}>
           {null}
         </NsfwGate>
       </Page>

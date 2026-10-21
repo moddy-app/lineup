@@ -4,7 +4,9 @@ import {afterEach, beforeAll, describe, expect, it, vi} from 'vitest';
 import {makeGuildProfile, makeMe, makeMyGuild} from '@/api/fixtures';
 import {json, mockApi, renderApp, useFrench} from '@/test/harness';
 
-import {Component} from './ClaimPage';
+import {useServersDialog} from '@/ui';
+
+import ServersDialogs from './ServersDialogs';
 
 beforeAll(useFrench);
 afterEach(() => {
@@ -19,7 +21,12 @@ const CLAIMED = makeMyGuild({id: '712345678901234567', name: 'Pixel Forge', clai
 
 const lineupError = (status: number, code: string) => json(status, {error: {code, message: 'm'}, code});
 
-function mount(claim: () => Response | Promise<Response>) {
+function Page() {
+  const {mode, show} = useServersDialog();
+  return <ServersDialogs mode={mode} show={show} />;
+}
+
+function mount(claim: () => Response | Promise<Response>, mode: 'add' | 'manage' = 'add') {
   const api = mockApi({
     'GET /lineup/me': () => json(200, makeMe()),
     'GET /lineup/me/guilds': () => json(200, [CLAIMED, MODDY, PLAIN]),
@@ -27,12 +34,10 @@ function mount(claim: () => Response | Promise<Response>) {
   });
   renderApp(
     [
-      {path: 'me/guilds', Component},
+      {path: 'me', element: <Page />},
       {path: 'guilds/:id/manage', element: <p>Gestion</p>},
     ],
-    {
-      path: '/me/guilds',
-    },
+    {path: `/me?servers=${mode}`},
   );
   return api;
 }
@@ -50,11 +55,25 @@ async function openFor(name: string) {
   fireEvent.click(row.querySelector('md-outlined-button') as HTMLElement);
 }
 
-describe('claim page', () => {
-  it('reads "in the directory" or "hidden" from the list itself, with one request for all the servers', async () => {
-    const api = mount(() => json(201, makeGuildProfile()));
+const textButton = (label: string) =>
+  [...document.querySelectorAll<HTMLElement>('md-dialog md-text-button')].find((b) => b.textContent === label);
+
+describe('server dialogs', () => {
+  it('manage: reads "in the directory" or "hidden" from the list itself, with one request for all the servers', async () => {
+    const api = mount(() => json(201, makeGuildProfile()), 'manage');
     expect(await screen.findByText('Masqué')).toBeTruthy();
+    expect(screen.getAllByText('Gérer les serveurs').length).toBeGreaterThan(0);
     expect(api.calls.some((call) => call.path.startsWith('/lineup/guilds/'))).toBe(false);
+  });
+
+  it('lists only the servers not on Lineup yet, and goes back to the list from a step', async () => {
+    mount(() => json(201, makeGuildProfile()));
+    expect(await screen.findByText('Cubelands FR')).toBeTruthy();
+    await openFor('Studio Nocturne');
+    expect(inviteField()).not.toBeNull();
+    fireEvent.click(textButton('Retour à la liste')!);
+    expect(await screen.findByText('Cubelands FR')).toBeTruthy();
+    expect(inviteField()).toBeNull();
   });
 
   it('adds a server where Moddy is with its id alone: no invitation field', async () => {

@@ -37,7 +37,7 @@ const SNOWFLAKE = '812345678901234567';
 afterEach(() => vi.unstubAllGlobals());
 
 /**
- * The 41 routes of LINEUP.md §6, each with what its function must send. The
+ * The routes of LINEUP.md §6 that the front calls (all but the directory), each with what its function must send. The
  * navigation `GET /lineup/auth/login` is checked apart (it is a URL).
  */
 const routes: Array<{route: string; call: () => Promise<unknown>; expected: Partial<Call>}> = [
@@ -49,11 +49,6 @@ const routes: Array<{route: string; call: () => Promise<unknown>; expected: Part
     expected: {method: 'POST', path: '/lineup/me/refresh-guilds', body: undefined},
   },
   {route: 'GET /lineup/catalog', call: () => api.getCatalog(), expected: {method: 'GET', path: '/lineup/catalog'}},
-  {
-    route: 'GET /lineup/guilds',
-    call: () => api.getGuildDirectory({theme: 'gaming', q: ' mine ', include_nsfw: false}, {cursor: 'abc', limit: 24}),
-    expected: {method: 'GET', path: '/lineup/guilds', query: 'theme=gaming&q=mine&limit=24&cursor=abc'},
-  },
   {
     route: 'POST /lineup/guilds/claim',
     call: () => api.claimGuild({invite: 'https://discord.gg/cubelands'}),
@@ -261,9 +256,9 @@ const routes: Array<{route: string; call: () => Promise<unknown>; expected: Part
 ];
 
 describe('endpoints', () => {
-  it('covers 40 requests plus the sign-in navigation: the 41 routes', () => {
-    expect(routes).toHaveLength(40);
-    expect(new Set(routes.map((r) => r.route)).size).toBe(40);
+  it('covers 39 requests plus the sign-in navigation (the 41 routes of LINEUP.md minus the directory)', () => {
+    expect(routes).toHaveLength(39);
+    expect(new Set(routes.map((r) => r.route)).size).toBe(39);
   });
 
   for (const {route, call, expected} of routes) {
@@ -285,11 +280,13 @@ describe('endpoints', () => {
       if (path!.endsWith('/resolve')) documented.add(`${method} ${path!.replace(/resolve$/, 'dismiss')}`);
     }
     documented.delete('GET /lineup/auth/login');
+    // The directory page is gone: the front no longer calls it.
+    documented.delete('GET /lineup/guilds');
     const implemented = new Set(
       routes.map((r) => r.route.replace(/\{entity_type\}\/\{entity_id\}/, '{entity_type}/{entity_id}')),
     );
     expect([...documented].sort()).toEqual([...implemented].sort());
-    expect(documented.size).toBe(40);
+    expect(documented.size).toBe(39);
   });
 
   it('encodes path parameters', async () => {

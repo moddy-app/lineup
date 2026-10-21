@@ -356,26 +356,28 @@ function PostHeader({post, poster, onDeleted}: {post: PostDetail; poster: Poster
               {post.title}
             </h1>
             <p className="post-byline">
-              <Link to={poster.to} className="post-poster-link">
-                {poster.isGuild ? (
-                  <GuildIcon id={post.guild_id!} iconUrl={post.guild?.icon_url} size="small" />
-                ) : (
-                  <UserAvatar id={post.author.id} src={post.author.avatar_url} size="small" />
-                )}
-                <DisplayName
-                  name={poster.name}
-                  badges={poster.badges}
-                  entity={poster.isGuild ? 'guild' : 'user'}
-                  focusable={false}
-                />
-              </Link>
+              <span className="post-byline-item">
+                <Link to={poster.to} className="post-poster-link">
+                  {poster.isGuild ? (
+                    <GuildIcon id={post.guild_id!} iconUrl={post.guild?.icon_url} size="small" />
+                  ) : (
+                    <UserAvatar id={post.author.id} src={post.author.avatar_url} size="small" />
+                  )}
+                  <DisplayName
+                    name={poster.name}
+                    badges={poster.badges}
+                    entity={poster.isGuild ? 'guild' : 'user'}
+                    focusable={false}
+                  />
+                </Link>
+              </span>
               {post.published_at && (
-                <span className="post-dates">
+                <span className="post-byline-item post-dates">
                   {t('dates.published')} <RelativeTime value={post.published_at} />
                 </span>
               )}
               {Date.parse(post.updated_at) - Date.parse(post.published_at ?? post.created_at) > 60_000 && (
-                <span className="post-dates">
+                <span className="post-byline-item post-dates">
                   {t('dates.updated')} <RelativeTime value={post.updated_at} />
                 </span>
               )}

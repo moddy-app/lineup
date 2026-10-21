@@ -877,15 +877,17 @@ a.inner-card {
   min-width: 0;
 }
 
-.experience-position {
+.experience-name {
   min-width: 0;
+  max-width: none;
+  margin: 0;
   font-size: var(--text-body);
   font-weight: 600;
   color: var(--md-sys-color-on-surface);
   overflow-wrap: anywhere;
 }
 
-.experience-name,
+.experience-position,
 .experience-period {
   max-width: none;
   margin: 0;
@@ -893,7 +895,7 @@ a.inner-card {
   overflow-wrap: anywhere;
 }
 
-.experience-name {
+.experience-position {
   color: var(--md-sys-color-on-surface);
 }
 
@@ -1305,6 +1307,115 @@ md-dialog {
 }
 
 /* ---------------------------------------------------------------------------
+ * App bar: the whole logo at every width (the kit's own one keeps only the
+ * mark under 600px), and the destinations (`.app-nav` on wide windows, a menu
+ * button under 700px).
+ * ------------------------------------------------------------------------- */
+
+.app-logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: 36px;
+  margin-top: -3px;
+  color: var(--md-sys-color-primary);
+  border-radius: var(--radius-s);
+  outline: none;
+}
+
+.app-logo:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 4px;
+}
+
+.app-logo-art {
+  display: flex;
+  height: 100%;
+}
+
+.app-logo-art svg {
+  display: block;
+  height: 100%;
+  width: auto;
+}
+
+.top-nav {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.top-nav-menu {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .app-logo {
+    height: 28px;
+    margin-top: 0;
+  }
+
+  .top-nav .app-nav {
+    display: none;
+  }
+
+  .top-nav-menu {
+    display: inline-flex;
+  }
+}
+
+/* Account menu (app bar): a round 32px button, and a card with the person on top of the menu. */
+
+.user-menu-button {
+  --md-icon-button-icon-size: 32px;
+}
+
+.user-menu-popover {
+  min-width: 17rem;
+}
+
+.user-menu-card {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-m);
+  margin-bottom: var(--gap-s);
+  padding: var(--gap-m);
+  border-radius: var(--radius-l);
+  background-color: var(--md-sys-color-surface-container);
+}
+
+.user-avatar.user-menu-avatar {
+  --avatar-size: 48px;
+}
+
+.avatar.user-menu-avatar {
+  width: 48px;
+  height: 48px;
+}
+
+.user-menu-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.user-menu-name {
+  font-size: var(--text-body);
+  font-weight: 600;
+  color: var(--md-sys-color-on-surface);
+}
+
+.user-menu-email {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* ---------------------------------------------------------------------------
  * Language menu (app bar): the button, and the menu of the five languages.
  * ------------------------------------------------------------------------- */
 
@@ -1346,7 +1457,8 @@ md-dialog {
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  /* Follows the size of the text next to it (16px at 16px of text). */
+  /* Follows the text next to it, smaller (0.8em, never under 14px), so that it stays light in a big title. */
+  font-size: max(14px, 0.8em);
   width: 1em;
   height: 1em;
   border-radius: var(--radius-full);
@@ -1356,7 +1468,7 @@ md-dialog {
 }
 
 .verified-badge .material-symbols-outlined {
-  font-size: 1em;
+  font-size: inherit;
 }
 
 .verified-badge-tip {
@@ -1813,10 +1925,35 @@ md-dialog {
   min-width: 0;
 }
 
-.settings-context > md-outlined-button {
+.settings-context-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-s);
+  box-sizing: border-box;
   width: 100%;
-  --md-outlined-button-label-text-color: var(--md-sys-color-on-surface);
-  --md-outlined-button-icon-color: var(--md-sys-color-on-surface-variant);
+  min-height: 56px;
+  padding: var(--gap-s) var(--gap-m) var(--gap-s) var(--gap-l);
+  border: 0;
+  border-radius: var(--radius-l);
+  background-color: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+  font: inherit;
+  font-weight: 500;
+  text-align: start;
+  cursor: pointer;
+  --md-focus-ring-shape: var(--radius-l);
+  --md-ripple-hover-color: var(--md-sys-color-on-surface);
+  --md-ripple-pressed-color: var(--md-sys-color-on-surface);
+}
+
+.settings-context-button .settings-context-current {
+  flex: 1 1 auto;
+}
+
+.settings-context-chevron {
+  flex-shrink: 0;
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .settings-context-current {
@@ -1830,8 +1967,8 @@ md-dialog {
 .settings-context-current .avatar,
 .settings-context-current .guild-icon {
   flex-shrink: 0;
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
 }
 
 .settings-context-name {

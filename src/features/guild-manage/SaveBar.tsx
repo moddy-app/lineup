@@ -5,7 +5,7 @@ import {useSession} from '@/auth/session';
 import {useT} from '@/i18n/useT';
 import {Icon} from '@/ui';
 
-import {SanctionNotice} from '../guilds/SanctionNotice';
+import {SanctionNotice} from '@/components/SanctionNotice';
 
 export interface SaveBarProps {
   dirty: boolean;

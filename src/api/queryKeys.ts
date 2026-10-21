@@ -7,7 +7,6 @@
  *   ['posts', 'feed', filters]              infinite
  *   ['posts', 'detail', id]
  *   ['posts', 'mine', {guildId, status}]    infinite
- *   ['guilds', 'directory', filters]        infinite
  *   ['guilds', 'detail', id]
  *   ['guilds', 'mine']
  *   ['users', 'detail', id]
@@ -21,7 +20,6 @@
 
 import type {
   BadgeEntityType,
-  DirectoryFilters,
   FeedFilters,
   MyPostsParams,
   Snowflake,
@@ -45,8 +43,6 @@ export const queryKeys = {
   myPosts: (params: MyPostsParams) => ['posts', 'mine', params] as const,
 
   guilds: () => ['guilds'] as const,
-  directories: () => ['guilds', 'directory'] as const,
-  directory: (filters: DirectoryFilters) => ['guilds', 'directory', filters] as const,
   guildDetails: () => ['guilds', 'detail'] as const,
   guildDetail: (id: Snowflake) => ['guilds', 'detail', id] as const,
   myGuilds: () => ['guilds', 'mine'] as const,
@@ -93,14 +89,6 @@ export function normalizeFeedFilters(filters: FeedFilters): FeedFilters {
     include_nsfw: filters.include_nsfw ? true : undefined,
   };
   return stripUndefined(normalized);
-}
-
-export function normalizeDirectoryFilters(filters: DirectoryFilters): DirectoryFilters {
-  return stripUndefined({
-    theme: text(filters.theme),
-    q: text(filters.q),
-    include_nsfw: filters.include_nsfw ? true : undefined,
-  });
 }
 
 export function normalizeMyPostsParams(params: MyPostsParams): MyPostsParams {

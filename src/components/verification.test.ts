@@ -34,12 +34,12 @@ describe('verificationOf', () => {
 
 describe('verificationLabel', () => {
   initI18n();
-  it('names the kind in the current language, and the entity for lineup_verified', async () => {
+  it('names the kind in the current language, whatever the entity', async () => {
     await i18n.changeLanguage('en');
     const t = i18n.getFixedT('en', 'components');
     expect(verificationLabel('moddy_staff', 'user', t)).toBe('Moddy team');
     expect(verificationLabel('moddy_server', 'guild', t)).toBe('Official Moddy server');
-    expect(verificationLabel('lineup_verified', 'guild', t)).toBe('Verified server');
-    expect(verificationLabel('lineup_verified', 'user', t)).toBe('Verified account');
+    expect(verificationLabel('lineup_verified', 'guild', t)).toBe('Verified');
+    expect(verificationLabel('lineup_verified', 'user', t)).toBe('Verified');
   });
 });

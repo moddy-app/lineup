@@ -47,7 +47,7 @@ export function Component() {
             tone="tertiary"
             title={t('notFound.title')}
             action={
-              <LinkButton to={paths.guilds()} icon="groups">
+              <LinkButton to={paths.feed()} icon="rocket_launch">
                 {t('notFound.action')}
               </LinkButton>
             }

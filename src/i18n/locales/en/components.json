@@ -184,8 +184,7 @@
   "verification": {
     "moddy_staff": "Moddy team",
     "moddy_server": "Official Moddy server",
-    "lineup_verified_guild": "Verified server",
-    "lineup_verified_user": "Verified account"
+    "lineup_verified": "Verified"
   },
   "settings": {
     "nav": {

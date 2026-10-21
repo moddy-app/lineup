@@ -50,7 +50,7 @@ export function Component() {
       <ShowcasePage>
         {notFound ? (
           <EmptyState
-            icon="person_search"
+            icon="badge"
             title={t('notFound.title')}
             shape="hexagon"
             tone="tertiary"

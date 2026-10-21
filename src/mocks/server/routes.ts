@@ -7,7 +7,7 @@
  * mode the login button goes to the mock's own login page instead.
  */
 
-import {catalogFixture} from '@/api/catalog.fixture';
+import {mockCatalog} from '../logic/badges';
 import type {BadgeEntityType} from '@/api/types';
 
 import {unauthenticated} from '../errors';
@@ -121,7 +121,7 @@ export const routes: Route[] = [
     method: 'GET',
     path: '/lineup/catalog',
     auth: 'public',
-    handler: () => ok(catalogFixture, {'Cache-Control': 'public, max-age=3600'}),
+    handler: () => ok(mockCatalog, {'Cache-Control': 'public, max-age=3600'}),
   },
 
   // ---- 6.2 Servers -----------------------------------------------------------

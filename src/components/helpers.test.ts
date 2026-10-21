@@ -20,12 +20,12 @@ describe('badgeIcon', () => {
     expect(badgeIcon('discord_verified')).toBe('verified');
     expect(badgeIcon('discord_partner')).toBe('handshake');
     expect(badgeIcon('moddy_installed')).toBe('smart_toy');
-    expect(badgeIcon('moddy_premium')).toBe('workspace_premium');
+    expect(badgeIcon('moddy_premium')).toBe('crown');
     expect(badgeIcon('nsfw')).toBe('explicit');
-    expect(badgeIcon('moddy_staff')).toBe('shield_person');
-    expect(badgeIcon('lineup_verified')).toBe('verified_user');
+    expect(badgeIcon('moddy_staff')).toBe('construction');
+    expect(badgeIcon('lineup_verified')).toBe('verified');
     expect(badgeIcon('moddy_partner')).toBe('handshake');
-    expect(badgeIcon('moddy_server')).toBe('home');
+    expect(badgeIcon('moddy_server')).toBe('verified');
     expect(badgeIcon('discord_staff')).toBe('badge');
     expect(badgeIcon('discord_certified_moderator')).toBe('gavel');
     expect(badgeIcon('discord_hypesquad_events')).toBe('celebration');

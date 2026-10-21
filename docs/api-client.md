@@ -48,14 +48,14 @@ Un 401 prend le code `unauthenticated` ; `expired` vaut `true` si le texte conti
 
 ## Pagination : `src/api/pagination.ts`
 
-Les listes à curseur (fil, annuaire, mes annonces, staff) utilisent `useInfiniteList(useXxx())`. Une page peut être plus courte que `limit`, voire vide, avec un `next_cursor` non nul (les annonces d'auteurs suspendus sont retirées après la lecture de la page). Donc :
+Les listes à curseur (fil, mes annonces, staff) utilisent `useInfiniteList(useXxx())`. Une page peut être plus courte que `limit`, voire vide, avec un `next_cursor` non nul (les annonces d'auteurs suspendus sont retirées après la lecture de la page). Donc :
 
 - La fin de liste est `next_cursor === null`, jamais une page courte.
 - Une page vide avec curseur est suivie toute seule, jusqu'à 3 pages vides de suite (`MAX_AUTO_EMPTY_PAGES`) ; ensuite la liste s'arrête et propose "Charger plus".
 - Le hook renvoie `items`, `hasMore`, `loadMore`, `isLoading`, `isLoadingMore`, `isEmpty`, `isError`, `isLoadMoreError`, `isRefetching`, `isPlaceholderData`, `error`, `refetch`. Un échec du chargement suivant garde les éléments affichés et propose de réessayer.
 - Les badges staff paginent par `limit` / `offset` (`STAFF_BADGES_PAGE_SIZE` = 100).
 - Corps de revendication : `{invite}` ou `{guild_id}` (`ClaimGuildBody`). Avec `has_moddy`, `guild_id` seul ; `invite_required` (422) renvoie à la saisie d'une invitation. `PUT /lineup/guilds/{id}` accepte `invite: null` (Moddy génère l'invitation) ; la mutation `useUpdateGuild` n'a rien de plus à savoir.
-- Les résumés (`post.guild`, `post.author`, `team[].user`, `experience.guild`, `me.user`, cartes d'annuaire) portent `badges` : `DisplayName` les reçoit toujours. `GuildInvite.url` peut être nul. `MyGuild.listed` est mis à jour avec la réponse d'une revendication ou d'une écriture (`upsertMyGuild`) ; `toGuildCard` produit `description` (160 caractères) et `nsfw`.
+- Les résumés (`post.guild`, `post.author`, `team[].user`, `experience.guild`, `me.user`) portent `badges` : `DisplayName` les reçoit toujours. `GuildInvite.url` peut être nul. `MyGuild.listed` est mis à jour avec la réponse d'une revendication ou d'une écriture (`upsertMyGuild`) .
 
 ## Retry et `Retry-After`
 

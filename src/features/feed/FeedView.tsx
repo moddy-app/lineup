@@ -308,7 +308,7 @@ function FeedList({
         {t('empty.filteredBody')}
       </EmptyState>
     ) : (
-      <EmptyState compact icon={kind === 'guild' ? 'campaign' : 'person_search'} title={t(`${kind}.emptyTitle`)}>
+      <EmptyState compact icon={kind === 'guild' ? 'rocket_launch' : 'badge'} title={t(`${kind}.emptyTitle`)}>
         {t(`${kind}.emptyBody`)}
       </EmptyState>
     );

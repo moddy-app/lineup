@@ -10,15 +10,19 @@ import {defaultAvatarUrl} from '@/lib/discord';
 import {Avatar} from './Avatar';
 import {type DashboardContext, ME_CONTEXT, sameContext} from './dashboardContext';
 import {Dropdown, type DropdownItem} from './Dropdown';
+import {Icon} from './Icon';
+import {useServersDialog} from './serversDialog';
 
 /**
  * "Who am I managing": you, or one of your claimed servers, then "Add a
- * server". One full-width outlined button and the shared `Dropdown`. While the
+ * server" and "Manage servers" (two dialogs, `?servers=`). One full-width block (`surface-container-high`, no border) and the shared `Dropdown`. While the
  * list of servers loads or if it fails, only you (and the server of the
  * current address, read with `useGuild`) are offered.
  */
 export function ContextSwitcher({context}: {context: DashboardContext}) {
   const {t} = useT('components');
+  const {t: tClaim} = useT('claim');
+  const servers = useServersDialog();
   const navigate = useNavigate();
   const {me} = useSession();
   const myGuilds = useMyGuilds();
@@ -61,13 +65,16 @@ export function ContextSwitcher({context}: {context: DashboardContext}) {
     onSelect: () =>
       void navigate(option.context.kind === 'guild' ? paths.guildManage(option.context.guildId) : paths.me()),
   }));
-  items.push({
-    key: 'add',
-    label: t('settings.context.manage'),
-    icon: 'groups',
-    separated: true,
-    onSelect: () => void navigate(paths.myGuilds()),
-  });
+  items.push(
+    {
+      key: 'add',
+      label: tClaim('menu.add'),
+      icon: 'add',
+      separated: true,
+      onSelect: () => servers.show('add'),
+    },
+    {key: 'manage', label: tClaim('menu.manage'), icon: 'settings', onSelect: () => servers.show('manage')},
+  );
 
   return (
     <div className="settings-context">
@@ -77,13 +84,15 @@ export function ContextSwitcher({context}: {context: DashboardContext}) {
         header={{icon: 'swap_horiz', label: t('settings.context.label')}}
         items={items}
         trigger={({ref, onActivate, ...aria}) => (
-          <md-outlined-button {...aria} ref={ref} trailing-icon onclick={onActivate}>
+          <button {...aria} type="button" ref={ref} className="settings-context-button" onClick={onActivate}>
+            <md-ripple />
+            <md-focus-ring />
             <span className="settings-context-current">
               {current.leading}
               <span className="settings-context-name">{current.label}</span>
             </span>
-            <md-icon slot="icon">expand_more</md-icon>
-          </md-outlined-button>
+            <Icon name="expand_more" className="settings-context-chevron" />
+          </button>
         )}
       />
     </div>

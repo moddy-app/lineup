@@ -9,7 +9,7 @@
  * | 3  | GET    /lineup/me/guilds                                 | getMyGuilds                   | guilds.ts      |
  * | 4  | POST   /lineup/me/refresh-guilds                         | refreshMyGuilds               | guilds.ts      |
  * | 5  | GET    /lineup/catalog                                   | getCatalog                    | catalog.ts     |
- * | 6  | GET    /lineup/guilds                                    | getGuildDirectory             | guilds.ts      |
+ * | 6  | GET    /lineup/guilds                                    | (unused by the front: the directory page is gone) |
  * | 7  | POST   /lineup/guilds/claim                              | claimGuild                    | guilds.ts      |
  * | 8  | GET    /lineup/guilds/{guild_id}                         | getGuild                      | guilds.ts      |
  * | 9  | PUT    /lineup/guilds/{guild_id}                         | updateGuild                   | guilds.ts      |
@@ -63,16 +63,7 @@ export {
   updateExperience,
   verifyExperience,
 } from './experiences';
-export {
-  claimGuild,
-  deleteGuild,
-  getGuild,
-  getGuildDirectory,
-  getMyGuilds,
-  refreshGuild,
-  refreshMyGuilds,
-  updateGuild,
-} from './guilds';
+export {claimGuild, deleteGuild, getGuild, getMyGuilds, refreshGuild, refreshMyGuilds, updateGuild} from './guilds';
 export {closePost, createPost, deletePost, getFeed, getMyPosts, getPost, publishPost, updatePost} from './posts';
 export {createReport} from './reports';
 export type {PageOptions, ReadOptions} from './shared';

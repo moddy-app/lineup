@@ -40,7 +40,8 @@ export const routes: RouteObject[] = [
           {path: p.feed, lazy: () => import('@/features/feed/FeedPage')},
           {path: p.people, lazy: () => import('@/features/feed/PeoplePage')},
           {path: p.post, lazy: () => import('@/features/post/PostPage')},
-          {path: p.guilds, lazy: () => import('@/features/guilds/GuildDirectoryPage')},
+          // The old address of the servers directory, which no longer exists.
+          {path: p.guilds, element: <Navigate to={paths.feed()} replace />},
           {path: p.guild, lazy: () => import('@/features/guild-profile/GuildProfilePage')},
           {path: p.user, lazy: () => import('@/features/user-profile/UserProfilePage')},
           protectedRoutes('editor', [
@@ -48,9 +49,9 @@ export const routes: RouteObject[] = [
             {path: p.postEdit, lazy: () => import('@/features/post-editor/PostEditorPage')},
           ]),
           protectedRoutes('posts', [{path: p.myPosts, lazy: () => import('@/features/my-posts/MyPostsPage')}]),
-          // The old address of the claim page.
-          {path: p.guildClaim, element: <Navigate to={paths.myGuilds()} replace />},
-          protectedRoutes('claim', [{path: p.myGuilds, lazy: () => import('@/features/claim/ClaimPage')}]),
+          // The old addresses of the claim page: its two dialogs now open on the dashboard.
+          {path: p.guildClaim, element: <Navigate to={paths.guildClaim()} replace />},
+          {path: p.myGuilds, element: <Navigate to={paths.myGuilds()} replace />},
           protectedRoutes('manage', [
             {
               path: p.guildManage,

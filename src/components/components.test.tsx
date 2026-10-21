@@ -120,7 +120,7 @@ describe('BadgeList', () => {
     expect(items.map((item) => item.textContent)).toEqual([
       'verifiedServeur vérifié Discord',
       'smart_toyModdy installé',
-      'verified_userVérifié par Lineup',
+      'verifiedVérifié',
     ]);
     expect(items[2]!.className).toContain('manual');
     expect(items[0]!.className).not.toContain('manual');
@@ -147,7 +147,7 @@ describe('BadgeList', () => {
     const item = screen.getByRole('img', {name: 'Équipe Moddy'});
     expect(item.getAttribute('data-tooltip')).toBe('Équipe Moddy');
     expect(item.getAttribute('tabindex')).toBe('0');
-    expect(item.textContent).toBe('shield_person');
+    expect(item.textContent).toBe('construction');
   });
 
   it('can leave the compact icons out of the tab order, inside a link card', () => {
@@ -165,8 +165,8 @@ describe('BadgeList', () => {
     renderWithCatalog(<BadgeList badges={badges} variant="compact" max={2} />);
     expect(screen.getAllByRole('img')).toHaveLength(3);
     const more = screen.getByText('+2');
-    expect(more.getAttribute('data-tooltip')).toBe('NSFW (18+)\nPartenaire Moddy');
-    expect(more.getAttribute('aria-label')).toBe('2 autres badges : NSFW (18+), Partenaire Moddy');
+    expect(more.getAttribute('data-tooltip')).toBe('NSFW (18+)\nPartenaire');
+    expect(more.getAttribute('aria-label')).toBe('2 autres badges : NSFW (18+), Partenaire');
   });
 
   it('shows no "+n" when everything fits', () => {
