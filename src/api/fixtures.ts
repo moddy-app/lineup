@@ -58,8 +58,8 @@ export function makePost(overrides: Partial<Post> = {}): Post {
     created_at: '2026-10-20T13:58:02.100000+00:00',
     updated_at: '2026-10-20T14:03:11.482913+00:00',
     is_expired: false,
-    guild: guildId ? {id: guildId, name: 'Cubelands FR', icon_url: null} : null,
-    author: {id: ME_ID, username: 'alex', global_name: 'Alex', avatar_url: null},
+    guild: guildId ? {id: guildId, name: 'Cubelands FR', icon_url: null, nsfw: false, badges: []} : null,
+    author: {id: ME_ID, username: 'alex', global_name: 'Alex', avatar_url: null, badges: []},
     ...overrides,
   };
 }
@@ -85,6 +85,8 @@ export function makeExperience(overrides: Partial<PrivateExperience> = {}): Priv
     guild_id: GUILD_ID,
     name: 'Cubelands FR',
     invite_url: 'https://discord.gg/cubelands',
+    image_url: null,
+    member_count: null,
     guild: null,
     position: 'moderator',
     position_other: null,
@@ -158,6 +160,7 @@ export function makeGuildProfile(overrides: Partial<GuildProfile> = {}): GuildPr
     posts: [],
     team: [],
     stale: false,
+    snapshot_at: '2026-10-20T14:00:00.000000+00:00',
     can_manage: true,
     ...overrides,
   };
@@ -173,6 +176,7 @@ export function makeMe(overrides: Partial<Me['user']> = {}): Me {
       banner_url: null,
       avatar_decoration_data: null,
       is_staff: false,
+      badges: [],
       ...overrides,
     },
     has_lineup_scopes: true,
@@ -182,7 +186,15 @@ export function makeMe(overrides: Partial<Me['user']> = {}): Me {
 }
 
 export function makeMyGuild(overrides: Partial<MyGuild> = {}): MyGuild {
-  return {id: GUILD_ID, name: 'Cubelands FR', icon_url: null, has_moddy: true, claimed: false, ...overrides};
+  return {
+    id: GUILD_ID,
+    name: 'Cubelands FR',
+    icon_url: null,
+    has_moddy: true,
+    claimed: false,
+    listed: false,
+    ...overrides,
+  };
 }
 
 export function makeReport(overrides: Partial<Report> = {}): Report {

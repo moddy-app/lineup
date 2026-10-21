@@ -1,6 +1,6 @@
 import {FeedView} from './FeedView';
 
-/** `/` Recrutements: servers that recruit. */
+/** `/` Projets: servers that recruit. */
 export function Component() {
   return <FeedView kind="guild" />;
 }

@@ -2,15 +2,12 @@
 
 import {useSortable} from '@dnd-kit/sortable';
 import {CSS} from '@dnd-kit/utilities';
-import type {MdIconButton} from '@material/web/iconbutton/icon-button.js';
-import type {MdMenu} from '@material/web/menu/menu.js';
-import {useLayoutEffect, useRef, useState} from 'react';
 
 import type {PrivateExperience} from '@/api/types';
 import {ExperienceRow} from '@/components/ExperienceRow';
 import {useT} from '@/i18n/useT';
 import {cx} from '@/lib/cx';
-import {Icon} from '@/ui';
+import {Dropdown, Icon} from '@/ui';
 
 import {VerificationBox} from './VerificationBox';
 
@@ -42,12 +39,6 @@ export function ExperienceItem({
     id: experience.id,
     disabled,
   });
-  const [menuOpen, setMenuOpen] = useState(false);
-  const button = useRef<MdIconButton>(null);
-  const menu = useRef<MdMenu>(null);
-  useLayoutEffect(() => {
-    if (menu.current) menu.current.anchorElement = button.current;
-  });
 
   return (
     <li
@@ -70,7 +61,6 @@ export function ExperienceItem({
         as="div"
         className="exp-row"
         experience={experience}
-        lookupGuild
         actions={<VerificationBox experience={experience} />}
       />
       <div className="exp-tools">
@@ -84,51 +74,47 @@ export function ExperienceItem({
           <md-icon>edit</md-icon>
         </md-icon-button>
         <span className="exp-menu">
-          <md-icon-button
-            ref={button}
-            type="button"
-            aria-label={`${t('list.more')} : ${title}`}
-            title={t('list.more')}
-            aria-haspopup="menu"
-            aria-expanded={menuOpen}
-            onclick={() => setMenuOpen((open) => !open)}
-          >
-            <md-icon>more_vert</md-icon>
-          </md-icon-button>
-          <md-menu
-            ref={menu}
-            open={menuOpen}
-            onclose={() => setMenuOpen(false)}
-            anchorCorner="end-end"
-            menuCorner="start-end"
-          >
-            <md-menu-item
-              disabled={disabled || index === 0}
-              aria-label={t('list.moveUp', {title})}
-              onclick={() => onMove(index, index - 1)}
-            >
-              <md-icon slot="start" aria-hidden="true">
-                arrow_upward
-              </md-icon>
-              <div slot="headline">{t('list.up')}</div>
-            </md-menu-item>
-            <md-menu-item
-              disabled={disabled || index === total - 1}
-              aria-label={t('list.moveDown', {title})}
-              onclick={() => onMove(index, index + 1)}
-            >
-              <md-icon slot="start" aria-hidden="true">
-                arrow_downward
-              </md-icon>
-              <div slot="headline">{t('list.down')}</div>
-            </md-menu-item>
-            <md-menu-item className="exp-delete" disabled={disabled} onclick={() => onDelete(experience)}>
-              <md-icon slot="start" aria-hidden="true">
-                delete
-              </md-icon>
-              <div slot="headline">{tCommon('actions.delete')}</div>
-            </md-menu-item>
-          </md-menu>
+          <Dropdown
+            align="end"
+            label={`${t('list.more')} : ${title}`}
+            items={[
+              {
+                key: 'up',
+                icon: 'arrow_upward',
+                label: t('list.up'),
+                disabled: disabled || index === 0,
+                onSelect: () => onMove(index, index - 1),
+              },
+              {
+                key: 'down',
+                icon: 'arrow_downward',
+                label: t('list.down'),
+                disabled: disabled || index === total - 1,
+                onSelect: () => onMove(index, index + 1),
+              },
+              {
+                key: 'delete',
+                icon: 'delete',
+                label: tCommon('actions.delete'),
+                destructive: true,
+                separated: true,
+                disabled,
+                onSelect: () => onDelete(experience),
+              },
+            ]}
+            trigger={({ref, onActivate, ...aria}) => (
+              <md-icon-button
+                {...aria}
+                ref={ref}
+                type="button"
+                aria-label={`${t('list.more')} : ${title}`}
+                title={t('list.more')}
+                onclick={onActivate}
+              >
+                <md-icon>more_vert</md-icon>
+              </md-icon-button>
+            )}
+          />
         </span>
       </div>
     </li>

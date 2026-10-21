@@ -3,7 +3,7 @@
   "notFound": {
     "title": "Server nicht gefunden",
     "body": "Dieser Server hat kein Lineup-Profil, oder sein Profil ist nicht öffentlich.",
-    "action": "Server ansehen"
+    "action": "Projekte ansehen"
   },
   "stats": {
     "members_one": "Mitglied",
@@ -23,7 +23,7 @@
     "action": "Verwalten"
   },
   "notices": {
-    "unlisted": "Dieses Profil steht nicht im Verzeichnis. Nur Verwalter und das Moddy-Team sehen es.",
+    "unlisted": "Dieses Profil ist ausgeblendet: Nur Verwalter und das Moddy-Team sehen es, ebenso seine Anzeigen.",
     "inviteLost": "Die gespeicherte Einladung existiert nicht mehr: Die Schaltfläche Beitreten ist ausgeblendet.",
     "inviteLostAction": "Einladung ersetzen"
   },

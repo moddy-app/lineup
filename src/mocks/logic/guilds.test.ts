@@ -42,6 +42,27 @@ describe('the directory', () => {
     expect(names(await api.call('GET', '/lineup/guilds', {query: {q: 'game developers'}}))).toEqual(['Pixel Forge']);
   });
 
+  it('gives each card a description cut at 160 characters, and its nsfw flag', async () => {
+    const api = createTestApi();
+    api.server.db.profiles[G.pixel]!.description = 'x'.repeat(200);
+    const cards: Array<{id: string; description: string | null; nsfw: boolean; badges: Array<{source: string}>}> = [];
+    let cursor: string | null = null;
+    do {
+      const page = await api.call('GET', '/lineup/guilds', {
+        query: cursor ? {include_nsfw: '1', cursor} : {include_nsfw: '1'},
+      });
+      cards.push(...page.json.items);
+      cursor = page.json.next_cursor;
+    } while (cursor);
+    const pixel = cards.find((card) => card.id === G.pixel);
+    expect(pixel?.description).toBe(`${'x'.repeat(160)}…`);
+    // Without a Lineup description, Discord's is used.
+    expect(cards.find((card) => card.id === G.cubelands)?.description).toBeTruthy();
+    expect(cards.find((card) => card.id === G.velvet)?.nsfw).toBe(true);
+    expect(cards.find((card) => card.id === G.pixel)?.nsfw).toBe(false);
+    expect(cards.every((card) => card.badges.every((badge) => badge.source !== 'discord'))).toBe(true);
+  });
+
   it('answers theme_invalid, cursor_invalid and standard 422s', async () => {
     const api = createTestApi();
     expect((await api.call('GET', '/lineup/guilds', {query: {theme: 'cooking'}})).json).toMatchObject({
@@ -313,11 +334,62 @@ describe('claiming a server by invitation (§3)', () => {
     expect(
       (await api.call('POST', '/lineup/guilds/claim', {body: {invite: 'abc', extra: 1}})).json.detail[0].type,
     ).toBe('extra_forbidden');
-    expect((await api.call('POST', '/lineup/guilds/claim', {body: {}})).json.detail[0].type).toBe('missing');
+    // At least one of invite and guild_id.
+    expect((await api.call('POST', '/lineup/guilds/claim', {body: {}})).json.detail[0]).toMatchObject({
+      type: 'value_error',
+      loc: ['body'],
+    });
     expect((await api.call('POST', '/lineup/guilds/claim')).json.detail[0]).toMatchObject({
       type: 'missing',
       loc: ['body'],
     });
+  });
+});
+
+describe('claiming a server with guild_id (Moddy creates the invitation)', () => {
+  const claimById = (api: ReturnType<typeof createTestApi>, body: Record<string, unknown>) =>
+    api.call('POST', '/lineup/guilds/claim', {body});
+
+  it('guild_id alone is enough where Moddy is: the API creates the permanent invitation', async () => {
+    const api = createTestApi('camille');
+    const response = await claimById(api, {guild_id: G.cafe});
+    expect(response.status).toBe(201);
+    expect(response.json).toMatchObject({id: G.cafe, has_moddy: true, listed: true, can_manage: true});
+    expect(response.json.invite).toEqual({
+      code: `moddy-${G.cafe.slice(-8)}`,
+      url: `https://discord.gg/moddy-${G.cafe.slice(-8)}`,
+      valid: true,
+    });
+    // The server now reads as claimed and listed in "my servers".
+    const mine = (await api.call('GET', '/lineup/me/guilds')).json as Array<{
+      id: string;
+      claimed: boolean;
+      listed: boolean;
+    }>;
+    expect(mine.find((entry) => entry.id === G.cafe)).toMatchObject({claimed: true, listed: true});
+  });
+
+  it('answers 422 invite_required when Moddy is not on the server', async () => {
+    const api = createTestApi('camille');
+    const response = await claimById(api, {guild_id: G.studio});
+    expect([response.status, code(response)]).toEqual([422, 'invite_required']);
+    expect(api.server.db.profiles[G.studio]).toBeUndefined();
+    // With an invitation it works, and guild_id may come along.
+    expect((await claimById(api, {guild_id: G.studio, invite: 'studio-nocturne'})).status).toBe(201);
+  });
+
+  it('answers 422 invite_guild_mismatch when the invitation and guild_id are two servers', async () => {
+    const api = createTestApi('camille');
+    expect(code(await claimById(api, {guild_id: G.cafe, invite: 'studio-nocturne'}))).toBe('invite_guild_mismatch');
+    expect(api.server.db.profiles[G.cafe]).toBeUndefined();
+  });
+
+  it('checks the rights and the duplicate before asking for Moddy', async () => {
+    const api = createTestApi('camille');
+    expect(code(await claimById(api, {guild_id: G.lumiere}))).toBe('lineup_guild_forbidden');
+    expect(code(await claimById(api, {guild_id: G.cubelands}))).toBe('lineup_guild_forbidden');
+    expect(code(await claimById(api, {guild_id: G.atelier}))).toBe('lineup_guild_already_claimed');
+    expect((await claimById(api, {guild_id: G.marche})).json.error.code).toBe('guild_suspended');
   });
 });
 
@@ -375,7 +447,26 @@ describe('editing, refreshing and my servers', () => {
     expect(code(await api.call('PUT', `/lineup/guilds/${G.atelier}`, {body: {invite: 'zzz999'}}))).toBe(
       'invite_not_found',
     );
-    expect((await api.call('PUT', `/lineup/guilds/${G.atelier}`, {body: {invite: null}})).status).toBe(200);
+  });
+
+  it('invite: null asks Moddy for a new permanent invitation, only where Moddy is', async () => {
+    const api = createTestApi('camille');
+    const generated = await api.call('PUT', `/lineup/guilds/${G.atelier}`, {body: {invite: null}});
+    expect(generated.status).toBe(200);
+    expect(generated.json.invite).toMatchObject({code: `moddy-${G.atelier.slice(-8)}`, valid: true});
+    expect(generated.json.invite.url).toBe(`https://discord.gg/moddy-${G.atelier.slice(-8)}`);
+    // Pixel Forge: Camille manages it, but the bot is not there.
+    expect(code(await api.call('PUT', `/lineup/guilds/${G.pixel}`, {body: {invite: null}}))).toBe('invite_required');
+  });
+
+  it('answers snapshot_at to a manager only, and invite.url null when the bot made no invitation', async () => {
+    const api = createTestApi('karim');
+    const manager = await api.call('GET', `/lineup/guilds/${G.arena}`);
+    expect(manager.json.invite).toEqual({code: '', url: null, valid: true});
+    expect(typeof manager.json.snapshot_at).toBe('string');
+    const visitor = createTestApi('camille');
+    expect((await visitor.call('GET', `/lineup/guilds/${G.arena}`)).json.snapshot_at).toBeNull();
+    expect((await createTestApi().call('GET', `/lineup/guilds/${G.arena}`)).json.snapshot_at).toBeNull();
   });
 
   it('checks a PUT in the documented order when several conditions fail together', async () => {
@@ -460,11 +551,11 @@ describe('editing, refreshing and my servers', () => {
     const api = createTestApi('camille');
     const response = await api.call('GET', '/lineup/me/guilds');
     expect(response.json).toEqual([
-      {id: G.atelier, name: 'Atelier du Phénix', icon_url: null, has_moddy: true, claimed: true},
-      {id: G.cafe, name: 'Café des Mods', icon_url: null, has_moddy: true, claimed: false},
-      {id: G.marche, name: 'Marché des Arcanes', icon_url: null, has_moddy: false, claimed: false},
-      {id: G.pixel, name: 'Pixel Forge', icon_url: null, has_moddy: false, claimed: true},
-      {id: G.studio, name: 'Studio Nocturne', icon_url: null, has_moddy: false, claimed: false},
+      {id: G.atelier, name: 'Atelier du Phénix', icon_url: null, has_moddy: true, claimed: true, listed: true},
+      {id: G.cafe, name: 'Café des Mods', icon_url: null, has_moddy: true, claimed: false, listed: false},
+      {id: G.marche, name: 'Marché des Arcanes', icon_url: null, has_moddy: false, claimed: false, listed: false},
+      {id: G.pixel, name: 'Pixel Forge', icon_url: null, has_moddy: false, claimed: true, listed: true},
+      {id: G.studio, name: 'Studio Nocturne', icon_url: null, has_moddy: false, claimed: false, listed: false},
     ]);
   });
 
@@ -476,7 +567,7 @@ describe('editing, refreshing and my servers', () => {
     expect(refreshed.json).toEqual({guilds: [], stale: true});
     api.state.discordDown = false;
     expect((await api.call('GET', '/lineup/me/guilds')).json).toEqual([
-      {id: G.chroniqueurs, name: 'Les Chroniqueurs', icon_url: null, has_moddy: false, claimed: false},
+      {id: G.chroniqueurs, name: 'Les Chroniqueurs', icon_url: null, has_moddy: false, claimed: false, listed: false},
     ]);
   });
 });

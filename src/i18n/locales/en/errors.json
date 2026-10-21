@@ -29,6 +29,7 @@
     "invite_invalid": "This is not a server invitation link.",
     "invite_expiring": "This invitation expires. Use one that never expires.",
     "invite_guild_mismatch": "This invitation leads to another server.",
+    "invite_required": "Moddy is not on this server. A permanent invitation is required.",
     "theme_invalid": "This theme does not exist.",
     "cursor_invalid": "The list changed. Reload the page.",
     "lineup_filter_invalid": "One of the filters is not valid.",

@@ -5,8 +5,6 @@
     "add": "Add an experience",
     "edit": "Edit",
     "drag": "Move {{title}}",
-    "moveUp": "Move {{title}} up",
-    "moveDown": "Move {{title}} down",
     "moved": "{{title}}: position {{position}} of {{total}}",
     "reordered": "Order saved",
     "orderOutdated": "The list had changed elsewhere. It was reloaded, move it again.",
@@ -65,7 +63,9 @@
     "descriptionHelp": "What you did there. Optional.",
     "startDate": "Start",
     "endDate": "End",
-    "current": "Current role, no end date"
+    "current": "Current role, no end date",
+    "image": "Image (https URL)",
+    "imageHelp": "Optional. A logo or a picture of the service."
   },
   "warning": {
     "before": {
@@ -92,7 +92,9 @@
     "startFuture": "The start date cannot be in the future.",
     "endRequired": "Enter the end date, or tick \"Current role\".",
     "endFuture": "The end date cannot be in the future.",
-    "endBeforeStart": "The end cannot be before the start."
+    "endBeforeStart": "The end cannot be before the start.",
+    "imageTooLong": "{{count}} characters at most.",
+    "imageNotHttps": "Enter an address starting with https://."
   },
   "delete": {
     "title": "Delete {{title}}?",

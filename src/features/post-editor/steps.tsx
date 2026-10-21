@@ -40,7 +40,7 @@ interface TypeStepProps extends StepProps {
   guilds: UseQueryResult<MyGuild[]>;
 }
 
-const KIND_ICON = {guild: 'groups', user: 'person_search'} as const;
+const KIND_ICON = {guild: 'groups', user: 'badge'} as const;
 
 export function TypeStep({form, set, err, editing, guilds}: TypeStepProps) {
   const {t} = useT('editor');

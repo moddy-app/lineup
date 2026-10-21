@@ -25,6 +25,7 @@ import {MockLoginPage} from './LoginPage';
 import {currentSession, getPersonaId, isSessionExpired, setPersonaId} from './personas';
 import {dispatch, type ServerContext} from './server/dispatch';
 import {routes} from './server/routes';
+import {avatars, MOCK_IMAGE_HOST} from './seed/assets';
 import {getSettings, takeFailNext} from './settings';
 
 export const LOGIN_PAGE_PATH = '/__mock/login';
@@ -62,6 +63,14 @@ function handlers() {
   const verbs = {GET: http.get, POST: http.post, PUT: http.put, PATCH: http.patch, DELETE: http.delete} as const;
   return [
     ...routes.map((route) => verbs[route.method](`${config.apiBase}${route.path}`, ({request}) => respond(request))),
+    // The https images of the seeded services (`mockImageUrl`): the kit's avatars.
+    http.get(`${MOCK_IMAGE_HOST}/:file`, async ({params}) => {
+      const name = String(params.file).replace(/\.webp$/, '') as keyof typeof avatars;
+      const source = avatars[name];
+      if (!source) return new HttpResponse(null, {status: 404});
+      const asset = await fetch(source);
+      return new HttpResponse(await asset.arrayBuffer(), {headers: {'Content-Type': 'image/webp'}});
+    }),
     // Anything else under the API: 404 `{"error": "Not Found"}`, like an unknown route.
     http.all(`${config.apiBase}/*`, ({request}) => respond(request)),
   ];

@@ -50,7 +50,7 @@ export function Component() {
       <ShowcasePage>
         {notFound ? (
           <EmptyState
-            icon="person_search"
+            icon="badge"
             title={t('notFound.title')}
             shape="hexagon"
             tone="tertiary"
@@ -147,7 +147,6 @@ function Profile({profile}: {profile: UserProfile}) {
                   <ExperienceRow
                     key={experience.id}
                     experience={experience}
-                    lookupGuild
                     href={
                       experience.kind === 'guild' && experience.guild_id ? paths.guild(experience.guild_id) : undefined
                     }

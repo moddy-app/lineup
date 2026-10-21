@@ -13,16 +13,18 @@ interface RelativeTimeProps {
   /** An ISO timestamp from the API. */
   value: string;
   className?: string;
+  /** Wraps the relative text in a sentence ("Mis à jour il y a 3 heures"). */
+  format?: (relative: string) => string;
 }
 
-export function RelativeTime({value, className}: RelativeTimeProps) {
+export function RelativeTime({value, className, format}: RelativeTimeProps) {
   useLanguage();
   useNow();
   const date = parseDate(value);
   if (Number.isNaN(+date)) return null;
   return (
     <time dateTime={date.toISOString()} title={formatDateTime(date)} className={className}>
-      {formatRelativeTime(date)}
+      {format ? format(formatRelativeTime(date)) : formatRelativeTime(date)}
     </time>
   );
 }

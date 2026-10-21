@@ -85,7 +85,26 @@ session's Moddy servers.
 - `PUT /lineup/guilds/{id}`: body and id validation (422), session (401/403), rights (503 if Discord is silent,
   403 `lineup_guild_forbidden`, 403 `guild_suspended`), no profile (404), then `invite` (422 `invite_invalid`, 503,
   404 `invite_not_found`, 422 `invite_invalid` / `invite_expiring` / `invite_guild_mismatch`), then the write.
-  Nothing is written if a step fails.
+  Nothing is written if a step fails. `invite: null` asks Moddy for a new permanent invitation (`moddy-<8 last digits
+of the id>`): 422 `invite_required` when Moddy is not on the server.
+- `POST /lineup/guilds/claim` takes `{invite}`, `{guild_id}` or both (neither: 422 `value_error` on `body`).
+  With an invitation: resolve it, then (two servers: 422 `invite_guild_mismatch`), rights, duplicate. With `guild_id`
+  alone: rights (403, also for an unknown id), duplicate (409), then Moddy must be on the server (422
+  `invite_required`), which creates the permanent invitation itself. The order of the last two is a guess.
+- Experiences: `image_url` and `member_count` are read from the invitation for a server (a server's `image_url` in
+  the body is ignored, and `PATCH` leaves it alone). A service has `image_url` (https, 500 characters at most,
+  `null` clears it, changing it never resets a verification) and `member_count: null`. `experience.guild` is the
+  server's summary (`id`, `name`, `icon_url`, `badges`) when it has a listed, unsuspended profile, else `null`.
+- Summaries (`post.guild`, `post.author`, `team[].user`, `experience.guild`, `me.user`, directory cards) carry
+  `badges` without Discord's and without `moddy_premium`. `post.guild.nsfw` and the directory card's `nsfw` follow
+  the theme or Discord's level. A card's `description` is the Lineup text, else Discord's, cut at 160 characters
+  and followed by "…".
+- `GET /lineup/guilds/{id}`: `snapshot_at` for a manager only (`null` otherwise). Arena Esport FR has
+  `invite: {code: "", url: null, valid: true}` (the bot could not create an invitation: no "Join" button).
+  The shape of `code` in that case is not documented; the mock sends an empty string.
+- `GET /lineup/me/guilds`: `listed` (profile present and visible in the directory, `false` without a profile).
+- `GET /lineup/staff/badges` and the `PUT`: `entity_name` and `entity_icon_url` come from the entity's profile, `null`
+  without one (the manual badge on Café des Mods shows it). `entity_type` is optional.
 
 ## Test invitation codes
 
@@ -120,6 +139,9 @@ invitation of the Lumen Study profile was deleted: `invite.valid` is `false` the
 
 ## Notable seed cases
 
+- Claiming with `guild_id` alone: Café des Mods (Moddy installed) goes through with no invitation field; Studio
+  Nocturne (no Moddy) answers 422 `invite_required` and needs `studio-nocturne`. Sending `guild_id: <Café>` with
+  `studio-nocturne` answers 422 `invite_guild_mismatch`.
 - About 12 claimed servers: a NSFW one by theme (Velvet Lounge), a NSFW one by Discord level 3 (Nox After Dark),
   an unlisted one (Terres d'Hyrule RP), a suspended one (Trade Hub Gains), one with a deleted invitation
   (Lumen Study), one with an old snapshot that cannot be refreshed (`stale: true`, Dev Corner), manual badges of

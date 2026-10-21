@@ -29,6 +29,7 @@
     "invite_invalid": "Este link não é um convite de servidor.",
     "invite_expiring": "Este convite expira. Use um que nunca expire.",
     "invite_guild_mismatch": "Este convite leva a outro servidor.",
+    "invite_required": "O Moddy não está neste servidor. É preciso um convite permanente.",
     "theme_invalid": "Este tema não existe.",
     "cursor_invalid": "A lista mudou. Recarregue a página.",
     "lineup_filter_invalid": "Um dos filtros não é válido.",

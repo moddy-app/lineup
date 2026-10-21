@@ -24,6 +24,8 @@ function experience(
     guild_id: '1',
     name: 'Cubelands',
     invite_url: 'https://discord.gg/x',
+    image_url: null,
+    member_count: null,
     guild: null,
     position: 'moderator',
     position_other: null,
@@ -69,6 +71,29 @@ describe('validateExperience', () => {
     ).toBe('endBeforeStart');
   });
 
+  it('accepts an empty image or an https one of 500 characters at most, for a service', () => {
+    const form = {
+      ...emptyForm(),
+      kind: 'service' as const,
+      name: 'Studio',
+      position: 'moderator',
+      start_date: '2024-01-01',
+    };
+    const image = (image_url: string) =>
+      validateExperience({...form, image_url}, {editing: false, today}).image_url?.key;
+    expect(image('')).toBeUndefined();
+    expect(image('  ')).toBeUndefined();
+    expect(image('https://cdn.example.com/logo.png')).toBeUndefined();
+    expect(image('http://cdn.example.com/logo.png')).toBe('imageNotHttps');
+    expect(image('cdn.example.com/logo.png')).toBe('imageNotHttps');
+    expect(image('https://cdn.example.com/a b.png')).toBe('imageNotHttps');
+    expect(image(`https://cdn.example.com/${'a'.repeat(500)}`)).toBe('imageTooLong');
+    // A server experience has no image field to check.
+    expect(
+      validateExperience({...form, kind: 'guild', invite: 'abc', image_url: 'nope'}, {editing: false, today}).image_url,
+    ).toBeUndefined();
+  });
+
   it('todayIso is a local calendar day', () => {
     expect(todayIso(new Date(2026, 9, 5))).toBe('2026-10-05');
   });
@@ -86,6 +111,45 @@ describe('bodies', () => {
       end_date: null,
     });
     expect(createBody({...form, kind: 'service', name: ' Studio '})).toMatchObject({kind: 'service', name: 'Studio'});
+  });
+
+  it('sends the image of a service, or null when the field is empty', () => {
+    const form = {
+      ...emptyForm(),
+      kind: 'service' as const,
+      name: 'Studio',
+      position: 'moderator',
+      start_date: '2024-01-01',
+    };
+    expect(createBody({...form, image_url: ' https://cdn.example.com/a.png '})).toMatchObject({
+      kind: 'service',
+      image_url: 'https://cdn.example.com/a.png',
+    });
+    expect(createBody(form)).toMatchObject({kind: 'service', image_url: null});
+    expect(
+      createBody({...form, kind: 'guild', invite: 'abc', image_url: 'https://x.example.com/a.png'}),
+    ).not.toHaveProperty('image_url');
+  });
+
+  it('edits a service image: sent when changed, null when emptied, never for a server', () => {
+    const service = experience({
+      kind: 'service',
+      guild_id: null,
+      invite_url: null,
+      image_url: 'https://cdn.example.com/a.png',
+    });
+    const form = formFromExperience(service);
+    expect(form.image_url).toBe('https://cdn.example.com/a.png');
+    expect(updateBody(service, form)).toEqual({});
+    expect(updateBody(service, {...form, image_url: 'https://cdn.example.com/b.png'})).toEqual({
+      image_url: 'https://cdn.example.com/b.png',
+    });
+    expect(updateBody(service, {...form, image_url: ' '})).toEqual({image_url: null});
+    expect(
+      updateBody(experience(), {...formFromExperience(experience()), image_url: 'https://x.example.com/a.png'}),
+    ).toEqual({});
+    // The image never resets a verification.
+    expect(verificationEffect(service, {image_url: null})).toBe('none');
   });
 
   it('sends only the changes of an edition', () => {

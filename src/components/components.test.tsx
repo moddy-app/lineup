@@ -120,7 +120,7 @@ describe('BadgeList', () => {
     expect(items.map((item) => item.textContent)).toEqual([
       'verifiedServeur vérifié Discord',
       'smart_toyModdy installé',
-      'verified_userVérifié par Lineup',
+      'verifiedVérifié',
     ]);
     expect(items[2]!.className).toContain('manual');
     expect(items[0]!.className).not.toContain('manual');
@@ -147,7 +147,7 @@ describe('BadgeList', () => {
     const item = screen.getByRole('img', {name: 'Équipe Moddy'});
     expect(item.getAttribute('data-tooltip')).toBe('Équipe Moddy');
     expect(item.getAttribute('tabindex')).toBe('0');
-    expect(item.textContent).toBe('shield_person');
+    expect(item.textContent).toBe('construction');
   });
 
   it('can leave the compact icons out of the tab order, inside a link card', () => {
@@ -165,8 +165,8 @@ describe('BadgeList', () => {
     renderWithCatalog(<BadgeList badges={badges} variant="compact" max={2} />);
     expect(screen.getAllByRole('img')).toHaveLength(3);
     const more = screen.getByText('+2');
-    expect(more.getAttribute('data-tooltip')).toBe('NSFW (18+)\nPartenaire Moddy');
-    expect(more.getAttribute('aria-label')).toBe('2 autres badges : NSFW (18+), Partenaire Moddy');
+    expect(more.getAttribute('data-tooltip')).toBe('NSFW (18+)\nPartenaire');
+    expect(more.getAttribute('aria-label')).toBe('2 autres badges : NSFW (18+), Partenaire');
   });
 
   it('shows no "+n" when everything fits', () => {
@@ -185,7 +185,7 @@ describe('PostCard, feed variant', () => {
     languages: ['fr', 'en', 'es', 'de'],
     commitment: {hours_per_week: 5, compensation: 'volunteer', openings: 2},
     expires_at: new Date(Date.now() + 5 * 86_400_000 - 2 * 3_600_000).toISOString(),
-    guild: {id: '812345678901234567', name: 'Cubelands FR', icon_url: null},
+    guild: {id: '812345678901234567', name: 'Cubelands FR', icon_url: null, nsfw: false, badges: []},
   });
 
   it('is one link to the post, with nothing interactive inside', () => {
@@ -257,6 +257,7 @@ describe('PostCard, feed variant', () => {
         username: 'alex',
         global_name: 'Alex Martin',
         avatar_url: 'https://cdn.test/a.png',
+        badges: [],
       },
     });
     const {container} = renderWithCatalog(<PostCard post={post} />);
@@ -267,7 +268,11 @@ describe('PostCard, feed variant', () => {
   });
 
   it('copes with unknown names', () => {
-    renderWithCatalog(<PostCard post={makePost({guild: {id: '812345678901234567', name: null, icon_url: null}})} />);
+    renderWithCatalog(
+      <PostCard
+        post={makePost({guild: {id: '812345678901234567', name: null, icon_url: null, nsfw: false, badges: []}})}
+      />,
+    );
     expect(screen.getByText('Serveur sans nom')).toBeTruthy();
   });
 
@@ -419,6 +424,72 @@ describe('ExperienceRow', () => {
     );
     const link = screen.getByRole('link', {name: 'Cubelands FR'});
     expect(link.getAttribute('href')).toBe('/guilds/812345678901234567');
+  });
+
+  it('reads the server from experience.guild: name, icon, verification mark, member count, no request', () => {
+    const fetchSpy = vi.spyOn(globalThis, 'fetch');
+    const {container} = renderWithCatalog(
+      <Rows as="ul">
+        <ExperienceRow
+          experience={{
+            ...experience,
+            name: 'Ancien nom',
+            member_count: 4120,
+            guild: {
+              id: '812345678901234567',
+              name: 'Cubelands FR',
+              icon_url: 'https://cdn.test/cubelands.png',
+              badges: [{id: 'lineup_verified', label: {fr: 'Serveur vérifié', en: 'Verified'}, source: 'manual'}],
+            },
+          }}
+        />
+      </Rows>,
+    );
+    expect(container.querySelector('.experience-name')!.textContent).toContain('Cubelands FR');
+    expect(screen.getByRole('img', {name: /vérifi/i})).toBeTruthy();
+    const icon = container.querySelector('img.guild-icon')!;
+    expect(icon.getAttribute('src')).toBe('https://cdn.test/cubelands.png');
+    expect(icon.getAttribute('alt')).toBe('');
+    expect(icon.getAttribute('referrerpolicy')).toBe('no-referrer');
+    expect(container.querySelector('.inline-stats')!.textContent).toMatch(/4,1\s?k.*membres/);
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
+  it('keeps the experience name and the icon from the invitation when the server has no listed profile', () => {
+    const {container} = renderWithCatalog(
+      <Rows as="ul">
+        <ExperienceRow
+          experience={{...experience, guild: null, image_url: 'https://cdn.test/invite.png', member_count: 1}}
+        />
+      </Rows>,
+    );
+    expect(container.querySelector('.experience-name')!.textContent).toBe('Cubelands FR');
+    expect(container.querySelector('img.guild-icon')!.getAttribute('src')).toBe('https://cdn.test/invite.png');
+  });
+
+  it('shows the image of a service, decorative and lazy, and the shape when it does not load', () => {
+    const service = {
+      ...experience,
+      kind: 'service' as const,
+      guild_id: null,
+      invite_url: null,
+      name: 'Twitch',
+      image_url: 'https://cdn.test/twitch.png',
+    };
+    const {container} = renderWithCatalog(
+      <Rows as="ul">
+        <ExperienceRow experience={service} />
+      </Rows>,
+    );
+    const img = container.querySelector('img.guild-icon')!;
+    expect(img.getAttribute('alt')).toBe('');
+    expect(img.getAttribute('loading')).toBe('lazy');
+    expect(img.getAttribute('referrerpolicy')).toBe('no-referrer');
+    expect(img.getAttribute('width')).toBe('40');
+    expect(container.querySelector('.inline-stats')).toBeNull();
+    fireEvent.error(img);
+    expect(container.querySelector('img.guild-icon')).toBeNull();
+    expect(container.querySelector('.shape.guild-icon')).not.toBeNull();
   });
 
   it('does not link a service', () => {

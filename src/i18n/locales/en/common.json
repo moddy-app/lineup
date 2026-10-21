@@ -4,10 +4,11 @@
   },
   "nav": {
     "label": "Main navigation",
-    "feed": "Recruiting",
-    "guilds": "Servers",
+    "menu": "Menu",
+    "feed": "Projects",
     "staff": "Staff",
-    "people": "Talent"
+    "people": "Profiles",
+    "dashboard": "Dashboard"
   },
   "auth": {
     "login": "Sign in",
@@ -35,9 +36,7 @@
   "userMenu": {
     "profile": "View my public profile",
     "experiences": "Experience",
-    "posts": "My posts",
-    "guilds": "My servers",
-    "space": "My space"
+    "posts": "My posts"
   },
   "actions": {
     "retry": "Try again",

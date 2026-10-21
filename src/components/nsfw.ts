@@ -52,7 +52,20 @@ export function useNsfwConfirmed(): {confirmed: boolean; confirm: () => void} {
   return {confirmed, confirm: confirmNsfw};
 }
 
-/** A server or a post is adult content when it has the `nsfw` badge or the `nsfw` theme. */
-export function isNsfw(subject: {badges?: readonly Pick<Badge, 'id'>[]; theme?: string | null}): boolean {
-  return subject.theme === 'nsfw' || (subject.badges?.some((badge) => badge.id === 'nsfw') ?? false);
+/**
+ * Adult content: a server or post with the `nsfw` theme or badge, a directory
+ * card with `nsfw`, or a post whose server is NSFW (`post.guild.nsfw`).
+ */
+export function isNsfw(subject: {
+  badges?: readonly Pick<Badge, 'id'>[];
+  theme?: string | null;
+  nsfw?: boolean;
+  guild?: {nsfw?: boolean} | null;
+}): boolean {
+  return (
+    subject.nsfw === true ||
+    subject.guild?.nsfw === true ||
+    subject.theme === 'nsfw' ||
+    (subject.badges?.some((badge) => badge.id === 'nsfw') ?? false)
+  );
 }

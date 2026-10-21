@@ -98,7 +98,9 @@
         "generic": "Verified on {{date}}",
         "pending": "The Moddy team is reviewing the request."
       }
-    }
+    },
+    "members_one": "member",
+    "members_other": "members"
   },
   "report": {
     "button": "Report",
@@ -182,17 +184,26 @@
   "verification": {
     "moddy_staff": "Moddy team",
     "moddy_server": "Official Moddy server",
-    "lineup_verified_guild": "Verified server",
-    "lineup_verified_user": "Verified account"
+    "lineup_verified": "Verified"
   },
   "settings": {
-    "title": "My space",
-    "managed": "Managed servers",
     "nav": {
       "profile": "Profile",
       "experiences": "Experience",
+      "posts": "Posts"
+    },
+    "navLabel": "Dashboard pages",
+    "guildNav": {
+      "profile": "Profile",
+      "invite": "Invitation",
       "posts": "Posts",
-      "guilds": "Servers"
+      "discord": "Discord data",
+      "settings": "Settings"
+    },
+    "context": {
+      "label": "Manage",
+      "me": "Me",
+      "manage": "Manage my servers"
     }
   },
   "filters": {

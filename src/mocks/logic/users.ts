@@ -1,6 +1,6 @@
 /** Sessions and profiles (LINEUP.md §6.1, §6.3). */
 
-import type {Me, Snowflake, UserProfile} from '@/api/types';
+import type {Account, Me, Snowflake, UserProfile} from '@/api/types';
 
 import {notFound} from '../errors';
 import type {Actor, Env, Viewer} from '../env';
@@ -8,7 +8,7 @@ import {iso} from '../time';
 import {summaryBadges, userBadges} from './badges';
 import {discordSnapshot, toMeProfileRow, toUserProfile} from './views';
 
-/** `GET /lineup/me`: the session summary. Never an e-mail or a token. */
+/** `GET /lineup/me`: the session summary. Never a token, and no e-mail (see `toAccount`). */
 export function toMe(env: Env, actor: Actor): Me {
   const {user} = actor;
   return {
@@ -18,7 +18,10 @@ export function toMe(env: Env, actor: Actor): Me {
       global_name: user.global_name,
       avatar_url: user.avatar_url,
       banner_url: user.banner_url,
-      avatar_decoration_data: discordSnapshot(user).avatar_decoration_data,
+      // Mock only: `url` points at a local ring, so the decoration shows offline (the API sends `asset` and `sku_id`).
+      avatar_decoration_data: user.avatar_decoration
+        ? {...discordSnapshot(user).avatar_decoration_data, url: user.avatar_decoration.url}
+        : null,
       is_staff: user.is_staff,
       badges: summaryBadges(userBadges(env, user)),
     },
@@ -26,6 +29,11 @@ export function toMe(env: Env, actor: Actor): Me {
     login_url: '/lineup/auth/login',
     profile: toMeProfileRow(user),
   };
+}
+
+/** `GET /auth/me`, reduced to the e-mail: a fictitious address, as Discord's. */
+export function toAccount(actor: Actor): Account {
+  return {email: `${actor.user.username.replace(/[^a-z0-9._-]/gi, '')}@example.com`, verified: true};
 }
 
 /**

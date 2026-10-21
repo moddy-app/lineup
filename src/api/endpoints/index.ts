@@ -1,6 +1,6 @@
 /**
  * Every route of LINEUP.md §6, as one typed function. 41 routes; the app also
- * calls `POST /auth/logout` (a dashboard route, not counted).
+ * calls `GET /auth/me` and `POST /auth/logout` (dashboard routes, not counted).
  *
  * | #  | Route                                                    | Function                      | File           |
  * |----|----------------------------------------------------------|-------------------------------|----------------|
@@ -9,7 +9,7 @@
  * | 3  | GET    /lineup/me/guilds                                 | getMyGuilds                   | guilds.ts      |
  * | 4  | POST   /lineup/me/refresh-guilds                         | refreshMyGuilds               | guilds.ts      |
  * | 5  | GET    /lineup/catalog                                   | getCatalog                    | catalog.ts     |
- * | 6  | GET    /lineup/guilds                                    | getGuildDirectory             | guilds.ts      |
+ * | 6  | GET    /lineup/guilds                                    | (unused by the front: the directory page is gone) |
  * | 7  | POST   /lineup/guilds/claim                              | claimGuild                    | guilds.ts      |
  * | 8  | GET    /lineup/guilds/{guild_id}                         | getGuild                      | guilds.ts      |
  * | 9  | PUT    /lineup/guilds/{guild_id}                         | updateGuild                   | guilds.ts      |
@@ -45,13 +45,14 @@
  * | 39 | GET    /lineup/staff/reports                             | getStaffReports               | staff.ts       |
  * | 40 | POST   /lineup/staff/reports/{report_id}/resolve         | resolveReport                 | staff.ts       |
  * | 41 | POST   /lineup/staff/reports/{report_id}/dismiss         | dismissReport                 | staff.ts       |
+ * | +  | GET    /auth/me (dashboard route, not under /lineup)     | getAccount                    | auth.ts        |
  * | +  | POST   /auth/logout (dashboard route, not under /lineup) | logout                        | auth.ts        |
  *
  * endpoints.test.ts calls each function against a stubbed fetch and checks the
  * method, path, query and body against this table and against LINEUP.md.
  */
 
-export {getMe, loginUrl, LOGIN_PATH, logout, sanitizeRedirect, setLoginUrlBuilder} from './auth';
+export {getAccount, getMe, loginUrl, LOGIN_PATH, logout, sanitizeRedirect, setLoginUrlBuilder} from './auth';
 export type {LoginUrlBuilder} from './auth';
 export {getCatalog} from './catalog';
 export {
@@ -63,16 +64,7 @@ export {
   updateExperience,
   verifyExperience,
 } from './experiences';
-export {
-  claimGuild,
-  deleteGuild,
-  getGuild,
-  getGuildDirectory,
-  getMyGuilds,
-  refreshGuild,
-  refreshMyGuilds,
-  updateGuild,
-} from './guilds';
+export {claimGuild, deleteGuild, getGuild, getMyGuilds, refreshGuild, refreshMyGuilds, updateGuild} from './guilds';
 export {closePost, createPost, deletePost, getFeed, getMyPosts, getPost, publishPost, updatePost} from './posts';
 export {createReport} from './reports';
 export type {PageOptions, ReadOptions} from './shared';

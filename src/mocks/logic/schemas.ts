@@ -466,7 +466,21 @@ export function updatePostBody(now: Date) {
 // Servers, profiles, experiences, reports, staff
 // ---------------------------------------------------------------------------
 
-export const claimBody = model({invite: req(str({min: 2, max: 200}))});
+const claimShape = model({
+  invite: opt(str({min: 2, max: 200})),
+  guild_id: opt(str({min: 1, max: 32})),
+});
+
+/** `invite`, `guild_id` or both: at least one (422 otherwise). */
+export const claimBody: Parser<{invite?: string; guild_id?: string}> = (value, loc, issues) => {
+  const parsed = claimShape(value, loc, issues);
+  if (parsed === BAD) return BAD;
+  if (parsed.invite === undefined && parsed.guild_id === undefined) {
+    issues.add('value_error', loc, 'Value error, invite ou guild_id est obligatoire.', value, {error: {}});
+    return BAD;
+  }
+  return parsed;
+};
 
 export const guildUpdateBody = model({
   description: opt(nullable(str({max: 2000}))),
@@ -474,7 +488,7 @@ export const guildUpdateBody = model({
   theme: opt(nullable(themeId)),
   tags: opt(tags),
   languages: opt(languages),
-  // `null` is accepted and ignored (§6.2).
+  // `null` asks Moddy to generate a new invitation (only when it is on the server).
   invite: opt(nullable(str({min: 2, max: 200}))),
   listed: opt(bool),
 });
@@ -499,6 +513,7 @@ export type CreateExperienceInput = {
   kind: 'guild' | 'service';
   invite?: string;
   name?: string;
+  image_url?: string | null;
   position: string;
   position_other?: string;
   description?: string | null;
@@ -514,6 +529,7 @@ export function createExperienceBody(today: string): Parser<CreateExperienceInpu
     kind: req(literal(['guild', 'service'] as const)),
     invite: opt(str({min: 2, max: 200})),
     name: opt(experienceName),
+    image_url: opt(nullable(urlString)),
     position: req(experiencePosition),
     position_other: opt(positionOther),
     description: opt(experienceDescription),
@@ -560,6 +576,7 @@ export function createExperienceBody(today: string): Parser<CreateExperienceInpu
 export const updateExperienceBody = model({
   invite: opt(str({min: 2, max: 200})),
   name: opt(experienceName),
+  image_url: opt(nullable(urlString)),
   position: opt(experiencePosition),
   position_other: opt(positionOther),
   description: opt(experienceDescription),

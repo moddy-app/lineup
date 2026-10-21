@@ -3,7 +3,7 @@
   "notFound": {
     "title": "Server not found",
     "body": "This server has no Lineup profile, or its profile is not public.",
-    "action": "Browse servers"
+    "action": "See projects"
   },
   "stats": {
     "members_one": "member",
@@ -23,7 +23,7 @@
     "action": "Manage"
   },
   "notices": {
-    "unlisted": "This profile is not in the directory. Only managers and the Moddy staff see it.",
+    "unlisted": "This profile is hidden: only managers and the Moddy staff see it, and its posts.",
     "inviteLost": "The saved invite no longer exists: the Join button is hidden.",
     "inviteLostAction": "Replace the invite"
   },

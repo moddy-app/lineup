@@ -3,7 +3,7 @@
   "notFound": {
     "title": "Servidor no encontrado",
     "body": "Este servidor no tiene perfil en Lineup, o su perfil no es público.",
-    "action": "Ver servidores"
+    "action": "Ver proyectos"
   },
   "stats": {
     "members_one": "miembro",
@@ -23,7 +23,7 @@
     "action": "Gestionar"
   },
   "notices": {
-    "unlisted": "Este perfil no está en el directorio. Solo lo ven los gestores y el staff de Moddy.",
+    "unlisted": "Este perfil está oculto: solo lo ven los gestores y el staff de Moddy, igual que sus anuncios.",
     "inviteLost": "La invitación guardada ya no existe: el botón Unirse está oculto.",
     "inviteLostAction": "Reemplazar la invitación"
   },

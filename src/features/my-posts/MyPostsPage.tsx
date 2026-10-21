@@ -1,11 +1,11 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Link, useNavigate, useSearchParams} from 'react-router';
 
 import {errorMessage} from '@/api/errors';
 import {useClosePost, useDeletePost, usePublishPost} from '@/api/mutations';
 import {type InfiniteList, useInfiniteList} from '@/api/pagination';
 import {useCatalog, useMyPosts} from '@/api/queries';
-import type {Paginated, PostStatus, PrivatePost} from '@/api/types';
+import type {GuildProfile, Paginated, PostStatus, PrivatePost} from '@/api/types';
 import {paths} from '@/app/paths';
 import {usePageTitle} from '@/app/usePageTitle';
 import {useAuthAction} from '@/auth/useAuthAction';
@@ -25,6 +25,7 @@ import {useT} from '@/i18n/useT';
 import {Card, ConfirmDialog, Icon, LinkButton, SettingsLayout, Spinner, useSnackbar} from '@/ui';
 
 import './myPosts.css';
+import {countLivePosts} from './postsQuota';
 import {RowMenu, type RowMenuItem} from './RowMenu';
 import {useUserQuota} from './useUserQuota';
 
@@ -39,34 +40,36 @@ type RowAction = 'close' | 'publish' | 'delete';
 export function Component() {
   const {t} = useT('myPosts');
   usePageTitle(t('title'));
+  return (
+    <SettingsLayout
+      title={t('title')}
+      actions={
+        <LinkButton to={paths.postNew({kind: 'user'})} icon="add">
+          {t('new')}
+        </LinkButton>
+      }
+    >
+      <PostsManager />
+    </SettingsLayout>
+  );
+}
+
+/**
+ * The posts of the person (`/me/posts`) or of a server (`/guilds/:id/manage/posts`): a compact quota line,
+ * status chips (`?status=`), then a card with one `InnerCard` per post.
+ */
+export function PostsManager({guild}: {guild?: GuildProfile}) {
+  const {t} = useT('myPosts');
   const [params, setParams] = useSearchParams();
   const requested = params.get('status');
   const tab: Tab = isTab(requested) ? requested : 'all';
   const status: PostStatus | undefined = tab === 'all' ? undefined : tab;
 
-  const list = useInfiniteList<PrivatePost, Paginated<PrivatePost>>(useMyPosts({status}));
-  const quota = useUserQuota();
-  const catalog = useCatalog();
-  const limit = catalog.data?.limits.max_published_posts_per_user ?? 3;
+  const list = useInfiniteList<PrivatePost, Paginated<PrivatePost>>(useMyPosts({status, guildId: guild?.id}));
 
   return (
-    <SettingsLayout
-      title={t('title')}
-      actions={
-        <LinkButton to={paths.postNew()} icon="add">
-          {t('new')}
-        </LinkButton>
-      }
-    >
-      <div className="mp-quota">
-        {quota.ready ? (
-          <QuotaMeter used={quota.used} limit={limit} scope="user" />
-        ) : quota.list.isError ? (
-          <ErrorState compact error={quota.list.error} onRetry={quota.list.refetch} />
-        ) : (
-          <p className="mp-quota-loading">{t('quota.loading')}</p>
-        )}
-      </div>
+    <>
+      {guild ? <GuildQuota guildId={guild.id} /> : <UserQuota />}
 
       <div className="mp-filters" role="group" aria-label={t('tabsLabel')}>
         {TABS.map((value) => (
@@ -83,12 +86,62 @@ export function Component() {
         ))}
       </div>
 
-      <PostList list={list} tab={tab} />
-    </SettingsLayout>
+      <PostList list={list} tab={tab} guild={guild} />
+    </>
   );
 }
 
-function PostList({list, tab}: {list: InfiniteList<PrivatePost>; tab: Tab}) {
+function UserQuota() {
+  const {t} = useT('myPosts');
+  const quota = useUserQuota();
+  const catalog = useCatalog();
+  const limit = catalog.data?.limits.max_published_posts_per_user ?? 3;
+  return (
+    <div className="mp-quota">
+      {quota.ready ? (
+        <QuotaMeter used={quota.used} limit={limit} scope="user" />
+      ) : quota.list.isError ? (
+        <ErrorState compact error={quota.list.error} onRetry={quota.list.refetch} />
+      ) : (
+        <p className="mp-quota-loading">{t('quota.loading')}</p>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Published, unexpired posts of the server out of the catalog's limit. Nothing
+ * while it loads or if it cannot be read (the editor enforces the quota).
+ */
+function GuildQuota({guildId}: {guildId: string}) {
+  const {t} = useT('myPosts');
+  const {data: catalog} = useCatalog();
+  const published = useMyPosts({guildId, status: 'published'});
+  const list = useInfiniteList<PrivatePost, Paginated<PrivatePost>>(published);
+
+  // Expired posts stay "published" in the list: follow the pages until every one is read.
+  const {hasMore, isLoadingMore, loadMore, isError} = list;
+  useEffect(() => {
+    if (hasMore && !isLoadingMore && !isError) loadMore();
+  }, [hasMore, isLoadingMore, isError, loadMore]);
+
+  if (!catalog || list.isError || hasMore) return null;
+  return (
+    <div className="mp-quota">
+      {list.isLoading ? (
+        <p className="mp-quota-loading">{t('quota.loading')}</p>
+      ) : (
+        <QuotaMeter
+          used={countLivePosts(list.items)}
+          limit={catalog.limits.max_published_posts_per_guild}
+          scope="guild"
+        />
+      )}
+    </div>
+  );
+}
+
+function PostList({list, tab, guild}: {list: InfiniteList<PrivatePost>; tab: Tab; guild?: GuildProfile}) {
   const {t} = useT('myPosts');
   const {t: tCommon} = useT('common');
   const {canWrite, me} = useSession();
@@ -127,31 +180,42 @@ function PostList({list, tab}: {list: InfiniteList<PrivatePost>; tab: Tab}) {
     }
   };
 
-  if (list.isLoading) return <Spinner />;
+  if (list.isLoading)
+    return (
+      <Card className="mp-card">
+        <Spinner />
+      </Card>
+    );
   if (list.isError)
-    return <ErrorState compact error={list.error} onRetry={list.refetch} retrying={list.isRefetching} />;
+    return (
+      <Card className="mp-card">
+        <ErrorState compact error={list.error} onRetry={list.refetch} retrying={list.isRefetching} />
+      </Card>
+    );
   if (list.isEmpty) {
     return (
-      <EmptyState
-        compact
-        icon={
-          tab === 'hidden'
-            ? 'visibility_off'
-            : tab === 'draft'
-              ? 'draft'
-              : tab === 'closed'
-                ? 'inventory_2'
-                : 'campaign'
-        }
-        title={t(`empty.${tab}.title`)}
-        action={
-          <LinkButton to={paths.postNew()} icon="add">
-            {t('new')}
-          </LinkButton>
-        }
-      >
-        {t(`empty.${tab}.body`)}
-      </EmptyState>
+      <Card className="mp-card">
+        <EmptyState
+          compact
+          icon={
+            tab === 'hidden'
+              ? 'visibility_off'
+              : tab === 'draft'
+                ? 'draft'
+                : tab === 'closed'
+                  ? 'inventory_2'
+                  : 'campaign'
+          }
+          title={t(`empty.${tab}.title`)}
+          action={
+            <LinkButton to={paths.postNew(guild ? {guildId: guild.id} : {kind: 'user'})} icon="add">
+              {t('new')}
+            </LinkButton>
+          }
+        >
+          {t(`empty.${tab}.body`)}
+        </EmptyState>
+      </Card>
     );
   }
 
@@ -207,7 +271,7 @@ function PostList({list, tab}: {list: InfiniteList<PrivatePost>; tab: Tab}) {
                       <Link to={paths.post(post.id)}>{post.title}</Link>
                     </p>
                     <p className="mp-meta">
-                      {isGuild ? (
+                      {guild ? null : isGuild ? (
                         <DisplayName
                           name={post.guild?.name ?? t('row.unknownGuild')}
                           badges={post.guild?.badges}

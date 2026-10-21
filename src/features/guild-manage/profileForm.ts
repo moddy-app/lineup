@@ -54,29 +54,49 @@ function cleanLinks(links: readonly Link[]): Link[] {
 const sameList = (a: readonly string[], b: readonly string[]) =>
   a.length === b.length && [...a].sort().every((value, index) => value === [...b].sort()[index]);
 
-/** Only the fields that changed: an absent field is not touched by the API. */
-export function buildUpdate(baseline: ProfileFormValues, values: ProfileFormValues): UpdateGuildBody {
+/**
+ * The form of a page: each management page edits its own fields and sends only
+ * those (and only the ones that changed; the API leaves an absent field alone).
+ */
+export type FormScope = 'profile' | 'invite' | 'visibility';
+
+export const SCOPE_FIELDS: Record<FormScope, ReadonlyArray<keyof ProfileFormValues>> = {
+  profile: ['description', 'links', 'theme', 'tags', 'languages'],
+  invite: ['invite'],
+  visibility: ['listed'],
+};
+
+const inScope = (scope: FormScope | undefined, field: keyof ProfileFormValues) =>
+  scope === undefined || SCOPE_FIELDS[scope].includes(field);
+
+/** Only the fields that changed (within `scope`, all by default): an absent field is not touched by the API. */
+export function buildUpdate(
+  baseline: ProfileFormValues,
+  values: ProfileFormValues,
+  scope?: FormScope,
+): UpdateGuildBody {
   const body: UpdateGuildBody = {};
+  const has = (field: keyof ProfileFormValues) => inScope(scope, field);
 
   const before = baseline.description.trim();
   const after = values.description.trim();
-  if (before !== after) body.description = after === '' ? null : after;
+  if (has('description') && before !== after) body.description = after === '' ? null : after;
 
   const linksBefore = cleanLinks(baseline.links);
   const linksAfter = cleanLinks(values.links);
-  if (JSON.stringify(linksBefore) !== JSON.stringify(linksAfter)) body.links = linksAfter;
+  if (has('links') && JSON.stringify(linksBefore) !== JSON.stringify(linksAfter)) body.links = linksAfter;
 
-  if (baseline.theme !== values.theme) body.theme = values.theme === '' ? null : values.theme;
+  if (has('theme') && baseline.theme !== values.theme) body.theme = values.theme === '' ? null : values.theme;
 
   const tagsAfter = parseTags(values.tags);
-  if (!sameList(parseTags(baseline.tags), tagsAfter)) body.tags = tagsAfter;
+  if (has('tags') && !sameList(parseTags(baseline.tags), tagsAfter)) body.tags = tagsAfter;
 
-  if (!sameList(baseline.languages, values.languages)) body.languages = [...values.languages];
+  if (has('languages') && !sameList(baseline.languages, values.languages)) body.languages = [...values.languages];
 
   const invite = values.invite.trim();
-  if (invite !== '') body.invite = invite;
+  if (has('invite') && invite !== '') body.invite = invite;
 
-  if (baseline.listed !== values.listed) body.listed = values.listed;
+  if (has('listed') && baseline.listed !== values.listed) body.listed = values.listed;
   return body;
 }
 
@@ -91,7 +111,11 @@ export interface LocalIssue {
 type Limits = Pick<Catalog['limits'], 'max_tags' | 'tag_pattern' | 'max_links' | 'max_languages'>;
 
 /** The checks the form can do before sending; the API checks again. Keys are field paths (`links.0.url`). */
-export function validateValues(values: ProfileFormValues, limits: Limits): Record<string, LocalIssue> {
+export function validateValues(
+  values: ProfileFormValues,
+  limits: Limits,
+  scope?: FormScope,
+): Record<string, LocalIssue> {
   const issues: Record<string, LocalIssue> = {};
 
   if (values.description.length > FIELD_LIMITS.guild.descriptionMax) {
@@ -134,5 +158,9 @@ export function validateValues(values: ProfileFormValues, limits: Limits): Recor
   if (invite !== '' && (invite.length < FIELD_LIMITS.guild.inviteMin || invite.length > FIELD_LIMITS.guild.inviteMax)) {
     issues.invite = {key: 'errors.inviteLength'};
   }
-  return issues;
+  if (scope === undefined) return issues;
+  // Only the checks of the fields of this page.
+  const owner = (key: string): keyof ProfileFormValues =>
+    key.startsWith('links') ? 'links' : (key as keyof ProfileFormValues);
+  return Object.fromEntries(Object.entries(issues).filter(([key]) => inScope(scope, owner(key))));
 }

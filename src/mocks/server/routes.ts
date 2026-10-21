@@ -1,13 +1,13 @@
 /**
  * Every route of LINEUP.md §6 (the 41 under /lineup, plus the dashboard's
- * `POST /auth/logout`), as a thin adapter: parse the path and the body, call
+ * `GET /auth/me` and `POST /auth/logout`), as a thin adapter: parse the path and the body, call
  * the logic, choose the status code. The rules live in ../logic.
  *
  * `GET /lineup/auth/login` is a browser navigation, not a request: in mock
  * mode the login button goes to the mock's own login page instead.
  */
 
-import {catalogFixture} from '@/api/catalog.fixture';
+import {mockCatalog} from '../logic/badges';
 import type {BadgeEntityType} from '@/api/types';
 
 import {unauthenticated} from '../errors';
@@ -67,7 +67,7 @@ import {
   revokeBadge,
   unhidePost,
 } from '../logic/staff';
-import {getUserProfile, toMe, updateMyProfile} from '../logic/users';
+import {getUserProfile, toAccount, toMe, updateMyProfile} from '../logic/users';
 import {calendarDate} from '../time';
 import {Issues, parseBody, Params} from '../logic/validate';
 import type {RouteContext} from './dispatch';
@@ -121,7 +121,7 @@ export const routes: Route[] = [
     method: 'GET',
     path: '/lineup/catalog',
     auth: 'public',
-    handler: () => ok(catalogFixture, {'Cache-Control': 'public, max-age=3600'}),
+    handler: () => ok(mockCatalog, {'Cache-Control': 'public, max-age=3600'}),
   },
 
   // ---- 6.2 Servers -----------------------------------------------------------
@@ -419,7 +419,8 @@ export const routes: Route[] = [
     handler: (c) => ok(dismissReport(c.env, actorOf(c), pathUuid(c, 'report_id'))),
   },
 
-  // ---- The dashboard's sign-out (same cookie) ---------------------------------
+  // ---- The dashboard's account and sign-out (same cookie) ---------------------
+  {method: 'GET', path: '/auth/me', auth: 'any_session', handler: (c) => ok(toAccount(actorOf(c)))},
   {
     method: 'POST',
     path: '/auth/logout',

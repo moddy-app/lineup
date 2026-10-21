@@ -1,6 +1,4 @@
 {
-  "title": "Serveurs",
-  "description": "Les serveurs Discord que vous gérez",
   "unknownName": "Serveur sans nom",
   "success": "{{name}} est sur Lineup.",
   "refresh": {
@@ -9,15 +7,15 @@
     "done": "Liste relue depuis Discord."
   },
   "onLineup": {
-    "title": "Sur Lineup",
     "label": "Serveurs sur Lineup",
-    "listed": "Dans l'annuaire",
+    "listed": "Visible",
     "unlisted": "Masqué",
     "manage": "Gérer",
-    "profile": "Voir le profil"
+    "profile": "Voir le profil",
+    "emptyTitle": "Aucun serveur sur Lineup",
+    "emptyBody": "Les serveurs que vous ajoutez apparaissent ici."
   },
   "toAdd": {
-    "title": "À ajouter",
     "label": "Serveurs à ajouter",
     "withModdy": "Moddy installé",
     "add": "Ajouter",
@@ -33,17 +31,18 @@
   },
   "dialog": {
     "title": "Ajouter {{name}}",
-    "titleFree": "Ajouter un serveur",
     "intro": "Collez un lien d'invitation de {{name}} qui n'expire jamais. Il devient le bouton Rejoindre du profil.",
-    "introModdy": "Moddy est déjà sur {{name}}, mais Lineup demande encore une invitation qui n'expire jamais. Créez-en une sur Discord et collez-la ici.",
+    "introModdy": "Moddy est déjà sur {{name}}. Lineup lit le serveur et crée pour vous l'invitation permanente.",
     "introFree": "Collez un lien d'invitation qui n'expire jamais vers un serveur que vous gérez. Il prouve que le serveur est le vôtre et devient le bouton Rejoindre du profil.",
     "how": "Comment créer une invitation permanente",
     "label": "Lien ou code d'invitation",
     "placeholder": "https://discord.gg/votre-code",
     "hint": "Le code seul fonctionne aussi.",
-    "cancel": "Annuler",
     "submit": "Ajouter",
-    "submitting": "Vérification..."
+    "submitting": "Vérification...",
+    "adding": "Ajout...",
+    "back": "Retour à la liste",
+    "close": "Fermer"
   },
   "errors": {
     "tooShort": "Saisissez au moins {{count}} caractères.",
@@ -51,5 +50,9 @@
     "rightsChanged": "J'ai changé mes droits",
     "rightsChecking": "Lecture des droits...",
     "openProfile": "Ouvrir le profil"
+  },
+  "menu": {
+    "add": "Ajouter un serveur",
+    "manage": "Gérer les serveurs"
   }
 }

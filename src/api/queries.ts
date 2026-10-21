@@ -16,10 +16,10 @@ import {type InfiniteData, keepPreviousData, useInfiniteQuery, useQuery} from '@
 
 import type {ApiError} from './client';
 import {
+  getAccount,
   getCatalog,
   getFeed,
   getGuild,
-  getGuildDirectory,
   getMyExperiences,
   getMyGuilds,
   getMyPosts,
@@ -30,12 +30,11 @@ import {
   getStaffReports,
   getUser,
 } from './endpoints';
-import {normalizeDirectoryFilters, normalizeFeedFilters, normalizeMyPostsParams, queryKeys} from './queryKeys';
+import {normalizeFeedFilters, normalizeMyPostsParams, queryKeys} from './queryKeys';
 import {shouldRetry} from './retry';
 import {fetchSession} from './sessionSnapshot';
 import type {
   BadgeEntityType,
-  DirectoryFilters,
   FeedFilters,
   MyPostsParams,
   Paginated,
@@ -70,6 +69,23 @@ export function useMe() {
     refetchOnWindowFocus: true,
     retry: (failureCount, error) => failureCount < 1 && shouldRetry(failureCount, error),
   });
+}
+
+/**
+ * The e-mail of the signed-in person (`GET /auth/me`, a dashboard route).
+ * Optional data: a failure is not retried and the e-mail is simply not shown.
+ */
+export function useAccountEmail(): string | null {
+  const signedIn = useIsSignedIn();
+  const {data} = useQuery({
+    queryKey: queryKeys.account(),
+    queryFn: ({signal}) => getAccount({signal}),
+    enabled: signedIn,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
+    retry: false,
+  });
+  return data?.email ?? null;
 }
 
 /** True once the session is known to be a signed-in one: gates the person's own data. */
@@ -145,19 +161,6 @@ export function useMyPosts(params: MyPostsParams = {}) {
 // ---------------------------------------------------------------------------
 // Servers
 // ---------------------------------------------------------------------------
-
-/** The public directory of servers (60 s of cache on the server). */
-export function useGuildDirectory(filters: DirectoryFilters = {}) {
-  const normalized = normalizeDirectoryFilters(filters);
-  return useInfiniteQuery({
-    queryKey: queryKeys.directory(normalized),
-    queryFn: ({pageParam, signal}) => getGuildDirectory(normalized, {cursor: pageParam, signal}),
-    initialPageParam: FIRST_PAGE,
-    getNextPageParam: nextCursor,
-    staleTime: 60_000,
-    placeholderData: keepPreviousData,
-  });
-}
 
 /** A server's profile. */
 export function useGuild(guildId: Snowflake | undefined) {

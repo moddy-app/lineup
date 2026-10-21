@@ -9,6 +9,7 @@ import type {VerificationEvidence} from '@/api/types';
 
 import type {DbExperience} from '../model';
 import {DAY, iso} from '../time';
+import {mockImageUrl} from './assets';
 import {experienceId as xid, G, U} from './ids';
 
 type ExperienceSeed = Pick<DbExperience, 'user_id' | 'kind' | 'name' | 'position' | 'start_date'> &
@@ -25,6 +26,8 @@ export function seedExperiences(now: Date): DbExperience[] {
       id: xid(n),
       guild_id: null,
       invite_code: null,
+      image_url: null,
+      member_count: null,
       position_other: null,
       description: null,
       end_date: null,
@@ -109,6 +112,7 @@ export function seedExperiences(now: Date): DbExperience[] {
     // Pending a review (a past experience on a service): the owner sees her own note.
     make(
       service(U.camille, 'Chaîne Twitch de Kaelis', 'moderator', '2021-04-12', '2023-06-30', {
+        image_url: mockImageUrl('mia'),
         description: 'Modération du chat pendant les directs, environ 800 spectateurs en moyenne.',
         status: 'pending',
         evidence: {
@@ -273,6 +277,7 @@ export function seedExperiences(now: Date): DbExperience[] {
     // Sam: a past service, verified, shown to everyone.
     make(
       service(U.sam, 'Réseau de serveurs StreamHub', 'moderator', '2019-10-01', '2022-02-28', {
+        image_url: mockImageUrl('troublemaker'),
         status: 'verified',
         method: 'moddy_staff',
         verified_at: ago(140),

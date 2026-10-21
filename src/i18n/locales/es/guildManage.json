@@ -1,12 +1,11 @@
 {
   "title": "Gestión del servidor",
   "pageTitle": "Gestionar {{name}}",
-  "pageDescription": "Gestión del perfil de Lineup",
   "unknownName": "Servidor sin nombre",
   "notFound": {
     "title": "Servidor no encontrado",
     "body": "Este servidor no tiene perfil en Lineup. Añádalo primero desde la página Servidores.",
-    "action": "Ver servidores"
+    "action": "Ver proyectos"
   },
   "forbidden": {
     "title": "No gestionas este servidor",
@@ -15,15 +14,6 @@
   },
   "viewProfile": "Ver el perfil público",
   "saved": "Perfil guardado.",
-  "sections": {
-    "label": "Secciones de la página",
-    "profile": "Perfil público",
-    "invite": "Invitación",
-    "visibility": "Visibilidad",
-    "posts": "Anuncios",
-    "discord": "Datos de Discord",
-    "danger": "Zona de peligro"
-  },
   "profile": {
     "title": "Perfil público",
     "description": "Lo que ve quien abre el servidor."
@@ -68,21 +58,25 @@
   },
   "invite": {
     "title": "Invitación",
-    "description": "El enlace del botón Unirse del perfil.",
-    "current": "Invitación actual",
-    "valid": "Válida",
     "lost": "No encontrada en Discord",
-    "lostHelp": "Ya no existe en Discord: reemplácela.",
-    "none": "No hay invitación guardada.",
+    "none": "Sin invitación",
     "label": "Nueva invitación",
     "placeholder": "https://discord.gg/su-codigo",
-    "hint": "Opcional. No debe caducar nunca y llevar a este mismo servidor.",
-    "how": "Cómo crear una invitación permanente"
+    "hint": "No debe caducar nunca y debe llevar a este servidor.",
+    "how": "Cómo crear una invitación permanente",
+    "regenerate": "Generar una invitación nueva",
+    "regenerating": "Generando...",
+    "regenerated": "Invitación nueva generada.",
+    "waitIn": "Disponible en {{seconds}} s",
+    "paste": "Pegar otra invitación",
+    "copy": "Copiar enlace",
+    "copied": "Invitación copiada.",
+    "copyFailed": "No se pudo copiar."
   },
   "visibility": {
     "title": "Visibilidad",
-    "label": "Mostrar el servidor en el directorio",
-    "on": "Cualquiera puede encontrar este perfil en el directorio.",
+    "label": "Hacer visible el servidor en Lineup",
+    "on": "El perfil y los anuncios del servidor son visibles para todos.",
     "off": "El perfil y sus anuncios desaparecen para todos, salvo para los gestores y el staff de Moddy."
   },
   "errors": {
@@ -104,11 +98,12 @@
     "staleDone": "Discord no respondió: se conservan los datos antiguos.",
     "refresh": "Actualizar ahora",
     "refreshing": "Leyendo...",
-    "waitIn": "Disponible en {{seconds}} s"
+    "waitIn": "Disponible en {{seconds}} s",
+    "updated": "Actualizado {{relative}}"
   },
   "danger": {
     "title": "Zona de peligro",
-    "body": "Eliminar el perfil lo quita del directorio y cierra los anuncios del servidor. El servidor de Discord no se toca.",
+    "body": "Eliminar el perfil lo hace invisible y cierra los anuncios del servidor. El servidor de Discord no se toca.",
     "action": "Eliminar el perfil",
     "confirmTitle": "¿Eliminar el perfil de {{name}}?",
     "confirmBody": "Lo que ocurre:",
@@ -118,31 +113,12 @@
     "confirm": "Eliminar",
     "done": "El perfil de {{name}} se ha eliminado."
   },
-  "posts": {
-    "title": "Anuncios del servidor",
-    "create": "Nuevo anuncio",
-    "filters": "Filtrar por estado",
-    "filter": {
-      "all": "Todos",
-      "published": "Publicados",
-      "draft": "Borradores",
-      "closed": "Cerrados",
-      "hidden": "Ocultos"
-    },
-    "menu": "Acciones del anuncio {{title}}",
-    "emptyTitle": "Sin anuncios",
-    "emptyAll": "Este servidor aún no tiene anuncios. Quienes gestionan el servidor pueden editarlos todos.",
-    "emptyTab": "No hay anuncios con este estado.",
-    "hidden": "Ocultado por el equipo de Moddy: ya no se puede modificar.",
-    "edit": "Editar",
-    "close": "Cerrar",
-    "reopen": "Reabrir",
-    "publish": "Publicar",
-    "delete": "Eliminar",
-    "closed": "Anuncio cerrado.",
-    "published": "Anuncio publicado.",
-    "deleted": "Anuncio eliminado.",
-    "deleteTitle": "¿Eliminar este anuncio?",
-    "deleteBody": "«{{title}}» se eliminará de forma definitiva."
+  "newPost": "Nuevo anuncio",
+  "pages": {
+    "profile": "Descripción, tema, etiquetas, idiomas y enlaces.",
+    "invite": "El enlace del botón Unirse en su perfil.",
+    "posts": "Los anuncios de este servidor.",
+    "discord": "Lo que Lineup lee de Discord.",
+    "settings": "Visibilidad y eliminación."
   }
 }

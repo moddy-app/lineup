@@ -1,6 +1,6 @@
 # Notes pour l'équipe backend
 
-Questions et écarts rencontrés en construisant le front, avec les réponses déjà données par le responsable du backend. Le front ne dépend d'aucun point ouvert : il gère les deux cas quand il y a doute.
+Questions et écarts rencontrés en construisant le front, avec les réponses données par le responsable du backend. Le front ne dépend d'aucun point ouvert : il gère les deux cas quand il y a doute.
 
 ## Réponses reçues
 
@@ -19,17 +19,23 @@ Questions et écarts rencontrés en construisant le front, avec les réponses d�
 4. **Route inconnue ou mauvaise méthode.** Route inconnue : 404 `{"detail":"Not Found"}`. Mauvaise méthode : 405 `{"detail":"Method Not Allowed"}` avec un en-tête `Allow`. C'est la forme native de FastAPI. LINEUP.md §0 est inexact (il écrit `{"error":"Not Found"}`) et son helper `api()` doit aussi lire `body.detail` quand c'est une chaîne. Le responsable backend corrigera le document. Le client du front gère déjà cette forme (voir [api-client.md](api-client.md)).
 5. **401 "Session expiree" et "Non authentifie".** Le premier : cookie envoyé, session disparue. Le second : pas de cookie. Le front traite les deux pareil (retour à la connexion) ; le mock simule les deux.
 6. **`POST /auth/logout`.** Route du tableau de bord, même session. Réponse 200 avec un corps vide (pas du JSON), `Set-Cookie` qui efface `session_token` sur `.moddy.app`, session supprimée dans Redis. Déconnecte aussi du tableau de bord. Un compte suspendu peut se déconnecter. Sans session valide : 401 (l'un ou l'autre texte), traité par le front comme déjà déconnecté. Origine étrangère : 403 `Origin not allowed`.
+7. **Badges Discord publics.** Toujours envoyés sur le profil complet d'une personne (`badges` de `GET /lineup/users/{id}`), jamais sur les résumés. LINEUP.md §10 est corrigé en ce sens. Le front n'affiche de toute façon pas les badges Discord à côté d'un nom.
+8. **`entity_type` sur `GET /lineup/staff/badges`.** Facultatif. Le front garde un appel par type et fusionne pour « tous » : la pagination par `limit` et `offset` reste par type.
+9. **Réponses staff verify / reject.** Elles contiennent `user_id` (type `StaffExperience`). `syncStaffExperience` s'en sert pour mettre à jour le profil de la personne et la file.
+10. **Pages vides consécutives.** Pas de borne stricte côté API ; 3 reste raisonnable. Le front suit au plus 3 pages vides (avec `next_cursor` non nul), puis affiche « Charger plus ».
+11. **`redirect` depuis localhost.** Voulu : le chemin relatif est rattaché à `lineup.moddy.app`, donc on revient sur la production après la connexion.
+12. **NSFW sur une annonce.** `post.guild.nsfw` (booléen) existe. `isNsfw` le lit : une annonce est NSFW si `post.guild.nsfw` ou si son thème est `nsfw`. Les cartes de l'annuaire portent aussi `nsfw`.
+13. **Annonces d'un serveur non listé.** Masquées du fil et du détail (404 pour un tiers). Le mock a raison.
+14. **Badges sur les résumés.** `badges` est présent sur `post.guild`, `post.author`, `team[].user`, `experience.guild`, `GET /lineup/me` (`user.badges`) et les cartes de l'annuaire, sans badges Discord ni `moddy_premium`. Les types le déclarent obligatoire.
+15. **Invitation des serveurs avec Moddy.** `POST /lineup/guilds/claim` accepte `{invite}` ou `{guild_id}` (au moins un). Avec Moddy sur le serveur, `guild_id` seul suffit : l'API lit le serveur et crée l'invitation permanente. Sans Moddy : 422 `invite_required`. `invite` et `guild_id` pour deux serveurs : 422 `invite_guild_mismatch`. `PUT /lineup/guilds/{id}` avec `invite: null` demande une nouvelle invitation à Moddy (422 `invite_required` sans Moddy). `GET /lineup/guilds/{id}` : `invite.url` nul si le bot n'a pu en créer nulle part ; `snapshot_at` seulement pour les gestionnaires.
+16. **Description dans l'annuaire.** Chaque carte porte `description` (description Lineup, sinon Discord, tronquée à 160 caractères avec « … ») et `nsfw`.
+17. **Expériences.** `image_url` et `member_count` ; `experience.guild` `{id, name, icon_url, badges}` quand le serveur a un profil Lineup listé, sinon `null` (aussi pour un service). Pour un serveur, `image_url` du corps est ignoré. Changer l'image ne remet pas la vérification à zéro.
+18. **Mes serveurs et console staff.** `GET /lineup/me/guilds` : `listed` sur chaque élément. `GET` et `PUT /lineup/staff/badges` : `entity_name` et `entity_icon_url`, nuls sans profil Lineup.
 
 ## Questions ouvertes
 
-1. **Badges Discord publics.** LINEUP.md §10 dit que les badges Discord publics ne sont pas exposés ; §5 et §6.3 disent qu'ils le sont (source `discord`). Le front gère les deux.
-2. **`entity_type` sur `GET /lineup/staff/badges`.** Est-il obligatoire ? Le front l'envoie quand on filtre et fusionne deux appels pour "tous".
-3. **Réponses staff verify / reject.** Contiennent-elles `user_id` ? Le front ne s'y appuie pas.
-4. **Nombre de pages vides à suivre.** Le front suit au plus 3 pages vides consécutives (avec `next_cursor` non nul), puis affiche "Charger plus". Une valeur recommandée côté backend serait utile.
-5. **`redirect` depuis localhost.** Le front envoie un chemin relatif (une URL localhost est réduite à son chemin). À confirmer que c'est le comportement voulu pour le développement.
-6. **NSFW sur une annonce.** `post.guild` n'a ni badges ni indicateur `nsfw` : la porte d'âge de la page d'annonce ne peut se déclencher que sur le thème `nsfw`. Une annonce d'un serveur de niveau Discord `nsfw_level` 1 ou 3 mais d'un autre thème s'affiche sans porte. Proposition : ajouter `nsfw: boolean` (ou `badges`) à `post.guild`.
-7. **Annonces d'un serveur non listé.** LINEUP.md §16 dit à un endroit que ces annonces restent dans le fil et ailleurs qu'elles sont masquées (§8 "Visibilité côté lecteur", dernier point, contre §9 et §16 ; le texte du dossier indique les deux comportements). Le mock les masque. À confirmer.
-8. **Badges sur les résumés.** `post.guild`, `post.author`, `team[].user` et `GET /lineup/me` n'ont pas de `badges`, alors que la coche de vérification doit apparaître partout où un nom s'affiche. Proposition : ajouter `badges` (sans les badges Discord) à ces quatre objets, avec la même logique que les profils complets. Le mock le fait déjà ; le front n'affiche rien si le champ manque (`badges` est optionnel dans les types).
-9. **Invitation des serveurs avec Moddy.** Quand Moddy est déjà sur le serveur, le bot pourrait créer lui-même l'invitation permanente. Proposition : rendre `invite` facultatif dans `POST /lineup/guilds/claim` et `PUT /lineup/guilds/{id}` quand `has_moddy` est vrai (l'API crée ou réutilise une invitation via le bot). Le front garde le champ obligatoire tant que l'API ne l'accepte pas.
-10. **Description dans l'annuaire.** `GET /lineup/guilds` ne renvoie pas `description`. Proposition : l'ajouter, tronquée (par exemple 160 caractères), pour l'afficher sur les cartes de l'annuaire.
-11. **Autres écarts.** Aucun autre écart n'a été relevé en lisant `src/mocks/README.md` et les commentaires du code. Si vous en trouvez, ajoutez-les ici.
+1. **`invite.code` quand `invite.url` est nul.** Le message annonce seulement `url` nullable. Le type garde `code: string` ; le mock envoie `{code: "", url: null, valid: true}`. À confirmer (sans doute `code` nul aussi).
+2. **Ordre des contrôles de `POST /lineup/guilds/claim` avec `guild_id` seul.** Le mock vérifie les droits (403), puis le doublon (409), puis la présence de Moddy (422 `invite_required`). Le front ne dépend pas de l'ordre.
+3. **`experience.guild` et NSFW.** Le résumé n'a pas de `nsfw` : le front garde le repli sur l'icône quand ses `badges` contiennent `nsfw`. Proposition : y ajouter `nsfw: boolean` comme sur `post.guild`.
+4. **E-mail du compte.** `GET /lineup/me` n'a pas d'e-mail, mais `GET /auth/me` (route du tableau de bord, cookie `session_token`) renvoie `email` (nullable) et `verified`. Le front l'y lit pour le menu du compte (`useAccountEmail`) ; la ligne est masquée si l'e-mail manque ou si la requête échoue. À confirmer : CORS de `/auth/me` pour `https://lineup.moddy.app`.
+5. **Autres écarts.** Aucun autre écart n'a été relevé en lisant `src/mocks/README.md` et les commentaires du code. Si vous en trouvez, ajoutez-les ici.

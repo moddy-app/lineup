@@ -9,7 +9,6 @@ import {
   mapItems,
   removeItems,
   removeExperience,
-  toGuildCard,
   toPublicPost,
   unclaimMyGuild,
   upsertExperience,
@@ -19,7 +18,6 @@ import {
   withBadgeGrant,
   withExperience,
   withExperienceOrder,
-  withGuildInDirectory,
   withManualBadge,
   withModeration,
   withoutBadgeGrant,
@@ -43,7 +41,7 @@ import {
   page,
   postCreatedAt,
 } from './fixtures';
-import type {GuildCard, ManualBadgeGrant, PrivatePost} from './types';
+import type {ManualBadgeGrant, PrivatePost} from './types';
 
 const ids = (data: {pages: Array<{items: Array<{id: string}>}>} | undefined) =>
   data?.pages.map((p) => p.items.map((item) => item.id));
@@ -344,36 +342,17 @@ describe('servers', () => {
   it('marks an existing one claimed with its fresh name, or leaves the list alone when identical', () => {
     const list = [makeMyGuild({id: GUILD_ID, name: 'Old'})];
     const result = upsertMyGuild(list, makeGuildProfile({name: 'New'}));
-    expect(result[0]).toMatchObject({name: 'New', claimed: true});
+    expect(result[0]).toMatchObject({name: 'New', claimed: true, listed: true});
+    // An unlisted profile is claimed but not listed.
+    expect(upsertMyGuild(result, makeGuildProfile({name: 'New', listed: false}))[0]).toMatchObject({listed: false});
     expect(upsertMyGuild(result, makeGuildProfile({name: 'New'}))).toBe(result);
   });
 
   it('unclaims a deleted server and keeps it in the list', () => {
     const list = [makeMyGuild({claimed: true})];
-    expect(unclaimMyGuild(list, GUILD_ID)).toEqual([makeMyGuild({claimed: false})]);
+    expect(unclaimMyGuild(list, GUILD_ID)).toEqual([makeMyGuild({claimed: false, listed: false})]);
     const already = [makeMyGuild({claimed: false})];
     expect(unclaimMyGuild(already, GUILD_ID)).toBe(already);
-  });
-
-  it('makes a directory card without the premium badge', () => {
-    const profile = makeGuildProfile({
-      badges: [
-        {id: 'moddy_installed', label: {fr: 'a', en: 'a'}, source: 'computed'},
-        {id: 'moddy_premium', label: {fr: 'b', en: 'b'}, source: 'computed'},
-      ],
-    });
-    expect(toGuildCard(profile).badges.map((b) => b.id)).toEqual(['moddy_installed']);
-  });
-
-  it('updates a listed card in the directory and removes an unlisted one', () => {
-    const card: GuildCard = toGuildCard(makeGuildProfile({tags: ['old']}));
-    const other = toGuildCard(makeGuildProfile({id: '2'}));
-    const data = infinite(page([card, other]));
-    const updated = withGuildInDirectory(data, makeGuildProfile({tags: ['new']}))!;
-    expect(updated.pages[0]!.items[0]!.tags).toEqual(['new']);
-    expect(updated.pages[0]!.items[1]).toBe(other);
-    expect(ids(withGuildInDirectory(data, makeGuildProfile({listed: false})))).toEqual([['2']]);
-    expect(withGuildInDirectory(undefined, makeGuildProfile())).toBeUndefined();
   });
 });
 
@@ -410,6 +389,8 @@ describe('badges', () => {
   const grant = (badge: string, at: string, note: string | null = null): ManualBadgeGrant => ({
     entity_type: 'guild',
     entity_id: GUILD_ID,
+    entity_name: null,
+    entity_icon_url: null,
     badge,
     granted_by: '1',
     granted_at: at,

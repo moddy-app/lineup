@@ -51,7 +51,6 @@ import {
   withBadgeGrant,
   withExperience,
   withExperienceOrder,
-  withGuildInDirectory,
   withManualBadge,
   withModeration,
   withoutBadgeGrant,
@@ -69,7 +68,6 @@ import type {
   BadgeEntityType,
   Catalog,
   ExperienceList,
-  GuildCard,
   GuildProfile,
   ManualBadgeGrant,
   Me,
@@ -234,29 +232,17 @@ export function syncPostModerated(queryClient: QueryClient, moderation: PostMode
 
 /**
  * A server profile came back whole (claim, PUT, refresh): it is the detail,
- * the person's list of servers is patched (claimed, name, icon), and the
- * directory card follows. A claim adds a server to the directory: marked stale.
+ * the person's list of servers is patched (claimed, name, icon).
  */
-export function syncGuildProfile(
-  queryClient: QueryClient,
-  profile: GuildProfile,
-  options: {claimed?: boolean} = {},
-): void {
+export function syncGuildProfile(queryClient: QueryClient, profile: GuildProfile): void {
   queryClient.setQueryData<GuildProfile>(queryKeys.guildDetail(profile.id), profile);
   patchQuery<MyGuild[]>(queryClient, queryKeys.myGuilds(), (list) => upsertMyGuild(list, profile));
-  patchQueries<Infinite<Paginated<GuildCard>>>(queryClient, queryKeys.directories(), (data) =>
-    withGuildInDirectory(data, profile),
-  );
-  if (options.claimed) markStale(queryClient, queryKeys.directories());
 }
 
 /** A server profile was deleted. Its draft and published posts were closed by the API: the caches say so too. */
 export function syncGuildDeleted(queryClient: QueryClient, guildId: Snowflake): void {
   queryClient.removeQueries({queryKey: queryKeys.guildDetail(guildId), exact: true});
   patchQuery<MyGuild[]>(queryClient, queryKeys.myGuilds(), (list) => unclaimMyGuild(list, guildId));
-  patchQueries<Infinite<Paginated<GuildCard>>>(queryClient, queryKeys.directories(), (data) =>
-    removeItems(data, (card: GuildCard) => card.id === guildId),
-  );
   removeFromFeeds(queryClient, (post) => post.guild_id === guildId);
 
   // The posts of the server that are held somewhere, closed; hidden ones stay hidden.

@@ -1,23 +1,35 @@
-import {useParams} from 'react-router';
+import {Outlet, useLocation, useParams} from 'react-router';
 
 import {hasCode} from '@/api/client';
 import {useGuild} from '@/api/queries';
-import type {GuildProfile} from '@/api/types';
 import {paths} from '@/app/paths';
 import {usePageTitle} from '@/app/usePageTitle';
 import {DisplayName, EmptyState, ErrorState} from '@/components';
 import {useT} from '@/i18n/useT';
 import {LinkButton, PageLoading, SettingsLayout} from '@/ui';
 
-import {DangerZone} from './DangerZone';
-import {GuildPosts} from './GuildPosts';
-import {ProfileEditor} from './ProfileEditor';
-import {SectionNav} from './SectionNav';
-import {SnapshotCard} from './SnapshotCard';
 import './guildManage.css';
 
+type Section = 'profile' | 'invite' | 'posts' | 'discord' | 'settings';
+
+function sectionOf(pathname: string, guildId: string): Section {
+  const at = (path: string) => pathname.replace(/\/$/, '') === path;
+  if (at(paths.guildManageInvite(guildId))) return 'invite';
+  if (at(paths.guildManagePosts(guildId))) return 'posts';
+  if (at(paths.guildManageDiscord(guildId))) return 'discord';
+  if (at(paths.guildManageSettings(guildId))) return 'settings';
+  return 'profile';
+}
+
+/**
+ * Parent of the management pages of a server. Reads the server once, handles
+ * loading, not found and refused access, then shows the dashboard layout
+ * (title, short description of the page, link to the public profile) around the
+ * page (`<Outlet context={guild}>`).
+ */
 export function Component() {
   const {guildId} = useParams();
+  const {pathname} = useLocation();
   const {t} = useT('guildManage');
   const query = useGuild(guildId);
   const guild = query.data;
@@ -35,7 +47,7 @@ export function Component() {
             tone="tertiary"
             title={t('notFound.title')}
             action={
-              <LinkButton to={paths.guilds()} icon="groups">
+              <LinkButton to={paths.feed()} icon="rocket_launch">
                 {t('notFound.action')}
               </LinkButton>
             }
@@ -69,28 +81,26 @@ export function Component() {
     );
   }
 
-  return <ManageView key={guild.id} guild={guild} />;
-}
-
-function ManageView({guild}: {guild: GuildProfile}) {
-  const {t} = useT('guildManage');
-  const name = guild.name ?? t('unknownName');
+  const section = sectionOf(pathname, guild.id);
   return (
     <SettingsLayout
       className="manage-page"
-      title={<DisplayName name={name} badges={guild.badges} entity="guild" />}
-      description={t('pageDescription')}
+      title={<DisplayName name={guild.name ?? t('unknownName')} badges={guild.badges} entity="guild" />}
+      description={t(`pages.${section}`)}
       actions={
-        <LinkButton to={paths.guild(guild.id)} variant="outlined" icon="visibility">
-          {t('viewProfile')}
-        </LinkButton>
+        <>
+          <LinkButton to={paths.guild(guild.id)} variant="outlined" icon="visibility">
+            {t('viewProfile')}
+          </LinkButton>
+          {section === 'posts' && (
+            <LinkButton to={paths.postNew({guildId: guild.id})} icon="add">
+              {t('newPost')}
+            </LinkButton>
+          )}
+        </>
       }
     >
-      <SectionNav />
-      <ProfileEditor guild={guild} />
-      <GuildPosts guild={guild} />
-      <SnapshotCard guild={guild} />
-      <DangerZone guild={guild} />
+      <Outlet key={guild.id} context={guild} />
     </SettingsLayout>
   );
 }

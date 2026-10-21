@@ -1,6 +1,4 @@
 {
-  "title": "Servidores",
-  "description": "Los servidores de Discord que gestiona",
   "unknownName": "Servidor sin nombre",
   "success": "{{name}} ya está en Lineup.",
   "refresh": {
@@ -9,15 +7,15 @@
     "done": "Lista leída de nuevo desde Discord."
   },
   "onLineup": {
-    "title": "En Lineup",
     "label": "Servidores en Lineup",
-    "listed": "En el directorio",
+    "listed": "Visible",
     "unlisted": "Oculto",
     "manage": "Gestionar",
-    "profile": "Ver el perfil"
+    "profile": "Ver el perfil",
+    "emptyTitle": "Ningún servidor en Lineup",
+    "emptyBody": "Los servidores que añada aparecen aquí."
   },
   "toAdd": {
-    "title": "Por añadir",
     "label": "Servidores por añadir",
     "withModdy": "Moddy instalado",
     "add": "Añadir",
@@ -33,17 +31,18 @@
   },
   "dialog": {
     "title": "Añadir {{name}}",
-    "titleFree": "Añadir un servidor",
     "intro": "Pegue un enlace de invitación a {{name}} que no caduque nunca. Se convierte en el botón Unirse del perfil.",
-    "introModdy": "Moddy ya está en {{name}}, pero Lineup aún pide una invitación que no caduque nunca. Cree una en Discord y péguela aquí.",
+    "introModdy": "Moddy ya está en {{name}}. Lineup lee el servidor y crea la invitación permanente por usted.",
     "introFree": "Pegue un enlace de invitación que no caduque nunca a un servidor que gestione. Demuestra que el servidor es suyo y se convierte en el botón Unirse del perfil.",
     "how": "Cómo crear una invitación permanente",
     "label": "Enlace o código de invitación",
     "placeholder": "https://discord.gg/su-codigo",
     "hint": "El código solo también sirve.",
-    "cancel": "Cancelar",
     "submit": "Añadir",
-    "submitting": "Comprobando..."
+    "submitting": "Comprobando...",
+    "adding": "Añadiendo...",
+    "back": "Volver a la lista",
+    "close": "Cerrar"
   },
   "errors": {
     "tooShort": "Escriba al menos {{count}} caracteres.",
@@ -51,5 +50,9 @@
     "rightsChanged": "He cambiado mis permisos",
     "rightsChecking": "Leyendo permisos...",
     "openProfile": "Abrir el perfil"
+  },
+  "menu": {
+    "add": "Añadir un servidor",
+    "manage": "Gestionar servidores"
   }
 }

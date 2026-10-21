@@ -13,6 +13,7 @@ import {useCallback} from 'react';
 import {useLanguage} from '@/i18n/useLanguage';
 import {i18n, type Language} from '@/i18n';
 
+import {BADGE_LABEL_OVERRIDES} from './badgeLabels';
 import {useCatalog} from './queries';
 import type {Catalog, CatalogEntry, CatalogKind, LocalizedLabel} from './types';
 
@@ -77,6 +78,7 @@ export function useCatalogLabel(): CatalogLabels {
   const {data: catalog} = useCatalog();
   const label = useCallback(
     (kind: CatalogKind, id: string, fallback?: LocalizedLabel) =>
+      (kind === 'badges' ? BADGE_LABEL_OVERRIDES[id]?.[language] : undefined) ??
       pickCatalogLabel({
         language,
         id,

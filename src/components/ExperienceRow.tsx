@@ -1,7 +1,8 @@
 /**
- * One experience as an inner card: the server's icon (or a shape
- * for a service), the position in 600, the server or service name (with its
- * verification mark when the server's profile is known), the period and its
+ * One experience as an inner card: the server's icon or the service's image
+ * (a shape without either), the server or service name in 600 (with its
+ * verification mark when the server has a listed profile: `experience.guild`),
+ * the position under it, the member count of a server, the period and its
  * duration, a short description and the verification. `actions` is a slot under the text
  * for the owner's controls; `href` makes the name a link to the server.
  *
@@ -13,16 +14,16 @@ import {type ReactNode, useState} from 'react';
 import {Link} from 'react-router';
 
 import {useCatalogLabel} from '@/api/catalog';
-import {useGuild} from '@/api/queries';
-import {type Badge, isPrivateExperience, type ProfileExperience} from '@/api/types';
+import {isPrivateExperience, type ProfileExperience} from '@/api/types';
 import {useLanguage} from '@/i18n/useLanguage';
 import {useT} from '@/i18n/useT';
 import {cx} from '@/lib/cx';
-import {Shape} from '@/ui';
 
 import {DisplayName} from './DisplayName';
 import {formatDuration, formatRange, monthsBetween} from './experienceFormat';
 import {GuildIcon} from './GuildIcon';
+import {InlineStats} from './InlineStats';
+import {ServiceImage} from './ServiceImage';
 import {useNow} from './useNow';
 import {VerificationPill} from './VerificationPill';
 
@@ -30,15 +31,6 @@ interface ExperienceRowProps {
   experience: ProfileExperience;
   /** Where the name goes (the server's profile); only for a server experience. */
   href?: string;
-  /** The server's icon, when its profile was loaded (the experience itself carries none). */
-  iconUrl?: string | null;
-  /** The server's badges, for its verification mark. */
-  badges?: readonly Badge[] | null;
-  /**
-   * Load the server's profile (`GET /lineup/guilds/{id}`, cached) to show its
-   * icon and verification mark. A server marked NSFW keeps its placeholder.
-   */
-  lookupGuild?: boolean;
   /** Show every verification state, not only a verification. Default: the private views. */
   showStatus?: boolean;
   /** The owner's controls, under the text. */
@@ -60,59 +52,58 @@ export function ExperienceList({children, ...props}: React.HTMLAttributes<HTMLUL
   );
 }
 
-export function ExperienceRow({
-  experience,
-  href,
-  iconUrl,
-  badges,
-  lookupGuild,
-  showStatus,
-  actions,
-  as: Tag = 'li',
-  className,
-}: ExperienceRowProps) {
+export function ExperienceRow({experience, href, showStatus, actions, as: Tag = 'li', className}: ExperienceRowProps) {
   const {t} = useT('components');
   const {label} = useCatalogLabel();
   useLanguage();
   useNow();
   const [expanded, setExpanded] = useState(false);
   const isGuild = experience.kind === 'guild' && experience.guild_id !== null;
-  const guild = useGuild(lookupGuild && isGuild ? (experience.guild_id ?? undefined) : undefined).data;
-  const known = guild && !guild.badges.some((badge) => badge.id === 'nsfw') ? guild : null;
-  const icon = iconUrl ?? known?.icon_url ?? null;
-  const markBadges = badges ?? guild?.badges;
+  const guild = experience.guild;
+  // A NSFW server keeps its placeholder, as everywhere else.
+  const adult = guild?.badges.some((badge) => badge.id === 'nsfw') ?? false;
+  const image = adult ? null : isGuild ? (guild?.icon_url ?? experience.image_url) : experience.image_url;
+  const displayName = isGuild ? (guild?.name ?? experience.name) : experience.name;
 
   const position =
     experience.position === 'other' && experience.position_other
       ? experience.position_other
       : label('positions', experience.position);
+  const memberStats = [
+    {
+      icon: 'group',
+      value: experience.member_count,
+      label: t('experience.members', {count: experience.member_count ?? 0}),
+    },
+  ];
   const months = monthsBetween(experience.start_date, experience.end_date);
   const period = formatRange(experience.start_date, experience.end_date, t);
   const duration = formatDuration(months, t);
   const description = experience.description?.trim() || null;
   const collapsible = description !== null && description.length > LONG_DESCRIPTION;
-  const name = href && isGuild ? <Link to={href}>{experience.name}</Link> : experience.name;
+  const name = href && isGuild ? <Link to={href}>{displayName}</Link> : displayName;
 
   return (
     <Tag className={cx('experience-row', Tag === 'li' && 'inner-card', className)}>
       <div className="experience-marker">
         {isGuild && experience.guild_id ? (
-          <GuildIcon id={experience.guild_id} iconUrl={icon} />
+          <GuildIcon id={experience.guild_id} iconUrl={image} noReferrer />
         ) : (
-          <Shape shape="hexagon" tone="secondary" icon="apartment" className="guild-icon" />
+          <ServiceImage url={image} />
         )}
       </div>
       <div className="experience-body">
         <div className="experience-head">
-          <span className="experience-position">{position}</span>
+          <p className="experience-name">
+            {isGuild ? <DisplayName name={name} badges={guild?.badges} entity="guild" /> : name}
+          </p>
           <VerificationPill
             verification={experience.verification}
             showAll={showStatus ?? isPrivateExperience(experience)}
           />
         </div>
-        <p className="experience-name">
-          {isGuild ? <DisplayName name={name} badges={markBadges} entity="guild" /> : name}
-        </p>
+        <p className="experience-position">{position}</p>
+        {isGuild && <InlineStats compact items={memberStats} />}
         <p className="experience-period numeric">
           {period} · {duration}
         </p>

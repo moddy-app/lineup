@@ -16,7 +16,7 @@ export function Component() {
           <h1>{t('notFound.title')}</h1>
           <p>{t('notFound.body')}</p>
           <CardActions>
-            <LinkButton to={paths.feed()} icon="campaign">
+            <LinkButton to={paths.feed()} icon="rocket_launch">
               {t('actions.backToFeed')}
             </LinkButton>
           </CardActions>

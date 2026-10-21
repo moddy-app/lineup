@@ -164,11 +164,8 @@ export interface UserSummary {
   display_name: string | null;
   avatar_url: string | null;
   avatar_decoration: AvatarDecoration | null;
-  /**
-   * Not in the API yet (docs/backend-notes.md, "Badges sur les résumés"): the mock gives it, the app shows
-   * nothing when it is missing. Never Discord's badges.
-   */
-  badges?: Badge[];
+  /** Without Discord's badges and `moddy_premium` (summaries only). */
+  badges: Badge[];
 }
 
 // ---- Posts ------------------------------------------------------------------
@@ -220,11 +217,10 @@ export interface PostGuild {
   id: Snowflake;
   name: string | null;
   icon_url: string | null;
-  /**
-   * Not in the API yet (docs/backend-notes.md, "Badges sur les résumés"): the mock gives it, the app shows
-   * nothing when it is missing. Never Discord's badges.
-   */
-  badges?: Badge[];
+  /** The server is NSFW (theme or Discord's level): the age gate follows it. */
+  nsfw: boolean;
+  /** Without Discord's badges and `moddy_premium` (summaries only). */
+  badges: Badge[];
 }
 
 /** From the stored snapshots, never from Discord: fields are null when unknown. */
@@ -233,11 +229,8 @@ export interface PostAuthor {
   username: string | null;
   global_name: string | null;
   avatar_url: string | null;
-  /**
-   * Not in the API yet (docs/backend-notes.md, "Badges sur les résumés"): the mock gives it, the app shows
-   * nothing when it is missing. Never Discord's badges.
-   */
-  badges?: Badge[];
+  /** Without Discord's badges and `moddy_premium` (summaries only). */
+  badges: Badge[];
 }
 
 /** The public view of a post (feed, detail, profiles). */
@@ -331,6 +324,14 @@ export interface PrivateVerification extends PublicVerification {
   rejection_reason: string | null;
 }
 
+/** The server of a server experience, as a summary (`badges` without Discord's). */
+export interface ExperienceGuild {
+  id: Snowflake;
+  name: string | null;
+  icon_url: string | null;
+  badges: Badge[];
+}
+
 /** The public view of an experience (someone else's profile): never any proof. */
 export interface Experience {
   id: Uuid;
@@ -340,8 +341,12 @@ export interface Experience {
   name: string;
   /** Null for a `service`. */
   invite_url: string | null;
-  /** Always null (a reserved field): load `GET /lineup/guilds/{guild_id}` to show the server. */
-  guild: null;
+  /** A server: its image or icon, from the invitation. A service: an https URL typed by the person, or null. */
+  image_url: string | null;
+  /** A server only, read from the invitation; null for a service. */
+  member_count: number | null;
+  /** The server's Lineup profile when it has one that is listed; null otherwise, and for a service. */
+  guild: ExperienceGuild | null;
   /** A catalog position id. */
   position: string;
   position_other: string | null;
@@ -377,7 +382,8 @@ export function isPrivateExperience(experience: ProfileExperience): experience i
 
 export interface GuildInvite {
   code: string;
-  url: string;
+  /** Null: the bot could not create an invitation anywhere; hide "Join". */
+  url: string | null;
   /** False: the invitation no longer exists on Discord; hide "Join". */
   valid: boolean;
 }
@@ -391,7 +397,11 @@ export interface GuildCard {
   presence_count: number | null;
   theme: string | null;
   tags: string[];
+  /** Without Discord's badges and `moddy_premium`. */
   badges: Badge[];
+  /** The Lineup description, else Discord's, cut at 160 characters with "…". */
+  description: string | null;
+  nsfw: boolean;
 }
 
 export interface TeamMember {
@@ -433,6 +443,8 @@ export interface GuildProfile {
   team: TeamMember[];
   /** True: the Discord snapshot is old and could not be refreshed. */
   stale: boolean;
+  /** When the Discord snapshot was taken. Managers only; null for anyone else. */
+  snapshot_at: IsoDateTime | null;
   /** For showing edit buttons only; the API checks again on every write. */
   can_manage: boolean;
 }
@@ -507,11 +519,19 @@ export interface MeUser {
   banner_url: string | null;
   avatar_decoration_data: DiscordFreeObject | null;
   is_staff: boolean;
-  /**
-   * Not in the API yet (docs/backend-notes.md, "Badges sur les résumés"): the mock gives it, the app shows
-   * nothing when it is missing. Never Discord's badges.
-   */
-  badges?: Badge[];
+  /** Without Discord's badges and `moddy_premium` (summaries only). */
+  badges: Badge[];
+}
+
+/**
+ * `GET /auth/me` (dashboard route), reduced to what the front reads. The e-mail
+ * comes from the session, so a change on Discord shows after the next sign-in.
+ */
+export interface Account {
+  /** Null when the Discord account has none or did not share it. */
+  email: string | null;
+  /** Discord verified the address. */
+  verified: boolean | null;
 }
 
 /** `GET /lineup/me`. Also the session test: a 401 means signed out. */
@@ -534,6 +554,8 @@ export interface MyGuild {
   has_moddy: boolean;
   /** A Lineup profile exists already. */
   claimed: boolean;
+  /** The profile exists and is visible in the directory; false without a profile. */
+  listed: boolean;
 }
 
 /** `POST /lineup/me/refresh-guilds`. `stale`: Discord did not answer, `guilds` is the session's (incomplete) list. */
@@ -579,6 +601,10 @@ export type BadgeEntityType = 'user' | 'guild';
 export interface ManualBadgeGrant {
   entity_type: BadgeEntityType;
   entity_id: Snowflake;
+  /** The person's or the server's name; null without a Lineup profile. */
+  entity_name: string | null;
+  /** The avatar or the server's icon; null without a Lineup profile. */
+  entity_icon_url: string | null;
   badge: string;
   granted_by: Snowflake;
   granted_at: IsoDateTime;
@@ -655,10 +681,13 @@ export interface UpdatePostBody {
   expires_at?: IsoDateTime | null;
 }
 
-export interface ClaimGuildBody {
-  /** A code or a link, 2 to 200 characters. Must never expire. */
-  invite: string;
-}
+/**
+ * `POST /lineup/guilds/claim`: at least one of the two. With Moddy on the
+ * server (`has_moddy`), `guild_id` alone is enough: the API reads the server
+ * and creates the permanent invitation itself. Without Moddy the invitation is
+ * required (422 `invite_required` otherwise).
+ */
+export type ClaimGuildBody = {invite: string; guild_id?: Snowflake} | {guild_id: Snowflake; invite?: string};
 
 export interface UpdateGuildBody {
   /** 2000 characters at most; null goes back to Discord's text. */
@@ -668,8 +697,11 @@ export interface UpdateGuildBody {
   theme?: string | null;
   tags?: string[];
   languages?: string[];
-  /** A new permanent invitation to the same server. */
-  invite?: string;
+  /**
+   * A new permanent invitation to the same server. `null` asks Moddy to
+   * generate one (only when Moddy is on the server, else 422 `invite_required`).
+   */
+  invite?: string | null;
   listed?: boolean;
 }
 
@@ -698,7 +730,7 @@ interface ExperienceBodyBase {
 
 export type CreateExperienceBody =
   | (ExperienceBodyBase & {kind: 'guild'; invite: string; name?: never})
-  | (ExperienceBodyBase & {kind: 'service'; name: string; invite?: never});
+  | (ExperienceBodyBase & {kind: 'service'; name: string; invite?: never; image_url?: string | null});
 
 /**
  * `PATCH /lineup/me/experiences/{id}`. `kind` cannot change. `position` and
@@ -709,6 +741,8 @@ export interface UpdateExperienceBody {
   invite?: string;
   /** A service only. */
   name?: string;
+  /** A service only: an https URL, 500 characters at most; null clears it. Ignored for a server. */
+  image_url?: string | null;
   position?: string;
   position_other?: string;
   description?: string | null;

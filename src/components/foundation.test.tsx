@@ -28,22 +28,22 @@ const badge = (id: string, source: Badge['source'] = 'computed'): Badge => ({
 describe('VerifiedBadge', () => {
   it('is an image named by its meaning, focusable, with an aria-hidden tooltip', () => {
     const {container} = renderWithCatalog(<VerifiedBadge kind="lineup_verified" entity="guild" />);
-    const mark = screen.getByRole('img', {name: 'Serveur vérifié'});
+    const mark = screen.getByRole('img', {name: 'Vérifié'});
     expect(mark.tabIndex).toBe(0);
     const tip = container.querySelector('.verified-badge-tip');
-    expect(tip?.textContent).toBe('Serveur vérifié');
+    expect(tip?.textContent).toBe('Vérifié');
     expect(tip?.getAttribute('aria-hidden')).toBe('true');
     // The icon is the filled check_circle.
     expect(mark.querySelector('.material-symbols-outlined.filled')?.textContent).toBe('check_circle');
   });
 
-  it('says "Compte vérifié" for a person and follows the language', async () => {
+  it('says "Vérifié" for a person and follows the language', async () => {
     renderWithCatalog(<VerifiedBadge kind="lineup_verified" entity="user" />);
-    expect(screen.getByRole('img', {name: 'Compte vérifié'})).toBeTruthy();
+    expect(screen.getByRole('img', {name: 'Vérifié'})).toBeTruthy();
     renderWithCatalog(<VerifiedBadge kind="moddy_staff" entity="user" />);
     expect(screen.getByRole('img', {name: 'Équipe Moddy'})).toBeTruthy();
     renderWithCatalog(<VerifiedBadge kind="moddy_server" entity="guild" />);
-    expect(screen.getByRole('img', {name: 'Serveur officiel Moddy'})).toBeTruthy();
+    expect(screen.getByRole('img', {name: 'Serveur officiel de Moddy'})).toBeTruthy();
   });
 });
 
@@ -72,7 +72,7 @@ describe('DisplayName', () => {
 });
 
 describe('BadgeStrip', () => {
-  it('leaves out Discord badges and the verification badges', () => {
+  it('leaves out Discord badges and keeps the verification badges', () => {
     renderWithCatalog(
       <BadgeStrip
         badges={[
@@ -87,14 +87,15 @@ describe('BadgeStrip', () => {
       />,
     );
     const items = screen.getAllByRole('img');
-    expect(items.map((item) => item.getAttribute('aria-label'))).toEqual(['Moddy installé', 'Partenaire Moddy']);
-    expect(items[0]?.getAttribute('data-tooltip')).toBe('Moddy installé');
-    expect(items[0]?.querySelector('.filled')?.textContent).toBe('smart_toy');
+    expect(items.map((item) => item.getAttribute('aria-label'))).toHaveLength(5);
+    const installed = items.find((item) => item.getAttribute('aria-label') === 'Moddy installé');
+    expect(installed?.getAttribute('data-tooltip')).toBe('Moddy installé');
+    expect(installed?.querySelector('.filled')?.textContent).toBe('smart_toy');
   });
 
   it('renders nothing when no badge qualifies', () => {
     const {container} = renderWithCatalog(
-      <BadgeStrip badges={[badge('moddy_staff'), badge('discord_staff', 'discord')]} />,
+      <BadgeStrip badges={[badge('discord_staff', 'discord'), badge('discord_partner')]} />,
     );
     expect(container.querySelector('.badge-strip')).toBeNull();
     const none = renderWithCatalog(<BadgeStrip badges={undefined} />);

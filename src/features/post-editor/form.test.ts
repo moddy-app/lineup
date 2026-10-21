@@ -15,6 +15,8 @@ import {
   mapServerIssues,
   normalizeTag,
   stepOfField,
+  stepsFor,
+  STEP_IDS,
   toCreateBody,
   toUpdateBody,
   validateAll,
@@ -257,5 +259,14 @@ describe('small rules', () => {
     expect(isValidHttpsUrl('https://user:pw@a.example')).toBe(false);
     expect(isValidHttpsUrl('https://a.example:8443')).toBe(false);
     expect(isValidHttpsUrl('javascript:alert(1)')).toBe(false);
+  });
+});
+
+describe('stepsFor', () => {
+  it('keeps the type step only when nothing fixes the author', () => {
+    expect(stepsFor(false)).toEqual([...STEP_IDS]);
+    expect(stepsFor(true)).toEqual(STEP_IDS.filter((id) => id !== 'type'));
+    expect(stepsFor(true)[0]).toBe('content');
+    expect(stepsFor(true).at(-1)).toBe('review');
   });
 });

@@ -1,12 +1,11 @@
 {
   "title": "Server management",
   "pageTitle": "Manage {{name}}",
-  "pageDescription": "Lineup profile management",
   "unknownName": "Unnamed server",
   "notFound": {
     "title": "Server not found",
     "body": "This server has no Lineup profile. Add it first from the Servers page.",
-    "action": "Browse servers"
+    "action": "See projects"
   },
   "forbidden": {
     "title": "You do not manage this server",
@@ -15,15 +14,6 @@
   },
   "viewProfile": "View public profile",
   "saved": "Profile saved.",
-  "sections": {
-    "label": "Page sections",
-    "profile": "Public profile",
-    "invite": "Invitation",
-    "visibility": "Visibility",
-    "posts": "Posts",
-    "discord": "Discord data",
-    "danger": "Danger zone"
-  },
   "profile": {
     "title": "Public profile",
     "description": "What people see when they open the server."
@@ -68,21 +58,25 @@
   },
   "invite": {
     "title": "Invitation",
-    "description": "The link behind the Join button on the profile.",
-    "current": "Current invitation",
-    "valid": "Valid",
     "lost": "Not found on Discord",
-    "lostHelp": "It no longer exists on Discord: replace it.",
-    "none": "No invitation saved.",
+    "none": "No invitation",
     "label": "New invitation",
     "placeholder": "https://discord.gg/your-code",
-    "hint": "Optional. It must never expire and lead to this same server.",
-    "how": "How to create a permanent invitation"
+    "hint": "It must never expire and lead to this server.",
+    "how": "How to create a permanent invitation",
+    "regenerate": "Generate a new invitation",
+    "regenerating": "Generating...",
+    "regenerated": "New invitation generated.",
+    "waitIn": "Available in {{seconds}} s",
+    "paste": "Paste another invitation",
+    "copy": "Copy link",
+    "copied": "Invitation copied.",
+    "copyFailed": "Could not copy."
   },
   "visibility": {
     "title": "Visibility",
-    "label": "Show the server in the directory",
-    "on": "Anyone can find this profile in the directory.",
+    "label": "Make the server visible on Lineup",
+    "on": "The server's profile and posts are visible to everyone.",
     "off": "The profile and its posts disappear for everyone except managers and the Moddy staff."
   },
   "errors": {
@@ -104,11 +98,12 @@
     "staleDone": "Discord did not answer: the old data is kept.",
     "refresh": "Refresh now",
     "refreshing": "Reading...",
-    "waitIn": "Available in {{seconds}} s"
+    "waitIn": "Available in {{seconds}} s",
+    "updated": "Updated {{relative}}"
   },
   "danger": {
     "title": "Danger zone",
-    "body": "Deleting the profile removes it from the directory and closes the server's posts. The Discord server is not affected.",
+    "body": "Deleting the profile makes it invisible and closes the server's posts. The Discord server is not affected.",
     "action": "Delete the profile",
     "confirmTitle": "Delete the profile of {{name}}?",
     "confirmBody": "What happens:",
@@ -118,31 +113,12 @@
     "confirm": "Delete",
     "done": "The profile of {{name}} is deleted."
   },
-  "posts": {
-    "title": "Server posts",
-    "create": "New post",
-    "filters": "Filter by status",
-    "filter": {
-      "all": "All",
-      "published": "Published",
-      "draft": "Drafts",
-      "closed": "Closed",
-      "hidden": "Hidden"
-    },
-    "menu": "Actions for post {{title}}",
-    "emptyTitle": "No posts",
-    "emptyAll": "This server has no posts yet. Everyone who manages the server can edit all of them.",
-    "emptyTab": "No posts with this status.",
-    "hidden": "Hidden by the Moddy team: it can no longer be changed.",
-    "edit": "Edit",
-    "close": "Close",
-    "reopen": "Reopen",
-    "publish": "Publish",
-    "delete": "Delete",
-    "closed": "Post closed.",
-    "published": "Post published.",
-    "deleted": "Post deleted.",
-    "deleteTitle": "Delete this post?",
-    "deleteBody": "\"{{title}}\" will be deleted for good."
+  "newPost": "New post",
+  "pages": {
+    "profile": "Description, theme, tags, languages and links.",
+    "invite": "The link behind the Join button on your profile.",
+    "posts": "The posts of this server.",
+    "discord": "What Lineup reads from Discord.",
+    "settings": "Visibility and deletion."
   }
 }

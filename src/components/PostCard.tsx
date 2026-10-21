@@ -7,6 +7,10 @@
  *    small pills, compensation, hours, openings, expiry, language flags). The
  *    page says whether servers recruit or people offer: no kind marker.
  *    Put each card in an `<li>` of a `<ul>` on the page.
+ *  - `tile`: the same link as a square, for a grid (`.feed-grid`). Head (icon,
+ *    name, date), title on at most three lines, a description that fills what
+ *    is left, then one line: two positions at most with "+n", compensation.
+ *    Nothing leaves the square.
  *  - `row`: an inner card (`a`) for lists inside a profile or "my posts"; goes in
  *    `<InnerCards>`. With `showStatus`, the post's status on the right.
  */
@@ -15,6 +19,7 @@ import {useCatalogLabel} from '@/api/catalog';
 import type {Post} from '@/api/types';
 import {paths} from '@/app/paths';
 import {useT} from '@/i18n/useT';
+import {formatNumber} from '@/lib/format';
 import {Card, Icon, InnerCard, RowBody, Shape} from '@/ui';
 
 import {CommitmentSummary} from './CommitmentSummary';
@@ -31,17 +36,15 @@ import {UserAvatar} from './UserAvatar';
 
 interface PostCardProps {
   post: Post;
-  variant?: 'feed' | 'row';
+  variant?: 'feed' | 'row' | 'tile';
   /** Show the status pill (draft, published…): "my posts" and the staff. */
   showStatus?: boolean;
 }
 
 export function PostCard({post, variant = 'feed', showStatus}: PostCardProps) {
-  return variant === 'row' ? (
-    <PostRow post={post} showStatus={showStatus} />
-  ) : (
-    <PostFeedCard post={post} showStatus={showStatus} />
-  );
+  if (variant === 'row') return <PostRow post={post} showStatus={showStatus} />;
+  if (variant === 'tile') return <PostTile post={post} showStatus={showStatus} />;
+  return <PostFeedCard post={post} showStatus={showStatus} />;
 }
 
 function usePositionItems(post: Post) {
@@ -107,6 +110,69 @@ function PostFeedCard({post, showStatus}: {post: Post; showStatus?: boolean}) {
             )}
           </ul>
           <LanguageFlags codes={post.languages} focusable={false} />
+        </div>
+      )}
+    </Card>
+  );
+}
+
+const TILE_POSITIONS = 2;
+
+function PostTile({post, showStatus}: {post: Post; showStatus?: boolean}) {
+  const {t} = useT('components');
+  const {label} = useCatalogLabel();
+  const positions = usePositionItems(post);
+  const isGuild = post.kind === 'guild';
+  const name = isGuild
+    ? (post.guild?.name ?? t('post.unknownGuild'))
+    : (post.author.global_name ?? post.author.username ?? t('post.unknownAuthor'));
+  const badges = isGuild ? post.guild?.badges : post.author.badges;
+  const shown = positions.slice(0, TILE_POSITIONS);
+  const hidden = positions.length - shown.length;
+  const compensation = post.commitment?.compensation;
+
+  return (
+    <Card to={paths.post(post.id)} className="post-card post-tile">
+      <div className="post-head">
+        {isGuild && post.guild_id ? (
+          <GuildIcon id={post.guild_id} iconUrl={post.guild?.icon_url} size="small" />
+        ) : (
+          <UserAvatar id={post.author.id} src={post.author.avatar_url} size="small" />
+        )}
+        <div className="post-head-text">
+          <DisplayName
+            className="post-author-name"
+            name={name}
+            badges={badges}
+            entity={isGuild ? 'guild' : 'user'}
+            focusable={false}
+          />
+          <RelativeTime className="post-date" value={post.published_at ?? post.created_at} />
+        </div>
+      </div>
+
+      <h3 className="post-title">{post.title}</h3>
+      <p className="post-excerpt">{plainExcerpt(post.description)}</p>
+
+      {(shown.length > 0 || compensation || showStatus) && (
+        <div className="post-tile-foot">
+          {shown.length > 0 && (
+            <ul className="post-positions" aria-label={t('post.positions')}>
+              {shown.map((position) => (
+                <li key={position.key} className="post-position">
+                  {position.label}
+                </li>
+              ))}
+              {hidden > 0 && <li className="post-position">{`+${formatNumber(hidden)}`}</li>}
+            </ul>
+          )}
+          {compensation && (
+            <span className="post-tile-pay">
+              <Icon name="payments" />
+              <span>{label('compensations', compensation)}</span>
+            </span>
+          )}
+          {showStatus && <PostStatusBadge status={post.status} isExpired={post.is_expired} />}
         </div>
       )}
     </Card>

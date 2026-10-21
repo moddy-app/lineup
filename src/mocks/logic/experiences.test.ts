@@ -27,7 +27,19 @@ describe('listing and creating', () => {
       status: 'pending',
       evidence: {review_note: expect.any(String)},
     });
-    expect(items[0]).toMatchObject({guild: null, invite_url: 'https://discord.gg/atelier-phenix', is_current: true});
+    // A server with a listed Lineup profile comes with its summary: no request per experience.
+    expect(items[0]).toMatchObject({
+      guild: {id: G.atelier, name: 'Atelier du Phénix', icon_url: null, badges: [{id: 'moddy_installed'}]},
+      invite_url: 'https://discord.gg/atelier-phenix',
+      member_count: expect.any(Number),
+      is_current: true,
+    });
+    // A service has neither a server summary nor a member count; its image is the person's.
+    expect(items.find((item) => item.id === x(6))).toMatchObject({
+      guild: null,
+      member_count: null,
+      image_url: expect.any(String),
+    });
   });
 
   it('creates a server experience from an invitation: unverified, last, named after the server', async () => {
@@ -47,6 +59,10 @@ describe('listing and creating', () => {
       guild_id: G.cubelands,
       name: 'Cubelands FR',
       invite_url: 'https://discord.gg/cubelands',
+      // Read from the invitation; a server's `image_url` in the body is ignored.
+      member_count: 4120,
+      image_url: null,
+      guild: {id: G.cubelands, name: 'Cubelands FR'},
       sort_index: 9,
       end_date: null,
       is_current: true,
@@ -74,6 +90,25 @@ describe('listing and creating', () => {
       is_current: false,
       position_other: 'Parrain des nouveaux',
     });
+  });
+
+  it('creates a service with an https image, or none; member_count stays null', async () => {
+    const api = createTestApi('camille');
+    const make = (extra: Record<string, unknown>) =>
+      api.call('POST', BASE, {
+        body: {kind: 'service', name: 'Radio Pixel', position: 'moderator', start_date: '2024-01-10', ...extra},
+      });
+    const withImage = await make({image_url: 'https://cdn.example.com/radio.png'});
+    expect(withImage.status).toBe(201);
+    expect(withImage.json).toMatchObject({
+      image_url: 'https://cdn.example.com/radio.png',
+      member_count: null,
+      guild: null,
+    });
+    expect((await make({image_url: null})).json.image_url).toBeNull();
+    expect((await make({})).json.image_url).toBeNull();
+    expect((await make({image_url: 'http://cdn.example.com/radio.png'})).status).toBe(422);
+    expect((await make({image_url: `https://cdn.example.com/${'a'.repeat(500)}`})).status).toBe(422);
   });
 
   it('answers the invitation errors of §3', async () => {
@@ -207,6 +242,24 @@ describe('what resets a verification (§7)', () => {
     const other = await patch(api, x(1), {invite: 'https://discord.com/invite/cubelands'});
     expect(other.json).toMatchObject({guild_id: G.cubelands, name: 'Cubelands FR'});
     expect(status(other.json)).toBe('unverified');
+  });
+
+  it('changes or clears a service image without resetting the verification; a server ignores it', async () => {
+    const api = createTestApi('sam');
+    const service = (await api.call('GET', BASE)).json.items.find((item: {kind: string}) => item.kind === 'service');
+    expect(service.verification.status).toBe('verified');
+    const changed = await patch(api, service.id, {image_url: 'https://cdn.example.com/new.png'});
+    expect(changed.json.image_url).toBe('https://cdn.example.com/new.png');
+    expect(status(changed.json)).toBe('verified');
+    const cleared = await patch(api, service.id, {image_url: null});
+    expect(cleared.json.image_url).toBeNull();
+    expect(status(cleared.json)).toBe('verified');
+    expect((await patch(api, service.id, {image_url: 'ftp://x.example.com/a.png'})).status).toBe(422);
+
+    const camille = createTestApi('camille');
+    const ignored = await patch(camille, x(1), {image_url: 'https://cdn.example.com/other.png'});
+    expect(ignored.json.image_url).toBeNull();
+    expect(status(ignored.json)).toBe('verified');
   });
 
   it('empties position_other by itself when the position becomes a catalog one', async () => {

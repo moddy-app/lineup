@@ -1,18 +1,18 @@
-/* My servers (/me/guilds). Tokens only. */
+/* The server dialogs (add, manage). Tokens only. */
 
-.claim-refresh {
+.servers-refresh {
   display: flex;
   align-items: center;
   gap: var(--gap-s);
 }
 
-.claim-refresh-wait {
+.servers-refresh-wait {
   font-size: var(--text-small);
   color: var(--md-sys-color-on-surface-variant);
 }
 
 /* Lists of servers: one inner card each. */
-.claim-list {
+.servers-list {
   display: flex;
   flex-direction: column;
   gap: var(--gap-s);
@@ -21,14 +21,14 @@
   list-style: none;
 }
 
-.claim-item {
+.servers-item {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--gap-m) var(--gap-l);
 }
 
-.claim-item-body {
+.servers-item-body {
   display: flex;
   flex: 1 1 12rem;
   flex-direction: column;
@@ -37,12 +37,12 @@
   min-width: 0;
 }
 
-.claim-item-name {
+.servers-item-name {
   max-width: 100%;
   font-size: var(--text-body);
 }
 
-.claim-item-meta {
+.servers-item-meta {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -50,16 +50,16 @@
   color: var(--md-sys-color-on-surface-variant);
 }
 
-.claim-item-meta .material-symbols-outlined {
+.servers-item-meta .material-symbols-outlined {
   font-size: 16px;
 }
 
 /* A fact about the server, not a state of the page: only "Moddy installed" takes the accent. */
-.claim-item-moddy .material-symbols-outlined {
+.servers-item-moddy .material-symbols-outlined {
   color: var(--md-sys-color-primary);
 }
 
-.claim-item-actions {
+.servers-item-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -67,48 +67,54 @@
   margin-inline-start: auto;
 }
 
-.claim-none {
+.servers-none {
   margin: 0;
   color: var(--md-sys-color-on-surface-variant);
 }
 
-/* The claim dialog. */
-.claim-form {
+/* Dialog: a width that fits at 390px, the content scrolls inside. */
+md-dialog.servers-dialog {
+  width: min(36rem, calc(100vw - 2 * var(--gap-l)));
+  max-width: none;
+}
+
+.servers-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-s);
+}
+
+.servers-form {
   display: flex;
   flex-direction: column;
   gap: var(--gap-l);
   min-width: 0;
 }
 
-.claim-form p {
+.servers-form p {
   margin: 0;
   max-width: none;
 }
 
-.claim-target {
-  display: flex;
-  align-items: center;
-  gap: var(--gap-m);
-}
-
-.claim-details {
+.servers-details {
   padding: var(--gap-m) var(--gap-l);
   border-radius: var(--radius-l);
   background-color: var(--md-sys-color-surface-container);
 }
 
-.claim-details > summary {
+.servers-details > summary {
   cursor: pointer;
   font-weight: 500;
   color: var(--md-sys-color-on-surface);
 }
 
-.claim-details[open] > summary {
+.servers-details[open] > summary {
   margin-bottom: var(--gap-m);
 }
 
-.claim-error,
-.claim-inline-error {
+.servers-error {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -119,8 +125,7 @@
   color: var(--md-sys-color-on-surface);
 }
 
-.claim-error p,
-.claim-inline-error p {
+.servers-error p {
   display: flex;
   align-items: flex-start;
   gap: var(--gap-s);
@@ -128,19 +133,19 @@
   max-width: none;
 }
 
-.claim-error .material-symbols-outlined {
+.servers-error .material-symbols-outlined {
   flex-shrink: 0;
   color: var(--md-sys-color-error);
 }
 
-.claim-error-help {
+.servers-error-help {
   font-size: var(--text-small);
   color: var(--md-sys-color-on-surface-variant);
 }
 
 /* At phone width a long name keeps its line and the actions go under it. */
 @media (max-width: 600px) {
-  .claim-item-actions {
+  .servers-item-actions {
     flex: 1 0 100%;
     margin-inline-start: 0;
   }

@@ -1,6 +1,4 @@
 {
-  "title": "Server",
-  "description": "Die Discord-Server, die Sie verwalten",
   "unknownName": "Server ohne Namen",
   "success": "{{name}} ist jetzt auf Lineup.",
   "refresh": {
@@ -9,15 +7,15 @@
     "done": "Liste erneut von Discord gelesen."
   },
   "onLineup": {
-    "title": "Auf Lineup",
     "label": "Server auf Lineup",
-    "listed": "Im Verzeichnis",
+    "listed": "Sichtbar",
     "unlisted": "Ausgeblendet",
     "manage": "Verwalten",
-    "profile": "Profil ansehen"
+    "profile": "Profil ansehen",
+    "emptyTitle": "Kein Server auf Lineup",
+    "emptyBody": "Server, die Sie hinzufügen, erscheinen hier."
   },
   "toAdd": {
-    "title": "Hinzuzufügen",
     "label": "Server zum Hinzufügen",
     "withModdy": "Moddy installiert",
     "add": "Hinzufügen",
@@ -33,17 +31,18 @@
   },
   "dialog": {
     "title": "{{name}} hinzufügen",
-    "titleFree": "Server hinzufügen",
     "intro": "Fügen Sie einen Einladungslink zu {{name}} ein, der nie abläuft. Er wird zum Beitreten-Button im Profil.",
-    "introModdy": "Moddy ist schon auf {{name}}, aber Lineup verlangt noch eine Einladung, die nie abläuft. Erstellen Sie eine auf Discord und fügen Sie sie hier ein.",
+    "introModdy": "Moddy ist bereits auf {{name}}. Lineup liest den Server und erstellt die dauerhafte Einladung für Sie.",
     "introFree": "Fügen Sie einen Einladungslink ein, der nie abläuft und zu einem Server führt, den Sie verwalten. Er belegt, dass der Server Ihnen gehört, und wird zum Beitreten-Button im Profil.",
     "how": "So erstellen Sie eine dauerhafte Einladung",
     "label": "Einladungslink oder -code",
     "placeholder": "https://discord.gg/ihr-code",
     "hint": "Der reine Code funktioniert auch.",
-    "cancel": "Abbrechen",
     "submit": "Hinzufügen",
-    "submitting": "Prüfung..."
+    "submitting": "Prüfung...",
+    "adding": "Wird hinzugefügt...",
+    "back": "Zurück zur Liste",
+    "close": "Schließen"
   },
   "errors": {
     "tooShort": "Geben Sie mindestens {{count}} Zeichen ein.",
@@ -51,5 +50,9 @@
     "rightsChanged": "Ich habe meine Rechte geändert",
     "rightsChecking": "Rechte werden gelesen...",
     "openProfile": "Profil öffnen"
+  },
+  "menu": {
+    "add": "Server hinzufügen",
+    "manage": "Server verwalten"
   }
 }

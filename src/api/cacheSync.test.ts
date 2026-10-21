@@ -217,31 +217,20 @@ describe('the staff hides or shows a post', () => {
 });
 
 describe('servers', () => {
-  it('a claim or an update sets the detail, patches my servers and the directory card', () => {
+  it('a claim or an update sets the detail, patches my servers', () => {
     qc.setQueryData(queryKeys.myGuilds(), [makeMyGuild({name: 'Old'})]);
-    qc.setQueryData(queryKeys.directory({}), infinite(page([{...makeGuildProfile(), tags: ['old']} as never])));
     const profile = makeGuildProfile({name: 'New', tags: ['new']});
 
-    syncGuildProfile(qc, profile, {claimed: true});
+    syncGuildProfile(qc, profile);
 
     expect(qc.getQueryData(queryKeys.guildDetail(GUILD_ID))).toBe(profile);
-    expect(qc.getQueryData(queryKeys.myGuilds())).toEqual([makeMyGuild({name: 'New', claimed: true})]);
-    expect(qc.getQueryData<Pages<{tags: string[]}>>(queryKeys.directory({}))!.pages[0]!.items[0]!.tags).toEqual([
-      'new',
-    ]);
-    expect(qc.getQueryState(queryKeys.directory({}))?.isInvalidated).toBe(true);
-  });
-
-  it('an unlisted server leaves the directory', () => {
-    qc.setQueryData(queryKeys.directory({}), infinite(page([{id: GUILD_ID} as never])));
-    syncGuildProfile(qc, makeGuildProfile({listed: false}));
-    expect(ids(queryKeys.directory({}))).toEqual([[]]);
+    expect(qc.getQueryData(queryKeys.myGuilds())).toEqual([makeMyGuild({name: 'New', claimed: true, listed: true})]);
   });
 
   it('a claim adds a server my list did not hold', () => {
     qc.setQueryData(queryKeys.myGuilds(), []);
-    syncGuildProfile(qc, makeGuildProfile(), {claimed: true});
-    expect(qc.getQueryData(queryKeys.myGuilds())).toEqual([makeMyGuild({claimed: true})]);
+    syncGuildProfile(qc, makeGuildProfile());
+    expect(qc.getQueryData(queryKeys.myGuilds())).toEqual([makeMyGuild({claimed: true, listed: true})]);
   });
 
   it('deleting a server closes its posts in every cache and unclaims it', () => {
@@ -255,13 +244,11 @@ describe('servers', () => {
     qc.setQueryData(queryKeys.myGuilds(), [makeMyGuild({claimed: true})]);
     qc.setQueryData(queryKeys.guildDetail(GUILD_ID), makeGuildProfile());
     qc.setQueryData(queryKeys.feed({}), infinite(page([published, elsewhere])));
-    qc.setQueryData(queryKeys.directory({}), infinite(page([{id: GUILD_ID} as never])));
 
     syncGuildDeleted(qc, GUILD_ID);
 
     expect(qc.getQueryData(queryKeys.guildDetail(GUILD_ID))).toBeUndefined();
     expect(qc.getQueryData(queryKeys.myGuilds())).toEqual([makeMyGuild({claimed: false})]);
-    expect(ids(queryKeys.directory({}))).toEqual([[]]);
     expect(ids(queryKeys.feed({}))).toEqual([[elsewhere.id]]);
     expect(ids(queryKeys.myPosts({status: 'draft'}))).toEqual([[]]);
     expect(ids(queryKeys.myPosts({status: 'published'}))).toEqual([[elsewhere.id]]);
@@ -453,6 +440,8 @@ describe('staff queues', () => {
     const grant: ManualBadgeGrant = {
       entity_type: 'guild',
       entity_id: GUILD_ID,
+      entity_name: null,
+      entity_icon_url: null,
       badge: 'moddy_partner',
       granted_by: '1',
       granted_at: '2026-10-20T15:00:00+00:00',

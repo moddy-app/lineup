@@ -20,12 +20,10 @@ import type {InfiniteData} from '@tanstack/react-query';
 import type {
   Badge,
   Catalog,
-  GuildCard,
   GuildProfile,
   ManualBadgeGrant,
   MyGuild,
   MyPostsParams,
-  Paginated,
   Post,
   PostModeration,
   PrivateExperience,
@@ -330,6 +328,7 @@ export function upsertMyGuild(list: MyGuild[], profile: GuildProfile, claimed = 
     icon_url: profile.icon_url,
     has_moddy: profile.has_moddy,
     claimed,
+    listed: claimed && profile.listed,
   };
   const present = list.find((current) => current.id === profile.id);
   if (!present) return [...list, entry].sort(byName);
@@ -337,7 +336,8 @@ export function upsertMyGuild(list: MyGuild[], profile: GuildProfile, claimed = 
     present.name === entry.name &&
     present.icon_url === entry.icon_url &&
     present.has_moddy === entry.has_moddy &&
-    present.claimed === entry.claimed
+    present.claimed === entry.claimed &&
+    present.listed === entry.listed
   ) {
     return list;
   }
@@ -347,35 +347,11 @@ export function upsertMyGuild(list: MyGuild[], profile: GuildProfile, claimed = 
 /** After the profile was deleted: the server stays in the list, no longer claimed. */
 export function unclaimMyGuild(list: MyGuild[], guildId: Snowflake): MyGuild[] {
   return list.some((current) => current.id === guildId && current.claimed)
-    ? list.map((current) => (current.id === guildId ? {...current, claimed: false} : current))
+    ? list.map((current) => (current.id === guildId ? {...current, claimed: false, listed: false} : current))
     : list;
 }
 
 const byName = (a: MyGuild, b: MyGuild) => (a.name ?? '').localeCompare(b.name ?? '');
-
-/** The directory card of a server, from its full profile. Cards leave out `moddy_premium`. */
-export function toGuildCard(profile: GuildProfile): GuildCard {
-  return {
-    id: profile.id,
-    name: profile.name,
-    icon_url: profile.icon_url,
-    member_count: profile.member_count,
-    presence_count: profile.presence_count,
-    theme: profile.theme,
-    tags: profile.tags,
-    badges: profile.badges.filter((badge) => badge.id !== 'moddy_premium'),
-  };
-}
-
-/** The directory after a profile write: an unlisted server leaves it; a listed one is updated where it shows. */
-export function withGuildInDirectory<P>(
-  data: InfiniteData<Paginated<GuildCard>, P> | undefined,
-  profile: GuildProfile,
-): InfiniteData<Paginated<GuildCard>, P> | undefined {
-  if (!profile.listed) return removeItems(data, (card) => card.id === profile.id);
-  const next = toGuildCard(profile);
-  return mapItems(data, (card) => (card.id === profile.id ? next : card));
-}
 
 // ---------------------------------------------------------------------------
 // Badges

@@ -110,9 +110,10 @@ describe('errors, byte for byte (§0)', () => {
 });
 
 describe('the session', () => {
-  it('describes the person, never an e-mail or a token', async () => {
+  it('describes the person, with a test e-mail, never a token', async () => {
     const api = createTestApi('camille');
     const response = await api.call('GET', '/lineup/me');
+    expect(response.json.user).not.toHaveProperty('email');
     expect(response.json).toMatchObject({
       user: {
         id: U.camille,
@@ -132,7 +133,7 @@ describe('the session', () => {
         discord_snapshot: {id: U.camille, username: 'camille.renard', public_flags: 256},
       },
     });
-    expect(JSON.stringify(response.json)).not.toMatch(/email|token/i);
+    expect(JSON.stringify(response.json)).not.toMatch(/token/i);
   });
 
   it('tells the dashboard session apart, the staff, and the newcomer with no profile', async () => {

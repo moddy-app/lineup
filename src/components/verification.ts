@@ -34,9 +34,7 @@ export function verificationOf(
   return PRIORITY[entity].find((id) => ids.has(id)) ?? null;
 }
 
-/** The tooltip and accessible name of a verification. */
-export function verificationLabel(kind: Verification, entity: VerificationEntity, t: ComponentsT): string {
-  if (kind === 'lineup_verified')
-    return t(entity === 'guild' ? 'verification.lineup_verified_guild' : 'verification.lineup_verified_user');
+/** The tooltip and accessible name of a verification: the meaning, never who grants it. `_entity` is kept for callers. */
+export function verificationLabel(kind: Verification, _entity: VerificationEntity, t: ComponentsT): string {
   return t(`verification.${kind}`);
 }

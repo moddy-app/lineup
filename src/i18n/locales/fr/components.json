@@ -98,7 +98,9 @@
         "generic": "Vérifiée le {{date}}",
         "pending": "L'équipe Moddy examine la demande."
       }
-    }
+    },
+    "members_one": "membre",
+    "members_other": "membres"
   },
   "report": {
     "button": "Signaler",
@@ -181,18 +183,27 @@
   },
   "verification": {
     "moddy_staff": "Équipe Moddy",
-    "moddy_server": "Serveur officiel Moddy",
-    "lineup_verified_guild": "Serveur vérifié",
-    "lineup_verified_user": "Compte vérifié"
+    "moddy_server": "Serveur officiel de Moddy",
+    "lineup_verified": "Vérifié"
   },
   "settings": {
-    "title": "Mon espace",
-    "managed": "Serveurs gérés",
     "nav": {
       "profile": "Profil",
       "experiences": "Expériences",
+      "posts": "Annonces"
+    },
+    "navLabel": "Pages du tableau de bord",
+    "guildNav": {
+      "profile": "Profil",
+      "invite": "Invitation",
       "posts": "Annonces",
-      "guilds": "Serveurs"
+      "discord": "Données Discord",
+      "settings": "Paramètres"
+    },
+    "context": {
+      "label": "Gérer",
+      "me": "Moi",
+      "manage": "Gérer mes serveurs"
     }
   },
   "filters": {

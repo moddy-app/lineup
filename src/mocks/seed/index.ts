@@ -17,7 +17,7 @@ import {seedFillerPosts, seedPosts} from './posts';
 import {seedUsers} from './users';
 
 /** Bump when the seed's shape changes: a stored database of another version is thrown away. */
-export const DB_VERSION = 2;
+export const DB_VERSION = 3;
 
 const FEED_PAGE = 20;
 const DIRECTORY_PAGE = 24;
@@ -57,7 +57,18 @@ export function createSeedDb(now: Date = new Date()): Db {
     rt: newRuntime(),
   };
   addFillers(db, now);
+  readServerExperiences(db);
   return db;
+}
+
+/** A server experience carries the icon and the member count read from its invitation when it was created. */
+function readServerExperiences(db: Db): void {
+  for (const row of Object.values(db.experiences)) {
+    const guild = row.kind === 'guild' && row.guild_id ? db.guilds[row.guild_id] : undefined;
+    if (!guild) continue;
+    row.image_url = guild.icon_url;
+    row.member_count = guild.member_count;
+  }
 }
 
 /**

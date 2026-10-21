@@ -55,7 +55,7 @@ export function Component() {
             tone="tertiary"
             title={t('notFound.title')}
             action={
-              <LinkButton to={paths.guilds()} variant="filled" icon="groups">
+              <LinkButton to={paths.feed()} variant="filled" icon="rocket_launch">
                 {t('notFound.action')}
               </LinkButton>
             }
@@ -73,7 +73,7 @@ export function Component() {
   if (isNsfw(guild) && !confirmed) {
     return (
       <Page>
-        <NsfwGate nsfw backTo={paths.guilds()} headingLevel={1}>
+        <NsfwGate nsfw headingLevel={1}>
           {null}
         </NsfwGate>
       </Page>
@@ -86,6 +86,7 @@ function GuildView({guild}: {guild: GuildProfile}) {
   const {t} = useT('guildProfile');
   useLanguage();
   const name = guild.name ?? t('unknownName');
+  // No "Join" without a usable invitation: lost (`valid` false) or never created (`url` null).
   const inviteUrl = guild.invite?.valid ? safeHttpsUrl(guild.invite.url) : null;
   const banner = safeHttpsUrl(guild.banner_url) ?? safeHttpsUrl(guild.splash_url);
   const manageUrl = paths.guildManage(guild.id);
@@ -130,7 +131,7 @@ function GuildView({guild}: {guild: GuildProfile}) {
             <li>
               <Icon name="link_off" filled />
               <span>{t('notices.inviteLost')}</span>
-              <Link to={manageUrl}>{t('notices.inviteLostAction')}</Link>
+              <Link to={paths.guildManageInvite(guild.id)}>{t('notices.inviteLostAction')}</Link>
             </li>
           )}
         </ul>

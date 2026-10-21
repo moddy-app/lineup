@@ -32,7 +32,7 @@ describe('guild profile', () => {
     setup({badges: [verified], can_manage: false, description: 'Un **gras** et [un lien](https://example.com)'});
     const title = await screen.findByRole('heading', {level: 1});
     expect(title.textContent).toContain('Cubelands FR');
-    expect(within(title).getByRole('img', {name: 'Serveur vérifié'})).toBeTruthy();
+    expect(within(title).getByRole('img', {name: 'Vérifié'})).toBeTruthy();
     expect(screen.getByText('4 120')).toBeTruthy();
     expect(screen.queryByText('640')).toBeNull();
     // The description is Markdown.
@@ -49,12 +49,19 @@ describe('guild profile', () => {
     );
   });
 
+  it('has no join button when the bot could create no invitation (url null)', async () => {
+    setup({invite: {code: '', url: null, valid: true}, can_manage: false});
+    await screen.findByRole('heading', {level: 1});
+    expect(document.querySelector('md-filled-button')).toBeNull();
+    expect(screen.queryByRole('status')).toBeNull();
+  });
+
   it('has no join button when the invite is lost, and tells managers in one line', async () => {
     setup({invite: {code: 'x', url: 'https://discord.gg/x', valid: false}, listed: false});
     await screen.findByRole('heading', {level: 1});
     expect(document.querySelector('md-filled-button')).toBeNull();
     expect(screen.getAllByRole('status')).toHaveLength(1);
-    expect(screen.getByText(/absent de l'annuaire/)).toBeTruthy();
+    expect(screen.getByText(/Ce profil est masqué/)).toBeTruthy();
     expect(screen.getByText(/n'existe plus/)).toBeTruthy();
   });
 

@@ -1,6 +1,4 @@
 {
-  "title": "Servidores",
-  "description": "Os servidores do Discord que você gerencia",
   "unknownName": "Servidor sem nome",
   "success": "{{name}} está no Lineup.",
   "refresh": {
@@ -9,15 +7,15 @@
     "done": "Lista lida novamente do Discord."
   },
   "onLineup": {
-    "title": "No Lineup",
     "label": "Servidores no Lineup",
-    "listed": "No diretório",
+    "listed": "Visível",
     "unlisted": "Oculto",
     "manage": "Gerenciar",
-    "profile": "Ver o perfil"
+    "profile": "Ver o perfil",
+    "emptyTitle": "Nenhum servidor no Lineup",
+    "emptyBody": "Os servidores que você adicionar aparecem aqui."
   },
   "toAdd": {
-    "title": "Para adicionar",
     "label": "Servidores para adicionar",
     "withModdy": "Moddy instalado",
     "add": "Adicionar",
@@ -33,17 +31,18 @@
   },
   "dialog": {
     "title": "Adicionar {{name}}",
-    "titleFree": "Adicionar um servidor",
     "intro": "Cole um link de convite para {{name}} que nunca expire. Ele vira o botão Entrar do perfil.",
-    "introModdy": "O Moddy já está em {{name}}, mas o Lineup ainda pede um convite que nunca expire. Crie um no Discord e cole aqui.",
+    "introModdy": "O Moddy já está em {{name}}. O Lineup lê o servidor e cria o convite permanente para você.",
     "introFree": "Cole um link de convite que nunca expire para um servidor que você gerencia. Ele prova que o servidor é seu e vira o botão Entrar do perfil.",
     "how": "Como criar um convite permanente",
     "label": "Link ou código de convite",
     "placeholder": "https://discord.gg/seu-codigo",
     "hint": "O código sozinho também funciona.",
-    "cancel": "Cancelar",
     "submit": "Adicionar",
-    "submitting": "Verificando..."
+    "submitting": "Verificando...",
+    "adding": "Adicionando...",
+    "back": "Voltar à lista",
+    "close": "Fechar"
   },
   "errors": {
     "tooShort": "Digite pelo menos {{count}} caracteres.",
@@ -51,5 +50,9 @@
     "rightsChanged": "Mudei meus direitos",
     "rightsChecking": "Lendo direitos...",
     "openProfile": "Abrir o perfil"
+  },
+  "menu": {
+    "add": "Adicionar um servidor",
+    "manage": "Gerenciar servidores"
   }
 }

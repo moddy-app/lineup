@@ -63,7 +63,7 @@ h1.post-title {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 4px var(--gap-m);
+  gap: 4px var(--gap-s);
   margin: 0;
   font-size: var(--text-body-small);
   color: var(--md-sys-color-on-surface-variant);
@@ -88,9 +88,10 @@ h1.post-title {
   font-variant-numeric: tabular-nums;
 }
 
-.post-dates::before {
+/* The separator closes the item before it, so it ends a line and never starts one. */
+.post-byline-item:not(:last-child)::after {
   content: '·';
-  margin-inline-end: var(--gap-m);
+  margin-inline-start: var(--gap-s);
 }
 
 .post-actions {

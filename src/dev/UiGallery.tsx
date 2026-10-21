@@ -48,6 +48,7 @@ import {
   useSnackbar,
   InnerCard,
   InnerCards,
+  Dropdown,
 } from '@/ui';
 
 const SHAPES: Array<[ShapeName, ShapeTone, string]> = [
@@ -276,6 +277,30 @@ export function Component() {
               ]}
             />
             <output data-testid="kind">{kind}</output>
+            <Dropdown
+              label="Actions"
+              align="start"
+              header={{icon: 'tune', label: 'Actions'}}
+              items={[
+                {key: 'edit', icon: 'edit', label: 'Edit', onSelect: () => setKind('guild')},
+                {key: 'close', icon: 'lock', label: 'Close', onSelect: () => setKind('user')},
+                {key: 'off', icon: 'block', label: 'Unavailable', disabled: true, onSelect: () => {}},
+                {
+                  key: 'delete',
+                  icon: 'delete',
+                  label: 'Delete',
+                  destructive: true,
+                  separated: true,
+                  onSelect: () => setKind('other'),
+                },
+              ]}
+              trigger={({ref, onActivate, ...aria}) => (
+                <md-outlined-button {...aria} ref={ref} trailing-icon onclick={onActivate}>
+                  Dropdown menu
+                  <md-icon slot="icon">expand_more</md-icon>
+                </md-outlined-button>
+              )}
+            />
             <button type="button" data-testid="set-kind" onClick={() => setKind('other')}>
               set kind other
             </button>

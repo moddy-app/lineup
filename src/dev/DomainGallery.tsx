@@ -263,7 +263,6 @@ export function DomainGallery() {
               key={experience.id}
               experience={experience}
               href={experience.kind === 'guild' ? `/guilds/${experience.guild_id}` : undefined}
-              iconUrl={index === 1 ? ICON : undefined}
               actions={
                 index === 0 ? (
                   <>

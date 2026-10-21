@@ -4,10 +4,11 @@
   },
   "nav": {
     "label": "Hauptnavigation",
-    "feed": "Rekrutierung",
-    "guilds": "Server",
+    "menu": "Menü",
+    "feed": "Projekte",
     "staff": "Staff",
-    "people": "Kandidaten"
+    "people": "Profile",
+    "dashboard": "Dashboard"
   },
   "auth": {
     "login": "Anmelden",
@@ -35,9 +36,7 @@
   "userMenu": {
     "profile": "Mein öffentliches Profil ansehen",
     "experiences": "Erfahrung",
-    "posts": "Meine Anzeigen",
-    "guilds": "Meine Server",
-    "space": "Mein Bereich"
+    "posts": "Meine Anzeigen"
   },
   "actions": {
     "retry": "Erneut versuchen",

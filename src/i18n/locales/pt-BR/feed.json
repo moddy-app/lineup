@@ -1,16 +1,16 @@
 {
   "guild": {
-    "title": "Recrutamento",
+    "title": "Projetos",
     "subtitle": "Servidores do Discord procuram staff.",
     "action": "Publicar um anúncio",
-    "emptyTitle": "Nenhum servidor recrutando no momento",
+    "emptyTitle": "Nenhum projeto no momento",
     "emptyBody": "Os anúncios de servidores aparecem aqui assim que são publicados."
   },
   "user": {
-    "title": "Candidatos",
+    "title": "Perfis",
     "subtitle": "Pessoas oferecem seus serviços a servidores.",
     "action": "Oferecer meus serviços",
-    "emptyTitle": "Nenhum candidato no momento",
+    "emptyTitle": "Nenhum perfil no momento",
     "emptyBody": "Os anúncios de pessoas aparecem aqui assim que são publicados."
   },
   "list": "Lista de anúncios",

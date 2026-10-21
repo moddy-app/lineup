@@ -1,8 +1,6 @@
-import type {MdIconButton} from '@material/web/iconbutton/icon-button.js';
-import type {MdMenu} from '@material/web/menu/menu.js';
 import {ExperienceList} from '@/components/ExperienceRow';
 import {useQueryClient} from '@tanstack/react-query';
-import {type ReactNode, useLayoutEffect, useRef, useState} from 'react';
+import {type ReactNode, useState} from 'react';
 import {Link, useNavigate, useParams} from 'react-router';
 
 import {useCatalogLabel} from '@/api/catalog';
@@ -47,6 +45,8 @@ import {
   Card,
   CardActions,
   ConfirmDialog,
+  Dropdown,
+  type DropdownItem,
   Icon,
   LinkButton,
   Page,
@@ -126,7 +126,7 @@ function usePoster(post: PostDetail) {
   return {
     isGuild,
     name,
-    badges: isGuild ? (post.guild?.badges ?? guild.data?.badges) : (post.author.badges ?? user.data?.badges),
+    badges: isGuild ? (post.guild?.badges ?? guild.data?.badges) : post.author.badges,
     to: isGuild ? paths.guild(post.guild_id!) : paths.user(post.author_id),
     guild: guild.data,
     user: user.data,
@@ -134,7 +134,7 @@ function usePoster(post: PostDetail) {
 }
 
 function PostView({post, onDeleted}: {post: PostDetail; onDeleted: () => void}) {
-  const nsfw = isNsfw({theme: post.theme});
+  const nsfw = isNsfw({theme: post.theme, guild: post.guild});
   const poster = usePoster(post);
   return (
     <ShowcasePage className="post-page">
@@ -223,13 +223,7 @@ function PostHeader({post, poster, onDeleted}: {post: PostDetail; poster: Poster
   // The report dialog is mounted on first use, then kept so that it can animate out.
   const [reportMounted, setReportMounted] = useState(false);
   const [last, setLast] = useState<(() => Promise<void>) | null>(null);
-  const [menuOpen, setMenuOpen] = useState(false);
   const wait = useRetryAfter(error);
-  const menuButton = useRef<MdIconButton>(null);
-  const menu = useRef<MdMenu>(null);
-  useLayoutEffect(() => {
-    if (menu.current) menu.current.anchorElement = menuButton.current;
-  });
 
   const actions = ownerActions(post);
   const editor = actions.length > 0;
@@ -299,39 +293,57 @@ function PostHeader({post, poster, onDeleted}: {post: PostDetail; poster: Poster
     }
   };
 
-  const menuItem = (action: OwnerAction) => {
+  const menuItem = (action: OwnerAction): DropdownItem => {
     switch (action) {
       case 'edit':
-        return (
-          <md-menu-item key="edit" disabled={!canWrite} href={paths.postEdit(post.id)}>
-            <md-icon slot="start">edit</md-icon>
-            <div slot="headline">{t('actions.edit')}</div>
-          </md-menu-item>
-        );
+        return {
+          key: 'edit',
+          icon: 'edit',
+          label: t('actions.edit'),
+          disabled: !canWrite,
+          onSelect: () => void navigate(paths.postEdit(post.id)),
+        };
       case 'publish':
       case 'reopen':
-        return (
-          <md-menu-item key={action} disabled={disabled || post.is_expired} onclick={() => void change(action)}>
-            <md-icon slot="start">{action === 'publish' ? 'publish' : 'replay'}</md-icon>
-            <div slot="headline">{t(`actions.${action}`)}</div>
-          </md-menu-item>
-        );
+        return {
+          key: action,
+          icon: action === 'publish' ? 'publish' : 'replay',
+          label: t(`actions.${action}`),
+          disabled: disabled || post.is_expired,
+          onSelect: () => void change(action),
+        };
       case 'close':
-        return (
-          <md-menu-item key="close" disabled={disabled} onclick={() => void change('close')}>
-            <md-icon slot="start">lock</md-icon>
-            <div slot="headline">{t('actions.close')}</div>
-          </md-menu-item>
-        );
+        return {key: 'close', icon: 'lock', label: t('actions.close'), disabled, onSelect: () => void change('close')};
       case 'delete':
-        return (
-          <md-menu-item key="delete" disabled={disabled} onclick={() => setConfirming(true)}>
-            <md-icon slot="start">delete</md-icon>
-            <div slot="headline">{tCommon('actions.delete')}</div>
-          </md-menu-item>
-        );
+        return {
+          key: 'delete',
+          icon: 'delete',
+          label: tCommon('actions.delete'),
+          destructive: true,
+          disabled,
+          onSelect: () => setConfirming(true),
+        };
     }
   };
+
+  const menuItems: DropdownItem[] = [
+    ...menuActions.map(menuItem),
+    ...(canReport
+      ? [
+          {
+            key: 'report',
+            icon: 'flag',
+            label: t('menu.report'),
+            disabled: !canWrite,
+            onSelect: () =>
+              void auth.run(() => {
+                setReportMounted(true);
+                setReporting(true);
+              }),
+          },
+        ]
+      : []),
+  ];
 
   const hasMenu = menuActions.length > 0 || canReport;
 
@@ -344,26 +356,28 @@ function PostHeader({post, poster, onDeleted}: {post: PostDetail; poster: Poster
               {post.title}
             </h1>
             <p className="post-byline">
-              <Link to={poster.to} className="post-poster-link">
-                {poster.isGuild ? (
-                  <GuildIcon id={post.guild_id!} iconUrl={post.guild?.icon_url} size="small" />
-                ) : (
-                  <UserAvatar id={post.author.id} src={post.author.avatar_url} size="small" />
-                )}
-                <DisplayName
-                  name={poster.name}
-                  badges={poster.badges}
-                  entity={poster.isGuild ? 'guild' : 'user'}
-                  focusable={false}
-                />
-              </Link>
+              <span className="post-byline-item">
+                <Link to={poster.to} className="post-poster-link">
+                  {poster.isGuild ? (
+                    <GuildIcon id={post.guild_id!} iconUrl={post.guild?.icon_url} size="small" />
+                  ) : (
+                    <UserAvatar id={post.author.id} src={post.author.avatar_url} size="small" />
+                  )}
+                  <DisplayName
+                    name={poster.name}
+                    badges={poster.badges}
+                    entity={poster.isGuild ? 'guild' : 'user'}
+                    focusable={false}
+                  />
+                </Link>
+              </span>
               {post.published_at && (
-                <span className="post-dates">
+                <span className="post-byline-item post-dates">
                   {t('dates.published')} <RelativeTime value={post.published_at} />
                 </span>
               )}
               {Date.parse(post.updated_at) - Date.parse(post.published_at ?? post.created_at) > 60_000 && (
-                <span className="post-dates">
+                <span className="post-byline-item post-dates">
                   {t('dates.updated')} <RelativeTime value={post.updated_at} />
                 </span>
               )}
@@ -373,39 +387,22 @@ function PostHeader({post, poster, onDeleted}: {post: PostDetail; poster: Poster
             {editor ? primaryButton() : <ApplicationAction post={post} />}
             {hasMenu && (
               <span className="post-menu">
-                <md-icon-button
-                  ref={menuButton}
-                  aria-label={t('menu.label')}
-                  title={t('menu.label')}
-                  aria-haspopup="menu"
-                  aria-expanded={menuOpen}
-                  onclick={() => setMenuOpen((previous) => !previous)}
-                >
-                  <md-icon>more_vert</md-icon>
-                </md-icon-button>
-                <md-menu
-                  ref={menu}
-                  open={menuOpen}
-                  onclose={() => setMenuOpen(false)}
-                  anchorCorner="end-end"
-                  menuCorner="start-end"
-                >
-                  {menuActions.map(menuItem)}
-                  {canReport && (
-                    <md-menu-item
-                      disabled={!canWrite}
-                      onclick={() =>
-                        void auth.run(() => {
-                          setReportMounted(true);
-                          setReporting(true);
-                        })
-                      }
+                <Dropdown
+                  align="end"
+                  label={t('menu.label')}
+                  items={menuItems}
+                  trigger={({ref, onActivate, ...aria}) => (
+                    <md-icon-button
+                      {...aria}
+                      ref={ref}
+                      aria-label={t('menu.label')}
+                      title={t('menu.label')}
+                      onclick={onActivate}
                     >
-                      <md-icon slot="start">flag</md-icon>
-                      <div slot="headline">{t('menu.report')}</div>
-                    </md-menu-item>
+                      <md-icon>more_vert</md-icon>
+                    </md-icon-button>
                   )}
-                </md-menu>
+                />
               </span>
             )}
           </div>

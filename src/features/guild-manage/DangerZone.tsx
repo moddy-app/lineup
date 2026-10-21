@@ -11,9 +11,7 @@ import {useAuthAction} from '@/auth/useAuthAction';
 import {RetryButton} from '@/components';
 import {useT} from '@/i18n/useT';
 import {ConfirmDialog, SettingsPanel, useSnackbar} from '@/ui';
-import {SanctionNotice} from '../guilds/SanctionNotice';
-
-import {SECTION_IDS} from './sectionIds';
+import {SanctionNotice} from '@/components/SanctionNotice';
 
 /** Deleting the profile. Always behind a confirmation that says what happens to the posts. */
 export function DangerZone({guild}: {guild: GuildProfile}) {
@@ -38,7 +36,7 @@ export function DangerZone({guild}: {guild: GuildProfile}) {
       if (!done) return;
       setOpen(false);
       snackbar.show({message: t('danger.done', {name})});
-      void navigate(paths.guilds());
+      void navigate(paths.myGuilds());
     } catch (caught) {
       setError(caught);
     }
@@ -47,7 +45,6 @@ export function DangerZone({guild}: {guild: GuildProfile}) {
   return (
     <>
       <SettingsPanel
-        id={SECTION_IDS.danger}
         className="manage-panel manage-danger"
         title={t('danger.title')}
         description={t('danger.body')}
