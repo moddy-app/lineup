@@ -1,4 +1,3 @@
-import type {MdMenu} from '@material/web/menu/menu.js';
 import {
   type KeyboardEvent as ReactKeyboardEvent,
   type ReactNode,
@@ -13,7 +12,7 @@ import {
 
 import {useT} from '@/i18n/useT';
 import {cx} from '@/lib/cx';
-import {Icon, TextField} from '@/ui';
+import {Dropdown, type DropdownTriggerProps, Icon, TextField, usePresence} from '@/ui';
 
 import {activeKeys, appendKey, type ChipState, remainingKeys, toggleValue} from './logic';
 import {CLOSE_GUARD_MS, type FilterDefinition, type FilterSearch, OPEN_DELAY_MS} from './types';
@@ -100,6 +99,7 @@ export function FilterBar<K extends string>({search, filters, trailing, classNam
         <FilterMenu
           items={remaining.map((key) => ({key, icon: filters[key].icon, label: filters[key].label}))}
           onPick={addFilter}
+          label={t('filters.add')}
           allUsedLabel={t('filters.allUsed')}
           trigger={({ref, onActivate, ...triggerProps}) => (
             <md-icon-button
@@ -140,6 +140,7 @@ export function FilterBar<K extends string>({search, filters, trailing, classNam
             <FilterMenu
               items={remaining.map((key) => ({key, icon: filters[key].icon, label: filters[key].label}))}
               onPick={addFilter}
+              label={t('filters.add')}
               allUsedLabel={t('filters.allUsed')}
               trigger={({ref, onActivate, ...triggerProps}) => (
                 <button
@@ -170,54 +171,27 @@ function setRef<T>(ref: Ref<T>, element: T | null) {
 // The "add a filter" menu
 // ---------------------------------------------------------------------------
 
-interface TriggerProps {
-  ref: Ref<HTMLElement>;
-  /** Wire it to the click of the trigger (`onclick` on a custom element, `onClick` on a button). */
-  onActivate: () => void;
-  'aria-haspopup': 'menu';
-  'aria-expanded': boolean;
-}
-
 interface FilterMenuProps<K extends string> {
   items: Array<{key: K; icon: string; label: string}>;
   onPick: (key: K) => void;
+  /** Name of the menu, for assistive tech. */
+  label: string;
   allUsedLabel: string;
-  trigger: (props: TriggerProps) => ReactNode;
+  trigger: (props: DropdownTriggerProps) => ReactNode;
 }
 
-/** An md-menu under its trigger (the funnel, or the "+ Add a filter" chip). */
-function FilterMenu<K extends string>({items, onPick, allUsedLabel, trigger}: FilterMenuProps<K>) {
-  const [open, setOpen] = useState(false);
-  const [anchor, setAnchor] = useState<HTMLElement | null>(null);
-  const menuRef = useRef<MdMenu | null>(null);
-
-  useLayoutEffect(() => {
-    if (menuRef.current) menuRef.current.anchorElement = anchor;
-  }, [anchor]);
-
+/** A `Dropdown` under its trigger (the funnel, or the "+ Add a filter" chip). */
+function FilterMenu<K extends string>({items, onPick, label, allUsedLabel, trigger}: FilterMenuProps<K>) {
   return (
-    <span className="filter-menu-wrap">
-      {trigger({
-        ref: setAnchor,
-        onActivate: () => setOpen((previous) => !previous),
-        'aria-haspopup': 'menu',
-        'aria-expanded': open,
-      })}
-      <md-menu ref={menuRef} open={open} onclose={() => setOpen(false)} className="filter-menu">
-        {items.length === 0 ? (
-          <md-menu-item disabled>
-            <div slot="headline">{allUsedLabel}</div>
-          </md-menu-item>
-        ) : (
-          items.map((item) => (
-            <md-menu-item key={item.key} onclick={() => onPick(item.key)}>
-              <md-icon slot="start">{item.icon}</md-icon>
-              <div slot="headline">{item.label}</div>
-            </md-menu-item>
-          ))
-        )}
-      </md-menu>
-    </span>
+    <Dropdown
+      label={label}
+      items={
+        items.length === 0
+          ? [{key: 'all-used', label: allUsedLabel, disabled: true, onSelect: () => {}}]
+          : items.map((item) => ({key: item.key, icon: item.icon, label: item.label, onSelect: () => onPick(item.key)}))
+      }
+      trigger={trigger}
+    />
   );
 }
 
@@ -239,6 +213,7 @@ function FilterChip({definition, open, buttonRef, onToggle, onClose}: FilterChip
   const wrap = useRef<HTMLSpanElement>(null);
   const popover = useRef<HTMLDivElement>(null);
   const popoverId = useId();
+  const {mounted, closing} = usePresence(open);
   const {icon, label, kind, options, value, onChange} = definition;
 
   const selectedLabels = options.filter((option) => value.includes(option.value)).map((option) => option.label);
@@ -314,10 +289,12 @@ function FilterChip({definition, open, buttonRef, onToggle, onClose}: FilterChip
         {selectedLabels.length > 0 && <span className="filter-chip-value">{selectedLabels.join(', ')}</span>}
         <Icon name="expand_more" className="filter-chip-chevron" />
       </button>
-      {open && (
+      {mounted && (
         <div
           ref={popover}
           id={popoverId}
+          data-state={closing ? 'closed' : 'open'}
+          inert={closing}
           className={cx('filter-popover', options.length > 8 && 'wide')}
           role="group"
           aria-label={label}

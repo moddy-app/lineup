@@ -10,6 +10,8 @@
 :root {
   /* Fields and selects: the same 16px corners as md-outlined-text-field. */
   --md-outlined-select-text-field-container-shape: var(--radius-l);
+  /* Entrances of popovers, tooltips and the snackbar: quick, then settling (ui/Dialog.tsx uses the same). */
+  --ease-out-quiet: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ---------------------------------------------------------------------------
@@ -191,9 +193,14 @@ md-filled-button.destructive {
 @media (prefers-reduced-motion: no-preference) {
   .snackbar {
     transition:
-      opacity 200ms var(--ease),
-      translate 200ms var(--ease),
-      visibility 200ms;
+      opacity 150ms ease-in,
+      translate 150ms ease-in,
+      visibility 150ms;
+  }
+
+  .snackbar[data-open='true'] {
+    transition-duration: 200ms;
+    transition-timing-function: var(--ease-out-quiet);
   }
 }
 
@@ -1456,13 +1463,6 @@ md-dialog {
   display: inline-flex;
 }
 
-.language-menu-list {
-  min-width: 200px;
-  --md-menu-item-selected-container-color: var(--md-sys-color-secondary-container);
-  --md-menu-item-selected-label-text-color: var(--md-sys-color-on-secondary-container);
-  --md-menu-item-trailing-icon-color: var(--md-sys-color-on-secondary-container);
-}
-
 /* ---------------------------------------------------------------------------
  * Verification mark and display name. The name is cut with an ellipsis, the
  * mark never shrinks; the tooltip sits 6px under the mark.
@@ -1547,7 +1547,20 @@ md-dialog {
 
 @media (prefers-reduced-motion: no-preference) {
   .verified-badge-tip {
-    transition: opacity 120ms;
+    scale: 0.96;
+    translate: 0 -2px;
+    transition:
+      opacity 100ms ease-in,
+      scale 100ms ease-in,
+      translate 100ms ease-in;
+  }
+
+  .verified-badge:hover .verified-badge-tip,
+  .verified-badge:focus-visible .verified-badge-tip {
+    scale: 1;
+    translate: 0 0;
+    transition-duration: 150ms;
+    transition-timing-function: var(--ease-out-quiet);
   }
 }
 
@@ -2317,6 +2330,72 @@ md-dialog {
 @media (forced-colors: active) {
   .dropdown-popover {
     outline: 1px solid CanvasText;
+  }
+}
+
+/*
+ * Popovers (Dropdown, a filter chip's choices): a quiet entrance and exit, in
+ * the manner of shadcn/ui. In: 150 ms, a fade from 96% and 4px towards the
+ * trigger (`data-side`, `data-align` set by Dropdown). Out: 100 ms, a fade
+ * back to 96% (`data-state="closed"`, kept mounted by `usePresence`).
+ * `transform` composes with the chip popover's `translate` (its shift).
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .filter-popover {
+    --popover-from: translateY(-4px);
+    transform-origin: top left;
+    animation: popover-in 150ms var(--ease-out-quiet);
+  }
+
+  .filter-popover[data-align='end'] {
+    transform-origin: top right;
+  }
+
+  .filter-popover[data-side='top'] {
+    --popover-from: translateY(4px);
+    transform-origin: bottom left;
+  }
+
+  .filter-popover[data-side='top'][data-align='end'] {
+    transform-origin: bottom right;
+  }
+
+  .filter-popover[data-state='closed'] {
+    animation: popover-out 100ms ease-in forwards;
+  }
+}
+
+@keyframes popover-in {
+  from {
+    opacity: 0;
+    transform: var(--popover-from) scale(0.96);
+  }
+}
+
+@keyframes popover-out {
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+/* The kit's tooltips (`[data-tooltip]`): the same fade and slight zoom, on hover and focus. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-tooltip]::after {
+    scale: 0.96;
+    translate: 0 -2px;
+    transition:
+      opacity 100ms ease-in,
+      scale 100ms ease-in,
+      translate 100ms ease-in;
+  }
+
+  [data-tooltip]:hover::after,
+  [data-tooltip]:focus-visible::after {
+    scale: 1;
+    translate: 0 0;
+    transition-duration: 150ms;
+    transition-timing-function: var(--ease-out-quiet);
   }
 }
 

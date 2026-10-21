@@ -24,3 +24,4 @@ export {Checkbox, Switch} from './Toggles';
 export {TextField} from './TextField';
 export {Tooltip} from './Tooltip';
 export {parseServersMode, SERVERS_PARAM, type ServersMode, useServersDialog} from './serversDialog';
+export {allowsMotion, EXIT_MS, usePresence} from './motion';

@@ -14,6 +14,7 @@ import {createPortal} from 'react-dom';
 import {cx} from '@/lib/cx';
 
 import {Icon} from './Icon';
+import {usePresence} from './motion';
 
 export interface DropdownItem {
   key: string;
@@ -29,6 +30,8 @@ export interface DropdownItem {
   disabled?: boolean;
   /** A little more room above: a group apart. */
   separated?: boolean;
+  /** The language of the label, when it is not the page's (a language's own name). */
+  lang?: string;
   onSelect: () => void;
 }
 
@@ -96,6 +99,7 @@ export function Dropdown({
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
   const popover = useRef<HTMLDivElement>(null);
   const popoverId = useId();
+  const {mounted, closing} = usePresence(open);
 
   const close = useCallback(
     (restoreFocus: boolean) => {
@@ -103,7 +107,8 @@ export function Dropdown({
       if (!restoreFocus) return;
       window.setTimeout(() => {
         const active = document.activeElement;
-        if (!active || active === document.body) anchor?.focus();
+        // The popover may still be on screen for its exit, with the focus in it.
+        if (!active || active === document.body || popover.current?.contains(active)) anchor?.focus();
       }, 0);
     },
     [anchor],
@@ -125,6 +130,9 @@ export function Dropdown({
     const top = below + height > window.innerHeight - MARGIN && above >= MARGIN ? above : below;
     element.style.setProperty('--dropdown-x', `${left}px`);
     element.style.setProperty('--dropdown-y', `${top}px`);
+    // The entrance grows from the trigger's side (lineup.css `popover-in`).
+    element.dataset.side = top === above ? 'top' : 'bottom';
+    element.dataset.align = align;
   }, [anchor, align]);
 
   useLayoutEffect(() => {
@@ -206,11 +214,13 @@ export function Dropdown({
         'aria-expanded': open,
         'aria-controls': open ? popoverId : undefined,
       })}
-      {open &&
+      {mounted &&
         createPortal(
           <div
             ref={popover}
             id={popoverId}
+            data-state={closing ? 'closed' : 'open'}
+            inert={closing}
             popover="manual"
             className={cx('filter-popover', 'dropdown-popover', wide && 'wide', matchTrigger && 'match', className)}
             role={role}
@@ -239,6 +249,7 @@ export function Dropdown({
                     aria-selected={role === 'listbox' ? Boolean(item.selected) : undefined}
                     data-selected={item.selected ? 'true' : undefined}
                     disabled={item.disabled}
+                    lang={item.lang}
                     onClick={() => {
                       close(true);
                       item.onSelect();

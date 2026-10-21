@@ -1,8 +1,50 @@
 import type {MdDialog} from '@material/web/dialog/dialog.js';
+import type {DialogAnimation} from '@material/web/dialog/internal/animations.js';
 import type {ReactNode} from 'react';
 import {createPortal} from 'react-dom';
 
 import {useT} from '@/i18n/useT';
+
+import {allowsMotion} from './motion';
+
+/** The scrim of md-dialog at rest (Material). */
+const SCRIM = 0.32;
+const EASE_OUT = 'cubic-bezier(0.16, 1, 0.3, 1)';
+
+/** A quiet entrance: the dialog fades in from 96% and 4px lower, the scrim fades in. */
+const OPEN: DialogAnimation = {
+  dialog: [
+    [
+      [
+        {opacity: 0, transform: 'translateY(4px) scale(0.96)'},
+        {opacity: 1, transform: 'none'},
+      ],
+      {duration: 180, easing: EASE_OUT},
+    ],
+  ],
+  scrim: [[[{opacity: 0}, {opacity: SCRIM}], {duration: 150, easing: 'linear'}]],
+};
+
+/** The same, backwards and quicker. */
+const CLOSE: DialogAnimation = {
+  dialog: [
+    [
+      [
+        {opacity: 1, transform: 'none'},
+        {opacity: 0, transform: 'scale(0.96)'},
+      ],
+      {duration: 120, easing: 'ease-in', fill: 'forwards'},
+    ],
+  ],
+  scrim: [[[{opacity: SCRIM}, {opacity: 0}], {duration: 120, easing: 'linear', fill: 'forwards'}]],
+};
+
+/** Replaces Material's slide and grow; nothing moves under `prefers-reduced-motion: reduce`. */
+function quietAnimations(element: MdDialog | null) {
+  if (!element) return;
+  element.getOpenAnimation = () => (allowsMotion() ? OPEN : {});
+  element.getCloseAnimation = () => (allowsMotion() ? CLOSE : {});
+}
 
 interface DialogProps {
   open: boolean;
@@ -19,7 +61,8 @@ interface DialogProps {
 
 /**
  * md-dialog, controlled by `open`. Content is always in the DOM (the dialog
- * animates in and out), so keep heavy content out of it until `open`.
+ * animates in and out: a fade and a slight zoom, see `OPEN`), so keep heavy
+ * content out of it until `open`.
  *
  * Rendered in a portal on `document.body`. md-dialog draws its scrim as a
  * fixed `div` in its own shadow root, not in the top layer, so the scrim only
@@ -31,6 +74,7 @@ interface DialogProps {
 export function Dialog({open, onClose, headline, children, actions, type, className}: DialogProps) {
   return createPortal(
     <md-dialog
+      ref={quietAnimations}
       className={className}
       open={open}
       type={type}
