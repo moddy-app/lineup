@@ -109,3 +109,7 @@
   font-size: var(--text-body-small);
   color: var(--md-sys-color-on-surface-variant);
 }
+
+.card.profile-header {
+  flex-direction: row;
+}

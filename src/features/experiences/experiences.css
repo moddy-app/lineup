@@ -358,3 +358,21 @@ md-dialog.experience-dialog {
 .exp-verification p.exp-note {
   font-size: var(--text-body-small);
 }
+
+@media (max-width: 600px) {
+  .exp-item {
+    gap: 4px;
+  }
+
+  .exp-handle {
+    width: 24px;
+  }
+
+  .exp-item > .row {
+    padding-inline: 12px;
+  }
+
+  .exp-toolbar {
+    gap: 0;
+  }
+}

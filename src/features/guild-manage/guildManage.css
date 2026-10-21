@@ -1,6 +1,8 @@
 /* Manage a server (/guilds/:guildId/manage). Tokens only. */
 
-.manage-head {
+.card.manage-head {
+  flex-direction: row;
+  text-align: start;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
