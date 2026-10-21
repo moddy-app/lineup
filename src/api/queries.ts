@@ -16,6 +16,7 @@ import {type InfiniteData, keepPreviousData, useInfiniteQuery, useQuery} from '@
 
 import type {ApiError} from './client';
 import {
+  getAccount,
   getCatalog,
   getFeed,
   getGuild,
@@ -68,6 +69,23 @@ export function useMe() {
     refetchOnWindowFocus: true,
     retry: (failureCount, error) => failureCount < 1 && shouldRetry(failureCount, error),
   });
+}
+
+/**
+ * The e-mail of the signed-in person (`GET /auth/me`, a dashboard route).
+ * Optional data: a failure is not retried and the e-mail is simply not shown.
+ */
+export function useAccountEmail(): string | null {
+  const signedIn = useIsSignedIn();
+  const {data} = useQuery({
+    queryKey: queryKeys.account(),
+    queryFn: ({signal}) => getAccount({signal}),
+    enabled: signedIn,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
+    retry: false,
+  });
+  return data?.email ?? null;
 }
 
 /** True once the session is known to be a signed-in one: gates the person's own data. */

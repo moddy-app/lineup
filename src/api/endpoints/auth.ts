@@ -2,19 +2,24 @@
  * Session routes (LINEUP.md §2, §6.1).
  *
  * `GET /lineup/auth/login` is a browser navigation, not a request: it is a
- * URL builder here. `POST /auth/logout` is a dashboard route (the cookie is
+ * URL builder here. `GET /auth/me` and `POST /auth/logout` are dashboard routes (the cookie is
  * shared), not under /lineup.
  */
 
 import {config} from '@/config';
 
 import {apiFetch} from '../client';
-import type {Me} from '../types';
+import type {Account, Me} from '../types';
 import type {ReadOptions} from './shared';
 
 /** `GET /lineup/me`: the session test. A 401 means signed out. */
 export function getMe({signal}: ReadOptions = {}): Promise<Me> {
   return apiFetch<Me>('/lineup/me', {signal});
+}
+
+/** `GET /auth/me` (a dashboard route; same cookie): the Discord e-mail, which `/lineup/me` does not send. A 401 means signed out. */
+export function getAccount({signal}: ReadOptions = {}): Promise<Account> {
+  return apiFetch<Account>('/auth/me', {signal});
 }
 
 /** `POST /auth/logout` (a dashboard route; same cookie). 200 with an EMPTY body (not JSON); 401 without a valid session. */

@@ -256,6 +256,11 @@ const routes: Array<{route: string; call: () => Promise<unknown>; expected: Part
 ];
 
 describe('endpoints', () => {
+  it('GET /auth/me (dashboard route, not counted)', async () => {
+    const call = await sent(() => api.getAccount());
+    expect([call.method, call.path]).toEqual(['GET', '/auth/me']);
+  });
+
   it('covers 39 requests plus the sign-in navigation (the 41 routes of LINEUP.md minus the directory)', () => {
     expect(routes).toHaveLength(39);
     expect(new Set(routes.map((r) => r.route)).size).toBe(39);

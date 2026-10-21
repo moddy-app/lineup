@@ -4,6 +4,7 @@
  *   ['catalog']
  *   ['me']                                  the session snapshot, EXACT only
  *   ['me', 'profile']  ['me', 'experiences']
+ *   ['account']                             the e-mail of GET /auth/me
  *   ['posts', 'feed', filters]              infinite
  *   ['posts', 'detail', id]
  *   ['posts', 'mine', {guildId, status}]    infinite
@@ -31,6 +32,7 @@ import type {
 export const queryKeys = {
   catalog: () => ['catalog'] as const,
   me: () => ['me'] as const,
+  account: () => ['account'] as const,
   myProfile: () => ['me', 'profile'] as const,
   myExperiences: () => ['me', 'experiences'] as const,
 

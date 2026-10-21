@@ -6,7 +6,7 @@ import {routes} from './routes';
 
 /**
  * LINEUP.md section 6, route by route: method, path and who may call it. 41 routes, of which
- * `GET /lineup/auth/login` is a browser navigation (never a request), plus the dashboard's `POST /auth/logout`.
+ * `GET /lineup/auth/login` is a browser navigation (never a request), plus the dashboard's `GET /auth/me` and `POST /auth/logout`.
  */
 const DOC: ReadonlyArray<
   readonly [method: string, path: string, auth: 'public' | 'optional' | 'session' | 'staff' | 'any_session']
@@ -51,6 +51,7 @@ const DOC: ReadonlyArray<
   ['GET', '/lineup/staff/reports', 'staff'],
   ['POST', '/lineup/staff/reports/{report_id}/resolve', 'staff'],
   ['POST', '/lineup/staff/reports/{report_id}/dismiss', 'staff'],
+  ['GET', '/auth/me', 'any_session'],
   ['POST', '/auth/logout', 'any_session'],
 ];
 
@@ -69,8 +70,8 @@ const concrete = (path: string) => path.replace(/\{(\w+)\}/g, (_match, name: str
 const normalized = (path: string) => path.replace(/\{\w+\}|:\w+/g, ':p');
 
 describe('the table of routes', () => {
-  it('serves the 40 routes of LINEUP.md section 6 that are requests, plus the dashboard logout', () => {
-    expect(DOC).toHaveLength(41);
+  it('serves the 40 routes of LINEUP.md section 6 that are requests, plus the dashboard account and logout', () => {
+    expect(DOC).toHaveLength(42);
     expect(DOC.some(([, path]) => path === '/lineup/auth/login')).toBe(false);
     const served = routes.map((route) => `${route.method} ${normalized(route.path)} ${route.auth}`).sort();
     const documented = DOC.map(([method, path, auth]) => `${method} ${normalized(path)} ${auth}`).sort();

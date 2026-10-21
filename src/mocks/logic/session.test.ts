@@ -113,6 +113,7 @@ describe('the session', () => {
   it('describes the person, with a test e-mail, never a token', async () => {
     const api = createTestApi('camille');
     const response = await api.call('GET', '/lineup/me');
+    expect(response.json.user).not.toHaveProperty('email');
     expect(response.json).toMatchObject({
       user: {
         id: U.camille,
@@ -121,7 +122,6 @@ describe('the session', () => {
         is_staff: false,
         banner_url: null,
         avatar_decoration_data: null,
-        email: 'camille.renard@example.com',
       },
       has_lineup_scopes: true,
       login_url: '/lineup/auth/login',

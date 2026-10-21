@@ -5,6 +5,7 @@ import {avatarDecorationFromData} from '@/lib/discord';
 import {kitLabels} from '@/i18n/kitLabels';
 import {useLanguage} from '@/i18n/useLanguage';
 import {useT} from '@/i18n/useT';
+import {useAccountEmail} from '@/api/queries';
 import type {MeUser} from '@/api/types';
 import {Dropdown} from '@/ui';
 
@@ -15,11 +16,12 @@ import {paths} from './paths';
  * avatar in its shadow DOM, without Discord's decoration, and writes the
  * display name: this one keeps its look (32px round button, a card with the
  * person on top, the entries, "Sign out") with `UserAvatar`, the @username
- * and the e-mail when the API gives one.
+ * and the e-mail (`GET /auth/me`) when the API gives one.
  */
 export function UserMenu({user, onSignOut}: {user: MeUser; onSignOut: () => void}) {
   const {t} = useT('common');
   const labels = kitLabels(useLanguage()).userMenu;
+  const email = useAccountEmail();
   const navigate = useNavigate();
   const go = (to: string) => () => void navigate(to);
 
@@ -33,7 +35,7 @@ export function UserMenu({user, onSignOut}: {user: MeUser; onSignOut: () => void
       />
       <div className="user-menu-text">
         <DisplayName name={`@${user.username}`} badges={user.badges} entity="user" className="user-menu-name" />
-        {user.email && <span className="user-menu-email">{user.email}</span>}
+        {email && <span className="user-menu-email">{email}</span>}
       </div>
     </div>
   );

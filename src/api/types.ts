@@ -518,11 +518,20 @@ export interface MeUser {
   avatar_url: string | null;
   banner_url: string | null;
   avatar_decoration_data: DiscordFreeObject | null;
-  /** Expected (the `email` scope is already requested): not returned by the API yet. Shown in the account menu when present. */
-  email?: string | null;
   is_staff: boolean;
   /** Without Discord's badges and `moddy_premium` (summaries only). */
   badges: Badge[];
+}
+
+/**
+ * `GET /auth/me` (dashboard route), reduced to what the front reads. The e-mail
+ * comes from the session, so a change on Discord shows after the next sign-in.
+ */
+export interface Account {
+  /** Null when the Discord account has none or did not share it. */
+  email: string | null;
+  /** Discord verified the address. */
+  verified: boolean | null;
 }
 
 /** `GET /lineup/me`. Also the session test: a 401 means signed out. */
