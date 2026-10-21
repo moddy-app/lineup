@@ -17,7 +17,7 @@ export type ErrorOf = (field: string) => string | undefined;
 /** Translates a client issue. */
 export function useIssueText(): (issue: Issue) => string {
   const {t} = useT('editor');
-  return (issue) => t(`validation.${issue.message}`, issue.params as Record<string, string | number>);
+  return (issue) => t(`validation.${issue.message}` as 'validation.required', issue.params);
 }
 
 /** A field with its error under it; `name` lets the page focus it. */

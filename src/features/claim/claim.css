@@ -64,3 +64,9 @@
   gap: var(--gap-s);
   margin-inline-start: auto;
 }
+
+.claim-intro h1 {
+  margin: 0;
+  font-size: var(--text-title);
+  letter-spacing: normal;
+}

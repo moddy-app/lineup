@@ -97,3 +97,9 @@
   justify-content: center;
   padding-block: var(--gap-m);
 }
+
+.guilds-header h1 {
+  margin: 0;
+  font-size: var(--text-title);
+  letter-spacing: normal;
+}

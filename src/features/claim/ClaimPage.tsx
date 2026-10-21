@@ -195,7 +195,7 @@ export function Component() {
         </>
       }
     >
-      <Card as="section">
+      <Card as="section" className="claim-intro">
         <h1>{t('title')}</h1>
         <p>{t('intro')}</p>
       </Card>

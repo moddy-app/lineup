@@ -12,7 +12,7 @@ import {usePageTitle} from '@/app/usePageTitle';
 import {registerBeforeLogin} from '@/auth/beforeLogin';
 import {useSession} from '@/auth/session';
 import {useAuthAction} from '@/auth/useAuthAction';
-import {EmptyState, ErrorState, PostCard, RelativeTime} from '@/components';
+import {EmptyState, ErrorState, RelativeTime} from '@/components';
 import {useUserQuota} from '@/features/my-posts/useUserQuota';
 import {useLanguage} from '@/i18n/useLanguage';
 import {useT} from '@/i18n/useT';
@@ -71,29 +71,30 @@ export function Component() {
 
   if (catalog.isPending || (postId && post.isPending)) return <PageLoading />;
   if (catalog.isError) return <Shell editing={postId !== undefined}><ErrorState error={catalog.error} onRetry={() => void catalog.refetch()} /></Shell>;
+  const data = post.data;
   if (postId) {
-    if (post.isError) return <Shell editing={postId !== undefined}><ErrorState error={post.error} onRetry={() => void post.refetch()} /></Shell>;
-    if (post.data.status === 'hidden') {
+    if (post.isError || !data) return <Shell editing={postId !== undefined}><ErrorState error={post.error ?? new Error('missing')} onRetry={() => void post.refetch()} /></Shell>;
+    if (data.status === 'hidden') {
       return (
         <Shell editing={postId !== undefined}>
           <EmptyState icon="visibility_off" title={t('locked.hiddenTitle')} tone="secondary" shape="octagon" action={<LinkButton to={paths.myPosts()}>{t('locked.myPosts')}</LinkButton>}>
             {t('locked.hiddenBody')}
-            {post.data.hidden_reason ? ` ${t('locked.reason', {reason: post.data.hidden_reason})}` : ''}
+            {data.hidden_reason ? ` ${t('locked.reason', {reason: data.hidden_reason})}` : ''}
           </EmptyState>
         </Shell>
       );
     }
-    if (!post.data.can_edit) {
+    if (!data.can_edit) {
       return (
         <Shell editing={postId !== undefined}>
-          <EmptyState icon="lock" title={t('locked.forbiddenTitle')} action={<LinkButton to={paths.post(post.data.id)}>{t('locked.view')}</LinkButton>}>
+          <EmptyState icon="lock" title={t('locked.forbiddenTitle')} action={<LinkButton to={paths.post(data.id)}>{t('locked.view')}</LinkButton>}>
             {t('locked.forbiddenBody')}
           </EmptyState>
         </Shell>
       );
     }
   }
-  return <EditorForm key={postId ?? 'new'} catalog={catalog.data} initialPost={postId ? post.data : undefined} />;
+  return <EditorForm key={postId ?? 'new'} catalog={catalog.data} initialPost={postId ? data : undefined} />;
 }
 
 function Shell({children, editing}: {children: React.ReactNode; editing: boolean}) {
@@ -276,10 +277,10 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
       const messages: Record<string, string> = {};
       for (const entry of mapped) if (entry.step !== 'review') messages[entry.field] ??= issueMessage(entry.issue, tErrors);
       setServerErrors(messages);
-      const stepsWithIssues = mapped.map((entry) => entry.step).filter((id) => id !== 'review');
+      const stepsWithIssues = mapped.map((entry) => entry.step).filter((id): id is Exclude<StepId, 'review'> => id !== 'review');
       if (stepsWithIssues.length < mapped.length) setBanner(error);
       if (stepsWithIssues.length > 0) {
-        const target = STEP_IDS.find((id) => stepsWithIssues.includes(id))!;
+        const target = STEP_IDS.find((id) => id !== 'review' && stepsWithIssues.includes(id))!;
         const field = mapped.find((entry) => entry.step === target)!.field;
         setShowErrors((current) => new Set([...current, ...stepsWithIssues]));
         go(target, field);
