@@ -1,3 +1,64 @@
 {
-  "title": "Mis anuncios"
+  "title": "Mis anuncios",
+  "intro": "Todos sus anuncios, incluidos los borradores, los cerrados y los ocultados por el equipo.",
+  "new": "Publicar un anuncio",
+  "tabsLabel": "Estado de los anuncios",
+  "tabs": {
+    "all": "Todos",
+    "published": "Publicados",
+    "draft": "Borradores",
+    "closed": "Cerrados",
+    "hidden": "Ocultos"
+  },
+  "quota": {
+    "title": "Anuncios personales",
+    "body": "Solo cuentan sus anuncios «Busco equipo» publicados y no caducados. Los anuncios de servidor tienen su propio límite, de {{guildLimit}} por servidor.",
+    "loading": "Calculando."
+  },
+  "empty": {
+    "all": {
+      "title": "Aún no hay anuncios",
+      "body": "Publique para un servidor que gestiona, o para usted si busca equipo."
+    },
+    "published": {
+      "title": "Ningún anuncio publicado",
+      "body": "Un anuncio publicado permanece en el feed hasta que se cierra o caduca."
+    },
+    "draft": {
+      "title": "Ningún borrador",
+      "body": "Un borrador no cuenta para los límites y solo usted puede verlo."
+    },
+    "closed": {
+      "title": "Ningún anuncio cerrado",
+      "body": "Un anuncio cerrado sale del feed. Puede publicarlo de nuevo."
+    },
+    "hidden": {
+      "title": "Ningún anuncio oculto",
+      "body": "El equipo de Moddy oculta un anuncio que incumple las normas y da el motivo aquí."
+    }
+  },
+  "row": {
+    "hiddenReason": "Ocultado por el equipo de Moddy. Motivo: {{reason}}",
+    "hiddenNoReason": "Ocultado por el equipo de Moddy. Ya no se puede editar.",
+    "expired": "Caducado: cambie la fecha de caducidad para publicarlo de nuevo.",
+    "kind": "Tipo",
+    "actions": "Acciones del anuncio {{title}}"
+  },
+  "actions": {
+    "edit": "Editar",
+    "close": "Cerrar",
+    "publish": "Publicar",
+    "republish": "Publicar de nuevo",
+    "delete": "Eliminar"
+  },
+  "done": {
+    "closed": "Anuncio cerrado.",
+    "published": "Anuncio publicado.",
+    "deleted": "Anuncio eliminado."
+  },
+  "delete": {
+    "title": "¿Eliminar este anuncio?",
+    "body": "«{{title}}» se eliminará de forma definitiva. Esta acción no se puede deshacer."
+  },
+  "editFirst": "Editar"
 }

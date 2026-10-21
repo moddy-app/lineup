@@ -1,0 +1,360 @@
+/* My experiences: the sortable list, the verification block, the dialog. Tokens only. */
+
+.exp-intro,
+.exp-note {
+  margin: 0;
+  max-width: none;
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.exp-error {
+  margin: 0;
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-error);
+}
+
+.exp-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.exp-item {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: var(--gap-s);
+  min-width: 0;
+}
+
+.exp-item > .row {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.exp-item.is-dragging {
+  z-index: 2;
+  opacity: 0.92;
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-l);
+}
+
+.exp-handle {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-l);
+  background-color: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface-variant);
+  cursor: grab;
+  touch-action: none;
+}
+
+.exp-handle:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+.exp-handle:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.exp-item.is-dragging .exp-handle {
+  cursor: grabbing;
+}
+
+@media (hover: hover) {
+  .exp-handle:not(:disabled):hover {
+    color: var(--md-sys-color-primary);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exp-item {
+    transition: none !important;
+  }
+}
+
+/* The experience row's actions slot holds the verification block and the toolbar. */
+.exp-row .experience-actions {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--gap-m);
+}
+
+.exp-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-s);
+}
+
+.exp-toolbar-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-s);
+}
+
+md-text-button.exp-delete {
+  --md-text-button-label-text-color: var(--md-sys-color-error);
+  --md-text-button-icon-color: var(--md-sys-color-error);
+  --md-text-button-hover-label-text-color: var(--md-sys-color-error);
+  --md-text-button-hover-icon-color: var(--md-sys-color-error);
+  --md-text-button-focus-label-text-color: var(--md-sys-color-error);
+  --md-text-button-focus-icon-color: var(--md-sys-color-error);
+  --md-text-button-pressed-label-text-color: var(--md-sys-color-error);
+  --md-text-button-pressed-icon-color: var(--md-sys-color-error);
+  --md-text-button-hover-state-layer-color: var(--md-sys-color-error);
+  --md-text-button-pressed-state-layer-color: var(--md-sys-color-error);
+}
+
+/* Verification block */
+
+.exp-verification {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+  padding-top: var(--gap-m);
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.exp-status-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+}
+
+.exp-status-text > p {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-s);
+  margin: 0;
+  max-width: none;
+  font-size: var(--text-body-small);
+  overflow-wrap: anywhere;
+}
+
+.exp-status-text .material-symbols-outlined {
+  flex-shrink: 0;
+  font-size: 20px;
+  color: var(--md-sys-color-primary);
+}
+
+.exp-status-text.is-error .material-symbols-outlined,
+.exp-status-text.is-error strong {
+  color: var(--md-sys-color-error);
+}
+
+.exp-status-text > p.exp-note {
+  display: block;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.exp-evidence {
+  font-size: var(--text-body-small);
+}
+
+.exp-evidence summary {
+  cursor: pointer;
+  color: var(--md-sys-color-primary);
+}
+
+.exp-evidence summary:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+.exp-evidence dl {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--gap-s) var(--gap-l);
+  margin: var(--gap-m) 0 0;
+}
+
+.exp-evidence dt {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.exp-evidence dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.exp-evidence-note {
+  margin: var(--gap-m) 0 0;
+  max-width: none;
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+@media (max-width: 600px) {
+  .exp-evidence dl {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+
+  .exp-evidence dd {
+    margin-bottom: var(--gap-s);
+  }
+}
+
+.exp-inline-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+  padding: var(--gap-l);
+  border-radius: var(--radius-l);
+  background-color: var(--md-sys-color-surface-container-high);
+}
+
+.exp-inline-panel > p {
+  margin: 0;
+  max-width: none;
+  font-size: var(--text-body-small);
+}
+
+.exp-inline-panel.is-error {
+  background-color: var(--md-sys-color-error-container);
+  color: var(--md-sys-color-on-error-container);
+}
+
+.exp-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-s);
+}
+
+/* Aside */
+
+.exp-aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-l);
+}
+
+.exp-aside h2 {
+  margin: 0;
+  font-size: var(--text-subtitle);
+}
+
+.exp-count {
+  margin: 0;
+  font-size: var(--text-title);
+  font-weight: 600;
+  color: var(--md-sys-color-primary);
+}
+
+.exp-aside md-linear-progress {
+  width: 100%;
+}
+
+.exp-rules {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-l);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-body-small);
+}
+
+.exp-rules li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-m);
+}
+
+.exp-rules li > span:last-child {
+  padding-top: 6px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Dialog */
+
+md-dialog.experience-dialog {
+  max-height: min(820px, calc(100% - 48px));
+}
+
+.experience-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-l);
+  min-width: min(520px, 100%);
+}
+
+.experience-form p {
+  margin: 0;
+}
+
+.exp-dates {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--gap-l);
+}
+
+.exp-current-server {
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.exp-invite-help summary {
+  cursor: pointer;
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-primary);
+}
+
+.exp-invite-help summary:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+.exp-invite-help .invite-help {
+  margin-top: var(--gap-m);
+}
+
+.exp-callout {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-m);
+  padding: var(--gap-m) var(--gap-l);
+  border-radius: var(--radius-l);
+  background-color: var(--md-sys-color-surface-container);
+  font-size: var(--text-body-small);
+}
+
+.exp-callout .material-symbols-outlined {
+  flex-shrink: 0;
+  font-size: 20px;
+  color: var(--md-sys-color-primary);
+}
+
+.exp-callout.is-warning {
+  background-color: var(--md-sys-color-error-container);
+  color: var(--md-sys-color-on-error-container);
+}
+
+.exp-callout.is-warning .material-symbols-outlined {
+  color: var(--md-sys-color-on-error-container);
+}
+
+.exp-verification p.exp-note {
+  font-size: var(--text-body-small);
+}

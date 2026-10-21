@@ -1,3 +1,64 @@
 {
-  "title": "Meus anúncios"
+  "title": "Meus anúncios",
+  "intro": "Todos os seus anúncios, incluindo rascunhos, fechados e ocultados pela equipe.",
+  "new": "Publicar um anúncio",
+  "tabsLabel": "Status dos anúncios",
+  "tabs": {
+    "all": "Todos",
+    "published": "Publicados",
+    "draft": "Rascunhos",
+    "closed": "Fechados",
+    "hidden": "Ocultos"
+  },
+  "quota": {
+    "title": "Anúncios pessoais",
+    "body": "Só contam seus anúncios \"Procuro uma equipe\" publicados e não expirados. Os anúncios de servidor têm seu próprio limite, de {{guildLimit}} por servidor.",
+    "loading": "Calculando."
+  },
+  "empty": {
+    "all": {
+      "title": "Nenhum anúncio ainda",
+      "body": "Publique para um servidor que você gerencia, ou para você se procura uma equipe."
+    },
+    "published": {
+      "title": "Nenhum anúncio publicado",
+      "body": "Um anúncio publicado fica no feed até ser fechado ou expirar."
+    },
+    "draft": {
+      "title": "Nenhum rascunho",
+      "body": "Um rascunho não conta para os limites e só você pode vê-lo."
+    },
+    "closed": {
+      "title": "Nenhum anúncio fechado",
+      "body": "Um anúncio fechado sai do feed. Você pode publicá-lo novamente."
+    },
+    "hidden": {
+      "title": "Nenhum anúncio oculto",
+      "body": "A equipe do Moddy oculta um anúncio que viola as regras e informa o motivo aqui."
+    }
+  },
+  "row": {
+    "hiddenReason": "Ocultado pela equipe do Moddy. Motivo: {{reason}}",
+    "hiddenNoReason": "Ocultado pela equipe do Moddy. Não pode mais ser editado.",
+    "expired": "Expirado: altere a data de expiração para publicá-lo de novo.",
+    "kind": "Tipo",
+    "actions": "Ações do anúncio {{title}}"
+  },
+  "actions": {
+    "edit": "Editar",
+    "close": "Fechar",
+    "publish": "Publicar",
+    "republish": "Publicar de novo",
+    "delete": "Excluir"
+  },
+  "done": {
+    "closed": "Anúncio fechado.",
+    "published": "Anúncio publicado.",
+    "deleted": "Anúncio excluído."
+  },
+  "delete": {
+    "title": "Excluir este anúncio?",
+    "body": "\"{{title}}\" será excluído definitivamente. Esta ação não pode ser desfeita."
+  },
+  "editFirst": "Editar"
 }

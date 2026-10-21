@@ -21,13 +21,23 @@ export interface ProfileFormState {
 
 /** A problem with a field: a key of the `meProfile` namespace (`errors.<key>`) and its number, if any. */
 export interface FieldProblem {
-  key: 'linkLabelRequired' | 'linkLabelTooLong' | 'urlInvalid' | 'urlHttps' | 'urlTooLong' | 'timezoneInvalid' | 'tooLong' | 'tooMany';
+  key:
+    | 'linkLabelRequired'
+    | 'linkLabelTooLong'
+    | 'urlInvalid'
+    | 'urlHttps'
+    | 'urlTooLong'
+    | 'timezoneInvalid'
+    | 'tooLong'
+    | 'tooMany';
   count?: number;
 }
 
 export type ProfileProblems = Record<string, FieldProblem>;
 
-export function formFromProfile(profile: Pick<UserProfile, 'headline' | 'bio' | 'links' | 'languages' | 'timezone' | 'open_to_work'>): ProfileFormState {
+export function formFromProfile(
+  profile: Pick<UserProfile, 'headline' | 'bio' | 'links' | 'languages' | 'timezone' | 'open_to_work'>,
+): ProfileFormState {
   return {
     headline: profile.headline ?? '',
     bio: profile.bio ?? '',
@@ -90,7 +100,8 @@ export function validateProfile(state: ProfileFormState): ProfileProblems {
   state.links.forEach((link, index) => {
     const label = link.label.trim();
     if (label.length === 0) problems[`links.${index}.label`] = {key: 'linkLabelRequired'};
-    else if (label.length > LINK_LABEL_MAX) problems[`links.${index}.label`] = {key: 'linkLabelTooLong', count: LINK_LABEL_MAX};
+    else if (label.length > LINK_LABEL_MAX)
+      problems[`links.${index}.label`] = {key: 'linkLabelTooLong', count: LINK_LABEL_MAX};
     const urlProblem = linkUrlProblem(link.url);
     if (urlProblem) problems[`links.${index}.url`] = {key: urlProblem};
   });

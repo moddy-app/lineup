@@ -76,7 +76,14 @@ describe('validation', () => {
 
 describe('formFromProfile', () => {
   it('turns nulls into empty strings', () => {
-    const form = formFromProfile({headline: null, bio: null, links: [], languages: [], timezone: null, open_to_work: false});
+    const form = formFromProfile({
+      headline: null,
+      bio: null,
+      links: [],
+      languages: [],
+      timezone: null,
+      open_to_work: false,
+    });
     expect(form.headline).toBe('');
     expect(form.timezone).toBe('');
   });

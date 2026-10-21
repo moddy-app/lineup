@@ -1,4 +1,251 @@
 {
   "titleNew": "Novo anúncio",
-  "titleEdit": "Editar anúncio"
+  "titleEdit": "Editar o anúncio",
+  "introNew": "Oito etapas, salvas neste dispositivo enquanto você escreve. No fim, você pode publicar ou guardar um rascunho.",
+  "introEdit": "Altere as etapas que precisar e salve na última. Só os campos alterados são enviados.",
+  "count": "{{used}} / {{max}}",
+  "restored": {
+    "text": "Rascunho local restaurado, salvo",
+    "discard": "Descartar este rascunho"
+  },
+  "stepper": {
+    "label": "Etapas do anúncio",
+    "count": "Etapa {{current}} de {{total}}",
+    "state": {
+      "current": "etapa atual",
+      "done": "concluída",
+      "error": "a corrigir",
+      "todo": "ainda não vista"
+    }
+  },
+  "steps": {
+    "type": {
+      "short": "Tipo",
+      "title": "Tipo de anúncio",
+      "intro": "Um anúncio de servidor recruta para um servidor que você gerencia. Um anúncio pessoal apresenta alguém que procura uma equipe."
+    },
+    "content": {
+      "short": "Conteúdo",
+      "title": "Título e descrição",
+      "intro": "Diga quem você é ou o que o servidor oferece, com dados concretos."
+    },
+    "positions": {
+      "short": "Cargos",
+      "title": "Cargos",
+      "intro": "Os cargos procurados ou desejados. Escolha \"Outro\" para escrever seus próprios nomes."
+    },
+    "requirements": {
+      "short": "Requisitos",
+      "title": "Requisitos",
+      "intro": "O que os candidatos precisam cumprir. Opcional."
+    },
+    "application": {
+      "short": "Candidatura",
+      "title": "Como se candidatar",
+      "intro": "Como as pessoas interessadas entram em contato. Opcional."
+    },
+    "commitment": {
+      "short": "Compromisso",
+      "title": "Compromisso, idiomas e fuso horário",
+      "intro": "Todos os campos são opcionais."
+    },
+    "extras": {
+      "short": "Opções",
+      "title": "Tema, tags e expiração",
+      "intro": "Ajuda a classificar e encontrar o anúncio. Tudo é opcional."
+    },
+    "review": {
+      "short": "Revisão",
+      "title": "Revisar e enviar",
+      "intro": "Confira cada etapa. Um anúncio publicado aparece logo no feed."
+    }
+  },
+  "actions": {
+    "next": "Continuar",
+    "previous": "Anterior",
+    "publish": "Publicar",
+    "republish": "Publicar de novo",
+    "saveDraft": "Salvar como rascunho",
+    "saveEdit": "Salvar as alterações",
+    "saveChanges": "Salvar as alterações",
+    "sending": "Enviando"
+  },
+  "done": {
+    "published": "Anúncio publicado.",
+    "draft": "Rascunho salvo.",
+    "saved": "Alterações salvas."
+  },
+  "locked": {
+    "hiddenTitle": "Anúncio oculto",
+    "hiddenBody": "A equipe do Moddy ocultou este anúncio. Ele não pode mais ser editado.",
+    "reason": "Motivo: {{reason}}",
+    "myPosts": "Meus anúncios",
+    "forbiddenTitle": "Você não pode editar este anúncio",
+    "forbiddenBody": "Só o autor de um anúncio pessoal e os gerentes do servidor podem editar um anúncio.",
+    "view": "Ver o anúncio"
+  },
+  "type": {
+    "legend": "Quem publica",
+    "kind": {
+      "guild": {
+        "title": "Um servidor está recrutando",
+        "hint": "Para um servidor que você gerencia e que tem perfil no Lineup."
+      },
+      "user": {
+        "title": "Procuro uma equipe",
+        "hint": "Um anúncio em seu nome, com suas experiências verificadas."
+      }
+    },
+    "guildLegend": "Servidor",
+    "loadingGuilds": "Carregando seus servidores.",
+    "unnamedGuild": "Servidor sem nome",
+    "notClaimed": "Ainda não reivindicado no Lineup",
+    "claim": "Reivindicar",
+    "noGuilds": {
+      "title": "Nenhum servidor gerenciado",
+      "body": "Você precisa gerenciar um servidor do Discord e reivindicá-lo no Lineup para publicar em nome dele. Também pode publicar um anúncio pessoal."
+    },
+    "locked": "O tipo e o servidor não mudam depois que o anúncio é criado."
+  },
+  "content": {
+    "title": "Título",
+    "titleHint": "{{min}} a {{max}} caracteres",
+    "description": "Descrição",
+    "descriptionHint": "{{min}} a {{max}} caracteres"
+  },
+  "positions": {
+    "legend": "Cargos",
+    "hint": "Até {{max}} cargos.",
+    "otherLegend": "Nomes de \"Outro\"",
+    "otherHint": "Um nome por cargo, no máximo {{max}} caracteres.",
+    "otherLabel": "Nome {{n}}",
+    "removeOther": "Remover o nome {{n}}",
+    "addOther": "Adicionar um nome"
+  },
+  "requirements": {
+    "hint": "Até {{max}} requisitos.",
+    "none": "Nenhum requisito por enquanto.",
+    "add": "Adicionar um requisito",
+    "item": "Requisito {{n}}",
+    "remove": "Remover o requisito {{n}}",
+    "type": "Tipo de requisito",
+    "customLabel": "Título do requisito",
+    "customValue": "Detalhe",
+    "value": "Valor",
+    "range": "Entre {{min}} e {{max}}",
+    "flagOn": "Sim",
+    "flagOff": "Não",
+    "flagAria": "{{name}}",
+    "languages": "Idiomas exigidos",
+    "noValue": "Este requisito não tem valor a preencher.",
+    "verified": "Verificação pelo Lineup prevista",
+    "verifiedHint": "O Lineup ainda não verifica nenhuma candidatura: o anúncio só mostra que a verificação está prevista."
+  },
+  "application": {
+    "type": "Forma de candidatura",
+    "none": "Nenhuma",
+    "noneHint": "Sem candidatura, o anúncio não tem botão \"Candidatar-se\".",
+    "soon": "{{name}} (em breve)",
+    "url": "Endereço do link",
+    "urlHint": "Apenas endereços https, sem credenciais.",
+    "dmHint": "As pessoas interessadas escrevem em mensagem privada ao autor do anúncio no Discord."
+  },
+  "commitment": {
+    "hours": "Horas por semana",
+    "hoursHint": "{{min}} a {{max}}",
+    "openings": "Vagas abertas",
+    "openingsHint": "{{min}} a {{max}}",
+    "compensation": "Remuneração",
+    "compensationNone": "Não informada",
+    "languages": "Idiomas",
+    "languagesHint": "Até {{max}} idiomas.",
+    "timezone": "Fuso horário",
+    "timezoneHint": "Nome IANA (Europe/Paris) ou deslocamento UTC+02:00",
+    "useBrowserZone": "Usar {{zone}}"
+  },
+  "extras": {
+    "theme": "Tema",
+    "themeNone": "Nenhum",
+    "themeNsfw": "Anúncios NSFW ficam fora do feed, a menos que as pessoas os peçam.",
+    "tags": "Adicionar uma tag",
+    "tagsHint": "Até {{max}}. Letras minúsculas, números e hifens, de 2 a 24 caracteres.",
+    "tagAdd": "Adicionar",
+    "tagsList": "Tags",
+    "tagRemove": "Remover a tag {{tag}}",
+    "expiry": "Data de expiração",
+    "expiryNever": "Nunca por padrão. Caso contrário, entre {{min}} e {{max}}.",
+    "expiryRange": "Entre {{min}} e {{max}}. O anúncio expira no fim desse dia.",
+    "expiryClear": "Nunca expira",
+    "featured": "Experiência em destaque",
+    "featuredNone": "Nenhuma",
+    "featuredHint": "Só suas experiências verificadas são oferecidas.",
+    "featuredEmpty": "Você não tem nenhuma experiência verificada.",
+    "featuredLink": "Gerenciar minhas experiências",
+    "featuredLoading": "Carregando suas experiências.",
+    "featuredUnknown": "Experiência não verificada ou excluída"
+  },
+  "review": {
+    "empty": "Não preenchido",
+    "editShort": "Editar",
+    "edit": "Editar: {{step}}",
+    "invalid_one": "{{count}} etapa precisa ser corrigida antes de enviar.",
+    "invalid_other": "{{count}} etapas precisam ser corrigidas antes de enviar.",
+    "quotaFull": "Você atingiu o limite: feche um anúncio ou salve este como rascunho.",
+    "summary": {
+      "guild": "Servidor: {{name}}",
+      "user": "Anúncio pessoal",
+      "requirements_one": "{{count}} requisito",
+      "requirements_other": "{{count}} requisitos",
+      "hours_one": "{{count}} h por semana",
+      "hours_other": "{{count}} h por semana",
+      "openings_one": "{{count}} vaga aberta",
+      "openings_other": "{{count}} vagas abertas",
+      "languages_one": "{{count}} idioma",
+      "languages_other": "{{count}} idiomas",
+      "tags_one": "{{count}} tag",
+      "tags_other": "{{count}} tags",
+      "expires": "Expira em {{date}}",
+      "never": "Nunca expira",
+      "featured": "Experiência em destaque"
+    }
+  },
+  "banner": {
+    "saveDraft": "Salvar como rascunho",
+    "myPosts": "Meus anúncios",
+    "claim": "Reivindicar um servidor",
+    "quotaNew": "Um rascunho não conta para o limite. Você poderá publicá-lo quando uma vaga for liberada.",
+    "quotaEdit": "Suas alterações foram salvas, mas o anúncio não foi publicado. Feche um anúncio e publique-o em Meus anúncios."
+  },
+  "preview": {
+    "title": "Prévia",
+    "hint": "O cartão como aparece no feed.",
+    "titlePlaceholder": "O título do seu anúncio",
+    "descriptionPlaceholder": "A descrição aparecerá aqui."
+  },
+  "validation": {
+    "required": "Este campo é obrigatório.",
+    "tooShort": "Pelo menos {{count}} caracteres.",
+    "tooLong": "No máximo {{count}} caracteres.",
+    "kindRequired": "Escolha um tipo de anúncio.",
+    "guildRequired": "Escolha um servidor.",
+    "guildNotClaimed": "Este servidor não foi reivindicado no Lineup.",
+    "positionsMin": "Escolha pelo menos um cargo.",
+    "positionsMax": "No máximo {{count}} cargos.",
+    "otherRequired": "Escreva pelo menos um nome para \"Outro\".",
+    "otherMax": "No máximo {{count}} nomes.",
+    "requirementsMax": "No máximo {{count}} requisitos.",
+    "integer": "Digite um número inteiro.",
+    "between": "Entre {{min}} e {{max}}.",
+    "languagesMin": "Escolha pelo menos um idioma.",
+    "languagesMax": "No máximo {{count}} idiomas.",
+    "formUnavailable": "O formulário do Lineup ainda não está disponível.",
+    "urlHttps": "Digite um endereço https, sem credenciais nem espaços.",
+    "timezone": "Use um nome IANA (Europe/Paris) ou UTC+02:00.",
+    "tagsMax": "No máximo {{count}} tags.",
+    "tag": "2 a 24 caracteres: minúsculas, números e hifens.",
+    "expiryMin": "Escolha uma data a partir de amanhã.",
+    "expiryMax": "No máximo {{count}} dias a partir de hoje.",
+    "featuredUserOnly": "Só um anúncio pessoal pode destacar uma experiência.",
+    "featuredNotVerified": "Esta experiência não está verificada."
+  }
 }

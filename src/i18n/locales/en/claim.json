@@ -1,3 +1,42 @@
 {
-  "title": "Claim a server"
+  "title": "Claim a server",
+  "intro": "Claiming a server creates its Lineup profile. Only servers you own, or where you have the Administrator or Manage Server permission, are listed.",
+  "unknownName": "Unnamed server",
+  "success": "{{name}} is on Lineup.",
+  "list": {
+    "title": "Your servers",
+    "label": "Servers you can manage",
+    "refresh": "Refresh the list",
+    "refreshIn": "Refresh in {{seconds}} s",
+    "refreshed": "List read again from Discord.",
+    "withModdy": "Moddy is installed",
+    "withoutModdy": "Without Moddy",
+    "claimed": "On Lineup",
+    "profile": "Profile",
+    "manage": "Manage",
+    "claim": "Claim",
+    "emptyTitle": "No server to claim",
+    "emptyBody": "Only servers you own, or where you have the Administrator or Manage Server permission, appear here. If you just created one, refresh the list.",
+    "reauthTitle": "Allow Lineup to read your servers",
+    "reauthBody": "Your session comes from the Moddy dashboard and lacks this permission. Sign in again with Discord.",
+    "reauthAction": "Sign in again"
+  },
+  "form": {
+    "title": "Server invitation",
+    "body": "Paste an invitation link that never expires. It proves the server is yours and becomes the Join button on the profile.",
+    "label": "Invitation link or code",
+    "placeholder": "https://discord.gg/your-code",
+    "hint": "The bare code works too.",
+    "selected": "Invitation for {{name}}",
+    "deselect": "Remove",
+    "submit": "Claim",
+    "submitting": "Checking..."
+  },
+  "errors": {
+    "tooShort": "Enter at least {{count}} characters.",
+    "forbiddenHelp": "If you just got these rights on Discord, read them again and the claim is retried.",
+    "rightsChanged": "I changed my rights",
+    "rightsChecking": "Reading rights...",
+    "openProfile": "Open the profile"
+  }
 }

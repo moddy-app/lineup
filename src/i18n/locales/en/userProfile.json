@@ -1,3 +1,38 @@
 {
-  "title": "Profile"
+  "title": "Profile",
+  "notFound": {
+    "title": "Profile not found",
+    "body": "No account matches this address, or the profile is no longer visible.",
+    "action": "Browse posts"
+  },
+  "header": {
+    "created": "Discord account created on {{date}}",
+    "openToWork": "Open to work"
+  },
+  "about": {
+    "title": "About",
+    "timezone": "Time zone",
+    "languages": "Languages",
+    "links": "Links"
+  },
+  "self": {
+    "edit": "Edit my profile",
+    "experiences": "My experiences"
+  },
+  "bio": {
+    "title": "Bio"
+  },
+  "experiences": {
+    "title": "Experience",
+    "manage": "Manage",
+    "empty": "No experience listed.",
+    "emptySelf": "You have not added any experience yet."
+  },
+  "posts": {
+    "title": "Posts",
+    "count_one": "{{value}} published post",
+    "count_other": "{{value}} published posts",
+    "empty": "No published post at the moment.",
+    "emptySelf": "You have no published post."
+  }
 }

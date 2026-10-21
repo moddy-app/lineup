@@ -1,3 +1,84 @@
 {
-  "title": "Anúncio"
+  "title": "Anúncio",
+  "notFound": {
+    "title": "Anúncio não encontrado ou removido",
+    "body": "Este anúncio não existe, foi removido ou não está visível com a sua conta."
+  },
+  "banner": {
+    "draft": {
+      "title": "Rascunho",
+      "body": "Só quem pode editar vê este anúncio. Publique para ele aparecer na lista."
+    },
+    "closed": {
+      "title": "Anúncio fechado",
+      "body": "Ele não aparece mais na lista. Reabra para publicar de novo."
+    },
+    "hidden": {
+      "title": "Anúncio oculto",
+      "body": "A equipe do Moddy ocultou este anúncio. Ele não pode mais ser editado.",
+      "reason": "Motivo: {{reason}}"
+    },
+    "expired": {
+      "title": "Este anúncio expirou",
+      "body": "Ele não está mais na lista e não aceita candidaturas.",
+      "editor": "Ele não está mais na lista. Escolha uma nova data de expiração para publicar de novo.",
+      "edit": "Alterar a data de expiração"
+    }
+  },
+  "dates": {
+    "published": "Publicado",
+    "updated": "Alterado"
+  },
+  "sections": {
+    "positions": "Cargos procurados",
+    "requirements": "Requisitos",
+    "details": "Detalhes"
+  },
+  "facts": {
+    "languages": "Idiomas",
+    "timezone": "Fuso horário",
+    "theme": "Tema",
+    "tags": "Tags"
+  },
+  "apply": {
+    "title": "Candidatura",
+    "external": "A candidatura é feita no site de quem recruta.",
+    "dm": "A candidatura é feita por mensagem direta no Discord com quem publicou o anúncio."
+  },
+  "author": {
+    "guild": "Servidor",
+    "user": "Autor",
+    "viewGuild": "Ver o servidor",
+    "viewUser": "Ver o perfil"
+  },
+  "featured": {
+    "title": "Experiência em destaque"
+  },
+  "report": {
+    "label": "Denunciar este anúncio"
+  },
+  "manage": {
+    "title": "Gerenciar o anúncio",
+    "body": "Você pode editar este anúncio."
+  },
+  "actions": {
+    "edit": "Editar",
+    "publish": "Publicar",
+    "reopen": "Reabrir",
+    "close": "Fechar o anúncio"
+  },
+  "snackbar": {
+    "publish": "Anúncio publicado.",
+    "reopen": "Anúncio reaberto.",
+    "close": "Anúncio fechado.",
+    "delete": "Anúncio excluído."
+  },
+  "confirmDelete": {
+    "title": "Excluir este anúncio?",
+    "body": "\"{{title}}\" será excluído de forma definitiva. Não é possível desfazer."
+  },
+  "errorLinks": {
+    "myPosts": "Ver meus anúncios",
+    "editExpiry": "Alterar a data de expiração"
+  }
 }

@@ -1,0 +1,214 @@
+/* Manage a server (/guilds/:guildId/manage). Tokens only. */
+
+.manage-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-l) var(--space);
+}
+
+.manage-head-text {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+
+.manage-head-text h1 {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--text-title);
+}
+
+.manage-head-text p {
+  margin: var(--gap-s) 0 0;
+}
+
+.manage-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space);
+}
+
+.manage-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-l);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.manage-group > legend {
+  margin-bottom: var(--gap-m);
+  padding: 0;
+  font-size: var(--text-subtitle);
+  font-weight: 600;
+  color: var(--md-sys-color-on-surface);
+}
+
+.manage-help {
+  margin: 0;
+  max-width: none;
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.manage-label {
+  margin: 0 0 var(--gap-s);
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.manage-field-error {
+  margin: var(--gap-s) 0 0;
+  font-size: var(--text-small);
+  color: var(--md-sys-color-error);
+}
+
+.manage-dirty {
+  font-size: var(--text-small);
+  color: var(--md-sys-color-primary);
+}
+
+.manage-discord-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-s);
+}
+
+.manage-discord-text p {
+  margin: 0;
+  max-width: none;
+  font-size: var(--text-small);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.manage-link {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+  align-items: start;
+  gap: var(--gap-m);
+}
+
+@media (max-width: 700px) {
+  .manage-link {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .manage-link > :first-child,
+  .manage-link > :nth-child(2) {
+    grid-column: 1;
+  }
+
+  .manage-link > md-icon-button {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
+}
+
+.manage-checks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--gap-s) var(--gap-l);
+}
+
+.manage-details {
+  padding: var(--gap-m) var(--gap-l);
+  border-radius: var(--radius-l);
+  background-color: var(--md-sys-color-surface-container);
+}
+
+.manage-details > summary {
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface);
+}
+
+.manage-details[open] > summary {
+  margin-bottom: var(--gap-m);
+}
+
+.manage-error {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-s);
+  padding: var(--gap-l);
+  border-radius: var(--radius-l);
+  background-color: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface);
+}
+
+.manage-error p {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-s);
+  margin: 0;
+  max-width: none;
+}
+
+.manage-error .material-symbols-outlined {
+  flex-shrink: 0;
+  color: var(--md-sys-color-error);
+}
+
+.manage-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-l) var(--space);
+}
+
+.manage-invite {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-s);
+  margin: 0;
+  font-size: var(--text-small);
+}
+
+.manage-confirm p {
+  margin: 0 0 var(--gap-m);
+}
+
+.manage-confirm ul {
+  margin: 0 0 var(--gap-m);
+  padding-inline-start: 1.25em;
+}
+
+.manage-posts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-l);
+  margin-top: var(--gap-m);
+}
+
+.manage-post-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.manage-post {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+}
+
+.manage-post-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-s);
+  padding-inline: var(--gap-s);
+}
+
+.manage-more {
+  display: flex;
+  justify-content: center;
+}

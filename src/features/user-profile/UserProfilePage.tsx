@@ -27,19 +27,7 @@ import {
 import {useLanguage} from '@/i18n/useLanguage';
 import {useT} from '@/i18n/useT';
 import {formatDate, formatNumber} from '@/lib/format';
-import {
-  AppLayout,
-  Card,
-  CardActions,
-  Icon,
-  LinkButton,
-  PageLoading,
-  Pill,
-  Rows,
-  Section,
-  Shape,
-  Status,
-} from '@/ui';
+import {AppLayout, Card, CardActions, Icon, LinkButton, PageLoading, Pill, Rows, Section, Shape, Status} from '@/ui';
 
 import './user-profile.css';
 
@@ -55,7 +43,17 @@ export function Component() {
     return (
       <AppLayout>
         {notFound ? (
-          <EmptyState icon="person_search" title={t('notFound.title')} shape="hexagon" tone="tertiary" action={<LinkButton to={paths.feed()} variant="outlined">{t('notFound.action')}</LinkButton>}>
+          <EmptyState
+            icon="person_search"
+            title={t('notFound.title')}
+            shape="hexagon"
+            tone="tertiary"
+            action={
+              <LinkButton to={paths.feed()} variant="outlined">
+                {t('notFound.action')}
+              </LinkButton>
+            }
+          >
             {t('notFound.body')}
           </EmptyState>
         ) : (
@@ -179,7 +177,9 @@ function Profile({profile}: {profile: UserProfile}) {
           </div>
         ) : (
           <>
-            <p className="profile-count numeric">{t('posts.count', {count: profile.posts.length, value: formatNumber(profile.posts.length)})}</p>
+            <p className="profile-count numeric">
+              {t('posts.count', {count: profile.posts.length, value: formatNumber(profile.posts.length)})}
+            </p>
             <Rows as="ul" aria-label={t('posts.title')}>
               {profile.posts.map((post) => (
                 <PostCard key={post.id} post={post} variant="row" />

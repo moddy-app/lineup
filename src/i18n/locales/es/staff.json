@@ -1,7 +1,207 @@
 {
-  "title": "Staff",
-  "reviews": "Verificaciones",
-  "reports": "Denuncias",
-  "badges": "Insignias",
-  "posts": "Anuncios"
+  "title": "Consola del staff",
+  "header": {
+    "text": "Cola de revisión de experiencias, denuncias, insignias manuales y anuncios ocultos."
+  },
+  "nav": {
+    "label": "Secciones de la consola",
+    "reviews": "Revisión",
+    "reports": "Denuncias",
+    "badges": "Insignias",
+    "posts": "Anuncios"
+  },
+  "forbidden": {
+    "title": "Acceso restringido",
+    "text": "Esta página es para el equipo de Moddy. Esta cuenta no tiene acceso."
+  },
+  "person": {
+    "profile": "Ver perfil"
+  },
+  "retryIn": "Reintentar en {{seconds}} s",
+  "dialog": {
+    "required": "Este campo es obligatorio."
+  },
+  "reviews": {
+    "status": "Estado",
+    "statuses": {
+      "pending": "Pendientes",
+      "unverified": "Sin verificar",
+      "verified": "Verificadas",
+      "rejected": "Rechazadas"
+    },
+    "empty": {
+      "pendingTitle": "Cola vacía",
+      "pendingText": "No hay ninguna solicitud de revisión en espera.",
+      "title": "Sin experiencias",
+      "text": "Ninguna experiencia tiene este estado."
+    },
+    "help": {
+      "title": "Reglas de revisión",
+      "order": "Las solicitudes más antiguas están arriba.",
+      "verify": "Verificar conserva la prueba existente y añade tu nota.",
+      "reject": "Rechazar requiere un motivo, que la persona puede leer."
+    },
+    "loaded": "{{n}} cargadas en esta lista.",
+    "updated": "Modificada",
+    "facts": {
+      "requestedAt": "Revisión solicitada",
+      "reviewNote": "Nota de la persona",
+      "permissions": "Permisos",
+      "owner": "Propietario del servidor",
+      "yes": "Sí",
+      "no": "No",
+      "roles": "Roles",
+      "checkedAt": "Comprobación de Discord",
+      "staffNote": "Nota del staff",
+      "rejection": "Motivo del rechazo",
+      "none": "No hay pruebas registradas."
+    },
+    "verify": {
+      "action": "Verificar",
+      "title": "Verificar esta experiencia",
+      "text": "La experiencia pasa a verificada, método staff. Se conserva la prueba existente.",
+      "note": "Nota (opcional)",
+      "confirm": "Verificar",
+      "done": "Experiencia verificada."
+    },
+    "reject": {
+      "action": "Rechazar",
+      "title": "Rechazar esta experiencia",
+      "text": "La persona verá este motivo y podrá pedir otra revisión tras corregirla.",
+      "reason": "Motivo",
+      "confirm": "Rechazar",
+      "done": "Experiencia rechazada."
+    }
+  },
+  "reports": {
+    "status": "Estado",
+    "statuses": {
+      "open": "Abiertas",
+      "resolved": "Resueltas",
+      "dismissed": "Descartadas",
+      "all": "Todas"
+    },
+    "states": {
+      "open": "Abierta",
+      "resolved": "Resuelta",
+      "dismissed": "Descartada"
+    },
+    "targets": {
+      "post": "Anuncio",
+      "user": "Perfil",
+      "guild": "Servidor"
+    },
+    "open": "Abrir: {{target}}",
+    "reasons": {
+      "spam": "Spam",
+      "scam": "Estafa",
+      "inappropriate": "Contenido inapropiado",
+      "impersonation": "Suplantación de identidad",
+      "other": "Otro"
+    },
+    "noDetails": "Sin detalles.",
+    "reporter": "Denunciado por",
+    "handledBy": "Decidido por",
+    "hidePost": "Ocultar el anuncio",
+    "empty": {
+      "openTitle": "Sin denuncias abiertas",
+      "openText": "Todas las denuncias están decididas.",
+      "title": "Sin denuncias",
+      "text": "Ninguna denuncia tiene este estado."
+    },
+    "help": {
+      "title": "Antes de decidir",
+      "target": "Abre primero el destino. Resolver o descartar no modifica el destino: oculta el anuncio por separado.",
+      "once": "Una denuncia decidida no se puede volver a decidir."
+    },
+    "loaded": "{{n}} cargadas en esta lista.",
+    "resolve": {
+      "action": "Resolver",
+      "title": "Marcar como resuelta",
+      "text": "La denuncia se cierra con una medida tomada. El destino no se modifica.",
+      "confirm": "Marcar resuelta",
+      "done": "Denuncia resuelta."
+    },
+    "dismiss": {
+      "action": "Descartar",
+      "title": "Descartar sin acción",
+      "text": "La denuncia se cierra sin medida. No se podrá reabrir.",
+      "confirm": "Descartar",
+      "done": "Denuncia descartada."
+    }
+  },
+  "badges": {
+    "listTitle": "Insignias concedidas",
+    "filter": "Entidad",
+    "filters": {
+      "all": "Todas",
+      "user": "Personas",
+      "guild": "Servidores"
+    },
+    "entities": {
+      "user": "Persona",
+      "guild": "Servidor"
+    },
+    "empty": {
+      "title": "Sin insignias manuales",
+      "text": "No se ha concedido ninguna insignia para este filtro."
+    },
+    "grantedBy": "Concedida por",
+    "openEntity": "Abrir perfil ({{badge}}, {{id}})",
+    "revoke": {
+      "action": "Retirar",
+      "title": "Retirar esta insignia",
+      "text": "La insignia desaparece del perfil al instante. Puedes concederla de nuevo.",
+      "confirm": "Retirar",
+      "done": "Insignia retirada."
+    },
+    "form": {
+      "title": "Conceder una insignia",
+      "text": "Solo se ofrecen las insignias manuales del catálogo, según el tipo de entidad.",
+      "entityType": "Tipo de entidad",
+      "entityId": "ID de Discord",
+      "entityIdHint": "De 15 a 20 dígitos. No se comprueba que la entidad exista.",
+      "idInvalid": "El ID tiene de 15 a 20 dígitos.",
+      "badge": "Insignia",
+      "badgeRequired": "Elige una insignia.",
+      "notForEntity": "Esta insignia no existe para este tipo de entidad.",
+      "serverOnly": "Algunas insignias son solo para servidores.",
+      "note": "Nota (opcional)",
+      "submit": "Conceder",
+      "done": "Insignia concedida."
+    }
+  },
+  "posts": {
+    "lookup": {
+      "label": "ID o enlace del anuncio",
+      "hint": "Pega el UUID o la dirección del anuncio.",
+      "invalid": "No se reconoce ningún ID de anuncio.",
+      "submit": "Buscar"
+    },
+    "empty": {
+      "title": "Ningún anuncio seleccionado",
+      "text": "Pega un ID o un enlace para ver su estado y ocultarlo."
+    },
+    "reason": "Motivo:",
+    "help": {
+      "title": "Ocultar",
+      "hide": "Ocultar retira el anuncio de todas las lecturas públicas. El autor ve el motivo y ya no puede editarlo ni eliminarlo.",
+      "unhide": "Mostrarlo de nuevo lo deja en cerrado, nunca en publicado. El autor debe volver a publicarlo."
+    },
+    "hide": {
+      "action": "Ocultar",
+      "title": "Ocultar este anuncio",
+      "text": "El anuncio sale de las listas públicas. El autor lee el motivo.",
+      "reason": "Motivo",
+      "confirm": "Ocultar",
+      "done": "Anuncio oculto."
+    },
+    "unhide": {
+      "action": "Mostrar",
+      "title": "Mostrar este anuncio",
+      "text": "El anuncio pasa a cerrado. El autor debe volver a publicarlo para que sea visible.",
+      "confirm": "Mostrar",
+      "done": "Anuncio mostrado, queda cerrado."
+    }
+  }
 }

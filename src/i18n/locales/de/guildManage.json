@@ -1,3 +1,140 @@
 {
-  "title": "Server verwalten"
+  "title": "Serververwaltung",
+  "pageTitle": "{{name}} verwalten",
+  "heading": "{{name}} verwalten",
+  "unknownName": "Server ohne Namen",
+  "notFound": {
+    "title": "Server nicht gefunden",
+    "body": "Dieser Server hat kein Lineup-Profil. Beanspruche ihn zuerst auf der Seite zum Beanspruchen.",
+    "action": "Server ansehen"
+  },
+  "forbidden": {
+    "title": "Du verwaltest diesen Server nicht",
+    "body": "Du musst den Server besitzen oder die Berechtigung Administrator oder Server verwalten haben. Hast du diese Rechte gerade erhalten, lies deine Server auf der Seite zum Beanspruchen neu ein.",
+    "action": "Profil ansehen"
+  },
+  "status": {
+    "listed": "Im Verzeichnis",
+    "unlisted": "Nicht gelistet"
+  },
+  "viewProfile": "Profil ansehen",
+  "saved": "Profil gespeichert.",
+  "editor": {
+    "title": "Öffentliches Profil",
+    "unsaved": "Nicht gespeicherte Änderungen",
+    "save": "Speichern",
+    "saving": "Speichern...",
+    "reset": "Änderungen verwerfen"
+  },
+  "description": {
+    "title": "Beschreibung",
+    "label": "Serverbeschreibung",
+    "hint": "Leer lassen, um die Discord-Beschreibung zu zeigen.",
+    "discordTitle": "Discord-Beschreibung",
+    "discordNone": "Dieser Server hat keine Beschreibung auf Discord.",
+    "useDiscord": "Discord-Beschreibung verwenden"
+  },
+  "links": {
+    "title": "Links",
+    "hint": "Bis zu {{count}} Links, nur https. Der Name hat höchstens 40 Zeichen.",
+    "label": "Name von Link {{n}}",
+    "url": "Adresse von Link {{n}}",
+    "remove": "Link {{n}} entfernen",
+    "add": "Link hinzufügen"
+  },
+  "topics": {
+    "title": "Thema, Tags und Sprachen"
+  },
+  "theme": {
+    "label": "Thema",
+    "none": "Kein Thema"
+  },
+  "tags": {
+    "label": "Tags",
+    "hint": "Durch Kommas getrennt. Kleinbuchstaben, Ziffern und Bindestriche, 2 bis 24 Zeichen. {{count}} von {{max}}."
+  },
+  "languages": {
+    "label": "Sprachen des Servers ({{count}} von {{max}})"
+  },
+  "invite": {
+    "title": "Einladung",
+    "current": "Aktuelle Einladung:",
+    "valid": "Sie funktioniert.",
+    "lost": "Sie existiert auf Discord nicht mehr: ersetze sie.",
+    "none": "Keine Einladung gespeichert.",
+    "label": "Neue Einladung",
+    "placeholder": "https://discord.gg/dein-code",
+    "hint": "Optional. Sie darf nie ablaufen und muss zu demselben Server führen.",
+    "how": "So erstellst du eine dauerhafte Einladung"
+  },
+  "visibility": {
+    "title": "Sichtbarkeit",
+    "label": "Server im Verzeichnis anzeigen",
+    "on": "Jeder kann dieses Profil im Verzeichnis finden.",
+    "off": "Profil und Anzeigen verschwinden für alle, außer für Verwalter und das Moddy-Staff."
+  },
+  "errors": {
+    "fixFields": "Korrigiere die markierten Felder und speichere erneut.",
+    "descriptionMax": "Höchstens {{count}} Zeichen.",
+    "linkLabel": "Ein Name mit 1 bis {{max}} Zeichen ist nötig.",
+    "linkUrl": "Gib eine https-Adresse ein.",
+    "linksMax": "Höchstens {{count}} Links.",
+    "tagsMax": "Höchstens {{count}} Tags.",
+    "tagPattern": "„{{tag}}“ ist ungültig: 2 bis 24 Kleinbuchstaben, Ziffern oder Bindestriche.",
+    "languagesMax": "Höchstens {{count}} Sprachen.",
+    "inviteLength": "Gib einen Code oder Link mit 2 bis 200 Zeichen ein."
+  },
+  "snapshot": {
+    "title": "Discord-Daten",
+    "body": "Name, Symbol und Zahlen werden alle 6 Stunden neu gelesen. Du kannst das Neulesen einmal pro Minute erzwingen.",
+    "members": "Mitglieder",
+    "online": "Online",
+    "invite": "Einladung:",
+    "inviteValid": "gültig",
+    "inviteLost": "auf Discord nicht gefunden",
+    "noInvite": "keine",
+    "done": "Discord-Daten aktualisiert.",
+    "staleDone": "Discord hat nicht geantwortet: die alten Daten bleiben erhalten.",
+    "refresh": "Jetzt aktualisieren",
+    "refreshing": "Lesen...",
+    "waitIn": "Verfügbar in {{seconds}} s"
+  },
+  "danger": {
+    "title": "Profil löschen",
+    "body": "Das Profil verlässt das Verzeichnis und die Anzeigen des Servers werden geschlossen. Der Discord-Server bleibt unberührt.",
+    "action": "Profil löschen",
+    "confirmTitle": "Profil von {{name}} löschen?",
+    "confirmBody": "Was passiert:",
+    "effectPosts": "Entwürfe und veröffentlichte Anzeigen werden „geschlossen“. Du kannst sie nach erneutem Beanspruchen wieder öffnen.",
+    "effectHidden": "Vom Moddy-Team ausgeblendete Anzeigen bleiben ausgeblendet.",
+    "effectReclaim": "Beschreibung, Links, Tags und Sichtbarkeit gehen verloren.",
+    "confirm": "Löschen",
+    "done": "Das Profil von {{name}} ist gelöscht."
+  },
+  "posts": {
+    "title": "Anzeigen des Servers",
+    "create": "Neue Anzeige",
+    "tabs": "Status der Anzeigen",
+    "tab": {
+      "all": "Alle",
+      "published": "Veröffentlicht",
+      "draft": "Entwürfe",
+      "closed": "Geschlossen",
+      "hidden": "Ausgeblendet"
+    },
+    "emptyTitle": "Keine Anzeigen",
+    "emptyAll": "Dieser Server hat noch keine Anzeigen. Alle, die den Server verwalten, können sie bearbeiten.",
+    "emptyTab": "Keine Anzeigen mit diesem Status.",
+    "hidden": "Vom Moddy-Team ausgeblendet: sie kann nicht mehr geändert werden.",
+    "edit": "Bearbeiten",
+    "close": "Schließen",
+    "reopen": "Wieder öffnen",
+    "publish": "Veröffentlichen",
+    "delete": "Löschen",
+    "closed": "Anzeige geschlossen.",
+    "published": "Anzeige veröffentlicht.",
+    "deleted": "Anzeige gelöscht.",
+    "deleteTitle": "Diese Anzeige löschen?",
+    "deleteBody": "„{{title}}“ wird endgültig gelöscht."
+  }
 }

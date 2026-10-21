@@ -1,3 +1,163 @@
 {
-  "title": "Mi experiencia"
+  "title": "Mis experiencias",
+  "list": {
+    "intro": "Arrastra una experiencia por su asa, o usa las flechas, para cambiar el orden que se muestra en tu perfil.",
+    "add": "Añadir una experiencia",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "drag": "Mover {{title}}",
+    "moveUp": "Subir {{title}}",
+    "moveDown": "Bajar {{title}}",
+    "moved": "{{title}}: posición {{position}} de {{total}}",
+    "reordered": "Orden guardado",
+    "orderOutdated": "La lista había cambiado en otro sitio. Se ha recargado, repite el movimiento.",
+    "title": "{{position}}, {{name}}"
+  },
+  "empty": {
+    "title": "Ninguna experiencia",
+    "body": "Añade los servidores o servicios en los que has trabajado. Una experiencia verificada se puede destacar en un anuncio."
+  },
+  "aside": {
+    "countTitle": "Experiencias",
+    "count": "{{used}} / {{max}}",
+    "profile": "Editar mi perfil",
+    "verifyTitle": "Verificación",
+    "auto": "Automática: para un servidor en el que trabajas ahora, Lineup lee tus permisos en ese servidor a través de Discord.",
+    "manual": "Revisión manual: para un puesto pasado o un servicio, el equipo de Moddy examina tu solicitud.",
+    "reset": "Cambiar el puesto, las fechas o el servidor de una experiencia verificada elimina la verificación."
+  },
+  "dnd": {
+    "instructions": "Pulsa Espacio o Intro para coger la experiencia, las flechas arriba y abajo para moverla, Espacio o Intro para soltarla y Escape para cancelar.",
+    "start": "{{title}} cogida.",
+    "over": "{{title}} sobre la posición {{position}} de {{total}}.",
+    "end": "{{title}} colocada en la posición {{position}} de {{total}}.",
+    "cancel": "Movimiento de {{title}} cancelado."
+  },
+  "dialog": {
+    "createTitle": "Añadir una experiencia",
+    "editTitle": "Editar la experiencia",
+    "create": "Añadir",
+    "saving": "Guardando",
+    "saveAndReset": "Guardar y eliminar la verificación",
+    "created": "Experiencia añadida",
+    "updated": "Experiencia modificada",
+    "limit": "Tienes {{count}} / {{max}} experiencias. Elimina una para añadir otra."
+  },
+  "fields": {
+    "kind": {
+      "label": "Tipo",
+      "guild": "Servidor de Discord",
+      "service": "Otro servicio",
+      "locked": "El tipo no se puede cambiar."
+    },
+    "currentServer": "Servidor actual:",
+    "invite": "Invitación permanente",
+    "newInvite": "Nueva invitación (opcional)",
+    "inviteHelp": "El nombre del servidor se toma de la invitación.",
+    "newInviteHelp": "Déjalo vacío para conservar el servidor. Otro servidor elimina la verificación.",
+    "inviteHow": "Cómo crear una invitación permanente",
+    "name": "Nombre del servicio",
+    "nameHelp": "Por ejemplo una plataforma, una asociación o una empresa.",
+    "position": "Puesto",
+    "positionPlaceholder": "Elige un puesto",
+    "positionOther": "Nombre del puesto",
+    "description": "Descripción",
+    "descriptionHelp": "Lo que hacías allí. Opcional.",
+    "startDate": "Inicio",
+    "endDate": "Fin",
+    "current": "Puesto actual, sin fecha de fin"
+  },
+  "warning": {
+    "before": {
+      "verified": "Cambiar el puesto, las fechas o el servidor eliminará la verificación.",
+      "pending": "Cambiar el puesto, las fechas o el servidor cancelará la solicitud de revisión en curso.",
+      "rejected": "Cambiar el puesto, las fechas o el servidor borrará el rechazo. Podrás volver a pedir una verificación."
+    },
+    "resets": {
+      "verified": "Este cambio eliminará la verificación. Podrás volver a pedirla después.",
+      "pending": "Este cambio cancelará la solicitud de revisión en curso.",
+      "rejected": "Este cambio borrará el rechazo. Podrás volver a pedir una verificación."
+    },
+    "keeps": "Añadir una fecha de fin a una experiencia verificada y en curso mantiene la verificación."
+  },
+  "problems": {
+    "inviteRequired": "Pega una invitación permanente.",
+    "nameRequired": "Indica un nombre.",
+    "nameTooLong": "{{count}} caracteres como máximo.",
+    "positionRequired": "Elige un puesto.",
+    "positionOtherRequired": "Indica el nombre del puesto.",
+    "positionOtherTooLong": "{{count}} caracteres como máximo.",
+    "descriptionTooLong": "{{count}} caracteres como máximo.",
+    "startRequired": "Indica la fecha de inicio.",
+    "startFuture": "La fecha de inicio no puede ser futura.",
+    "endRequired": "Indica la fecha de fin o marca «Puesto actual».",
+    "endFuture": "La fecha de fin no puede ser futura.",
+    "endBeforeStart": "El fin no puede ser anterior al inicio."
+  },
+  "delete": {
+    "title": "¿Eliminar {{title}}?",
+    "body": "Esta experiencia y su verificación se eliminarán. No se puede deshacer.",
+    "featured": "Si uno de tus anuncios la destaca, el anuncio pierde ese destacado.",
+    "done": "Experiencia eliminada"
+  },
+  "status": {
+    "verified": {
+      "discord": "Verificada a través de Discord",
+      "staff": "Verificada por el equipo de Moddy",
+      "generic": "Verificada"
+    },
+    "on": "el {{date}}",
+    "pending": "Solicitud de revisión enviada, a la espera del equipo de Moddy.",
+    "rejected": "Rechazada.",
+    "rejectedNoReason": "No se indicó ningún motivo.",
+    "rejectedHelp": "Corrige la experiencia si hace falta y vuelve a pedir una verificación.",
+    "unverified": {
+      "service": "Sin verificar. Un servicio se verifica con una revisión manual.",
+      "current": "Sin verificar. Solo una experiencia verificada se puede destacar en un anuncio.",
+      "ended": "Sin verificar. Un puesto terminado se verifica con una revisión manual."
+    }
+  },
+  "evidence": {
+    "summary": "Ver qué se comprobó",
+    "owner": "Propietario",
+    "ownerYes": "Eres propietario del servidor",
+    "permissions": "Permisos encontrados",
+    "checkedAt": "Comprobación",
+    "staffNote": "Nota del equipo",
+    "private": "Visible solo para ti y para el equipo de Moddy.",
+    "permission": {
+      "ADMINISTRATOR": "Administrador",
+      "MANAGE_GUILD": "Gestionar el servidor",
+      "MANAGE_ROLES": "Gestionar roles",
+      "MANAGE_CHANNELS": "Gestionar canales",
+      "KICK_MEMBERS": "Expulsar miembros",
+      "BAN_MEMBERS": "Banear miembros",
+      "MANAGE_MESSAGES": "Gestionar mensajes",
+      "MODERATE_MEMBERS": "Aislar temporalmente miembros",
+      "MANAGE_NICKNAMES": "Gestionar apodos",
+      "MANAGE_EVENTS": "Gestionar eventos"
+    }
+  },
+  "verify": {
+    "action": "Verificar automáticamente",
+    "waiting": "Reintentar en {{seconds}} s",
+    "success": "Experiencia verificada"
+  },
+  "reauth": {
+    "title": "Autoriza a Lineup a leer tus servidores.",
+    "body": "La verificación automática lee tus permisos en el servidor. Pasarás de nuevo por Discord y volverás aquí.",
+    "action": "Autorizar con Discord"
+  },
+  "review": {
+    "open": "Pedir una revisión manual",
+    "intro": "El equipo de Moddy examina la solicitud. Puedes añadir una precisión.",
+    "note": "Nota para el equipo (opcional)",
+    "noteHelp": "Por ejemplo: cómo confirmar tu puesto.",
+    "send": "Enviar la solicitud",
+    "sending": "Enviando",
+    "cancel": "Cancelar",
+    "sent": "Solicitud enviada",
+    "yourNote": "Tu nota:",
+    "pending": "Revisión en curso"
+  }
 }

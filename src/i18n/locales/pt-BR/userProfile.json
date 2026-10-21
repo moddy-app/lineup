@@ -1,3 +1,38 @@
 {
-  "title": "Perfil"
+  "title": "Perfil",
+  "notFound": {
+    "title": "Perfil não encontrado",
+    "body": "Nenhuma conta corresponde a este endereço, ou o perfil não está mais visível.",
+    "action": "Ver anúncios"
+  },
+  "header": {
+    "created": "Conta do Discord criada em {{date}}",
+    "openToWork": "Aberto a propostas"
+  },
+  "about": {
+    "title": "Sobre",
+    "timezone": "Fuso horário",
+    "languages": "Idiomas",
+    "links": "Links"
+  },
+  "self": {
+    "edit": "Editar meu perfil",
+    "experiences": "Minhas experiências"
+  },
+  "bio": {
+    "title": "Apresentação"
+  },
+  "experiences": {
+    "title": "Experiência",
+    "manage": "Gerenciar",
+    "empty": "Nenhuma experiência informada.",
+    "emptySelf": "Você ainda não adicionou nenhuma experiência."
+  },
+  "posts": {
+    "title": "Anúncios",
+    "count_one": "{{value}} anúncio publicado",
+    "count_other": "{{value}} anúncios publicados",
+    "empty": "Nenhum anúncio publicado no momento.",
+    "emptySelf": "Você não tem nenhum anúncio publicado."
+  }
 }

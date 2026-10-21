@@ -1,3 +1,84 @@
 {
-  "title": "Annonce"
+  "title": "Annonce",
+  "notFound": {
+    "title": "Annonce introuvable ou retirée",
+    "body": "Cette annonce n'existe pas, a été retirée, ou n'est pas visible avec votre compte."
+  },
+  "banner": {
+    "draft": {
+      "title": "Brouillon",
+      "body": "Seules les personnes qui peuvent la modifier voient cette annonce. Publiez-la pour qu'elle apparaisse dans les annonces."
+    },
+    "closed": {
+      "title": "Annonce fermée",
+      "body": "Elle n'apparaît plus dans les annonces. Rouvrez-la pour la republier."
+    },
+    "hidden": {
+      "title": "Annonce masquée",
+      "body": "L'équipe Moddy a masqué cette annonce. Elle ne peut plus être modifiée.",
+      "reason": "Motif : {{reason}}"
+    },
+    "expired": {
+      "title": "Cette annonce a expiré",
+      "body": "Elle n'est plus dans les annonces et n'accepte plus de candidature.",
+      "editor": "Elle n'est plus dans les annonces. Choisissez une nouvelle date d'expiration pour la republier.",
+      "edit": "Modifier la date d'expiration"
+    }
+  },
+  "dates": {
+    "published": "Publiée",
+    "updated": "Modifiée"
+  },
+  "sections": {
+    "positions": "Postes recherchés",
+    "requirements": "Conditions",
+    "details": "Détails"
+  },
+  "facts": {
+    "languages": "Langues",
+    "timezone": "Fuseau horaire",
+    "theme": "Thème",
+    "tags": "Étiquettes"
+  },
+  "apply": {
+    "title": "Candidature",
+    "external": "La candidature se fait sur le site du recruteur.",
+    "dm": "La candidature se fait en message privé Discord avec l'auteur de l'annonce."
+  },
+  "author": {
+    "guild": "Serveur",
+    "user": "Auteur",
+    "viewGuild": "Voir le serveur",
+    "viewUser": "Voir le profil"
+  },
+  "featured": {
+    "title": "Expérience mise en avant"
+  },
+  "report": {
+    "label": "Signaler cette annonce"
+  },
+  "manage": {
+    "title": "Gérer l'annonce",
+    "body": "Vous pouvez modifier cette annonce."
+  },
+  "actions": {
+    "edit": "Modifier",
+    "publish": "Publier",
+    "reopen": "Rouvrir",
+    "close": "Fermer l'annonce"
+  },
+  "snackbar": {
+    "publish": "Annonce publiée.",
+    "reopen": "Annonce rouverte.",
+    "close": "Annonce fermée.",
+    "delete": "Annonce supprimée."
+  },
+  "confirmDelete": {
+    "title": "Supprimer cette annonce ?",
+    "body": "« {{title}} » sera supprimée définitivement. Cette action ne peut pas être annulée."
+  },
+  "errorLinks": {
+    "myPosts": "Voir mes annonces",
+    "editExpiry": "Modifier la date d'expiration"
+  }
 }

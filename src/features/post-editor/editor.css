@@ -1,0 +1,436 @@
+/* The post editor: stepper, fields, preview. Tokens of the kit only. */
+
+.ed-sr-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: clip;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* -- Head and stepper --------------------------------------------------------- */
+
+.ed-head {
+  gap: var(--gap-l);
+}
+
+.ed-head h1 {
+  margin: 0 0 var(--gap-s);
+  font-size: var(--text-title);
+  letter-spacing: normal;
+}
+
+.ed-restored {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-m);
+  padding: var(--gap-m) var(--gap-l);
+  border-radius: var(--radius-l);
+}
+
+.ed-restored .material-symbols-outlined {
+  color: var(--md-sys-color-primary);
+}
+
+.ed-restored p {
+  flex: 1 1 220px;
+  max-width: none;
+  font-size: var(--text-body-small);
+}
+
+.ed-stepper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-s);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ed-step md-text-button {
+  --md-text-button-container-height: 40px;
+  --md-text-button-label-text-size: var(--text-body-small);
+  --md-text-button-container-shape: var(--radius-full);
+}
+
+.ed-step.is-current md-text-button {
+  --md-text-button-label-text-color: var(--md-sys-color-on-secondary-container);
+  --md-text-button-icon-color: var(--md-sys-color-on-secondary-container);
+  background-color: var(--md-sys-color-secondary-container);
+  border-radius: var(--radius-full);
+}
+
+.ed-step.is-done md-text-button {
+  --md-text-button-icon-color: var(--md-sys-color-primary);
+}
+
+.ed-step.is-error md-text-button {
+  --md-text-button-icon-color: var(--md-sys-color-error);
+  --md-text-button-label-text-color: var(--md-sys-color-error);
+}
+
+.ed-step.is-todo md-text-button {
+  --md-text-button-label-text-color: var(--md-sys-color-on-surface-variant);
+  --md-text-button-icon-color: var(--md-sys-color-on-surface-variant);
+}
+
+@media (max-width: 600px) {
+  /* Only the current step keeps its name: the others are their icon and number. */
+  .ed-step:not(.is-current) .ed-step-label {
+    display: none;
+  }
+
+  .ed-step:not(.is-current) md-text-button {
+    --md-text-button-leading-space: 12px;
+    --md-text-button-trailing-space: 12px;
+    --md-text-button-with-leading-icon-leading-space: 12px;
+    --md-text-button-with-leading-icon-trailing-space: 12px;
+  }
+}
+
+/* -- A step -------------------------------------------------------------------- */
+
+.ed-step-card {
+  gap: var(--space);
+}
+
+.ed-step-head h2 {
+  margin: 0 0 var(--gap-s);
+}
+
+.ed-step-head p {
+  max-width: none;
+}
+
+.ed-step-head .ed-step-count {
+  margin-bottom: var(--gap-s);
+  font-size: var(--text-label);
+  color: var(--md-sys-color-primary);
+  font-weight: 500;
+}
+
+.ed-step-card .card-actions {
+  margin-top: 0;
+}
+
+.ed-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-l);
+  min-width: 0;
+}
+
+.ed-field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-s);
+  min-width: 0;
+}
+
+.ed-field > :is(md-outlined-text-field, md-outlined-select, fieldset) {
+  align-self: stretch;
+}
+
+.ed-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap-l);
+}
+
+@media (max-width: 600px) {
+  .ed-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.ed-error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-s);
+  max-width: none;
+  margin: 0;
+  font-size: var(--text-small);
+  color: var(--md-sys-color-error);
+}
+
+.ed-error .material-symbols-outlined {
+  flex-shrink: 0;
+  font-size: 18px;
+}
+
+.ed-fields p.ed-hint,
+.ed-step-card p.ed-hint {
+  max-width: none;
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.ed-count {
+  margin-inline-start: var(--gap-s);
+  font-size: var(--text-label);
+  font-weight: 400;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.ed-empty {
+  max-width: none;
+}
+
+/* -- Groups, checks, choices -------------------------------------------------- */
+
+.ed-group,
+.ed-choices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.ed-group legend,
+.ed-choices legend {
+  padding: 0;
+  margin-bottom: var(--gap-s);
+  font-size: var(--text-body-small);
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface);
+}
+
+.ed-checks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
+  gap: var(--gap-s) var(--gap-l);
+}
+
+.ed-check {
+  min-width: 0;
+  font-size: var(--text-body-small);
+}
+
+.ed-choice {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-m);
+  padding: var(--gap-s) var(--gap-m);
+  border-radius: var(--radius-l);
+  background-color: var(--md-sys-color-surface-container);
+  cursor: pointer;
+}
+
+.ed-choice.is-disabled {
+  cursor: default;
+}
+
+.ed-choice md-radio {
+  flex-shrink: 0;
+}
+
+.ed-choice-text {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  padding-block: 2px;
+}
+
+.ed-choice-title {
+  font-size: var(--text-subtitle);
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface);
+  overflow-wrap: anywhere;
+}
+
+.ed-choice-hint {
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.ed-guilds {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ed-locked {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-m);
+  padding: var(--gap-m) var(--gap-l);
+  border-radius: var(--radius-l);
+}
+
+.ed-locked .material-symbols-outlined {
+  color: var(--md-sys-color-primary);
+}
+
+.ed-sub {
+  display: block;
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.ed-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+}
+
+.ed-inline {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-s);
+  min-width: 0;
+}
+
+.ed-inline > .field {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+}
+
+.ed-inline-end {
+  align-self: stretch;
+}
+
+.ed-inline-end md-outlined-button {
+  margin-top: 8px;
+}
+
+/* -- Requirements ------------------------------------------------------------- */
+
+.ed-requirements {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ed-requirement {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+  padding: var(--gap-l);
+  border-radius: var(--radius-xl);
+}
+
+.ed-requirement-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-m);
+}
+
+.ed-verify {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+}
+
+/* -- Tags --------------------------------------------------------------------- */
+
+.ed-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-s);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ed-tags .chip {
+  padding-inline-end: 2px;
+}
+
+.ed-tags .chip.is-invalid {
+  color: var(--md-sys-color-error);
+}
+
+.ed-tag-remove {
+  --md-icon-button-icon-size: 16px;
+  --md-icon-button-state-layer-height: 28px;
+  --md-icon-button-state-layer-width: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+/* -- Review and banner --------------------------------------------------------- */
+
+.ed-review .row-meta {
+  overflow-wrap: anywhere;
+}
+
+.ed-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-m);
+  padding: var(--gap-l);
+  border-radius: var(--radius-l);
+  background-color: var(--md-sys-color-error-container);
+  color: var(--md-sys-color-on-error-container);
+}
+
+.ed-banner .material-symbols-outlined {
+  flex-shrink: 0;
+}
+
+.ed-banner-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+  min-width: 0;
+}
+
+.ed-banner-body p,
+.card .ed-banner-body p {
+  max-width: none;
+  font-size: var(--text-body-small);
+  color: inherit;
+}
+
+.ed-banner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-s);
+  margin-top: var(--gap-s);
+}
+
+.ed-banner-actions:empty {
+  display: none;
+}
+
+/* -- Preview ------------------------------------------------------------------- */
+
+.ed-preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+  min-width: 0;
+}
+
+.ed-preview h2 {
+  margin: 0;
+  font-size: var(--text-subtitle);
+  font-weight: 600;
+  color: var(--md-sys-color-on-surface);
+}
+
+.ed-preview p {
+  margin: 0;
+  max-width: none;
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.ed-preview-card {
+  min-width: 0;
+}

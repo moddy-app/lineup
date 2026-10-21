@@ -1,3 +1,58 @@
 {
-  "title": "Edit my profile"
+  "title": "Edit my profile",
+  "intro": "This profile is public. Only the fields you change are saved.",
+  "saved": "Profile saved",
+  "saving": "Saving",
+  "save": "Save",
+  "reset": "Discard changes",
+  "fields": {
+    "headline": "Headline",
+    "headlineHelp": "One line under your name, for example \"Moderator for 4 years\".",
+    "bio": "Bio",
+    "bioHelp": "Plain text. Line breaks are kept.",
+    "openToWork": "Open to work",
+    "openToWorkHelp": "An \"Open to work\" marker shows on your profile."
+  },
+  "links": {
+    "title": "Links",
+    "help": "Up to {{count}} links, over https. A link name is 40 characters at most.",
+    "label": "Link name",
+    "url": "Address (https)",
+    "remove": "Remove link {{label}}",
+    "add": "Add a link",
+    "count": "{{count}} / {{max}}"
+  },
+  "languages": {
+    "title": "Languages",
+    "help": "{{count}} selected out of {{max}} at most."
+  },
+  "timezone": {
+    "title": "Time zone",
+    "label": "Time zone",
+    "help": "IANA name (Europe/Paris) or UTC offset (UTC+02:00). Leave empty to show nothing.",
+    "suggestion": "Your browser's zone:",
+    "use": "Use it"
+  },
+  "summary": {
+    "title": "Preview",
+    "noHeadline": "No headline",
+    "languages_one": "{{count}} language: {{list}}",
+    "languages_other": "{{count}} languages: {{list}}",
+    "noLanguages": "No language",
+    "links_one": "{{count}} link",
+    "links_other": "{{count}} links",
+    "open": "Open to work",
+    "closed": "Not looking",
+    "view": "View my public profile"
+  },
+  "problems": {
+    "linkLabelRequired": "Give the link a name.",
+    "linkLabelTooLong": "The name is {{count}} characters at most.",
+    "urlInvalid": "This address is not valid (no credentials, spaces or port).",
+    "urlHttps": "The link must start with https://.",
+    "urlTooLong": "The address is 500 characters at most.",
+    "timezoneInvalid": "Unknown zone. Examples: Europe/Paris, UTC+02:00.",
+    "tooLong": "{{count}} characters at most.",
+    "tooMany": "{{count}} items at most."
+  }
 }

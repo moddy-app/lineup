@@ -1,3 +1,84 @@
 {
-  "title": "Anzeige"
+  "title": "Anzeige",
+  "notFound": {
+    "title": "Anzeige nicht gefunden oder entfernt",
+    "body": "Diese Anzeige existiert nicht, wurde entfernt oder ist mit deinem Konto nicht sichtbar."
+  },
+  "banner": {
+    "draft": {
+      "title": "Entwurf",
+      "body": "Nur Personen, die sie bearbeiten können, sehen diese Anzeige. Veröffentliche sie, damit sie in der Liste erscheint."
+    },
+    "closed": {
+      "title": "Anzeige geschlossen",
+      "body": "Sie erscheint nicht mehr in der Liste. Öffne sie wieder, um sie erneut zu veröffentlichen."
+    },
+    "hidden": {
+      "title": "Anzeige ausgeblendet",
+      "body": "Das Moddy-Team hat diese Anzeige ausgeblendet. Sie kann nicht mehr bearbeitet werden.",
+      "reason": "Grund: {{reason}}"
+    },
+    "expired": {
+      "title": "Diese Anzeige ist abgelaufen",
+      "body": "Sie ist nicht mehr in der Liste und nimmt keine Bewerbungen mehr an.",
+      "editor": "Sie ist nicht mehr in der Liste. Wähle ein neues Ablaufdatum, um sie erneut zu veröffentlichen.",
+      "edit": "Ablaufdatum ändern"
+    }
+  },
+  "dates": {
+    "published": "Veröffentlicht",
+    "updated": "Geändert"
+  },
+  "sections": {
+    "positions": "Gesuchte Positionen",
+    "requirements": "Voraussetzungen",
+    "details": "Details"
+  },
+  "facts": {
+    "languages": "Sprachen",
+    "timezone": "Zeitzone",
+    "theme": "Thema",
+    "tags": "Tags"
+  },
+  "apply": {
+    "title": "Bewerbung",
+    "external": "Bewerbungen laufen über die Website der suchenden Seite.",
+    "dm": "Bewerbungen laufen per Discord-Direktnachricht an die Person, die die Anzeige veröffentlicht hat."
+  },
+  "author": {
+    "guild": "Server",
+    "user": "Autor",
+    "viewGuild": "Server ansehen",
+    "viewUser": "Profil ansehen"
+  },
+  "featured": {
+    "title": "Hervorgehobene Erfahrung"
+  },
+  "report": {
+    "label": "Diese Anzeige melden"
+  },
+  "manage": {
+    "title": "Anzeige verwalten",
+    "body": "Du kannst diese Anzeige bearbeiten."
+  },
+  "actions": {
+    "edit": "Bearbeiten",
+    "publish": "Veröffentlichen",
+    "reopen": "Wieder öffnen",
+    "close": "Anzeige schließen"
+  },
+  "snackbar": {
+    "publish": "Anzeige veröffentlicht.",
+    "reopen": "Anzeige wieder geöffnet.",
+    "close": "Anzeige geschlossen.",
+    "delete": "Anzeige gelöscht."
+  },
+  "confirmDelete": {
+    "title": "Diese Anzeige löschen?",
+    "body": "„{{title}}“ wird endgültig gelöscht. Das kann nicht rückgängig gemacht werden."
+  },
+  "errorLinks": {
+    "myPosts": "Meine Anzeigen ansehen",
+    "editExpiry": "Ablaufdatum ändern"
+  }
 }

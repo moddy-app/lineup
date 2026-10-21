@@ -1,3 +1,64 @@
 {
-  "title": "My posts"
+  "title": "My posts",
+  "intro": "All your posts, including drafts, closed posts and those hidden by the team.",
+  "new": "Publish a post",
+  "tabsLabel": "Post status",
+  "tabs": {
+    "all": "All",
+    "published": "Published",
+    "draft": "Drafts",
+    "closed": "Closed",
+    "hidden": "Hidden"
+  },
+  "quota": {
+    "title": "Personal posts",
+    "body": "Only your published, unexpired \"Looking for a team\" posts count. Server posts have their own limit of {{guildLimit}} per server.",
+    "loading": "Counting."
+  },
+  "empty": {
+    "all": {
+      "title": "No post yet",
+      "body": "Post for a server you manage, or for yourself if you are looking for a team."
+    },
+    "published": {
+      "title": "No published post",
+      "body": "A published post stays in the feed until it is closed or expires."
+    },
+    "draft": {
+      "title": "No draft",
+      "body": "A draft does not count toward the limits and only you can see it."
+    },
+    "closed": {
+      "title": "No closed post",
+      "body": "A closed post leaves the feed. You can publish it again."
+    },
+    "hidden": {
+      "title": "No hidden post",
+      "body": "The Moddy team hides a post that breaks the rules and gives the reason here."
+    }
+  },
+  "row": {
+    "hiddenReason": "Hidden by the Moddy team. Reason: {{reason}}",
+    "hiddenNoReason": "Hidden by the Moddy team. It can no longer be edited.",
+    "expired": "Expired: change the expiry date to publish it again.",
+    "kind": "Type",
+    "actions": "Actions for {{title}}"
+  },
+  "actions": {
+    "edit": "Edit",
+    "close": "Close",
+    "publish": "Publish",
+    "republish": "Publish again",
+    "delete": "Delete"
+  },
+  "done": {
+    "closed": "Post closed.",
+    "published": "Post published.",
+    "deleted": "Post deleted."
+  },
+  "delete": {
+    "title": "Delete this post?",
+    "body": "\"{{title}}\" will be deleted for good. This cannot be undone."
+  },
+  "editFirst": "Edit"
 }

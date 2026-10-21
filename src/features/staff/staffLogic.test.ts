@@ -2,7 +2,14 @@ import {describe, expect, it} from 'vitest';
 
 import type {CatalogBadge} from '@/api/types';
 
-import {extractPostId, isEntityId, manualBadgesFor, parseEntityFilter, parseReportStatus, parseReviewStatus} from './staffLogic';
+import {
+  extractPostId,
+  isEntityId,
+  manualBadgesFor,
+  parseEntityFilter,
+  parseReportStatus,
+  parseReviewStatus,
+} from './staffLogic';
 
 const badge = (id: string, entity: CatalogBadge['entity'], source: CatalogBadge['source']): CatalogBadge => ({
   id,
@@ -54,7 +61,11 @@ describe('isEntityId', () => {
 describe('manualBadgesFor', () => {
   it('keeps manual badges that fit the entity', () => {
     expect(manualBadgesFor(catalog, 'user').map((b) => b.id)).toEqual(['lineup_verified', 'moddy_partner']);
-    expect(manualBadgesFor(catalog, 'guild').map((b) => b.id)).toEqual(['lineup_verified', 'moddy_partner', 'moddy_server']);
+    expect(manualBadgesFor(catalog, 'guild').map((b) => b.id)).toEqual([
+      'lineup_verified',
+      'moddy_partner',
+      'moddy_server',
+    ]);
     expect(manualBadgesFor(undefined, 'user')).toEqual([]);
   });
 });

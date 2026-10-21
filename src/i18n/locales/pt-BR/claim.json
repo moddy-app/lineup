@@ -1,3 +1,42 @@
 {
-  "title": "Reivindicar um servidor"
+  "title": "Reivindicar um servidor",
+  "intro": "Reivindicar um servidor cria o perfil dele no Lineup. Só aparecem os servidores dos quais você é dono ou onde tem a permissão de Administrador ou Gerenciar servidor.",
+  "unknownName": "Servidor sem nome",
+  "success": "{{name}} está no Lineup.",
+  "list": {
+    "title": "Seus servidores",
+    "label": "Servidores que você pode gerenciar",
+    "refresh": "Atualizar a lista",
+    "refreshIn": "Atualizar em {{seconds}} s",
+    "refreshed": "Lista lida novamente do Discord.",
+    "withModdy": "O Moddy está instalado",
+    "withoutModdy": "Sem o Moddy",
+    "claimed": "No Lineup",
+    "profile": "Perfil",
+    "manage": "Gerenciar",
+    "claim": "Reivindicar",
+    "emptyTitle": "Nenhum servidor para reivindicar",
+    "emptyBody": "Aqui só aparecem os servidores dos quais você é dono ou onde tem a permissão de Administrador ou Gerenciar servidor. Se acabou de criar um, atualize a lista.",
+    "reauthTitle": "Autorize o Lineup a ler seus servidores",
+    "reauthBody": "Sua sessão vem do painel do Moddy e não tem essa permissão. Entre novamente com o Discord.",
+    "reauthAction": "Entrar novamente"
+  },
+  "form": {
+    "title": "Convite do servidor",
+    "body": "Cole um link de convite que nunca expira. Ele prova que o servidor é seu e vira o botão Entrar do perfil.",
+    "label": "Link ou código de convite",
+    "placeholder": "https://discord.gg/seu-codigo",
+    "hint": "O código sozinho também funciona.",
+    "selected": "Convite de {{name}}",
+    "deselect": "Remover",
+    "submit": "Reivindicar",
+    "submitting": "Verificando..."
+  },
+  "errors": {
+    "tooShort": "Digite pelo menos {{count}} caracteres.",
+    "forbiddenHelp": "Se você acabou de receber esses direitos no Discord, leia-os de novo e a reivindicação será repetida.",
+    "rightsChanged": "Mudei meus direitos",
+    "rightsChecking": "Lendo direitos...",
+    "openProfile": "Abrir o perfil"
+  }
 }

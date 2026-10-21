@@ -1,3 +1,64 @@
 {
-  "title": "Mes annonces"
+  "title": "Mes annonces",
+  "intro": "Toutes vos annonces, y compris les brouillons, les annonces fermées et celles masquées par l'équipe.",
+  "new": "Publier une annonce",
+  "tabsLabel": "Statut des annonces",
+  "tabs": {
+    "all": "Toutes",
+    "published": "Publiées",
+    "draft": "Brouillons",
+    "closed": "Fermées",
+    "hidden": "Masquées"
+  },
+  "quota": {
+    "title": "Annonces personnelles",
+    "body": "Seules vos annonces « Je cherche une équipe » publiées et non expirées comptent. Les annonces de serveur ont leur propre limite, de {{guildLimit}} par serveur.",
+    "loading": "Calcul en cours."
+  },
+  "empty": {
+    "all": {
+      "title": "Aucune annonce pour l'instant",
+      "body": "Publiez pour un serveur que vous gérez, ou pour vous si vous cherchez une équipe."
+    },
+    "published": {
+      "title": "Aucune annonce publiée",
+      "body": "Une annonce publiée apparaît dans le fil jusqu'à sa fermeture ou son expiration."
+    },
+    "draft": {
+      "title": "Aucun brouillon",
+      "body": "Un brouillon ne compte pas dans les limites et n'est visible que de vous."
+    },
+    "closed": {
+      "title": "Aucune annonce fermée",
+      "body": "Une annonce fermée quitte le fil. Vous pouvez la publier à nouveau."
+    },
+    "hidden": {
+      "title": "Aucune annonce masquée",
+      "body": "L'équipe Moddy masque une annonce qui ne respecte pas les règles, et en donne le motif ici."
+    }
+  },
+  "row": {
+    "hiddenReason": "Masquée par l'équipe Moddy. Motif : {{reason}}",
+    "hiddenNoReason": "Masquée par l'équipe Moddy. Elle ne peut plus être modifiée.",
+    "expired": "Expirée : modifiez la date d'expiration pour la publier à nouveau.",
+    "kind": "Type",
+    "actions": "Actions de l'annonce {{title}}"
+  },
+  "actions": {
+    "edit": "Modifier",
+    "close": "Fermer",
+    "publish": "Publier",
+    "republish": "Publier à nouveau",
+    "delete": "Supprimer"
+  },
+  "done": {
+    "closed": "Annonce fermée.",
+    "published": "Annonce publiée.",
+    "deleted": "Annonce supprimée."
+  },
+  "delete": {
+    "title": "Supprimer cette annonce ?",
+    "body": "« {{title}} » sera supprimée définitivement. Cette action ne peut pas être annulée."
+  },
+  "editFirst": "Modifier"
 }

@@ -1,3 +1,84 @@
 {
-  "title": "Post"
+  "title": "Post",
+  "notFound": {
+    "title": "Post not found or removed",
+    "body": "This post does not exist, was removed, or is not visible with your account."
+  },
+  "banner": {
+    "draft": {
+      "title": "Draft",
+      "body": "Only people who can edit it see this post. Publish it to make it appear in the feed."
+    },
+    "closed": {
+      "title": "Post closed",
+      "body": "It no longer appears in the feed. Reopen it to publish it again."
+    },
+    "hidden": {
+      "title": "Post hidden",
+      "body": "The Moddy team hid this post. It can no longer be edited.",
+      "reason": "Reason: {{reason}}"
+    },
+    "expired": {
+      "title": "This post has expired",
+      "body": "It is no longer in the feed and no longer takes applications.",
+      "editor": "It is no longer in the feed. Choose a new expiry date to publish it again.",
+      "edit": "Edit the expiry date"
+    }
+  },
+  "dates": {
+    "published": "Published",
+    "updated": "Updated"
+  },
+  "sections": {
+    "positions": "Positions wanted",
+    "requirements": "Requirements",
+    "details": "Details"
+  },
+  "facts": {
+    "languages": "Languages",
+    "timezone": "Time zone",
+    "theme": "Theme",
+    "tags": "Tags"
+  },
+  "apply": {
+    "title": "Apply",
+    "external": "Applications go through the recruiter's own site.",
+    "dm": "Applications go through a Discord direct message to the author of the post."
+  },
+  "author": {
+    "guild": "Server",
+    "user": "Author",
+    "viewGuild": "View the server",
+    "viewUser": "View the profile"
+  },
+  "featured": {
+    "title": "Featured experience"
+  },
+  "report": {
+    "label": "Report this post"
+  },
+  "manage": {
+    "title": "Manage the post",
+    "body": "You can edit this post."
+  },
+  "actions": {
+    "edit": "Edit",
+    "publish": "Publish",
+    "reopen": "Reopen",
+    "close": "Close the post"
+  },
+  "snackbar": {
+    "publish": "Post published.",
+    "reopen": "Post reopened.",
+    "close": "Post closed.",
+    "delete": "Post deleted."
+  },
+  "confirmDelete": {
+    "title": "Delete this post?",
+    "body": "\"{{title}}\" will be deleted for good. This cannot be undone."
+  },
+  "errorLinks": {
+    "myPosts": "See my posts",
+    "editExpiry": "Edit the expiry date"
+  }
 }

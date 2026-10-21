@@ -1,3 +1,140 @@
 {
-  "title": "Gérer le serveur"
+  "title": "Gestion du serveur",
+  "pageTitle": "Gérer {{name}}",
+  "heading": "Gérer {{name}}",
+  "unknownName": "Serveur sans nom",
+  "notFound": {
+    "title": "Serveur introuvable",
+    "body": "Ce serveur n'a pas de profil Lineup. Revendiquez-le d'abord depuis la page de revendication.",
+    "action": "Voir les serveurs"
+  },
+  "forbidden": {
+    "title": "Vous ne gérez pas ce serveur",
+    "body": "Il faut être propriétaire du serveur, ou avoir la permission Administrateur ou Gérer le serveur. Si vous venez de recevoir ces droits, relisez vos serveurs depuis la page de revendication.",
+    "action": "Voir le profil"
+  },
+  "status": {
+    "listed": "Dans l'annuaire",
+    "unlisted": "Non listé"
+  },
+  "viewProfile": "Voir le profil",
+  "saved": "Profil enregistré.",
+  "editor": {
+    "title": "Profil public",
+    "unsaved": "Modifications non enregistrées",
+    "save": "Enregistrer",
+    "saving": "Enregistrement...",
+    "reset": "Annuler les modifications"
+  },
+  "description": {
+    "title": "Description",
+    "label": "Description du serveur",
+    "hint": "Laissez vide pour afficher la description Discord.",
+    "discordTitle": "Description Discord",
+    "discordNone": "Ce serveur n'a pas de description sur Discord.",
+    "useDiscord": "Utiliser la description Discord"
+  },
+  "links": {
+    "title": "Liens",
+    "hint": "{{count}} liens au plus, en https. Le nom fait 40 caractères au plus.",
+    "label": "Nom du lien {{n}}",
+    "url": "Adresse du lien {{n}}",
+    "remove": "Retirer le lien {{n}}",
+    "add": "Ajouter un lien"
+  },
+  "topics": {
+    "title": "Thème, tags et langues"
+  },
+  "theme": {
+    "label": "Thème",
+    "none": "Aucun thème"
+  },
+  "tags": {
+    "label": "Tags",
+    "hint": "Séparés par des virgules. Lettres minuscules, chiffres et tirets, de 2 à 24 caractères. {{count}} sur {{max}}."
+  },
+  "languages": {
+    "label": "Langues du serveur ({{count}} sur {{max}})"
+  },
+  "invite": {
+    "title": "Invitation",
+    "current": "Invitation actuelle :",
+    "valid": "Elle fonctionne.",
+    "lost": "Elle n'existe plus sur Discord : remplacez-la.",
+    "none": "Aucune invitation enregistrée.",
+    "label": "Nouvelle invitation",
+    "placeholder": "https://discord.gg/votre-code",
+    "hint": "Facultatif. Elle doit n'expirer jamais et mener à ce même serveur.",
+    "how": "Comment créer une invitation permanente"
+  },
+  "visibility": {
+    "title": "Visibilité",
+    "label": "Afficher le serveur dans l'annuaire",
+    "on": "Tout le monde peut trouver ce profil dans l'annuaire.",
+    "off": "Le profil et ses annonces disparaissent pour tout le monde, sauf pour les gestionnaires et le staff Moddy."
+  },
+  "errors": {
+    "fixFields": "Corrigez les champs signalés, puis enregistrez de nouveau.",
+    "descriptionMax": "{{count}} caractères au plus.",
+    "linkLabel": "Un nom de 1 à {{max}} caractères est requis.",
+    "linkUrl": "Saisissez une adresse en https.",
+    "linksMax": "{{count}} liens au plus.",
+    "tagsMax": "{{count}} tags au plus.",
+    "tagPattern": "« {{tag}} » n'est pas valide : 2 à 24 lettres minuscules, chiffres ou tirets.",
+    "languagesMax": "{{count}} langues au plus.",
+    "inviteLength": "Saisissez un code ou un lien de 2 à 200 caractères."
+  },
+  "snapshot": {
+    "title": "Données Discord",
+    "body": "Nom, icône et effectifs sont relus toutes les 6 heures. Vous pouvez forcer la relecture une fois par minute.",
+    "members": "Membres",
+    "online": "En ligne",
+    "invite": "Invitation :",
+    "inviteValid": "valide",
+    "inviteLost": "introuvable sur Discord",
+    "noInvite": "aucune",
+    "done": "Données Discord actualisées.",
+    "staleDone": "Discord n'a pas répondu : les anciennes données sont conservées.",
+    "refresh": "Actualiser maintenant",
+    "refreshing": "Lecture...",
+    "waitIn": "Disponible dans {{seconds}} s"
+  },
+  "danger": {
+    "title": "Supprimer le profil",
+    "body": "Le profil quitte l'annuaire et les annonces du serveur sont fermées. Le serveur Discord n'est pas touché.",
+    "action": "Supprimer le profil",
+    "confirmTitle": "Supprimer le profil de {{name}} ?",
+    "confirmBody": "Ce qui se passe :",
+    "effectPosts": "Les annonces en brouillon et publiées passent en « fermée ». Vous pourrez les rouvrir après une nouvelle revendication.",
+    "effectHidden": "Les annonces masquées par l'équipe Moddy restent masquées.",
+    "effectReclaim": "La description, les liens, les tags et la visibilité sont perdus.",
+    "confirm": "Supprimer",
+    "done": "Le profil de {{name}} est supprimé."
+  },
+  "posts": {
+    "title": "Annonces du serveur",
+    "create": "Nouvelle annonce",
+    "tabs": "Statut des annonces",
+    "tab": {
+      "all": "Toutes",
+      "published": "Publiées",
+      "draft": "Brouillons",
+      "closed": "Fermées",
+      "hidden": "Masquées"
+    },
+    "emptyTitle": "Aucune annonce",
+    "emptyAll": "Ce serveur n'a encore aucune annonce. Toutes les personnes qui gèrent le serveur peuvent les modifier.",
+    "emptyTab": "Aucune annonce avec ce statut.",
+    "hidden": "Masquée par l'équipe Moddy : elle ne peut plus être modifiée.",
+    "edit": "Modifier",
+    "close": "Fermer",
+    "reopen": "Rouvrir",
+    "publish": "Publier",
+    "delete": "Supprimer",
+    "closed": "Annonce fermée.",
+    "published": "Annonce publiée.",
+    "deleted": "Annonce supprimée.",
+    "deleteTitle": "Supprimer cette annonce ?",
+    "deleteBody": "« {{title}} » sera supprimée définitivement."
+  }
 }

@@ -1,4 +1,251 @@
 {
   "titleNew": "Neue Anzeige",
-  "titleEdit": "Anzeige bearbeiten"
+  "titleEdit": "Anzeige bearbeiten",
+  "introNew": "Acht Schritte, die laufend auf diesem Gerät gespeichert werden. Am Ende veröffentlichen Sie oder speichern einen Entwurf.",
+  "introEdit": "Ändern Sie die gewünschten Schritte und speichern Sie im letzten. Nur geänderte Felder werden gesendet.",
+  "count": "{{used}} / {{max}}",
+  "restored": {
+    "text": "Lokaler Entwurf wiederhergestellt, gespeichert",
+    "discard": "Entwurf verwerfen"
+  },
+  "stepper": {
+    "label": "Schritte der Anzeige",
+    "count": "Schritt {{current}} von {{total}}",
+    "state": {
+      "current": "aktueller Schritt",
+      "done": "erledigt",
+      "error": "zu korrigieren",
+      "todo": "noch nicht angesehen"
+    }
+  },
+  "steps": {
+    "type": {
+      "short": "Art",
+      "title": "Art der Anzeige",
+      "intro": "Eine Server-Anzeige sucht Verstärkung für einen Server, den Sie verwalten. Eine persönliche Anzeige stellt jemanden vor, der ein Team sucht."
+    },
+    "content": {
+      "short": "Inhalt",
+      "title": "Titel und Beschreibung",
+      "intro": "Sagen Sie, wer Sie sind oder was der Server bietet, möglichst konkret."
+    },
+    "positions": {
+      "short": "Rollen",
+      "title": "Rollen",
+      "intro": "Die gesuchten oder angestrebten Rollen. Wählen Sie „Andere“, um eigene Bezeichnungen zu schreiben."
+    },
+    "requirements": {
+      "short": "Voraussetzungen",
+      "title": "Voraussetzungen",
+      "intro": "Was Bewerber erfüllen müssen. Optional."
+    },
+    "application": {
+      "short": "Bewerbung",
+      "title": "Bewerbung",
+      "intro": "Wie Interessierte Kontakt aufnehmen. Optional."
+    },
+    "commitment": {
+      "short": "Aufwand",
+      "title": "Aufwand, Sprachen und Zeitzone",
+      "intro": "Alle Felder sind optional."
+    },
+    "extras": {
+      "short": "Optionen",
+      "title": "Thema, Tags und Ablauf",
+      "intro": "Hilft beim Einordnen und Finden der Anzeige. Alles ist optional."
+    },
+    "review": {
+      "short": "Prüfen",
+      "title": "Prüfen und senden",
+      "intro": "Prüfen Sie jeden Schritt. Eine veröffentlichte Anzeige erscheint sofort im Feed."
+    }
+  },
+  "actions": {
+    "next": "Weiter",
+    "previous": "Zurück",
+    "publish": "Veröffentlichen",
+    "republish": "Erneut veröffentlichen",
+    "saveDraft": "Als Entwurf speichern",
+    "saveEdit": "Änderungen speichern",
+    "saveChanges": "Änderungen speichern",
+    "sending": "Wird gesendet"
+  },
+  "done": {
+    "published": "Anzeige veröffentlicht.",
+    "draft": "Entwurf gespeichert.",
+    "saved": "Änderungen gespeichert."
+  },
+  "locked": {
+    "hiddenTitle": "Anzeige ausgeblendet",
+    "hiddenBody": "Das Moddy-Team hat diese Anzeige ausgeblendet. Sie kann nicht mehr bearbeitet werden.",
+    "reason": "Grund: {{reason}}",
+    "myPosts": "Meine Anzeigen",
+    "forbiddenTitle": "Bearbeiten nicht möglich",
+    "forbiddenBody": "Nur der Autor einer persönlichen Anzeige und die Verwalter des Servers können eine Anzeige bearbeiten.",
+    "view": "Anzeige ansehen"
+  },
+  "type": {
+    "legend": "Wer veröffentlicht",
+    "kind": {
+      "guild": {
+        "title": "Ein Server sucht Verstärkung",
+        "hint": "Für einen Server, den Sie verwalten und der ein Lineup-Profil hat."
+      },
+      "user": {
+        "title": "Ich suche ein Team",
+        "hint": "Eine Anzeige in Ihrem Namen, mit Ihren verifizierten Erfahrungen."
+      }
+    },
+    "guildLegend": "Server",
+    "loadingGuilds": "Ihre Server werden geladen.",
+    "unnamedGuild": "Server ohne Namen",
+    "notClaimed": "Noch nicht bei Lineup beansprucht",
+    "claim": "Beanspruchen",
+    "noGuilds": {
+      "title": "Kein verwalteter Server",
+      "body": "Sie müssen einen Discord-Server verwalten und bei Lineup beanspruchen, um in seinem Namen zu veröffentlichen. Sie können auch eine persönliche Anzeige veröffentlichen."
+    },
+    "locked": "Art und Server lassen sich nach dem Erstellen nicht mehr ändern."
+  },
+  "content": {
+    "title": "Titel",
+    "titleHint": "{{min}} bis {{max}} Zeichen",
+    "description": "Beschreibung",
+    "descriptionHint": "{{min}} bis {{max}} Zeichen"
+  },
+  "positions": {
+    "legend": "Rollen",
+    "hint": "Bis zu {{max}} Rollen.",
+    "otherLegend": "Bezeichnungen für „Andere“",
+    "otherHint": "Eine Bezeichnung pro Rolle, höchstens {{max}} Zeichen.",
+    "otherLabel": "Bezeichnung {{n}}",
+    "removeOther": "Bezeichnung {{n}} entfernen",
+    "addOther": "Bezeichnung hinzufügen"
+  },
+  "requirements": {
+    "hint": "Bis zu {{max}} Voraussetzungen.",
+    "none": "Noch keine Voraussetzungen.",
+    "add": "Voraussetzung hinzufügen",
+    "item": "Voraussetzung {{n}}",
+    "remove": "Voraussetzung {{n}} entfernen",
+    "type": "Art der Voraussetzung",
+    "customLabel": "Titel der Voraussetzung",
+    "customValue": "Detail",
+    "value": "Wert",
+    "range": "Zwischen {{min}} und {{max}}",
+    "flagOn": "Ja",
+    "flagOff": "Nein",
+    "flagAria": "{{name}}",
+    "languages": "Geforderte Sprachen",
+    "noValue": "Für diese Voraussetzung ist kein Wert nötig.",
+    "verified": "Prüfung durch Lineup geplant",
+    "verifiedHint": "Lineup prüft noch keine Bewerbung: Die Anzeige zeigt nur, dass eine Prüfung geplant ist."
+  },
+  "application": {
+    "type": "Bewerbungsweg",
+    "none": "Keiner",
+    "noneHint": "Ohne Bewerbungsweg hat die Anzeige keinen Button „Bewerben“.",
+    "soon": "{{name}} (bald verfügbar)",
+    "url": "Link-Adresse",
+    "urlHint": "Nur https-Adressen, ohne Zugangsdaten.",
+    "dmHint": "Interessierte schreiben dem Autor der Anzeige eine private Nachricht auf Discord."
+  },
+  "commitment": {
+    "hours": "Stunden pro Woche",
+    "hoursHint": "{{min}} bis {{max}}",
+    "openings": "Offene Stellen",
+    "openingsHint": "{{min}} bis {{max}}",
+    "compensation": "Vergütung",
+    "compensationNone": "Nicht angegeben",
+    "languages": "Sprachen",
+    "languagesHint": "Bis zu {{max}} Sprachen.",
+    "timezone": "Zeitzone",
+    "timezoneHint": "IANA-Name (Europe/Paris) oder Versatz UTC+02:00",
+    "useBrowserZone": "{{zone}} verwenden"
+  },
+  "extras": {
+    "theme": "Thema",
+    "themeNone": "Keins",
+    "themeNsfw": "NSFW-Anzeigen bleiben aus dem Feed, außer man verlangt sie ausdrücklich.",
+    "tags": "Tag hinzufügen",
+    "tagsHint": "Bis zu {{max}}. Kleinbuchstaben, Ziffern und Bindestriche, 2 bis 24 Zeichen.",
+    "tagAdd": "Hinzufügen",
+    "tagsList": "Tags",
+    "tagRemove": "Tag {{tag}} entfernen",
+    "expiry": "Ablaufdatum",
+    "expiryNever": "Standardmäßig nie. Sonst zwischen {{min}} und {{max}}.",
+    "expiryRange": "Zwischen {{min}} und {{max}}. Die Anzeige läuft am Ende dieses Tages ab.",
+    "expiryClear": "Läuft nie ab",
+    "featured": "Hervorgehobene Erfahrung",
+    "featuredNone": "Keine",
+    "featuredHint": "Nur Ihre verifizierten Erfahrungen stehen zur Wahl.",
+    "featuredEmpty": "Sie haben keine verifizierte Erfahrung.",
+    "featuredLink": "Meine Erfahrungen verwalten",
+    "featuredLoading": "Ihre Erfahrungen werden geladen.",
+    "featuredUnknown": "Nicht verifizierte oder gelöschte Erfahrung"
+  },
+  "review": {
+    "empty": "Nicht ausgefüllt",
+    "editShort": "Ändern",
+    "edit": "Ändern: {{step}}",
+    "invalid_one": "{{count}} Schritt muss vor dem Senden korrigiert werden.",
+    "invalid_other": "{{count}} Schritte müssen vor dem Senden korrigiert werden.",
+    "quotaFull": "Das Limit ist erreicht: Schließen Sie eine Anzeige oder speichern Sie diese als Entwurf.",
+    "summary": {
+      "guild": "Server: {{name}}",
+      "user": "Persönliche Anzeige",
+      "requirements_one": "{{count}} Voraussetzung",
+      "requirements_other": "{{count}} Voraussetzungen",
+      "hours_one": "{{count}} Std. pro Woche",
+      "hours_other": "{{count}} Std. pro Woche",
+      "openings_one": "{{count}} offene Stelle",
+      "openings_other": "{{count}} offene Stellen",
+      "languages_one": "{{count}} Sprache",
+      "languages_other": "{{count}} Sprachen",
+      "tags_one": "{{count}} Tag",
+      "tags_other": "{{count}} Tags",
+      "expires": "Läuft am {{date}} ab",
+      "never": "Läuft nie ab",
+      "featured": "Hervorgehobene Erfahrung"
+    }
+  },
+  "banner": {
+    "saveDraft": "Als Entwurf speichern",
+    "myPosts": "Meine Anzeigen",
+    "claim": "Server beanspruchen",
+    "quotaNew": "Ein Entwurf zählt nicht zum Limit. Sie können ihn veröffentlichen, sobald ein Platz frei wird.",
+    "quotaEdit": "Ihre Änderungen sind gespeichert, die Anzeige ist aber nicht veröffentlicht. Schließen Sie eine Anzeige und veröffentlichen Sie sie unter Meine Anzeigen."
+  },
+  "preview": {
+    "title": "Vorschau",
+    "hint": "Die Karte, wie sie im Feed erscheint.",
+    "titlePlaceholder": "Der Titel Ihrer Anzeige",
+    "descriptionPlaceholder": "Die Beschreibung erscheint hier."
+  },
+  "validation": {
+    "required": "Dieses Feld ist erforderlich.",
+    "tooShort": "Mindestens {{count}} Zeichen.",
+    "tooLong": "Höchstens {{count}} Zeichen.",
+    "kindRequired": "Wählen Sie eine Art von Anzeige.",
+    "guildRequired": "Wählen Sie einen Server.",
+    "guildNotClaimed": "Dieser Server ist bei Lineup nicht beansprucht.",
+    "positionsMin": "Wählen Sie mindestens eine Rolle.",
+    "positionsMax": "Höchstens {{count}} Rollen.",
+    "otherRequired": "Schreiben Sie mindestens eine Bezeichnung für „Andere“.",
+    "otherMax": "Höchstens {{count}} Bezeichnungen.",
+    "requirementsMax": "Höchstens {{count}} Voraussetzungen.",
+    "integer": "Geben Sie eine ganze Zahl ein.",
+    "between": "Zwischen {{min}} und {{max}}.",
+    "languagesMin": "Wählen Sie mindestens eine Sprache.",
+    "languagesMax": "Höchstens {{count}} Sprachen.",
+    "formUnavailable": "Das Lineup-Formular ist noch nicht verfügbar.",
+    "urlHttps": "Geben Sie eine https-Adresse ohne Zugangsdaten und Leerzeichen ein.",
+    "timezone": "Verwenden Sie einen IANA-Namen (Europe/Paris) oder UTC+02:00.",
+    "tagsMax": "Höchstens {{count}} Tags.",
+    "tag": "2 bis 24 Zeichen: Kleinbuchstaben, Ziffern, Bindestriche.",
+    "expiryMin": "Wählen Sie ein Datum ab morgen.",
+    "expiryMax": "Höchstens {{count}} Tage ab heute.",
+    "featuredUserOnly": "Nur eine persönliche Anzeige kann eine Erfahrung hervorheben.",
+    "featuredNotVerified": "Diese Erfahrung ist nicht verifiziert."
+  }
 }

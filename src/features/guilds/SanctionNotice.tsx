@@ -4,6 +4,8 @@ import {useT} from '@/i18n/useT';
 import {safeHttpsUrl} from '@/lib/url';
 import {Icon, Pill} from '@/ui';
 
+import './SanctionNotice.css';
+
 /**
  * A `403 guild_suspended`: the server is under a global sanction. The sentence
  * is the central one; the references are what the support asks for.

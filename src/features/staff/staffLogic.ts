@@ -1,5 +1,6 @@
 /** Pure rules of the staff console: URL filters, ids, and which manual badges fit which entity. */
 
+import {FIELD_LIMITS} from '@/api/limits';
 import type {BadgeEntityType, CatalogBadge, StaffExperienceStatus, StaffReportStatus} from '@/api/types';
 
 export const REVIEW_STATUSES: readonly StaffExperienceStatus[] = ['pending', 'unverified', 'verified', 'rejected'];
@@ -8,8 +9,8 @@ export type EntityFilter = 'all' | BadgeEntityType;
 export const ENTITY_FILTERS: readonly EntityFilter[] = ['all', 'user', 'guild'];
 
 /** The reason, note and badge-note limits of LINEUP.md §6.7. */
-export const REASON_MAX = 500;
-export const BADGE_NOTE_MAX = 200;
+export const REASON_MAX = FIELD_LIMITS.staff.reasonMax;
+export const BADGE_NOTE_MAX = FIELD_LIMITS.staff.badgeNoteMax;
 
 function oneOf<T extends string>(values: readonly T[], value: string | null, fallback: T): T {
   return value !== null && (values as readonly string[]).includes(value) ? (value as T) : fallback;
@@ -33,9 +34,11 @@ export function isEntityId(value: string): boolean {
 }
 
 /** The manual badges (the only ones the staff can grant) that exist for this kind of entity. */
-export function manualBadgesFor(badges: readonly CatalogBadge[] | undefined, entityType: BadgeEntityType): CatalogBadge[] {
+export function manualBadgesFor(
+  badges: readonly CatalogBadge[] | undefined,
+  entityType: BadgeEntityType,
+): CatalogBadge[] {
   return (badges ?? []).filter(
     (badge) => badge.source === 'manual' && (badge.entity === 'both' || badge.entity === entityType),
   );
 }
-

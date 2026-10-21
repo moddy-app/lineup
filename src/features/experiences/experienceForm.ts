@@ -92,9 +92,11 @@ export function validateExperience(
   if (state.position === 'other') {
     const other = state.position_other.trim();
     if (other.length === 0) problems.position_other = {key: 'positionOtherRequired'};
-    else if (other.length > POSITION_OTHER_MAX) problems.position_other = {key: 'positionOtherTooLong', count: POSITION_OTHER_MAX};
+    else if (other.length > POSITION_OTHER_MAX)
+      problems.position_other = {key: 'positionOtherTooLong', count: POSITION_OTHER_MAX};
   }
-  if (state.description.length > DESCRIPTION_MAX) problems.description = {key: 'descriptionTooLong', count: DESCRIPTION_MAX};
+  if (state.description.length > DESCRIPTION_MAX)
+    problems.description = {key: 'descriptionTooLong', count: DESCRIPTION_MAX};
   if (!state.start_date) problems.start_date = {key: 'startRequired'};
   else if (state.start_date > today) problems.start_date = {key: 'startFuture'};
   if (!state.current) {
@@ -153,7 +155,7 @@ export type ResetEffect = 'none' | 'resets' | 'keeps';
 export function verificationEffect(experience: PrivateExperience, body: UpdateExperienceBody): ResetEffect {
   if (experience.verification.status === 'unverified') return 'none';
   const sensitive = (['invite', 'name', 'position', 'position_other', 'start_date', 'end_date'] as const).filter(
-    (key) => body[key] !== undefined,
+    (key) => body[key] !== undefined && (key === 'invite' || body[key] !== (experience[key] ?? null)),
   );
   if (sensitive.length === 0) return 'none';
   if (
@@ -169,7 +171,12 @@ export function verificationEffect(experience: PrivateExperience, body: UpdateEx
 }
 
 /** Which verification buttons the owner sees (LINEUP.md §13). */
-export function verificationOffer(experience: PrivateExperience): {auto: boolean; review: boolean; pending: boolean; verified: boolean} {
+export function verificationOffer(experience: PrivateExperience): {
+  auto: boolean;
+  review: boolean;
+  pending: boolean;
+  verified: boolean;
+} {
   const {status} = experience.verification;
   const open = status === 'unverified' || status === 'rejected';
   return {

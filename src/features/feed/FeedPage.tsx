@@ -42,7 +42,7 @@ export function Component() {
           {catalog.isError ? (
             <ErrorState error={catalog.error} onRetry={() => void catalog.refetch()} retrying={catalog.isFetching} />
           ) : (
-            <Card>
+            <Card className="feed-head">
               <h1 className="feed-title">{t('title')}</h1>
               <Spinner />
             </Card>
@@ -167,7 +167,6 @@ function PublishButton() {
  * cannot be read (the quota is a convenience here, the editor enforces it).
  */
 function QuotaCard({compact, inline}: {compact?: boolean; inline?: boolean}) {
-  const {t} = useT('feed');
   const {status} = useSession();
   const {data: catalog} = useCatalog();
   const mine = useMyPosts({status: 'published'});

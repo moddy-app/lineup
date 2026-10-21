@@ -1,7 +1,207 @@
 {
-  "title": "Staff",
-  "reviews": "Verificações",
-  "reports": "Denúncias",
-  "badges": "Selos",
-  "posts": "Anúncios"
+  "title": "Console da equipe",
+  "header": {
+    "text": "Fila de revisão de experiências, denúncias, selos manuais e anúncios ocultos."
+  },
+  "nav": {
+    "label": "Seções do console",
+    "reviews": "Revisão",
+    "reports": "Denúncias",
+    "badges": "Selos",
+    "posts": "Anúncios"
+  },
+  "forbidden": {
+    "title": "Acesso restrito",
+    "text": "Esta página é da equipe Moddy. Esta conta não tem acesso."
+  },
+  "person": {
+    "profile": "Ver perfil"
+  },
+  "retryIn": "Tentar de novo em {{seconds}} s",
+  "dialog": {
+    "required": "Este campo é obrigatório."
+  },
+  "reviews": {
+    "status": "Status",
+    "statuses": {
+      "pending": "Pendentes",
+      "unverified": "Não verificadas",
+      "verified": "Verificadas",
+      "rejected": "Recusadas"
+    },
+    "empty": {
+      "pendingTitle": "Fila vazia",
+      "pendingText": "Nenhum pedido de revisão aguardando.",
+      "title": "Nenhuma experiência",
+      "text": "Nenhuma experiência tem este status."
+    },
+    "help": {
+      "title": "Regras de revisão",
+      "order": "Os pedidos mais antigos ficam no topo.",
+      "verify": "Verificar mantém a prova existente e acrescenta sua nota.",
+      "reject": "Recusar exige um motivo, que a pessoa pode ler."
+    },
+    "loaded": "{{n}} carregadas nesta lista.",
+    "updated": "Alterada",
+    "facts": {
+      "requestedAt": "Revisão solicitada",
+      "reviewNote": "Nota da pessoa",
+      "permissions": "Permissões",
+      "owner": "Dono do servidor",
+      "yes": "Sim",
+      "no": "Não",
+      "roles": "Cargos",
+      "checkedAt": "Checagem do Discord",
+      "staffNote": "Nota da equipe",
+      "rejection": "Motivo da recusa",
+      "none": "Nenhuma prova registrada."
+    },
+    "verify": {
+      "action": "Verificar",
+      "title": "Verificar esta experiência",
+      "text": "A experiência passa a verificada, método equipe. A prova existente é mantida.",
+      "note": "Nota (opcional)",
+      "confirm": "Verificar",
+      "done": "Experiência verificada."
+    },
+    "reject": {
+      "action": "Recusar",
+      "title": "Recusar esta experiência",
+      "text": "A pessoa verá este motivo e poderá pedir nova revisão depois de corrigir.",
+      "reason": "Motivo",
+      "confirm": "Recusar",
+      "done": "Experiência recusada."
+    }
+  },
+  "reports": {
+    "status": "Status",
+    "statuses": {
+      "open": "Abertas",
+      "resolved": "Resolvidas",
+      "dismissed": "Arquivadas",
+      "all": "Todas"
+    },
+    "states": {
+      "open": "Aberta",
+      "resolved": "Resolvida",
+      "dismissed": "Arquivada"
+    },
+    "targets": {
+      "post": "Anúncio",
+      "user": "Perfil",
+      "guild": "Servidor"
+    },
+    "open": "Abrir: {{target}}",
+    "reasons": {
+      "spam": "Spam",
+      "scam": "Golpe",
+      "inappropriate": "Conteúdo inadequado",
+      "impersonation": "Falsidade de identidade",
+      "other": "Outro"
+    },
+    "noDetails": "Sem detalhes.",
+    "reporter": "Denunciado por",
+    "handledBy": "Decidido por",
+    "hidePost": "Ocultar o anúncio",
+    "empty": {
+      "openTitle": "Nenhuma denúncia aberta",
+      "openText": "Todas as denúncias foram decididas.",
+      "title": "Nenhuma denúncia",
+      "text": "Nenhuma denúncia tem este status."
+    },
+    "help": {
+      "title": "Antes de decidir",
+      "target": "Abra o alvo antes. Resolver ou arquivar não altera o alvo: oculte o anúncio à parte.",
+      "once": "Uma denúncia decidida não pode ser decidida de novo."
+    },
+    "loaded": "{{n}} carregadas nesta lista.",
+    "resolve": {
+      "action": "Resolver",
+      "title": "Marcar como resolvida",
+      "text": "A denúncia é encerrada com uma medida tomada. O alvo não é alterado.",
+      "confirm": "Marcar resolvida",
+      "done": "Denúncia resolvida."
+    },
+    "dismiss": {
+      "action": "Arquivar",
+      "title": "Arquivar sem ação",
+      "text": "A denúncia é encerrada sem medida. Ela não poderá ser reaberta.",
+      "confirm": "Arquivar",
+      "done": "Denúncia arquivada."
+    }
+  },
+  "badges": {
+    "listTitle": "Selos concedidos",
+    "filter": "Entidade",
+    "filters": {
+      "all": "Todas",
+      "user": "Pessoas",
+      "guild": "Servidores"
+    },
+    "entities": {
+      "user": "Pessoa",
+      "guild": "Servidor"
+    },
+    "empty": {
+      "title": "Nenhum selo manual",
+      "text": "Nenhum selo foi concedido para este filtro."
+    },
+    "grantedBy": "Concedido por",
+    "openEntity": "Abrir perfil ({{badge}}, {{id}})",
+    "revoke": {
+      "action": "Remover",
+      "title": "Remover este selo",
+      "text": "O selo sai do perfil na hora. Você pode concedê-lo de novo.",
+      "confirm": "Remover",
+      "done": "Selo removido."
+    },
+    "form": {
+      "title": "Conceder um selo",
+      "text": "Só os selos manuais do catálogo são oferecidos, conforme o tipo de entidade.",
+      "entityType": "Tipo de entidade",
+      "entityId": "ID do Discord",
+      "entityIdHint": "De 15 a 20 dígitos. Não é verificado se a entidade existe.",
+      "idInvalid": "O ID tem de 15 a 20 dígitos.",
+      "badge": "Selo",
+      "badgeRequired": "Escolha um selo.",
+      "notForEntity": "Este selo não existe para este tipo de entidade.",
+      "serverOnly": "Alguns selos são só para servidores.",
+      "note": "Nota (opcional)",
+      "submit": "Conceder",
+      "done": "Selo concedido."
+    }
+  },
+  "posts": {
+    "lookup": {
+      "label": "ID ou link do anúncio",
+      "hint": "Cole o UUID ou o endereço do anúncio.",
+      "invalid": "Nenhum ID de anúncio reconhecido.",
+      "submit": "Buscar"
+    },
+    "empty": {
+      "title": "Nenhum anúncio selecionado",
+      "text": "Cole um ID ou um link para ver o status e ocultá-lo."
+    },
+    "reason": "Motivo:",
+    "help": {
+      "title": "Ocultação",
+      "hide": "Ocultar tira o anúncio de todas as leituras públicas. O autor vê o motivo e não pode mais editá-lo nem excluí-lo.",
+      "unhide": "Reexibir o deixa como encerrado, nunca como publicado. O autor precisa publicá-lo de novo."
+    },
+    "hide": {
+      "action": "Ocultar",
+      "title": "Ocultar este anúncio",
+      "text": "O anúncio sai das listas públicas. O autor lê o motivo.",
+      "reason": "Motivo",
+      "confirm": "Ocultar",
+      "done": "Anúncio oculto."
+    },
+    "unhide": {
+      "action": "Reexibir",
+      "title": "Reexibir este anúncio",
+      "text": "O anúncio passa a encerrado. O autor precisa publicá-lo de novo para que fique visível.",
+      "confirm": "Reexibir",
+      "done": "Anúncio reexibido, está encerrado."
+    }
+  }
 }

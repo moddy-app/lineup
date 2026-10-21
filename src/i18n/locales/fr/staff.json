@@ -1,7 +1,207 @@
 {
-  "title": "Staff",
-  "reviews": "Vérifications",
-  "reports": "Signalements",
-  "badges": "Badges",
-  "posts": "Annonces"
+  "title": "Console staff",
+  "header": {
+    "text": "File de revue des expériences, signalements, badges manuels et annonces masquées."
+  },
+  "nav": {
+    "label": "Sections de la console",
+    "reviews": "Revue",
+    "reports": "Signalements",
+    "badges": "Badges",
+    "posts": "Annonces"
+  },
+  "forbidden": {
+    "title": "Accès réservé",
+    "text": "Cette page est réservée à l'équipe Moddy. Ce compte n'y a pas accès."
+  },
+  "person": {
+    "profile": "Voir le profil"
+  },
+  "retryIn": "Réessayer dans {{seconds}} s",
+  "dialog": {
+    "required": "Ce champ est obligatoire."
+  },
+  "reviews": {
+    "status": "Statut",
+    "statuses": {
+      "pending": "En attente",
+      "unverified": "Non vérifiées",
+      "verified": "Vérifiées",
+      "rejected": "Refusées"
+    },
+    "empty": {
+      "pendingTitle": "File vide",
+      "pendingText": "Aucune demande de revue en attente.",
+      "title": "Aucune expérience",
+      "text": "Aucune expérience avec ce statut."
+    },
+    "help": {
+      "title": "Règles de revue",
+      "order": "Les demandes les plus anciennes sont en haut.",
+      "verify": "Valider garde la preuve existante et ajoute votre note.",
+      "reject": "Refuser demande un motif, que la personne peut lire."
+    },
+    "loaded": "{{n}} chargées dans cette liste.",
+    "updated": "Modifiée",
+    "facts": {
+      "requestedAt": "Revue demandée",
+      "reviewNote": "Note de la personne",
+      "permissions": "Permissions",
+      "owner": "Propriétaire du serveur",
+      "yes": "Oui",
+      "no": "Non",
+      "roles": "Rôles",
+      "checkedAt": "Contrôle Discord",
+      "staffNote": "Note du staff",
+      "rejection": "Motif du refus",
+      "none": "Aucune preuve enregistrée."
+    },
+    "verify": {
+      "action": "Valider",
+      "title": "Valider cette expérience",
+      "text": "L'expérience passe en vérifiée, méthode staff. La preuve existante est conservée.",
+      "note": "Note (facultative)",
+      "confirm": "Valider",
+      "done": "Expérience validée."
+    },
+    "reject": {
+      "action": "Refuser",
+      "title": "Refuser cette expérience",
+      "text": "La personne verra ce motif et pourra redemander une revue après correction.",
+      "reason": "Motif",
+      "confirm": "Refuser",
+      "done": "Expérience refusée."
+    }
+  },
+  "reports": {
+    "status": "Statut",
+    "statuses": {
+      "open": "Ouverts",
+      "resolved": "Traités",
+      "dismissed": "Classés",
+      "all": "Tous"
+    },
+    "states": {
+      "open": "Ouvert",
+      "resolved": "Traité",
+      "dismissed": "Classé"
+    },
+    "targets": {
+      "post": "Annonce",
+      "user": "Profil",
+      "guild": "Serveur"
+    },
+    "open": "Ouvrir : {{target}}",
+    "reasons": {
+      "spam": "Spam",
+      "scam": "Arnaque",
+      "inappropriate": "Contenu inapproprié",
+      "impersonation": "Usurpation d'identité",
+      "other": "Autre"
+    },
+    "noDetails": "Aucun détail fourni.",
+    "reporter": "Signalé par",
+    "handledBy": "Décidé par",
+    "hidePost": "Masquer l'annonce",
+    "empty": {
+      "openTitle": "Aucun signalement ouvert",
+      "openText": "Tous les signalements ont été décidés.",
+      "title": "Aucun signalement",
+      "text": "Aucun signalement avec ce statut."
+    },
+    "help": {
+      "title": "Avant de décider",
+      "target": "Ouvrez la cible avant de décider. Traiter ou classer ne modifie pas la cible : masquez l'annonce séparément.",
+      "once": "Un signalement décidé ne peut plus être redécidé."
+    },
+    "loaded": "{{n}} chargés dans cette liste.",
+    "resolve": {
+      "action": "Traiter",
+      "title": "Marquer comme traité",
+      "text": "Le signalement est clos avec une mesure prise. La cible n'est pas modifiée.",
+      "confirm": "Marquer traité",
+      "done": "Signalement traité."
+    },
+    "dismiss": {
+      "action": "Classer",
+      "title": "Classer sans suite",
+      "text": "Le signalement est clos sans mesure. Il ne pourra plus être rouvert.",
+      "confirm": "Classer",
+      "done": "Signalement classé."
+    }
+  },
+  "badges": {
+    "listTitle": "Badges attribués",
+    "filter": "Entité",
+    "filters": {
+      "all": "Toutes",
+      "user": "Personnes",
+      "guild": "Serveurs"
+    },
+    "entities": {
+      "user": "Personne",
+      "guild": "Serveur"
+    },
+    "empty": {
+      "title": "Aucun badge manuel",
+      "text": "Aucun badge n'a été attribué pour ce filtre."
+    },
+    "grantedBy": "Attribué par",
+    "openEntity": "Ouvrir le profil ({{badge}}, {{id}})",
+    "revoke": {
+      "action": "Retirer",
+      "title": "Retirer ce badge",
+      "text": "Le badge disparaît du profil tout de suite. Vous pourrez l'attribuer de nouveau.",
+      "confirm": "Retirer",
+      "done": "Badge retiré."
+    },
+    "form": {
+      "title": "Attribuer un badge",
+      "text": "Seuls les badges manuels du catalogue sont proposés, selon le type d'entité.",
+      "entityType": "Type d'entité",
+      "entityId": "Identifiant Discord",
+      "entityIdHint": "15 à 20 chiffres. L'existence de l'entité n'est pas vérifiée.",
+      "idInvalid": "L'identifiant est composé de 15 à 20 chiffres.",
+      "badge": "Badge",
+      "badgeRequired": "Choisissez un badge.",
+      "notForEntity": "Ce badge n'existe pas pour ce type d'entité.",
+      "serverOnly": "Certains badges ne concernent que les serveurs.",
+      "note": "Note (facultative)",
+      "submit": "Attribuer",
+      "done": "Badge attribué."
+    }
+  },
+  "posts": {
+    "lookup": {
+      "label": "Identifiant ou lien de l'annonce",
+      "hint": "Collez l'UUID ou l'adresse de l'annonce.",
+      "invalid": "Aucun identifiant d'annonce reconnu.",
+      "submit": "Chercher"
+    },
+    "empty": {
+      "title": "Aucune annonce sélectionnée",
+      "text": "Collez un identifiant ou un lien pour voir son statut et la masquer."
+    },
+    "reason": "Motif :",
+    "help": {
+      "title": "Masquage",
+      "hide": "Masquer retire l'annonce de toutes les lectures publiques. L'auteur voit le motif et ne peut plus la modifier ni la supprimer.",
+      "unhide": "Démasquer la remet en fermée, jamais en publiée. L'auteur doit la republier lui-même."
+    },
+    "hide": {
+      "action": "Masquer",
+      "title": "Masquer cette annonce",
+      "text": "L'annonce disparaît des listes publiques. L'auteur lit le motif.",
+      "reason": "Motif",
+      "confirm": "Masquer",
+      "done": "Annonce masquée."
+    },
+    "unhide": {
+      "action": "Démasquer",
+      "title": "Démasquer cette annonce",
+      "text": "L'annonce repasse en fermée. L'auteur doit la republier pour qu'elle soit de nouveau visible.",
+      "confirm": "Démasquer",
+      "done": "Annonce démasquée, elle est fermée."
+    }
+  }
 }

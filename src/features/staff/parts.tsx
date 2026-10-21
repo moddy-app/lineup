@@ -79,7 +79,11 @@ export function ListBody<T>({list, emptyTitle, emptyText, emptyIcon, children}: 
 /** Avatar, a link to the profile and the id in a mono pill. With `lookup`, the name is read from the profile. */
 export function PersonLink({id, lookup}: {id: string; lookup?: boolean}) {
   const {t} = useT('staff');
-  return lookup ? <LookedUpPerson id={id} label={t('person.profile')} /> : <PersonRow id={id} label={t('person.profile')} />;
+  return lookup ? (
+    <LookedUpPerson id={id} label={t('person.profile')} />
+  ) : (
+    <PersonRow id={id} label={t('person.profile')} />
+  );
 }
 
 function LookedUpPerson({id, label}: {id: string; label: string}) {
@@ -170,7 +174,9 @@ export function ActionDialog({
   const fieldError = field ? fieldErrors(error, tErrors)[field.name] : undefined;
   const limited = hasCode(error, 'lineup_rate_limited');
   const message =
-    error === null || fieldError ? null : errorMessage(error, tErrors, limited && !retry.active ? {seconds: 0} : undefined);
+    error === null || fieldError
+      ? null
+      : errorMessage(error, tErrors, limited && !retry.active ? {seconds: 0} : undefined);
 
   async function submit() {
     const value = text.trim();
@@ -196,7 +202,8 @@ export function ActionDialog({
     <Dialog
       open={open}
       type="alert"
-      onClose={onClose}
+      // The dialog's own `close` event arrives after its animation: by then it may be shut already.
+      onClose={() => open && onClose()}
       className="staff-dialog"
       headline={headline}
       actions={

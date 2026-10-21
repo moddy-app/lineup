@@ -1,3 +1,140 @@
 {
-  "title": "Gestionar el servidor"
+  "title": "Gestión del servidor",
+  "pageTitle": "Gestionar {{name}}",
+  "heading": "Gestionar {{name}}",
+  "unknownName": "Servidor sin nombre",
+  "notFound": {
+    "title": "Servidor no encontrado",
+    "body": "Este servidor no tiene perfil en Lineup. Reclámalo primero desde la página de reclamación.",
+    "action": "Ver servidores"
+  },
+  "forbidden": {
+    "title": "No gestionas este servidor",
+    "body": "Hay que ser propietario del servidor, o tener el permiso de Administrador o Gestionar servidor. Si acabas de recibir estos permisos, vuelve a leer tus servidores desde la página de reclamación.",
+    "action": "Ver el perfil"
+  },
+  "status": {
+    "listed": "En el directorio",
+    "unlisted": "No listado"
+  },
+  "viewProfile": "Ver el perfil",
+  "saved": "Perfil guardado.",
+  "editor": {
+    "title": "Perfil público",
+    "unsaved": "Cambios sin guardar",
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "reset": "Descartar cambios"
+  },
+  "description": {
+    "title": "Descripción",
+    "label": "Descripción del servidor",
+    "hint": "Déjalo vacío para mostrar la descripción de Discord.",
+    "discordTitle": "Descripción de Discord",
+    "discordNone": "Este servidor no tiene descripción en Discord.",
+    "useDiscord": "Usar la descripción de Discord"
+  },
+  "links": {
+    "title": "Enlaces",
+    "hint": "Hasta {{count}} enlaces, solo https. El nombre tiene 40 caracteres como máximo.",
+    "label": "Nombre del enlace {{n}}",
+    "url": "Dirección del enlace {{n}}",
+    "remove": "Quitar el enlace {{n}}",
+    "add": "Añadir un enlace"
+  },
+  "topics": {
+    "title": "Temática, etiquetas e idiomas"
+  },
+  "theme": {
+    "label": "Temática",
+    "none": "Sin temática"
+  },
+  "tags": {
+    "label": "Etiquetas",
+    "hint": "Separadas por comas. Minúsculas, números y guiones, de 2 a 24 caracteres. {{count}} de {{max}}."
+  },
+  "languages": {
+    "label": "Idiomas del servidor ({{count}} de {{max}})"
+  },
+  "invite": {
+    "title": "Invitación",
+    "current": "Invitación actual:",
+    "valid": "Funciona.",
+    "lost": "Ya no existe en Discord: reemplázala.",
+    "none": "No hay invitación guardada.",
+    "label": "Nueva invitación",
+    "placeholder": "https://discord.gg/tu-codigo",
+    "hint": "Opcional. No debe caducar nunca y llevar a este mismo servidor.",
+    "how": "Cómo crear una invitación permanente"
+  },
+  "visibility": {
+    "title": "Visibilidad",
+    "label": "Mostrar el servidor en el directorio",
+    "on": "Cualquiera puede encontrar este perfil en el directorio.",
+    "off": "El perfil y sus anuncios desaparecen para todos, salvo para los gestores y el staff de Moddy."
+  },
+  "errors": {
+    "fixFields": "Corrige los campos marcados y guarda de nuevo.",
+    "descriptionMax": "Máximo {{count}} caracteres.",
+    "linkLabel": "Se requiere un nombre de 1 a {{max}} caracteres.",
+    "linkUrl": "Escribe una dirección https.",
+    "linksMax": "Máximo {{count}} enlaces.",
+    "tagsMax": "Máximo {{count}} etiquetas.",
+    "tagPattern": "\"{{tag}}\" no es válida: de 2 a 24 minúsculas, números o guiones.",
+    "languagesMax": "Máximo {{count}} idiomas.",
+    "inviteLength": "Escribe un código o enlace de 2 a 200 caracteres."
+  },
+  "snapshot": {
+    "title": "Datos de Discord",
+    "body": "El nombre, el icono y los miembros se leen de nuevo cada 6 horas. Puedes forzar la lectura una vez por minuto.",
+    "members": "Miembros",
+    "online": "En línea",
+    "invite": "Invitación:",
+    "inviteValid": "válida",
+    "inviteLost": "no encontrada en Discord",
+    "noInvite": "ninguna",
+    "done": "Datos de Discord actualizados.",
+    "staleDone": "Discord no respondió: se conservan los datos antiguos.",
+    "refresh": "Actualizar ahora",
+    "refreshing": "Leyendo...",
+    "waitIn": "Disponible en {{seconds}} s"
+  },
+  "danger": {
+    "title": "Eliminar el perfil",
+    "body": "El perfil sale del directorio y los anuncios del servidor se cierran. El servidor de Discord no se toca.",
+    "action": "Eliminar el perfil",
+    "confirmTitle": "¿Eliminar el perfil de {{name}}?",
+    "confirmBody": "Lo que ocurre:",
+    "effectPosts": "Los anuncios en borrador y publicados pasan a «cerrado». Podrás reabrirlos tras reclamar el servidor otra vez.",
+    "effectHidden": "Los anuncios ocultados por el equipo de Moddy siguen ocultos.",
+    "effectReclaim": "La descripción, los enlaces, las etiquetas y la visibilidad se pierden.",
+    "confirm": "Eliminar",
+    "done": "El perfil de {{name}} se ha eliminado."
+  },
+  "posts": {
+    "title": "Anuncios del servidor",
+    "create": "Nuevo anuncio",
+    "tabs": "Estado de los anuncios",
+    "tab": {
+      "all": "Todos",
+      "published": "Publicados",
+      "draft": "Borradores",
+      "closed": "Cerrados",
+      "hidden": "Ocultos"
+    },
+    "emptyTitle": "Sin anuncios",
+    "emptyAll": "Este servidor aún no tiene anuncios. Quienes gestionan el servidor pueden editarlos todos.",
+    "emptyTab": "No hay anuncios con este estado.",
+    "hidden": "Ocultado por el equipo de Moddy: ya no se puede modificar.",
+    "edit": "Editar",
+    "close": "Cerrar",
+    "reopen": "Reabrir",
+    "publish": "Publicar",
+    "delete": "Eliminar",
+    "closed": "Anuncio cerrado.",
+    "published": "Anuncio publicado.",
+    "deleted": "Anuncio eliminado.",
+    "deleteTitle": "¿Eliminar este anuncio?",
+    "deleteBody": "«{{title}}» se eliminará de forma definitiva."
+  }
 }

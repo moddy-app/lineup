@@ -1,3 +1,58 @@
 {
-  "title": "Profil bearbeiten"
+  "title": "Mein Profil bearbeiten",
+  "intro": "Dieses Profil ist öffentlich. Nur geänderte Felder werden gespeichert.",
+  "saved": "Profil gespeichert",
+  "saving": "Speichern",
+  "save": "Speichern",
+  "reset": "Änderungen verwerfen",
+  "fields": {
+    "headline": "Titel",
+    "headlineHelp": "Eine Zeile unter deinem Namen, zum Beispiel „Moderatorin seit 4 Jahren“.",
+    "bio": "Über mich",
+    "bioHelp": "Nur Text. Zeilenumbrüche bleiben erhalten.",
+    "openToWork": "Offen für Angebote",
+    "openToWorkHelp": "Auf deinem Profil erscheint die Markierung „Offen für Angebote“."
+  },
+  "links": {
+    "title": "Links",
+    "help": "Bis zu {{count}} Links, über https. Der Linkname hat höchstens 40 Zeichen.",
+    "label": "Linkname",
+    "url": "Adresse (https)",
+    "remove": "Link {{label}} entfernen",
+    "add": "Link hinzufügen",
+    "count": "{{count}} / {{max}}"
+  },
+  "languages": {
+    "title": "Sprachen",
+    "help": "{{count}} von höchstens {{max}} ausgewählt."
+  },
+  "timezone": {
+    "title": "Zeitzone",
+    "label": "Zeitzone",
+    "help": "IANA-Name (Europe/Paris) oder UTC-Versatz (UTC+02:00). Leer lassen, um nichts anzuzeigen.",
+    "suggestion": "Zeitzone deines Browsers:",
+    "use": "Übernehmen"
+  },
+  "summary": {
+    "title": "Vorschau",
+    "noHeadline": "Kein Titel",
+    "languages_one": "{{count}} Sprache: {{list}}",
+    "languages_other": "{{count}} Sprachen: {{list}}",
+    "noLanguages": "Keine Sprache",
+    "links_one": "{{count}} Link",
+    "links_other": "{{count}} Links",
+    "open": "Offen für Angebote",
+    "closed": "Nicht auf der Suche",
+    "view": "Mein öffentliches Profil ansehen"
+  },
+  "problems": {
+    "linkLabelRequired": "Gib dem Link einen Namen.",
+    "linkLabelTooLong": "Der Name hat höchstens {{count}} Zeichen.",
+    "urlInvalid": "Diese Adresse ist ungültig (ohne Zugangsdaten, Leerzeichen oder Port).",
+    "urlHttps": "Der Link muss mit https:// beginnen.",
+    "urlTooLong": "Die Adresse hat höchstens 500 Zeichen.",
+    "timezoneInvalid": "Unbekannte Zeitzone. Beispiele: Europe/Paris, UTC+02:00.",
+    "tooLong": "Höchstens {{count}} Zeichen.",
+    "tooMany": "Höchstens {{count}} Einträge."
+  }
 }

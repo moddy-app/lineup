@@ -8,7 +8,7 @@
   margin-block: var(--gap-s) 0;
 }
 
-.feed-title {
+.feed-head h1.feed-title {
   margin: 0;
   font-size: var(--text-title);
   line-height: 1.2;

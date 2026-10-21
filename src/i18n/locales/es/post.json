@@ -1,3 +1,84 @@
 {
-  "title": "Anuncio"
+  "title": "Anuncio",
+  "notFound": {
+    "title": "Anuncio no encontrado o retirado",
+    "body": "Este anuncio no existe, se retiró o no es visible con tu cuenta."
+  },
+  "banner": {
+    "draft": {
+      "title": "Borrador",
+      "body": "Solo las personas que pueden editarlo ven este anuncio. Publícalo para que aparezca en la lista."
+    },
+    "closed": {
+      "title": "Anuncio cerrado",
+      "body": "Ya no aparece en la lista. Reábrelo para publicarlo de nuevo."
+    },
+    "hidden": {
+      "title": "Anuncio oculto",
+      "body": "El equipo de Moddy ocultó este anuncio. Ya no se puede editar.",
+      "reason": "Motivo: {{reason}}"
+    },
+    "expired": {
+      "title": "Este anuncio ha caducado",
+      "body": "Ya no está en la lista y no acepta candidaturas.",
+      "editor": "Ya no está en la lista. Elige una nueva fecha de caducidad para publicarlo de nuevo.",
+      "edit": "Cambiar la fecha de caducidad"
+    }
+  },
+  "dates": {
+    "published": "Publicado",
+    "updated": "Modificado"
+  },
+  "sections": {
+    "positions": "Puestos buscados",
+    "requirements": "Requisitos",
+    "details": "Detalles"
+  },
+  "facts": {
+    "languages": "Idiomas",
+    "timezone": "Zona horaria",
+    "theme": "Temática",
+    "tags": "Etiquetas"
+  },
+  "apply": {
+    "title": "Candidatura",
+    "external": "La candidatura se hace en el sitio del reclutador.",
+    "dm": "La candidatura se hace por mensaje directo de Discord con quien publicó el anuncio."
+  },
+  "author": {
+    "guild": "Servidor",
+    "user": "Autor",
+    "viewGuild": "Ver el servidor",
+    "viewUser": "Ver el perfil"
+  },
+  "featured": {
+    "title": "Experiencia destacada"
+  },
+  "report": {
+    "label": "Denunciar este anuncio"
+  },
+  "manage": {
+    "title": "Gestionar el anuncio",
+    "body": "Puedes editar este anuncio."
+  },
+  "actions": {
+    "edit": "Editar",
+    "publish": "Publicar",
+    "reopen": "Reabrir",
+    "close": "Cerrar el anuncio"
+  },
+  "snackbar": {
+    "publish": "Anuncio publicado.",
+    "reopen": "Anuncio reabierto.",
+    "close": "Anuncio cerrado.",
+    "delete": "Anuncio eliminado."
+  },
+  "confirmDelete": {
+    "title": "¿Eliminar este anuncio?",
+    "body": "«{{title}}» se eliminará de forma definitiva. No se puede deshacer."
+  },
+  "errorLinks": {
+    "myPosts": "Ver mis anuncios",
+    "editExpiry": "Cambiar la fecha de caducidad"
+  }
 }

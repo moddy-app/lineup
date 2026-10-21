@@ -1,3 +1,56 @@
 {
-  "title": "Server"
+  "unknownName": "Server ohne Namen",
+  "notFound": {
+    "title": "Server nicht gefunden",
+    "body": "Dieser Server hat kein Lineup-Profil, oder sein Profil ist nicht öffentlich.",
+    "action": "Server ansehen"
+  },
+  "stats": {
+    "members": "Mitglieder",
+    "online": "Online",
+    "boosts": "Boosts",
+    "created": "Erstellt am"
+  },
+  "join": {
+    "action": "Server beitreten",
+    "unavailable": "Die Einladung dieses Servers ist nicht mehr verfügbar."
+  },
+  "unlisted": {
+    "title": "Nicht gelistetes Profil",
+    "body": "Dieses Profil steht nicht im Verzeichnis. Nur Verwalter und das Moddy-Staff sehen es, ebenso seine Anzeigen."
+  },
+  "inviteLost": {
+    "title": "Einladung ersetzen",
+    "body": "Die gespeicherte Einladung existiert auf Discord nicht mehr, der Beitreten-Button ist ausgeblendet. Speichere eine Einladung, die nie abläuft.",
+    "action": "Einladung ersetzen"
+  },
+  "about": {
+    "title": "Über den Server",
+    "none": "Dieser Server hat noch keine Beschreibung.",
+    "topics": "Thema und Tags"
+  },
+  "posts": {
+    "title_one": "{{count}} offene Anzeige",
+    "title_other": "{{count}} offene Anzeigen",
+    "titleEmpty": "Offene Anzeigen",
+    "label": "Anzeigen des Servers",
+    "emptyTitle": "Keine offenen Anzeigen",
+    "emptyBody": "Dieser Server sucht gerade kein Staff."
+  },
+  "team": {
+    "title": "Team",
+    "label": "Team des Servers",
+    "since": "{{position}}, seit {{date}}",
+    "emptyTitle": "Kein Team angegeben",
+    "emptyBody": "Hier erscheinen nur Personen mit verifizierter Erfahrung auf diesem Server."
+  },
+  "manage": {
+    "title": "Serververwaltung",
+    "body": "Du verwaltest diesen Server. Bearbeite das Profil, verfolge die Anzeigen oder lösche das Profil.",
+    "action": "Server verwalten"
+  },
+  "report": {
+    "title": "Ein Problem mit diesem Server",
+    "body": "Melde ein irreführendes Profil, Identitätsmissbrauch oder unangemessene Inhalte. Das Moddy-Team prüft jede Meldung."
+  }
 }

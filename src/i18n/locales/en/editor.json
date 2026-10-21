@@ -1,4 +1,251 @@
 {
   "titleNew": "New post",
-  "titleEdit": "Edit post"
+  "titleEdit": "Edit post",
+  "introNew": "Eight steps, saved on this device as you go. You can publish or keep a draft at the end.",
+  "introEdit": "Change the steps you need, then save from the last one. Only the changed fields are sent.",
+  "count": "{{used}} / {{max}}",
+  "restored": {
+    "text": "Local draft restored, saved",
+    "discard": "Discard this draft"
+  },
+  "stepper": {
+    "label": "Post steps",
+    "count": "Step {{current}} of {{total}}",
+    "state": {
+      "current": "current step",
+      "done": "done",
+      "error": "needs fixing",
+      "todo": "not seen yet"
+    }
+  },
+  "steps": {
+    "type": {
+      "short": "Type",
+      "title": "Post type",
+      "intro": "A server post recruits for a server you manage. A personal post presents someone looking for a team."
+    },
+    "content": {
+      "short": "Content",
+      "title": "Title and description",
+      "intro": "Say who you are or what the server offers, in concrete terms."
+    },
+    "positions": {
+      "short": "Roles",
+      "title": "Roles",
+      "intro": "The roles wanted or aimed at. Choose \"Other\" to write your own names."
+    },
+    "requirements": {
+      "short": "Requirements",
+      "title": "Requirements",
+      "intro": "What applicants must meet. Optional."
+    },
+    "application": {
+      "short": "Applying",
+      "title": "How to apply",
+      "intro": "How interested people get in touch. Optional."
+    },
+    "commitment": {
+      "short": "Commitment",
+      "title": "Commitment, languages and time zone",
+      "intro": "Every field is optional."
+    },
+    "extras": {
+      "short": "Options",
+      "title": "Theme, tags and expiry",
+      "intro": "Helps sort and find the post. Everything is optional."
+    },
+    "review": {
+      "short": "Review",
+      "title": "Review and send",
+      "intro": "Check each step. A published post shows in the feed right away."
+    }
+  },
+  "actions": {
+    "next": "Continue",
+    "previous": "Back",
+    "publish": "Publish",
+    "republish": "Publish again",
+    "saveDraft": "Save as draft",
+    "saveEdit": "Save changes",
+    "saveChanges": "Save changes",
+    "sending": "Sending"
+  },
+  "done": {
+    "published": "Post published.",
+    "draft": "Draft saved.",
+    "saved": "Changes saved."
+  },
+  "locked": {
+    "hiddenTitle": "Post hidden",
+    "hiddenBody": "The Moddy team has hidden this post. It can no longer be edited.",
+    "reason": "Reason: {{reason}}",
+    "myPosts": "My posts",
+    "forbiddenTitle": "You cannot edit this post",
+    "forbiddenBody": "Only the author of a personal post and the managers of the server can edit a post.",
+    "view": "View the post"
+  },
+  "type": {
+    "legend": "Who is posting",
+    "kind": {
+      "guild": {
+        "title": "A server is hiring",
+        "hint": "For a server you manage that has a Lineup profile."
+      },
+      "user": {
+        "title": "I am looking for a team",
+        "hint": "A post in your name, with your verified experiences."
+      }
+    },
+    "guildLegend": "Server",
+    "loadingGuilds": "Loading your servers.",
+    "unnamedGuild": "Unnamed server",
+    "notClaimed": "Not claimed on Lineup yet",
+    "claim": "Claim",
+    "noGuilds": {
+      "title": "No managed server",
+      "body": "You need to manage a Discord server and claim it on Lineup to post in its name. You can also publish a personal post."
+    },
+    "locked": "The type and the server cannot change once the post exists."
+  },
+  "content": {
+    "title": "Title",
+    "titleHint": "{{min}} to {{max}} characters",
+    "description": "Description",
+    "descriptionHint": "{{min}} to {{max}} characters"
+  },
+  "positions": {
+    "legend": "Roles",
+    "hint": "Up to {{max}} roles.",
+    "otherLegend": "\"Other\" names",
+    "otherHint": "One name per role, {{max}} characters at most.",
+    "otherLabel": "Name {{n}}",
+    "removeOther": "Remove name {{n}}",
+    "addOther": "Add a name"
+  },
+  "requirements": {
+    "hint": "Up to {{max}} requirements.",
+    "none": "No requirement yet.",
+    "add": "Add a requirement",
+    "item": "Requirement {{n}}",
+    "remove": "Remove requirement {{n}}",
+    "type": "Requirement type",
+    "customLabel": "Requirement title",
+    "customValue": "Detail",
+    "value": "Value",
+    "range": "Between {{min}} and {{max}}",
+    "flagOn": "Yes",
+    "flagOff": "No",
+    "flagAria": "{{name}}",
+    "languages": "Languages required",
+    "noValue": "This requirement has no value to enter.",
+    "verified": "Lineup verification planned",
+    "verifiedHint": "Lineup does not check any application yet: the post only shows that verification is planned."
+  },
+  "application": {
+    "type": "Application method",
+    "none": "None",
+    "noneHint": "Without one, the post has no \"Apply\" button.",
+    "soon": "{{name}} (coming soon)",
+    "url": "Link address",
+    "urlHint": "https addresses only, no credentials.",
+    "dmHint": "Interested people message the author of the post on Discord."
+  },
+  "commitment": {
+    "hours": "Hours per week",
+    "hoursHint": "{{min}} to {{max}}",
+    "openings": "Open positions",
+    "openingsHint": "{{min}} to {{max}}",
+    "compensation": "Compensation",
+    "compensationNone": "Not specified",
+    "languages": "Languages",
+    "languagesHint": "Up to {{max}} languages.",
+    "timezone": "Time zone",
+    "timezoneHint": "IANA name (Europe/Paris) or offset UTC+02:00",
+    "useBrowserZone": "Use {{zone}}"
+  },
+  "extras": {
+    "theme": "Theme",
+    "themeNone": "None",
+    "themeNsfw": "NSFW posts are left out of the feed unless people ask for them.",
+    "tags": "Add a tag",
+    "tagsHint": "Up to {{max}}. Lower-case letters, digits and hyphens, 2 to 24 characters.",
+    "tagAdd": "Add",
+    "tagsList": "Tags",
+    "tagRemove": "Remove tag {{tag}}",
+    "expiry": "Expiry date",
+    "expiryNever": "Never by default. Otherwise between {{min}} and {{max}}.",
+    "expiryRange": "Between {{min}} and {{max}}. The post expires at the end of that day.",
+    "expiryClear": "Never expires",
+    "featured": "Featured experience",
+    "featuredNone": "None",
+    "featuredHint": "Only your verified experiences are offered.",
+    "featuredEmpty": "You have no verified experience.",
+    "featuredLink": "Manage my experiences",
+    "featuredLoading": "Loading your experiences.",
+    "featuredUnknown": "Unverified or deleted experience"
+  },
+  "review": {
+    "empty": "Empty",
+    "editShort": "Edit",
+    "edit": "Edit: {{step}}",
+    "invalid_one": "{{count}} step needs fixing before sending.",
+    "invalid_other": "{{count}} steps need fixing before sending.",
+    "quotaFull": "You are at your limit: close a post or save this one as a draft.",
+    "summary": {
+      "guild": "Server: {{name}}",
+      "user": "Personal post",
+      "requirements_one": "{{count}} requirement",
+      "requirements_other": "{{count}} requirements",
+      "hours_one": "{{count}} h per week",
+      "hours_other": "{{count}} h per week",
+      "openings_one": "{{count}} open position",
+      "openings_other": "{{count}} open positions",
+      "languages_one": "{{count}} language",
+      "languages_other": "{{count}} languages",
+      "tags_one": "{{count}} tag",
+      "tags_other": "{{count}} tags",
+      "expires": "Expires {{date}}",
+      "never": "Never expires",
+      "featured": "Featured experience"
+    }
+  },
+  "banner": {
+    "saveDraft": "Save as draft",
+    "myPosts": "My posts",
+    "claim": "Claim a server",
+    "quotaNew": "A draft does not count toward the limit. You can publish it when a slot frees up.",
+    "quotaEdit": "Your changes are saved, but the post is not published. Close a post, then publish it from My posts."
+  },
+  "preview": {
+    "title": "Preview",
+    "hint": "The card as it appears in the feed.",
+    "titlePlaceholder": "Your post title",
+    "descriptionPlaceholder": "The description will show here."
+  },
+  "validation": {
+    "required": "This field is required.",
+    "tooShort": "At least {{count}} characters.",
+    "tooLong": "At most {{count}} characters.",
+    "kindRequired": "Choose a post type.",
+    "guildRequired": "Choose a server.",
+    "guildNotClaimed": "This server is not claimed on Lineup.",
+    "positionsMin": "Choose at least one role.",
+    "positionsMax": "At most {{count}} roles.",
+    "otherRequired": "Write at least one name for \"Other\".",
+    "otherMax": "At most {{count}} names.",
+    "requirementsMax": "At most {{count}} requirements.",
+    "integer": "Enter a whole number.",
+    "between": "Between {{min}} and {{max}}.",
+    "languagesMin": "Choose at least one language.",
+    "languagesMax": "At most {{count}} languages.",
+    "formUnavailable": "The Lineup form is not available yet.",
+    "urlHttps": "Enter an https address, without credentials or spaces.",
+    "timezone": "Use an IANA name (Europe/Paris) or UTC+02:00.",
+    "tagsMax": "At most {{count}} tags.",
+    "tag": "2 to 24 characters: lower case, digits, hyphens.",
+    "expiryMin": "Choose a date from tomorrow.",
+    "expiryMax": "At most {{count}} days from today.",
+    "featuredUserOnly": "Only a personal post can feature an experience.",
+    "featuredNotVerified": "This experience is not verified."
+  }
 }

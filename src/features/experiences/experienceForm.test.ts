@@ -14,7 +14,10 @@ import {
   verificationOffer,
 } from './experienceForm';
 
-function experience(overrides: Partial<PrivateExperience> = {}, status: PrivateExperience['verification']['status'] = 'verified'): PrivateExperience {
+function experience(
+  overrides: Partial<PrivateExperience> = {},
+  status: PrivateExperience['verification']['status'] = 'verified',
+): PrivateExperience {
   return {
     id: 'e1',
     kind: 'guild',
@@ -58,7 +61,12 @@ describe('validateExperience', () => {
     expect(problems.position_other?.key).toBe('positionOtherRequired');
     expect(problems.start_date?.key).toBe('startFuture');
     expect(problems.end_date?.key).toBe('endFuture');
-    expect(validateExperience({...form, start_date: '2025-01-01', end_date: '2024-01-01', position_other: 'x'}, {editing: false, today}).end_date?.key).toBe('endBeforeStart');
+    expect(
+      validateExperience(
+        {...form, start_date: '2025-01-01', end_date: '2024-01-01', position_other: 'x'},
+        {editing: false, today},
+      ).end_date?.key,
+    ).toBe('endBeforeStart');
   });
 
   it('todayIso is a local calendar day', () => {
@@ -69,7 +77,14 @@ describe('validateExperience', () => {
 describe('bodies', () => {
   it('builds a creation body per kind', () => {
     const form = {...emptyForm(), invite: ' abc ', position: 'moderator', start_date: '2024-01-01'};
-    expect(createBody(form)).toEqual({kind: 'guild', invite: 'abc', position: 'moderator', description: null, start_date: '2024-01-01', end_date: null});
+    expect(createBody(form)).toEqual({
+      kind: 'guild',
+      invite: 'abc',
+      position: 'moderator',
+      description: null,
+      start_date: '2024-01-01',
+      end_date: null,
+    });
     expect(createBody({...form, kind: 'service', name: ' Studio '})).toMatchObject({kind: 'service', name: 'Studio'});
   });
 
@@ -78,7 +93,9 @@ describe('bodies', () => {
     expect(updateBody(exp, formFromExperience(exp))).toEqual({});
     const form = {...formFromExperience(exp), current: false, end_date: '2025-01-01', description: 'Autre'};
     expect(updateBody(exp, form)).toEqual({end_date: '2025-01-01', description: 'Autre'});
-    expect(updateBody(experience({end_date: '2025-01-01', is_current: false}), {...formFromExperience(exp), current: true})).toEqual({end_date: null});
+    expect(
+      updateBody(experience({end_date: '2025-01-01', is_current: false}), {...formFromExperience(exp), current: true}),
+    ).toEqual({end_date: null});
   });
 });
 
@@ -87,7 +104,9 @@ describe('verificationEffect', () => {
     expect(verificationEffect(experience(), {end_date: '2025-01-01'})).toBe('keeps');
     expect(verificationEffect(experience(), {end_date: '2025-01-01', position: 'admin'})).toBe('resets');
     expect(verificationEffect(experience(), {end_date: null})).toBe('none');
-    expect(verificationEffect(experience({end_date: '2025-01-01', is_current: false}), {end_date: '2025-02-01'})).toBe('resets');
+    expect(verificationEffect(experience({end_date: '2025-01-01', is_current: false}), {end_date: '2025-02-01'})).toBe(
+      'resets',
+    );
     expect(verificationEffect(experience(), {description: 'x'})).toBe('none');
     expect(verificationEffect(experience(), {invite: 'abc'})).toBe('resets');
   });
@@ -103,7 +122,10 @@ describe('verificationOffer', () => {
   it('offers the automatic check first for a current server experience', () => {
     expect(verificationOffer(experience({}, 'unverified'))).toMatchObject({auto: true, review: true});
     expect(verificationOffer(experience({kind: 'service'}, 'rejected'))).toMatchObject({auto: false, review: true});
-    expect(verificationOffer(experience({end_date: '2025-01-01', is_current: false}, 'unverified'))).toMatchObject({auto: false, review: true});
+    expect(verificationOffer(experience({end_date: '2025-01-01', is_current: false}, 'unverified'))).toMatchObject({
+      auto: false,
+      review: true,
+    });
     expect(verificationOffer(experience({}, 'pending'))).toMatchObject({auto: false, review: false, pending: true});
     expect(verificationOffer(experience({}, 'verified'))).toMatchObject({auto: false, review: false, verified: true});
   });
