@@ -7,18 +7,12 @@ import type {CatalogKind} from '@/api/types';
 import {useT} from '@/i18n/useT';
 import {Checkbox, Icon} from '@/ui';
 
-import type {FormState, Issue} from './form';
+import type {FormState} from './form';
 
 export type SetForm = (patch: Partial<FormState>) => void;
 
 /** The shown message of a field, or undefined. */
 export type ErrorOf = (field: string) => string | undefined;
-
-/** Translates a client issue. */
-export function useIssueText(): (issue: Issue) => string {
-  const {t} = useT('editor');
-  return (issue) => t(`validation.${issue.message}` as 'validation.required', issue.params);
-}
 
 /** A field with its error under it; `name` lets the page focus it. */
 export function FieldBox({name, error, children}: {name: string; error?: string; children: ReactNode}) {

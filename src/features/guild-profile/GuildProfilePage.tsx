@@ -15,6 +15,7 @@ import {
   LanguageList,
   LinkList,
   NsfwGate,
+  useNsfwConfirmed,
   PostCard,
   ReportButton,
   StaleNotice,
@@ -32,6 +33,7 @@ import {
   Chips,
   Icon,
   LinkButton,
+  Page,
   PageLoading,
   Row,
   RowBody,
@@ -47,6 +49,7 @@ export function Component() {
   const {t} = useT('guildProfile');
   const query = useGuild(guildId);
   const guild = query.data;
+  const {confirmed} = useNsfwConfirmed();
   usePageTitle(guild?.name ?? t('notFound.title'));
 
   if (query.isPending) return <PageLoading />;
@@ -75,11 +78,17 @@ export function Component() {
     );
   }
 
-  return (
-    <NsfwGate nsfw={isNsfw(guild)} backTo={paths.guilds()} headingLevel={1}>
-      <GuildView guild={guild} />
-    </NsfwGate>
-  );
+  // The age screen sits in the page column; once confirmed, the profile takes its place.
+  if (isNsfw(guild) && !confirmed) {
+    return (
+      <Page>
+        <NsfwGate nsfw backTo={paths.guilds()} headingLevel={1}>
+          {null}
+        </NsfwGate>
+      </Page>
+    );
+  }
+  return <GuildView guild={guild} />;
 }
 
 function GuildView({guild}: {guild: GuildProfile}) {

@@ -102,7 +102,8 @@ export function validateValues(values: ProfileFormValues, limits: Limits): Recor
     const label = link.label.trim();
     const url = link.url.trim();
     if (label === '' && url === '') return;
-    if (label === '') issues[`links.${index}.label`] = {key: 'errors.linkLabel', params: {max: FIELD_LIMITS.link.labelMax}};
+    if (label === '')
+      issues[`links.${index}.label`] = {key: 'errors.linkLabel', params: {max: FIELD_LIMITS.link.labelMax}};
     else if (label.length > FIELD_LIMITS.link.labelMax) {
       issues[`links.${index}.label`] = {key: 'errors.linkLabel', params: {max: FIELD_LIMITS.link.labelMax}};
     }

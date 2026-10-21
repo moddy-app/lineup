@@ -11,6 +11,9 @@ import {Icon, LinkButton, Row, RowBody, Rows, Shape} from '@/ui';
 
 import type {StepId} from './form';
 
+const SHAPES = ['hexagon', 'square', 'pentagon', 'diamond', 'heptagon', 'octagon'] as const;
+const TONES = ['primary', 'tertiary', 'secondary'] as const;
+
 export interface ReviewRow {
   step: StepId;
   title: string;
@@ -36,13 +39,13 @@ export function ReviewStep({rows, onGo, quota}: ReviewStepProps) {
         </p>
       )}
       <Rows as="ul" className="ed-review">
-        {rows.map((row) => (
+        {rows.map((row, index) => (
           <Row key={row.step}>
             <Shape
               small
-              shape={row.state === 'error' ? 'octagon' : 'hexagon'}
-              tone={row.state === 'error' ? 'secondary' : row.state === 'done' ? 'primary' : 'tertiary'}
-              icon={row.state === 'error' ? 'error' : row.state === 'done' ? 'check' : 'more_horiz'}
+              shape={SHAPES[index % SHAPES.length]}
+              tone={row.state === 'error' ? 'solid' : TONES[index % TONES.length]}
+              icon={row.state === 'error' ? 'priority_high' : row.state === 'done' ? 'check' : 'more_horiz'}
             />
             <RowBody title={row.title} meta={row.summary} />
             <md-text-button aria-label={t('review.edit', {step: row.title})} onclick={() => onGo(row.step)}>

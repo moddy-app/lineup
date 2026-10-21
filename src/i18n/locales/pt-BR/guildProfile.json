@@ -50,7 +50,7 @@
     "action": "Gerenciar servidor"
   },
   "report": {
-    "title": "Um problema com este servidor",
+    "title": "Denunciar este servidor",
     "body": "Denuncie um perfil enganoso, uma falsificação de identidade ou conteúdo impróprio. A equipe do Moddy analisa cada denúncia."
   }
 }

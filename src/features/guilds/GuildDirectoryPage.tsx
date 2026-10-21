@@ -11,14 +11,7 @@ import type {GuildCard} from '@/api/types';
 import {paths} from '@/app/paths';
 import {usePageTitle} from '@/app/usePageTitle';
 import {useSession} from '@/auth/session';
-import {
-  BadgeList,
-  EmptyState,
-  ErrorState,
-  GuildIcon,
-  NsfwConfirmDialog,
-  useNsfwConfirmed,
-} from '@/components';
+import {BadgeList, EmptyState, ErrorState, GuildIcon, NsfwConfirmDialog, useNsfwConfirmed} from '@/components';
 import {useLanguage} from '@/i18n/useLanguage';
 import {useT} from '@/i18n/useT';
 import {formatCompact} from '@/lib/format';
@@ -142,9 +135,7 @@ export function Component() {
           </div>
           <CardActions>
             {claim}
-            {active && (
-              <md-text-button onclick={clear}>{t('filters.clear')}</md-text-button>
-            )}
+            {active && <md-text-button onclick={clear}>{t('filters.clear')}</md-text-button>}
           </CardActions>
         </Card>
 
@@ -233,7 +224,9 @@ function GuildCardLink({guild}: {guild: GuildCard}) {
             ) : (
               <>
                 {guild.member_count !== null && (
-                  <span>{t('card.members', {count: guild.member_count, value: formatCompact(guild.member_count)})}</span>
+                  <span>
+                    {t('card.members', {count: guild.member_count, value: formatCompact(guild.member_count)})}
+                  </span>
                 )}
                 {guild.presence_count !== null && (
                   <span>{t('card.online', {value: formatCompact(guild.presence_count)})}</span>

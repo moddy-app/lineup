@@ -72,13 +72,16 @@ export function ProfileEditor({guild}: {guild: GuildProfile}) {
   const fieldError = (key: string): string | undefined => (showLocal ? issueText(key) : undefined) ?? apiFields[key];
 
   const inviteCode = isApiError(error) && error.code !== null && INVITE_CODES.includes(error.code);
-  const inviteError =
-    (inviteCode ? errorMessage(error, tErrors) : undefined) ?? fieldError('invite');
+  const inviteError = (inviteCode ? errorMessage(error, tErrors) : undefined) ?? fieldError('invite');
   const validation = isApiError(error) && error.validation !== null;
   // Issues the form has no field for (an unknown key, a model-level rule) are listed in the alert.
   const unmapped = validation
     ? Object.entries(apiFields)
-        .filter(([key]) => !['description', 'theme', 'tags', 'languages', 'invite', 'listed'].includes(key) && !key.startsWith('links'))
+        .filter(
+          ([key]) =>
+            !['description', 'theme', 'tags', 'languages', 'invite', 'listed'].includes(key) &&
+            !key.startsWith('links'),
+        )
         .map(([, message]) => message)
     : [];
 

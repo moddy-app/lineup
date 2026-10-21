@@ -30,7 +30,7 @@ import {
 } from '@/ui';
 
 import './editor.css';
-import {useIssueText} from './fields';
+import {useIssueText} from './useIssueText';
 import {
   draftKey,
   EMPTY_FORM,
@@ -158,19 +158,15 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
   const firstStep: StepId = editing ? 'content' : 'type';
 
   // A form saved in this browser comes back, with a notice.
-  const [restoredAt, setRestoredAt] = useState<number | null>(null);
-  const [form, setForm] = useState<FormState>(() => {
+  const [restored] = useState(() => {
     const stored = getItem<unknown>(key, null);
-    if (isStoredDraft(stored)) {
-      const restored = mergeStoredForm(stored.form);
-      if (!formsEqual(restored, pristine)) return restored;
-    }
-    return pristine;
+    if (!isStoredDraft(stored)) return null;
+    const saved = mergeStoredForm(stored.form);
+    return formsEqual(saved, pristine) ? null : {form: saved, step: stored.step, savedAt: stored.savedAt};
   });
-  const [step, setStep] = useState<StepId>(() => {
-    const stored = getItem<unknown>(key, null);
-    return isStoredDraft(stored) && !formsEqual(mergeStoredForm(stored.form), pristine) ? stored.step : firstStep;
-  });
+  const [restoredAt, setRestoredAt] = useState<number | null>(restored?.savedAt ?? null);
+  const [form, setForm] = useState<FormState>(restored?.form ?? pristine);
+  const [step, setStep] = useState<StepId>(restored?.step ?? firstStep);
   const [visited, setVisited] = useState<Set<StepId>>(
     () => new Set<StepId>(editing ? STEP_IDS.filter((id) => id !== 'review') : []),
   );
@@ -183,30 +179,20 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
   const heading = useRef<HTMLHeadingElement>(null);
   const [now] = useState(() => new Date());
 
-  useEffect(() => {
-    const stored = getItem<unknown>(key, null);
-    if (isStoredDraft(stored) && !formsEqual(mergeStoredForm(stored.form), pristine)) setRestoredAt(stored.savedAt);
-    // Only at mount: later changes of `pristine` (after a save) must not re-announce.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   // The local draft: written shortly after each change, and at once before signing in.
-  const stateRef = useRef({form, step, pristine});
-  stateRef.current = {form, step, pristine};
-  const persist = () => {
-    const current = stateRef.current;
-    if (finished.current) return;
-    if (formsEqual(current.form, current.pristine)) removeItem(key);
-    else setItem(key, {version: 1, savedAt: Date.now(), step: current.step, form: current.form});
-  };
   useEffect(() => {
-    const timer = window.setTimeout(persist, 400);
-    return () => window.clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form, step]);
-  useEffect(() => registerBeforeLogin(persist),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [key]);
+    const save = () => {
+      if (finished.current) return;
+      if (formsEqual(form, pristine)) removeItem(key);
+      else setItem(key, {version: 1, savedAt: Date.now(), step, form});
+    };
+    const timer = window.setTimeout(save, 400);
+    const unregister = registerBeforeLogin(save);
+    return () => {
+      window.clearTimeout(timer);
+      unregister();
+    };
+  }, [form, step, pristine, key]);
 
   const rules = useMemo(
     () => ({
@@ -296,6 +282,9 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
       return;
     }
     setBanner(error);
+    window.requestAnimationFrame(() =>
+      document.querySelector('.ed-banner')?.scrollIntoView({block: 'center'}),
+    );
     if (code && CLAIM_CODES.includes(code) && !editing) go('type');
   };
 

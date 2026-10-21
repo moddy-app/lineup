@@ -50,7 +50,7 @@
     "action": "Server verwalten"
   },
   "report": {
-    "title": "Ein Problem mit diesem Server",
+    "title": "Diesen Server melden",
     "body": "Melde ein irreführendes Profil, Identitätsmissbrauch oder unangemessene Inhalte. Das Moddy-Team prüft jede Meldung."
   }
 }

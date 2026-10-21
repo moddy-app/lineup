@@ -50,7 +50,7 @@
     "action": "Gérer le serveur"
   },
   "report": {
-    "title": "Un problème avec ce serveur",
+    "title": "Signaler ce serveur",
     "body": "Signalez un profil trompeur, une usurpation ou un contenu inapproprié. L'équipe Moddy examine chaque signalement."
   }
 }

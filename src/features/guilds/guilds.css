@@ -99,7 +99,7 @@
 }
 
 .guilds-header h1 {
-  margin: 0;
+  margin: 0 0 var(--gap-m);
   font-size: var(--text-title);
   letter-spacing: normal;
 }

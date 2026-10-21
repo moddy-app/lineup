@@ -23,6 +23,7 @@ import {
   CardActions,
   Icon,
   LinkButton,
+  Panel,
   Row,
   RowBody,
   Rows,
@@ -134,65 +135,60 @@ export function Component() {
   return (
     <AppLayout
       aside={
-        <>
-          <Section title={t('form.title')}>
-            <p>{t('form.body')}</p>
-            {selected && (
-              <p className="claim-selected" role="status">
-                <GuildIcon id={selected.id} iconUrl={selected.icon_url} size="small" />
-                <span>{t('form.selected', {name: selected.name ?? t('unknownName')})}</span>
-                <md-text-button onclick={() => setSelected(null)}>{t('form.deselect')}</md-text-button>
-              </p>
-            )}
-            <form
-              className="claim-form"
-              onSubmit={(event) => {
-                event.preventDefault();
-                void submit();
+        <Section title={t('form.title')}>
+          <p>{t('form.body')}</p>
+          {selected && (
+            <p className="claim-selected" role="status">
+              <GuildIcon id={selected.id} iconUrl={selected.icon_url} size="small" />
+              <span>{t('form.selected', {name: selected.name ?? t('unknownName')})}</span>
+              <md-text-button onclick={() => setSelected(null)}>{t('form.deselect')}</md-text-button>
+            </p>
+          )}
+          <form
+            className="claim-form"
+            onSubmit={(event) => {
+              event.preventDefault();
+              void submit();
+            }}
+            noValidate
+          >
+            <TextField
+              ref={(element) => {
+                field.current = element;
               }}
-              noValidate
-            >
-              <TextField
-                ref={(element) => {
-                  field.current = element;
-                }}
-                label={t('form.label')}
-                value={invite}
-                onValueChange={(value) => {
-                  setInvite(value);
-                  if (error !== null) setError(null);
-                }}
-                placeholder={t('form.placeholder')}
-                supportingText={t('form.hint')}
-                errorText={inviteError}
-                maxLength={FIELD_LIMITS.guild.inviteMax}
-                autocomplete="off"
-                inputMode="url"
-                required
+              label={t('form.label')}
+              value={invite}
+              onValueChange={(value) => {
+                setInvite(value);
+                if (error !== null) setError(null);
+              }}
+              placeholder={t('form.placeholder')}
+              supportingText={t('form.hint')}
+              errorText={inviteError}
+              maxLength={FIELD_LIMITS.guild.inviteMax}
+              autocomplete="off"
+              inputMode="url"
+              required
+            />
+            {showAlert && (
+              <ClaimError
+                error={error}
+                onRefreshRights={() => void retryAfterRights()}
+                rightsBusy={refreshList.isPending}
+                onRetry={() => void submit()}
+                stale={rightsRefreshed === 'stale'}
               />
-              {showAlert && (
-                <ClaimError
-                  error={error}
-                  onRefreshRights={() => void retryAfterRights()}
-                  rightsBusy={refreshList.isPending}
-                  onRetry={() => void submit()}
-                  stale={rightsRefreshed === 'stale'}
-                />
-              )}
-              <CardActions>
-                <md-filled-button
-                  type="submit"
-                  disabled={claim.isPending || !canWrite || tooShort || trimmed === ''}
-                >
-                  {claim.isPending ? t('form.submitting') : t('form.submit')}
-                </md-filled-button>
-              </CardActions>
-            </form>
-          </Section>
-          <Card>
-            <InviteHelp headingLevel={2} />
-          </Card>
-        </>
+            )}
+            <CardActions>
+              <md-filled-button type="submit" disabled={claim.isPending || !canWrite || tooShort || trimmed === ''}>
+                {claim.isPending ? t('form.submitting') : t('form.submit')}
+              </md-filled-button>
+            </CardActions>
+          </form>
+          <Panel className="claim-help">
+            <InviteHelp headingLevel={3} />
+          </Panel>
+        </Section>
       }
     >
       <Card as="section" className="claim-intro">
@@ -219,12 +215,19 @@ export function Component() {
               compact
               icon="lock_reset"
               title={t('list.reauthTitle')}
-              action={<md-outlined-button onclick={() => reauth(guilds.error)}>{t('list.reauthAction')}</md-outlined-button>}
+              action={
+                <md-outlined-button onclick={() => reauth(guilds.error)}>{t('list.reauthAction')}</md-outlined-button>
+              }
             >
               {t('list.reauthBody')}
             </EmptyState>
           ) : (
-            <ErrorState compact error={guilds.error} onRetry={() => void guilds.refetch()} retrying={guilds.isFetching} />
+            <ErrorState
+              compact
+              error={guilds.error}
+              onRetry={() => void guilds.refetch()}
+              retrying={guilds.isFetching}
+            />
           )
         ) : (
           <>

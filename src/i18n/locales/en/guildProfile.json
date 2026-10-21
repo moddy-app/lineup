@@ -50,7 +50,7 @@
     "action": "Manage server"
   },
   "report": {
-    "title": "A problem with this server",
+    "title": "Report this server",
     "body": "Report a misleading profile, impersonation or inappropriate content. The Moddy team reviews every report."
   }
 }
