@@ -9,8 +9,8 @@
     "action": "Server ansehen"
   },
   "forbidden": {
-    "title": "Du verwaltest diesen Server nicht",
-    "body": "Du musst den Server besitzen oder die Berechtigung Administrator oder Server verwalten haben. Hast du diese Rechte gerade erhalten, lies deine Server auf der Seite zum Beanspruchen neu ein.",
+    "title": "Sie verwalten diesen Server nicht",
+    "body": "Sie müssen den Server besitzen oder die Berechtigung Administrator oder Server verwalten haben. Haben Sie diese Rechte gerade erhalten, lesen Sie Ihre Server auf der Seite zum Beanspruchen neu ein.",
     "action": "Profil ansehen"
   },
   "status": {
@@ -63,9 +63,9 @@
     "lost": "Sie existiert auf Discord nicht mehr: ersetze sie.",
     "none": "Keine Einladung gespeichert.",
     "label": "Neue Einladung",
-    "placeholder": "https://discord.gg/dein-code",
+    "placeholder": "https://discord.gg/ihr-code",
     "hint": "Optional. Sie darf nie ablaufen und muss zu demselben Server führen.",
-    "how": "So erstellst du eine dauerhafte Einladung"
+    "how": "So erstellen Sie eine dauerhafte Einladung"
   },
   "visibility": {
     "title": "Sichtbarkeit",
@@ -74,19 +74,19 @@
     "off": "Profil und Anzeigen verschwinden für alle, außer für Verwalter und das Moddy-Staff."
   },
   "errors": {
-    "fixFields": "Korrigiere die markierten Felder und speichere erneut.",
+    "fixFields": "Korrigieren Sie die markierten Felder und speichern Sie erneut.",
     "descriptionMax": "Höchstens {{count}} Zeichen.",
     "linkLabel": "Ein Name mit 1 bis {{max}} Zeichen ist nötig.",
-    "linkUrl": "Gib eine https-Adresse ein.",
+    "linkUrl": "Geben Sie eine https-Adresse ein.",
     "linksMax": "Höchstens {{count}} Links.",
     "tagsMax": "Höchstens {{count}} Tags.",
     "tagPattern": "„{{tag}}“ ist ungültig: 2 bis 24 Kleinbuchstaben, Ziffern oder Bindestriche.",
     "languagesMax": "Höchstens {{count}} Sprachen.",
-    "inviteLength": "Gib einen Code oder Link mit 2 bis 200 Zeichen ein."
+    "inviteLength": "Geben Sie einen Code oder Link mit 2 bis 200 Zeichen ein."
   },
   "snapshot": {
     "title": "Discord-Daten",
-    "body": "Name, Symbol und Zahlen werden alle 6 Stunden neu gelesen. Du kannst das Neulesen einmal pro Minute erzwingen.",
+    "body": "Name, Symbol und Zahlen werden alle 6 Stunden neu gelesen. Sie können das Neulesen einmal pro Minute erzwingen.",
     "members": "Mitglieder",
     "online": "Online",
     "invite": "Einladung:",
@@ -105,7 +105,7 @@
     "action": "Profil löschen",
     "confirmTitle": "Profil von {{name}} löschen?",
     "confirmBody": "Was passiert:",
-    "effectPosts": "Entwürfe und veröffentlichte Anzeigen werden „geschlossen“. Du kannst sie nach erneutem Beanspruchen wieder öffnen.",
+    "effectPosts": "Entwürfe und veröffentlichte Anzeigen werden „geschlossen“. Sie können sie nach erneutem Beanspruchen wieder öffnen.",
     "effectHidden": "Vom Moddy-Team ausgeblendete Anzeigen bleiben ausgeblendet.",
     "effectReclaim": "Beschreibung, Links, Tags und Sichtbarkeit gehen verloren.",
     "confirm": "Löschen",

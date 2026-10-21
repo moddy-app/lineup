@@ -132,7 +132,7 @@
     },
     "details": "Details (optional)",
     "submit": "Meldung senden",
-    "retryIn": "Erneut versuchen in {{seconds}} s",
+    "retryIn": "Erneut versuchen in {{wait}}",
     "sent": "Meldung gesendet. Danke.",
     "alreadyTitle": "Bereits gemeldet",
     "already": "Sie haben diesen Inhalt bereits gemeldet. Das Moddy-Team prüft ihn."
@@ -151,7 +151,7 @@
   "errorState": {
     "title": "Inhalt konnte nicht geladen werden",
     "notFoundTitle": "Nicht gefunden",
-    "retryIn": "Erneut versuchen in {{seconds}} s"
+    "retryIn": "Erneut versuchen in {{wait}}"
   },
   "quota": {
     "guild_one": "{{used}} / {{limit}} veröffentlichte Anzeige auf diesem Server",

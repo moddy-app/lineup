@@ -70,3 +70,11 @@
   font-size: var(--text-title);
   letter-spacing: normal;
 }
+
+/* At phone width a long name wraps the actions under it instead of being cut. */
+@media (max-width: 600px) {
+  .claim-row > .row-body {
+    flex: 1 1 160px;
+    min-width: 160px;
+  }
+}

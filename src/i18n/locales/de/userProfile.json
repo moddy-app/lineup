@@ -26,13 +26,13 @@
     "title": "Erfahrung",
     "manage": "Verwalten",
     "empty": "Keine Erfahrung angegeben.",
-    "emptySelf": "Du hast noch keine Erfahrung hinzugefügt."
+    "emptySelf": "Sie haben noch keine Erfahrung hinzugefügt."
   },
   "posts": {
     "title": "Anzeigen",
     "count_one": "{{value}} veröffentlichte Anzeige",
     "count_other": "{{value}} veröffentlichte Anzeigen",
     "empty": "Zurzeit keine veröffentlichte Anzeige.",
-    "emptySelf": "Du hast keine veröffentlichte Anzeige."
+    "emptySelf": "Sie haben keine veröffentlichte Anzeige."
   }
 }

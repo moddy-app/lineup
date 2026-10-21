@@ -3,7 +3,7 @@
  * (`Retry-After`): disabled, with the seconds left on the button.
  */
 
-import {useRetryAfter} from '@/api/useRetryAfter';
+import {formatCountdown, useRetryAfter} from '@/api/useRetryAfter';
 import {useT} from '@/i18n/useT';
 
 interface RetryButtonProps {
@@ -23,7 +23,7 @@ export function RetryButton({onRetry, error, busy}: RetryButtonProps) {
       <md-icon slot="icon" className="filled" aria-hidden="true">
         refresh
       </md-icon>
-      {active ? t('errorState.retryIn', {seconds}) : tCommon('actions.retry')}
+      {active ? t('errorState.retryIn', {wait: formatCountdown(seconds)}) : tCommon('actions.retry')}
     </md-outlined-button>
   );
 }

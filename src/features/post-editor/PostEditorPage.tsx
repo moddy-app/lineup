@@ -156,7 +156,8 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
   const key = draftKey(initialPost?.id);
   const [base, setBase] = useState<Post | undefined>(initialPost);
   const pristine = useMemo(() => (base ? formFromPost(base) : EMPTY_FORM), [base]);
-  const firstStep: StepId = editing ? 'content' : 'type';
+  const focusExpiry = editing && searchParams.get('focus') === 'expiry';
+  const firstStep: StepId = focusExpiry ? 'extras' : editing ? 'content' : 'type';
 
   // A form saved in this browser comes back, with a notice.
   const [restored] = useState(() => {
@@ -194,6 +195,11 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
       unregister();
     };
   }, [form, step, pristine, key]);
+
+  // `?focus=expiry` (from the banner of an expired post) opens the expiry field.
+  useEffect(() => {
+    if (focusExpiry) focusField('expiresOn');
+  }, [focusExpiry]);
 
   // `?guild=<id>` (from a server's page) preselects that server, if it is one of mine.
   const guildParam = searchParams.get('guild');

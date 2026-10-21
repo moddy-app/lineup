@@ -17,7 +17,7 @@
   "person": {
     "profile": "Voir le profil"
   },
-  "retryIn": "Réessayer dans {{seconds}} s",
+  "retryIn": "Réessayer dans {{wait}}",
   "dialog": {
     "required": "Ce champ est obligatoire."
   },

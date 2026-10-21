@@ -182,7 +182,7 @@ function Banners({post}: {post: PostDetail}) {
           <strong>{t('banner.expired.title')}</strong>
           <p>{post.can_edit ? t('banner.expired.editor') : t('banner.expired.body')}</p>
           {post.can_edit && (
-            <Link to={paths.postEdit(post.id)} className="post-banner-link">
+            <Link to={`${paths.postEdit(post.id)}?focus=expiry`} className="post-banner-link">
               {t('banner.expired.edit')}
             </Link>
           )}
@@ -548,7 +548,7 @@ function OwnerCard({post, onDeleted}: {post: PostDetail; onDeleted: () => void})
             </Link>
           )}
           {expired && (
-            <Link to={paths.postEdit(post.id)} className="post-banner-link">
+            <Link to={`${paths.postEdit(post.id)}?focus=expiry`} className="post-banner-link">
               {t('errorLinks.editExpiry')}
             </Link>
           )}

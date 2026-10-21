@@ -17,7 +17,7 @@
   "person": {
     "profile": "Ver perfil"
   },
-  "retryIn": "Reintentar en {{seconds}} s",
+  "retryIn": "Reintentar en {{wait}}",
   "dialog": {
     "required": "Este campo es obligatorio."
   },
@@ -38,7 +38,7 @@
     "help": {
       "title": "Reglas de revisión",
       "order": "Las solicitudes más antiguas están arriba.",
-      "verify": "Verificar conserva la prueba existente y añade tu nota.",
+      "verify": "Verificar conserva la prueba existente y añade su nota.",
       "reject": "Rechazar requiere un motivo, que la persona puede leer."
     },
     "loaded": "{{n}} cargadas en esta lista.",
@@ -111,7 +111,7 @@
     },
     "help": {
       "title": "Antes de decidir",
-      "target": "Abre primero el destino. Resolver o descartar no modifica el destino: oculta el anuncio por separado.",
+      "target": "Abra primero el destino. Resolver o descartar no modifica el destino: oculta el anuncio por separado.",
       "once": "Una denuncia decidida no se puede volver a decidir."
     },
     "loaded": "{{n}} cargadas en esta lista.",
@@ -151,7 +151,7 @@
     "revoke": {
       "action": "Retirar",
       "title": "Retirar esta insignia",
-      "text": "La insignia desaparece del perfil al instante. Puedes concederla de nuevo.",
+      "text": "La insignia desaparece del perfil al instante. Puede concederla de nuevo.",
       "confirm": "Retirar",
       "done": "Insignia retirada."
     },
@@ -163,7 +163,7 @@
       "entityIdHint": "De 15 a 20 dígitos. No se comprueba que la entidad exista.",
       "idInvalid": "El ID tiene de 15 a 20 dígitos.",
       "badge": "Insignia",
-      "badgeRequired": "Elige una insignia.",
+      "badgeRequired": "Elija una insignia.",
       "notForEntity": "Esta insignia no existe para este tipo de entidad.",
       "serverOnly": "Algunas insignias son solo para servidores.",
       "note": "Nota (opcional)",
@@ -174,13 +174,13 @@
   "posts": {
     "lookup": {
       "label": "ID o enlace del anuncio",
-      "hint": "Pega el UUID o la dirección del anuncio.",
+      "hint": "Pegue el UUID o la dirección del anuncio.",
       "invalid": "No se reconoce ningún ID de anuncio.",
       "submit": "Buscar"
     },
     "empty": {
       "title": "Ningún anuncio seleccionado",
-      "text": "Pega un ID o un enlace para ver su estado y ocultarlo."
+      "text": "Pegue un ID o un enlace para ver su estado y ocultarlo."
     },
     "reason": "Motivo:",
     "help": {

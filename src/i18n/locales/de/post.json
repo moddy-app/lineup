@@ -2,7 +2,7 @@
   "title": "Anzeige",
   "notFound": {
     "title": "Anzeige nicht gefunden oder entfernt",
-    "body": "Diese Anzeige existiert nicht, wurde entfernt oder ist mit deinem Konto nicht sichtbar."
+    "body": "Diese Anzeige existiert nicht, wurde entfernt oder ist mit Ihrem Konto nicht sichtbar."
   },
   "banner": {
     "draft": {
@@ -11,7 +11,7 @@
     },
     "closed": {
       "title": "Anzeige geschlossen",
-      "body": "Sie erscheint nicht mehr in der Liste. Öffne sie wieder, um sie erneut zu veröffentlichen."
+      "body": "Sie erscheint nicht mehr in der Liste. Öffnen Sie sie wieder, um sie erneut zu veröffentlichen."
     },
     "hidden": {
       "title": "Anzeige ausgeblendet",
@@ -21,7 +21,7 @@
     "expired": {
       "title": "Diese Anzeige ist abgelaufen",
       "body": "Sie ist nicht mehr in der Liste und nimmt keine Bewerbungen mehr an.",
-      "editor": "Sie ist nicht mehr in der Liste. Wähle ein neues Ablaufdatum, um sie erneut zu veröffentlichen.",
+      "editor": "Sie ist nicht mehr in der Liste. Wählen Sie ein neues Ablaufdatum, um sie erneut zu veröffentlichen.",
       "edit": "Ablaufdatum ändern"
     }
   },
@@ -59,7 +59,7 @@
   },
   "manage": {
     "title": "Anzeige verwalten",
-    "body": "Du kannst diese Anzeige bearbeiten."
+    "body": "Sie können diese Anzeige bearbeiten."
   },
   "actions": {
     "edit": "Bearbeiten",

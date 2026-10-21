@@ -132,7 +132,7 @@
     },
     "details": "Précisions (facultatif)",
     "submit": "Envoyer le signalement",
-    "retryIn": "Réessayer dans {{seconds}} s",
+    "retryIn": "Réessayer dans {{wait}}",
     "sent": "Signalement envoyé. Merci.",
     "alreadyTitle": "Déjà signalé",
     "already": "Vous avez déjà signalé ce contenu. L'équipe Moddy l'examine."
@@ -151,7 +151,7 @@
   "errorState": {
     "title": "Impossible de charger ce contenu",
     "notFoundTitle": "Introuvable",
-    "retryIn": "Réessayer dans {{seconds}} s"
+    "retryIn": "Réessayer dans {{wait}}"
   },
   "quota": {
     "guild_one": "{{used}} / {{limit}} annonce publiée sur ce serveur",

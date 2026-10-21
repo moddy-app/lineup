@@ -43,14 +43,14 @@
     "add": "Ajouter un lien"
   },
   "topics": {
-    "title": "Thème, tags et langues"
+    "title": "Thème, étiquettes et langues"
   },
   "theme": {
     "label": "Thème",
     "none": "Aucun thème"
   },
   "tags": {
-    "label": "Tags",
+    "label": "Étiquettes",
     "hint": "Séparés par des virgules. Lettres minuscules, chiffres et tirets, de 2 à 24 caractères. {{count}} sur {{max}}."
   },
   "languages": {
@@ -79,7 +79,7 @@
     "linkLabel": "Un nom de 1 à {{max}} caractères est requis.",
     "linkUrl": "Saisissez une adresse en https.",
     "linksMax": "{{count}} liens au plus.",
-    "tagsMax": "{{count}} tags au plus.",
+    "tagsMax": "{{count}} étiquettes au plus.",
     "tagPattern": "« {{tag}} » n'est pas valide : 2 à 24 lettres minuscules, chiffres ou tirets.",
     "languagesMax": "{{count}} langues au plus.",
     "inviteLength": "Saisissez un code ou un lien de 2 à 200 caractères."
@@ -107,7 +107,7 @@
     "confirmBody": "Ce qui se passe :",
     "effectPosts": "Les annonces en brouillon et publiées passent en « fermée ». Vous pourrez les rouvrir après une nouvelle revendication.",
     "effectHidden": "Les annonces masquées par l'équipe Moddy restent masquées.",
-    "effectReclaim": "La description, les liens, les tags et la visibilité sont perdus.",
+    "effectReclaim": "La description, les liens, les étiquettes et la visibilité sont perdus.",
     "confirm": "Supprimer",
     "done": "Le profil de {{name}} est supprimé."
   },

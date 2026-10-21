@@ -5,12 +5,12 @@
   "unknownName": "Servidor sin nombre",
   "notFound": {
     "title": "Servidor no encontrado",
-    "body": "Este servidor no tiene perfil en Lineup. Reclámalo primero desde la página de reclamación.",
+    "body": "Este servidor no tiene perfil en Lineup. Reclámelo primero desde la página de reclamación.",
     "action": "Ver servidores"
   },
   "forbidden": {
     "title": "No gestionas este servidor",
-    "body": "Hay que ser propietario del servidor, o tener el permiso de Administrador o Gestionar servidor. Si acabas de recibir estos permisos, vuelve a leer tus servidores desde la página de reclamación.",
+    "body": "Hay que ser propietario del servidor, o tener el permiso de Administrador o Gestionar servidor. Si acaba de recibir estos permisos, vuelva a leer sus servidores desde la página de reclamación.",
     "action": "Ver el perfil"
   },
   "status": {
@@ -63,7 +63,7 @@
     "lost": "Ya no existe en Discord: reemplázala.",
     "none": "No hay invitación guardada.",
     "label": "Nueva invitación",
-    "placeholder": "https://discord.gg/tu-codigo",
+    "placeholder": "https://discord.gg/su-codigo",
     "hint": "Opcional. No debe caducar nunca y llevar a este mismo servidor.",
     "how": "Cómo crear una invitación permanente"
   },
@@ -74,19 +74,19 @@
     "off": "El perfil y sus anuncios desaparecen para todos, salvo para los gestores y el staff de Moddy."
   },
   "errors": {
-    "fixFields": "Corrige los campos marcados y guarda de nuevo.",
+    "fixFields": "Corrija los campos marcados y guarda de nuevo.",
     "descriptionMax": "Máximo {{count}} caracteres.",
     "linkLabel": "Se requiere un nombre de 1 a {{max}} caracteres.",
-    "linkUrl": "Escribe una dirección https.",
+    "linkUrl": "Escriba una dirección https.",
     "linksMax": "Máximo {{count}} enlaces.",
     "tagsMax": "Máximo {{count}} etiquetas.",
     "tagPattern": "\"{{tag}}\" no es válida: de 2 a 24 minúsculas, números o guiones.",
     "languagesMax": "Máximo {{count}} idiomas.",
-    "inviteLength": "Escribe un código o enlace de 2 a 200 caracteres."
+    "inviteLength": "Escriba un código o enlace de 2 a 200 caracteres."
   },
   "snapshot": {
     "title": "Datos de Discord",
-    "body": "El nombre, el icono y los miembros se leen de nuevo cada 6 horas. Puedes forzar la lectura una vez por minuto.",
+    "body": "El nombre, el icono y los miembros se leen de nuevo cada 6 horas. Puede forzar la lectura una vez por minuto.",
     "members": "Miembros",
     "online": "En línea",
     "invite": "Invitación:",

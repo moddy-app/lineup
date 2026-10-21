@@ -1,17 +1,17 @@
 {
   "title": "Editar mi perfil",
-  "intro": "Este perfil es público. Solo se guardan los campos que cambies.",
+  "intro": "Este perfil es público. Solo se guardan los campos que cambie.",
   "saved": "Perfil guardado",
   "saving": "Guardando",
   "save": "Guardar",
   "reset": "Descartar cambios",
   "fields": {
     "headline": "Titular",
-    "headlineHelp": "Una línea bajo tu nombre, por ejemplo «Moderadora desde hace 4 años».",
+    "headlineHelp": "Una línea bajo su nombre, por ejemplo «Moderadora desde hace 4 años».",
     "bio": "Presentación",
     "bioHelp": "Texto sin formato. Se conservan los saltos de línea.",
     "openToWork": "Abierto a propuestas",
-    "openToWorkHelp": "Tu perfil muestra la marca «Abierto a propuestas»."
+    "openToWorkHelp": "Su perfil muestra la marca «Abierto a propuestas»."
   },
   "links": {
     "title": "Enlaces",
@@ -30,7 +30,7 @@
     "title": "Zona horaria",
     "label": "Zona horaria",
     "help": "Nombre IANA (Europe/Paris) o desfase UTC+02:00. Déjalo vacío para no mostrar nada.",
-    "suggestion": "Zona de tu navegador:",
+    "suggestion": "Zona de su navegador:",
     "use": "Usar"
   },
   "summary": {

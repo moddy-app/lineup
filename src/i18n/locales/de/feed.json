@@ -7,7 +7,7 @@
   "end": "Ende der Liste, {{count}} Anzeigen angezeigt.",
   "publish": {
     "title": "Anzeige veröffentlichen",
-    "body": "Für einen Server, den du verwaltest, oder für dich selbst.",
+    "body": "Für einen Server, den Sie verwalten, oder für sich selbst.",
     "action": "Anzeige veröffentlichen"
   },
   "filters": {
@@ -37,7 +37,7 @@
     "noneTitle": "Noch keine Anzeigen",
     "noneBody": "Veröffentlichte Anzeigen erscheinen hier. Veröffentliche die erste.",
     "filteredTitle": "Keine Anzeige passt zu diesen Filtern",
-    "filteredBody": "Entferne einen Filter oder setze alle zurück, um alle Anzeigen zu sehen."
+    "filteredBody": "Entfernen Sie einen Filter oder setzen Sie alle zurück, um alle Anzeigen zu sehen."
   },
   "invalid": {
     "title": "Diese Suche konnte nicht angewendet werden",

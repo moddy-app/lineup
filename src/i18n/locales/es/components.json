@@ -132,7 +132,7 @@
     },
     "details": "Detalles (opcional)",
     "submit": "Enviar la denuncia",
-    "retryIn": "Reintentar en {{seconds}} s",
+    "retryIn": "Reintentar en {{wait}}",
     "sent": "Denuncia enviada. Gracias.",
     "alreadyTitle": "Ya denunciado",
     "already": "Ya denunció este contenido. El equipo de Moddy lo está revisando."
@@ -151,7 +151,7 @@
   "errorState": {
     "title": "No se pudo cargar este contenido",
     "notFoundTitle": "No encontrado",
-    "retryIn": "Reintentar en {{seconds}} s"
+    "retryIn": "Reintentar en {{wait}}"
   },
   "quota": {
     "guild_one": "{{used}} / {{limit}} anuncio publicado en este servidor",

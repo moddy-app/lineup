@@ -41,3 +41,8 @@ export function useRetryAfter(error: unknown): RetryAfter {
   );
   return {seconds, active: seconds > 0};
 }
+
+/** Short countdown for a button: "45 s" up to two minutes, then "12 min". */
+export function formatCountdown(seconds: number): string {
+  return seconds < 120 ? `${seconds} s` : `${Math.ceil(seconds / 60)} min`;
+}

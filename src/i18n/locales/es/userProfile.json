@@ -26,13 +26,13 @@
     "title": "Experiencia",
     "manage": "Gestionar",
     "empty": "No hay experiencias indicadas.",
-    "emptySelf": "Todavía no has añadido ninguna experiencia."
+    "emptySelf": "Todavía no ha añadido ninguna experiencia."
   },
   "posts": {
     "title": "Anuncios",
     "count_one": "{{value}} anuncio publicado",
     "count_other": "{{value}} anuncios publicados",
     "empty": "No hay anuncios publicados por ahora.",
-    "emptySelf": "No tienes ningún anuncio publicado."
+    "emptySelf": "No tiene ningún anuncio publicado."
   }
 }

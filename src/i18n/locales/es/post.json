@@ -2,12 +2,12 @@
   "title": "Anuncio",
   "notFound": {
     "title": "Anuncio no encontrado o retirado",
-    "body": "Este anuncio no existe, se retiró o no es visible con tu cuenta."
+    "body": "Este anuncio no existe, se retiró o no es visible con su cuenta."
   },
   "banner": {
     "draft": {
       "title": "Borrador",
-      "body": "Solo las personas que pueden editarlo ven este anuncio. Publícalo para que aparezca en la lista."
+      "body": "Solo las personas que pueden editarlo ven este anuncio. Publíquelo para que aparezca en la lista."
     },
     "closed": {
       "title": "Anuncio cerrado",
@@ -21,7 +21,7 @@
     "expired": {
       "title": "Este anuncio ha caducado",
       "body": "Ya no está en la lista y no acepta candidaturas.",
-      "editor": "Ya no está en la lista. Elige una nueva fecha de caducidad para publicarlo de nuevo.",
+      "editor": "Ya no está en la lista. Elija una nueva fecha de caducidad para publicarlo de nuevo.",
       "edit": "Cambiar la fecha de caducidad"
     }
   },
@@ -59,7 +59,7 @@
   },
   "manage": {
     "title": "Gestionar el anuncio",
-    "body": "Puedes editar este anuncio."
+    "body": "Puede editar este anuncio."
   },
   "actions": {
     "edit": "Editar",

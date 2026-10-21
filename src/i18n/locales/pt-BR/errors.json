@@ -41,8 +41,8 @@
     "lineup_positions_other_unexpected": "Os nomes de cargo só são usados quando “Outro” está selecionado.",
     "lineup_experience_invalid": "Os dados desta experiência não são coerentes. Confira o cargo e as datas.",
     "lineup_experience_order_invalid": "A lista mudou. Recarregue-a e tente de novo.",
-    "lineup_verification_not_applicable": "A verificação automática não é possível para esta experiência. Peça uma verificação manual.",
-    "lineup_verification_failed": "A verificação automática não deu certo. Peça uma verificação manual.",
+    "lineup_verification_not_applicable": "A verificação automática não é possível para esta experiência. Peça uma revisão manual.",
+    "lineup_verification_failed": "A verificação automática não deu certo. Peça uma revisão manual.",
     "lineup_report_self": "Você não pode denunciar o seu próprio conteúdo.",
     "lineup_entity_type_invalid": "O tipo de entidade não é válido.",
     "lineup_badge_invalid": "Este selo não pode ser concedido a esta entidade.",
@@ -88,12 +88,12 @@
     "status": "O status não é válido."
   },
   "verificationFailed": {
-    "not_member": "Você não é membro deste servidor. Peça uma verificação manual.",
-    "no_staff_permission": "Você é membro deste servidor, mas não tem nenhuma permissão de staff. Peça uma verificação manual."
+    "not_member": "Você não é membro deste servidor. Peça uma revisão manual.",
+    "no_staff_permission": "Você é membro deste servidor, mas não tem nenhuma permissão de staff. Peça uma revisão manual."
   },
   "verificationNotApplicable": {
-    "not_guild": "A verificação automática só vale para servidores do Discord. Peça uma verificação manual.",
-    "ended": "A verificação automática só vale para experiências em andamento. Peça uma verificação manual."
+    "not_guild": "A verificação automática só vale para servidores do Discord. Peça uma revisão manual.",
+    "ended": "A verificação automática só vale para experiências em andamento. Peça uma revisão manual."
   },
   "validation": {
     "required": "Este campo é obrigatório.",

@@ -63,7 +63,7 @@
       "notRequired": "Microphone not required"
     },
     "promise": {
-      "label": "Lineup check planned",
+      "label": "Lineup verification planned",
       "hint": "Lineup will check this requirement when applications open on Lineup. Nothing is checked yet."
     },
     "viewer": {
@@ -132,7 +132,7 @@
     },
     "details": "Details (optional)",
     "submit": "Send report",
-    "retryIn": "Try again in {{seconds}} s",
+    "retryIn": "Try again in {{wait}}",
     "sent": "Report sent. Thank you.",
     "alreadyTitle": "Already reported",
     "already": "You have already reported this content. The Moddy team is reviewing it."
@@ -151,7 +151,7 @@
   "errorState": {
     "title": "Could not load this content",
     "notFoundTitle": "Not found",
-    "retryIn": "Try again in {{seconds}} s"
+    "retryIn": "Try again in {{wait}}"
   },
   "quota": {
     "guild_one": "{{used}} / {{limit}} published post on this server",

@@ -27,7 +27,7 @@
   "about": {
     "title": "À propos",
     "none": "Ce serveur n'a pas encore de description.",
-    "topics": "Thème et tags"
+    "topics": "Thème et étiquettes"
   },
   "posts": {
     "title_one": "{{count}} annonce ouverte",

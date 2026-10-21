@@ -7,7 +7,7 @@
   "end": "Fin de la lista, {{count}} anuncios mostrados.",
   "publish": {
     "title": "Publicar un anuncio",
-    "body": "Para un servidor que gestionas o para ti.",
+    "body": "Para un servidor que gestiona o para usted.",
     "action": "Publicar un anuncio"
   },
   "filters": {
@@ -35,7 +35,7 @@
   },
   "empty": {
     "noneTitle": "Todavía no hay anuncios",
-    "noneBody": "Los anuncios publicados aparecen aquí. Publica el primero.",
+    "noneBody": "Los anuncios publicados aparecen aquí. Publique el primero.",
     "filteredTitle": "Ningún anuncio coincide con estos filtros",
     "filteredBody": "Quita un filtro o restablécelos para ver todos los anuncios."
   },

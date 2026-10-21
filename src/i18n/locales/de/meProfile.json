@@ -7,11 +7,11 @@
   "reset": "Änderungen verwerfen",
   "fields": {
     "headline": "Titel",
-    "headlineHelp": "Eine Zeile unter deinem Namen, zum Beispiel „Moderatorin seit 4 Jahren“.",
+    "headlineHelp": "Eine Zeile unter Ihrem Namen, zum Beispiel „Moderatorin seit 4 Jahren“.",
     "bio": "Über mich",
     "bioHelp": "Nur Text. Zeilenumbrüche bleiben erhalten.",
     "openToWork": "Offen für Angebote",
-    "openToWorkHelp": "Auf deinem Profil erscheint die Markierung „Offen für Angebote“."
+    "openToWorkHelp": "Auf Ihrem Profil erscheint die Markierung „Offen für Angebote“."
   },
   "links": {
     "title": "Links",
@@ -30,7 +30,7 @@
     "title": "Zeitzone",
     "label": "Zeitzone",
     "help": "IANA-Name (Europe/Paris) oder UTC-Versatz (UTC+02:00). Leer lassen, um nichts anzuzeigen.",
-    "suggestion": "Zeitzone deines Browsers:",
+    "suggestion": "Zeitzone Ihres Browsers:",
     "use": "Übernehmen"
   },
   "summary": {
@@ -46,7 +46,7 @@
     "view": "Mein öffentliches Profil ansehen"
   },
   "problems": {
-    "linkLabelRequired": "Gib dem Link einen Namen.",
+    "linkLabelRequired": "Geben Sie dem Link einen Namen.",
     "linkLabelTooLong": "Der Name hat höchstens {{count}} Zeichen.",
     "urlInvalid": "Diese Adresse ist ungültig (ohne Zugangsdaten, Leerzeichen oder Port).",
     "urlHttps": "Der Link muss mit https:// beginnen.",

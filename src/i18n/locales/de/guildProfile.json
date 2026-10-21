@@ -21,7 +21,7 @@
   },
   "inviteLost": {
     "title": "Einladung ersetzen",
-    "body": "Die gespeicherte Einladung existiert auf Discord nicht mehr, der Beitreten-Button ist ausgeblendet. Speichere eine Einladung, die nie abläuft.",
+    "body": "Die gespeicherte Einladung existiert auf Discord nicht mehr, der Beitreten-Button ist ausgeblendet. Speichern Sie eine Einladung, die nie abläuft.",
     "action": "Einladung ersetzen"
   },
   "about": {
@@ -46,11 +46,11 @@
   },
   "manage": {
     "title": "Serververwaltung",
-    "body": "Du verwaltest diesen Server. Bearbeite das Profil, verfolge die Anzeigen oder lösche das Profil.",
+    "body": "Sie verwalten diesen Server. Bearbeiten Sie das Profil, verfolgen Sie die Anzeigen oder löschen Sie das Profil.",
     "action": "Server verwalten"
   },
   "report": {
     "title": "Diesen Server melden",
-    "body": "Melde ein irreführendes Profil, Identitätsmissbrauch oder unangemessene Inhalte. Das Moddy-Team prüft jede Meldung."
+    "body": "Melden Sie ein irreführendes Profil, Identitätsmissbrauch oder unangemessene Inhalte. Das Moddy-Team prüft jede Meldung."
   }
 }

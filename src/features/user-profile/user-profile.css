@@ -124,3 +124,7 @@
 .profile-facts > .profile-created {
   color: var(--md-sys-color-on-surface-variant);
 }
+
+.profile-account .card-actions {
+  padding-top: 0;
+}

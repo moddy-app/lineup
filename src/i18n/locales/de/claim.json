@@ -1,11 +1,11 @@
 {
   "title": "Server beanspruchen",
-  "intro": "Wer einen Server beansprucht, legt sein Lineup-Profil an. Es erscheinen nur Server, die dir gehören oder auf denen du die Berechtigung Administrator oder Server verwalten hast.",
+  "intro": "Wer einen Server beansprucht, legt sein Lineup-Profil an. Es erscheinen nur Server, die Ihnen gehören oder auf denen Sie die Berechtigung Administrator oder Server verwalten haben.",
   "unknownName": "Server ohne Namen",
   "success": "{{name}} ist jetzt auf Lineup.",
   "list": {
-    "title": "Deine Server",
-    "label": "Server, die du verwalten kannst",
+    "title": "Ihre Server",
+    "label": "Server, die Sie verwalten können",
     "refresh": "Liste aktualisieren",
     "refreshIn": "Aktualisieren in {{seconds}} s",
     "refreshed": "Liste erneut von Discord gelesen.",
@@ -16,16 +16,16 @@
     "manage": "Verwalten",
     "claim": "Beanspruchen",
     "emptyTitle": "Kein Server zum Beanspruchen",
-    "emptyBody": "Hier erscheinen nur Server, die dir gehören oder auf denen du die Berechtigung Administrator oder Server verwalten hast. Hast du gerade einen erstellt, aktualisiere die Liste.",
-    "reauthTitle": "Erlaube Lineup, deine Server zu lesen",
-    "reauthBody": "Deine Sitzung stammt vom Moddy-Dashboard und hat diese Berechtigung nicht. Melde dich erneut mit Discord an.",
+    "emptyBody": "Hier erscheinen nur Server, die Ihnen gehören oder auf denen Sie die Berechtigung Administrator oder Server verwalten haben. Haben Sie gerade einen erstellt, aktualisieren Sie die Liste.",
+    "reauthTitle": "Erlauben Sie Lineup, Ihre Server zu lesen",
+    "reauthBody": "Ihre Sitzung stammt vom Moddy-Dashboard und hat diese Berechtigung nicht. Melden Sie sich erneut mit Discord an.",
     "reauthAction": "Erneut anmelden"
   },
   "form": {
     "title": "Server-Einladung",
-    "body": "Füge einen Einladungslink ein, der nie abläuft. Er belegt, dass der Server dir gehört, und wird zum Beitreten-Button im Profil.",
+    "body": "Fügen Sie einen Einladungslink ein, der nie abläuft. Er belegt, dass der Server Ihnen gehört, und wird zum Beitreten-Button im Profil.",
     "label": "Einladungslink oder -code",
-    "placeholder": "https://discord.gg/dein-code",
+    "placeholder": "https://discord.gg/ihr-code",
     "hint": "Der reine Code funktioniert auch.",
     "selected": "Einladung für {{name}}",
     "deselect": "Entfernen",
@@ -33,8 +33,8 @@
     "submitting": "Prüfung..."
   },
   "errors": {
-    "tooShort": "Gib mindestens {{count}} Zeichen ein.",
-    "forbiddenHelp": "Hast du diese Rechte gerade erst auf Discord erhalten, lies sie neu ein, danach wird der Antrag wiederholt.",
+    "tooShort": "Geben Sie mindestens {{count}} Zeichen ein.",
+    "forbiddenHelp": "Haben Sie diese Rechte gerade erst auf Discord erhalten, lesen Sie sie neu ein. Der Antrag wird dann wiederholt.",
     "rightsChanged": "Ich habe meine Rechte geändert",
     "rightsChecking": "Rechte werden gelesen...",
     "openProfile": "Profil öffnen"

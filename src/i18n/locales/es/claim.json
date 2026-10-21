@@ -1,11 +1,11 @@
 {
   "title": "Reclamar un servidor",
-  "intro": "Reclamar un servidor crea su perfil en Lineup. Solo aparecen los servidores de los que eres propietario o donde tienes el permiso de Administrador o Gestionar servidor.",
+  "intro": "Reclamar un servidor crea su perfil en Lineup. Solo aparecen los servidores de los que es propietario o donde tiene el permiso de Administrador o Gestionar servidor.",
   "unknownName": "Servidor sin nombre",
   "success": "{{name}} ya está en Lineup.",
   "list": {
-    "title": "Tus servidores",
-    "label": "Servidores que puedes gestionar",
+    "title": "Sus servidores",
+    "label": "Servidores que puede gestionar",
     "refresh": "Actualizar la lista",
     "refreshIn": "Actualizar en {{seconds}} s",
     "refreshed": "Lista leída de nuevo desde Discord.",
@@ -16,16 +16,16 @@
     "manage": "Gestionar",
     "claim": "Reclamar",
     "emptyTitle": "Ningún servidor que reclamar",
-    "emptyBody": "Aquí solo aparecen los servidores de los que eres propietario o donde tienes el permiso de Administrador o Gestionar servidor. Si acabas de crear uno, actualiza la lista.",
-    "reauthTitle": "Autoriza a Lineup a leer tus servidores",
-    "reauthBody": "Tu sesión viene del panel de Moddy y no tiene este permiso. Vuelve a iniciar sesión con Discord.",
+    "emptyBody": "Aquí solo aparecen los servidores de los que es propietario o donde tiene el permiso de Administrador o Gestionar servidor. Si acaba de crear uno, actualice la lista.",
+    "reauthTitle": "Autorice a Lineup a leer sus servidores",
+    "reauthBody": "Su sesión viene del panel de Moddy y no tiene este permiso. Vuelva a iniciar sesión con Discord.",
     "reauthAction": "Volver a iniciar sesión"
   },
   "form": {
     "title": "Invitación del servidor",
-    "body": "Pega un enlace de invitación que no caduque nunca. Demuestra que el servidor es tuyo y se convierte en el botón Unirse del perfil.",
+    "body": "Pegue un enlace de invitación que no caduque nunca. Demuestra que el servidor es suyo y se convierte en el botón Unirse del perfil.",
     "label": "Enlace o código de invitación",
-    "placeholder": "https://discord.gg/tu-codigo",
+    "placeholder": "https://discord.gg/su-codigo",
     "hint": "El código solo también sirve.",
     "selected": "Invitación de {{name}}",
     "deselect": "Quitar",
@@ -33,8 +33,8 @@
     "submitting": "Comprobando..."
   },
   "errors": {
-    "tooShort": "Escribe al menos {{count}} caracteres.",
-    "forbiddenHelp": "Si acabas de recibir estos permisos en Discord, vuelve a leerlos y se reintenta la reclamación.",
+    "tooShort": "Escriba al menos {{count}} caracteres.",
+    "forbiddenHelp": "Si acaba de recibir estos permisos en Discord, vuelva a leerlos y se reintentará la reclamación.",
     "rightsChanged": "He cambiado mis permisos",
     "rightsChecking": "Leyendo permisos...",
     "openProfile": "Abrir el perfil"

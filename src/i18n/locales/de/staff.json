@@ -17,7 +17,7 @@
   "person": {
     "profile": "Profil ansehen"
   },
-  "retryIn": "Erneut versuchen in {{seconds}} s",
+  "retryIn": "Erneut versuchen in {{wait}}",
   "dialog": {
     "required": "Dieses Feld ist erforderlich."
   },
@@ -38,7 +38,7 @@
     "help": {
       "title": "Prüfregeln",
       "order": "Die ältesten Anfragen stehen oben.",
-      "verify": "Verifizieren behält den vorhandenen Nachweis und fügt deine Notiz hinzu.",
+      "verify": "Verifizieren behält den vorhandenen Nachweis und fügt Ihre Notiz hinzu.",
       "reject": "Ablehnen braucht eine Begründung, die die Person lesen kann."
     },
     "loaded": "{{n}} in dieser Liste geladen.",
@@ -111,7 +111,7 @@
     },
     "help": {
       "title": "Vor der Entscheidung",
-      "target": "Öffne zuerst das Ziel. Bearbeiten oder Abweisen ändert das Ziel nicht: Blende die Anzeige separat aus.",
+      "target": "Öffnen Sie zuerst das Ziel. Bearbeiten oder Abweisen ändert das Ziel nicht: blenden Sie die Anzeige separat aus.",
       "once": "Eine entschiedene Meldung kann nicht erneut entschieden werden."
     },
     "loaded": "{{n}} in dieser Liste geladen.",
@@ -151,7 +151,7 @@
     "revoke": {
       "action": "Entziehen",
       "title": "Dieses Abzeichen entziehen",
-      "text": "Das Abzeichen verschwindet sofort vom Profil. Du kannst es erneut vergeben.",
+      "text": "Das Abzeichen verschwindet sofort vom Profil. Sie können es erneut vergeben.",
       "confirm": "Entziehen",
       "done": "Abzeichen entzogen."
     },
@@ -163,7 +163,7 @@
       "entityIdHint": "15 bis 20 Ziffern. Ob die Entität existiert, wird nicht geprüft.",
       "idInvalid": "Die ID besteht aus 15 bis 20 Ziffern.",
       "badge": "Abzeichen",
-      "badgeRequired": "Wähle ein Abzeichen.",
+      "badgeRequired": "Wählen Sie ein Abzeichen.",
       "notForEntity": "Dieses Abzeichen gibt es für diesen Entitätstyp nicht.",
       "serverOnly": "Manche Abzeichen gibt es nur für Server.",
       "note": "Notiz (optional)",

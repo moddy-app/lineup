@@ -41,8 +41,8 @@
     "lineup_positions_other_unexpected": "Los nombres de puesto solo se usan si está seleccionado «Otro».",
     "lineup_experience_invalid": "Los datos de esta experiencia no son coherentes. Revise el puesto y las fechas.",
     "lineup_experience_order_invalid": "La lista ha cambiado. Recárguela e inténtelo de nuevo.",
-    "lineup_verification_not_applicable": "La verificación automática no es posible para esta experiencia. Solicite una verificación manual.",
-    "lineup_verification_failed": "La verificación automática no ha tenido éxito. Solicite una verificación manual.",
+    "lineup_verification_not_applicable": "La verificación automática no es posible para esta experiencia. Solicite una revisión manual.",
+    "lineup_verification_failed": "La verificación automática no ha tenido éxito. Solicite una revisión manual.",
     "lineup_report_self": "No puede denunciar su propio contenido.",
     "lineup_entity_type_invalid": "El tipo de entidad no es válido.",
     "lineup_badge_invalid": "Esta insignia no se puede conceder a esta entidad.",
@@ -88,12 +88,12 @@
     "status": "El estado no es válido."
   },
   "verificationFailed": {
-    "not_member": "No es miembro de este servidor. Solicite una verificación manual.",
-    "no_staff_permission": "Es miembro de este servidor, pero sin ningún permiso de staff. Solicite una verificación manual."
+    "not_member": "No es miembro de este servidor. Solicite una revisión manual.",
+    "no_staff_permission": "Es miembro de este servidor, pero sin ningún permiso de staff. Solicite una revisión manual."
   },
   "verificationNotApplicable": {
-    "not_guild": "La verificación automática solo afecta a los servidores de Discord. Solicite una verificación manual.",
-    "ended": "La verificación automática solo afecta a las experiencias en curso. Solicite una verificación manual."
+    "not_guild": "La verificación automática solo afecta a los servidores de Discord. Solicite una revisión manual.",
+    "ended": "La verificación automática solo afecta a las experiencias en curso. Solicite una revisión manual."
   },
   "validation": {
     "required": "Este campo es obligatorio.",

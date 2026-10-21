@@ -21,7 +21,7 @@ import {hasCode} from '@/api/client';
 import {errorMessage} from '@/api/errors';
 import {useCreateReport} from '@/api/mutations';
 import type {ReportReason, ReportTargetType} from '@/api/types';
-import {useRetryAfter} from '@/api/useRetryAfter';
+import {formatCountdown, useRetryAfter} from '@/api/useRetryAfter';
 import {useAuthAction} from '@/auth/useAuthAction';
 import {useSession} from '@/auth/session';
 import {useT} from '@/i18n/useT';
@@ -116,7 +116,7 @@ export function ReportDialog({open, onClose, target}: ReportDialogProps) {
           <>
             <md-text-button onclick={onClose}>{tCommon('actions.cancel')}</md-text-button>
             <md-filled-button disabled={!canSend} onclick={() => void send()}>
-              {retry.active ? t('report.retryIn', {seconds: retry.seconds}) : t('report.submit')}
+              {retry.active ? t('report.retryIn', {wait: formatCountdown(retry.seconds)}) : t('report.submit')}
             </md-filled-button>
           </>
         )

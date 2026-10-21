@@ -6,7 +6,7 @@ import {Link} from 'react-router';
 import {hasCode} from '@/api/client';
 import {errorMessage, fieldErrors} from '@/api/errors';
 import {useUser} from '@/api/queries';
-import {useRetryAfter} from '@/api/useRetryAfter';
+import {formatCountdown, useRetryAfter} from '@/api/useRetryAfter';
 import type {InfiniteList} from '@/api/pagination';
 import {paths} from '@/app/paths';
 import {useSession} from '@/auth/session';
@@ -216,7 +216,7 @@ export function ActionDialog({
             disabled={busy || retry.active || !canWrite}
             onclick={() => void submit()}
           >
-            {retry.active ? t('retryIn', {seconds: retry.seconds}) : confirmLabel}
+            {retry.active ? t('retryIn', {wait: formatCountdown(retry.seconds)}) : confirmLabel}
           </md-filled-button>
         </>
       }

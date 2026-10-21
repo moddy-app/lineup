@@ -34,7 +34,7 @@
   },
   "errors": {
     "tooShort": "Saisissez au moins {{count}} caractères.",
-    "forbiddenHelp": "Si vous venez de recevoir ces droits sur Discord, relisez-les, puis la revendication est retentée.",
+    "forbiddenHelp": "Si vous venez de recevoir ces droits sur Discord, relisez-les : la revendication sera retentée.",
     "rightsChanged": "J'ai changé mes droits",
     "rightsChecking": "Lecture des droits...",
     "openProfile": "Ouvrir le profil"

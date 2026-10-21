@@ -1,6 +1,6 @@
 {
   "title": "Server",
-  "intro": "Die Discord-Server, die auf Lineup Staff suchen. Öffne ein Profil, um das Team und die offenen Anzeigen zu sehen.",
+  "intro": "Die Discord-Server, die auf Lineup Staff suchen. Öffnen Sie ein Profil, um das Team und die offenen Anzeigen zu sehen.",
   "claim": {
     "action": "Server beanspruchen"
   },
@@ -27,6 +27,6 @@
   },
   "emptyFiltered": {
     "title": "Kein Server passt",
-    "body": "Ändere die Suche oder das Thema, oder setze die Filter zurück."
+    "body": "Ändern Sie die Suche oder das Thema, oder setzen Sie die Filter zurück."
   }
 }

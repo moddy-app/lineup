@@ -1,6 +1,6 @@
 {
   "title": "Servidores",
-  "intro": "Los servidores de Discord que buscan staff en Lineup. Abre un perfil para ver el equipo y los anuncios abiertos.",
+  "intro": "Los servidores de Discord que buscan staff en Lineup. Abra un perfil para ver el equipo y los anuncios abiertos.",
   "claim": {
     "action": "Reclamar un servidor"
   },
@@ -27,6 +27,6 @@
   },
   "emptyFiltered": {
     "title": "Ningún servidor coincide",
-    "body": "Cambia la búsqueda o la temática, o borra los filtros."
+    "body": "Cambie la búsqueda o la temática, o borre los filtros."
   }
 }

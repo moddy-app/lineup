@@ -24,7 +24,7 @@
     "lineup_post_not_hidden": "Cette annonce n'est pas masquée.",
     "lineup_experience_limit": "Vous avez atteint le nombre maximal d'expériences. Supprimez-en une pour en ajouter.",
     "lineup_experience_already_verified": "Cette expérience est déjà vérifiée.",
-    "lineup_review_already_pending": "Une vérification est déjà en attente pour cette expérience.",
+    "lineup_review_already_pending": "Une revue est déjà en attente pour cette expérience.",
     "lineup_report_already_handled": "Ce signalement a déjà été traité.",
     "invite_invalid": "Ce n'est pas un lien d'invitation de serveur.",
     "invite_expiring": "Cette invitation expire. Utilisez-en une qui n'expire jamais.",
@@ -41,8 +41,8 @@
     "lineup_positions_other_unexpected": "Les noms de poste ne servent que si « Autre » est sélectionné.",
     "lineup_experience_invalid": "Les informations de cette expérience sont incohérentes. Vérifiez le poste et les dates.",
     "lineup_experience_order_invalid": "La liste a changé. Rechargez-la puis réessayez.",
-    "lineup_verification_not_applicable": "La vérification automatique n'est pas possible pour cette expérience. Demandez une vérification manuelle.",
-    "lineup_verification_failed": "La vérification automatique n'a pas abouti. Demandez une vérification manuelle.",
+    "lineup_verification_not_applicable": "La vérification automatique n'est pas possible pour cette expérience. Demandez une revue manuelle.",
+    "lineup_verification_failed": "La vérification automatique n'a pas abouti. Demandez une revue manuelle.",
     "lineup_report_self": "Vous ne pouvez pas signaler votre propre contenu.",
     "lineup_entity_type_invalid": "Le type d'entité n'est pas valide.",
     "lineup_badge_invalid": "Ce badge ne peut pas être attribué à cette entité.",
@@ -88,12 +88,12 @@
     "status": "Le statut n'est pas valide."
   },
   "verificationFailed": {
-    "not_member": "Vous n'êtes pas membre de ce serveur. Demandez une vérification manuelle.",
-    "no_staff_permission": "Vous êtes membre de ce serveur, mais sans permission de staff. Demandez une vérification manuelle."
+    "not_member": "Vous n'êtes pas membre de ce serveur. Demandez une revue manuelle.",
+    "no_staff_permission": "Vous êtes membre de ce serveur, mais sans permission de staff. Demandez une revue manuelle."
   },
   "verificationNotApplicable": {
-    "not_guild": "La vérification automatique ne concerne que les serveurs Discord. Demandez une vérification manuelle.",
-    "ended": "La vérification automatique ne concerne que les expériences en cours. Demandez une vérification manuelle."
+    "not_guild": "La vérification automatique ne concerne que les serveurs Discord. Demandez une revue manuelle.",
+    "ended": "La vérification automatique ne concerne que les expériences en cours. Demandez une revue manuelle."
   },
   "validation": {
     "required": "Ce champ est obligatoire.",

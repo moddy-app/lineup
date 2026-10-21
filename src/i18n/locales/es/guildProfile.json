@@ -21,7 +21,7 @@
   },
   "inviteLost": {
     "title": "Invitación por reemplazar",
-    "body": "La invitación guardada ya no existe en Discord, así que el botón Unirse está oculto. Guarda una invitación que no caduque nunca.",
+    "body": "La invitación guardada ya no existe en Discord, así que el botón Unirse está oculto. Guarde una invitación que no caduque nunca.",
     "action": "Reemplazar la invitación"
   },
   "about": {
@@ -46,11 +46,11 @@
   },
   "manage": {
     "title": "Gestión del servidor",
-    "body": "Gestionas este servidor. Edita el perfil, sigue los anuncios o elimina el perfil.",
+    "body": "Gestiona este servidor. Edite el perfil, siga los anuncios o elimine el perfil.",
     "action": "Gestionar servidor"
   },
   "report": {
     "title": "Denunciar este servidor",
-    "body": "Informa de un perfil engañoso, una suplantación o contenido inapropiado. El equipo de Moddy revisa cada informe."
+    "body": "Informe de un perfil engañoso, una suplantación o contenido inapropiado. El equipo de Moddy revisa cada informe."
   }
 }

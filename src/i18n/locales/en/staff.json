@@ -17,7 +17,7 @@
   "person": {
     "profile": "View profile"
   },
-  "retryIn": "Retry in {{seconds}} s",
+  "retryIn": "Retry in {{wait}}",
   "dialog": {
     "required": "This field is required."
   },
