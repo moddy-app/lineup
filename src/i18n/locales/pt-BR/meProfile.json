@@ -1,0 +1,58 @@
+{
+  "title": "Editar meu perfil",
+  "intro": "Este perfil é público. Somente os campos alterados são salvos.",
+  "saved": "Perfil salvo",
+  "saving": "Salvando",
+  "save": "Salvar",
+  "reset": "Descartar alterações",
+  "fields": {
+    "headline": "Título",
+    "headlineHelp": "Uma linha abaixo do seu nome, por exemplo \"Moderadora há 4 anos\".",
+    "bio": "Apresentação",
+    "bioHelp": "Texto simples. As quebras de linha são mantidas.",
+    "openToWork": "Aberto a propostas",
+    "openToWorkHelp": "Seu perfil mostra a marca \"Aberto a propostas\"."
+  },
+  "links": {
+    "title": "Links",
+    "help": "Até {{count}} links, com https. O nome do link tem no máximo 40 caracteres.",
+    "label": "Nome do link",
+    "url": "Endereço (https)",
+    "remove": "Remover o link {{label}}",
+    "add": "Adicionar um link",
+    "count": "{{count}} / {{max}}"
+  },
+  "languages": {
+    "title": "Idiomas",
+    "help": "{{count}} selecionados de no máximo {{max}}."
+  },
+  "timezone": {
+    "title": "Fuso horário",
+    "label": "Fuso horário",
+    "help": "Nome IANA (Europe/Paris) ou deslocamento UTC+02:00. Deixe vazio para não mostrar nada.",
+    "suggestion": "Fuso do seu navegador:",
+    "use": "Usar"
+  },
+  "summary": {
+    "title": "Prévia",
+    "noHeadline": "Sem título",
+    "languages_one": "{{count}} idioma: {{list}}",
+    "languages_other": "{{count}} idiomas: {{list}}",
+    "noLanguages": "Nenhum idioma",
+    "links_one": "{{count}} link",
+    "links_other": "{{count}} links",
+    "open": "Aberto a propostas",
+    "closed": "Sem procurar",
+    "view": "Ver meu perfil público"
+  },
+  "problems": {
+    "linkLabelRequired": "Dê um nome ao link.",
+    "linkLabelTooLong": "O nome tem no máximo {{count}} caracteres.",
+    "urlInvalid": "Este endereço não é válido (sem credenciais, espaços ou porta).",
+    "urlHttps": "O link deve começar com https://.",
+    "urlTooLong": "O endereço tem no máximo 500 caracteres.",
+    "timezoneInvalid": "Fuso desconhecido. Exemplos: Europe/Paris, UTC+02:00.",
+    "tooLong": "No máximo {{count}} caracteres.",
+    "tooMany": "No máximo {{count}} itens."
+  }
+}

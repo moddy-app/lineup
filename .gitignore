@@ -1,0 +1,18 @@
+# Dependencies and build output
+node_modules/
+dist/
+dist-mock/
+
+# Local env files (.env.example and .env.mock are committed)
+.env*.local
+
+# Test and screenshot output
+test-results/
+playwright-report/
+artifacts/
+
+# Editors and OS
+.DS_Store
+.vscode/
+.idea/
+*.tsbuildinfo

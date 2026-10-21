@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lineup</title>
+    <meta
+      name="description"
+      content="Lineup connects Discord servers that recruit staff with people looking for a team."
+    />
+    <!-- The browser's UI takes the page color (set by the theme). -->
+    <meta name="theme-color" content="#f1f0f7" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <!-- 1. Theme before the first paint, and the page held until ready.
+            Blocking on purpose: inlined here by scripts/vite-plugin-theme-boot.ts. -->
+    <!-- theme-boot -->
+
+    <!-- 2. The design system (imported by src/main.tsx), the text font preloaded
+            with the URL of the stylesheet's @font-face
+            (scripts/vite-plugin-font-preload.ts), so it is fetched once. -->
+    <!-- font-preload -->
+
+    <!-- 3. Material Symbols. display=block: an icon stays blank until its
+            font arrives instead of showing its name ("group", "work"…). -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block"
+    />
+
+    <!-- 4. The app. -->
+    <script type="module" src="/src/main.tsx"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>Lineup needs JavaScript to run.</noscript>
+  </body>
+</html>

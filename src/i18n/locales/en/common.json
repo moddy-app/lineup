@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "description": "Lineup connects Discord servers that recruit staff with people looking for a team."
+  },
+  "nav": {
+    "label": "Main navigation",
+    "feed": "Posts",
+    "guilds": "Servers",
+    "staff": "Staff"
+  },
+  "auth": {
+    "login": "Sign in",
+    "loginWithDiscord": "Sign in with Discord",
+    "cancelled": "Sign-in cancelled",
+    "failed": "Sign-in did not complete",
+    "loggedOut": "You are signed out",
+    "logout": "Sign out",
+    "signInRequired": {
+      "title": "Sign in to continue",
+      "purpose": {
+        "default": "This page needs a Discord account.",
+        "profile": "Edit your public profile, the one servers see when they recruit.",
+        "experiences": "Add your experience and have it verified.",
+        "posts": "Find your posts: published, draft or closed.",
+        "editor": "Write a post for a server or for yourself.",
+        "claim": "Claim a server to manage its profile and posts.",
+        "manage": "Manage a server's profile, posts and visibility."
+      }
+    },
+    "sessionError": {
+      "note": "Your session could not be checked."
+    }
+  },
+  "userMenu": {
+    "profile": "My profile",
+    "editProfile": "Edit my profile",
+    "experiences": "My experience",
+    "posts": "My posts",
+    "guilds": "My servers"
+  },
+  "footer": {
+    "byline": "Lineup, a <moddy>Moddy</moddy> service",
+    "language": "Language"
+  },
+  "actions": {
+    "retry": "Try again",
+    "loadMore": "Load more",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "close": "Close",
+    "confirm": "Confirm",
+    "back": "Back",
+    "backToFeed": "Back to posts",
+    "reload": "Reload page"
+  },
+  "status": {
+    "loading": "Loading"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "This page left the server, or the address is wrong."
+  },
+  "routeError": {
+    "title": "Something went wrong",
+    "body": "This page could not be displayed. Reload it or go back to the posts."
+  },
+  "suspended": {
+    "title": "Your Moddy access is suspended.",
+    "body": "You can no longer publish or edit on Lineup. Public pages stay open to read.",
+    "noticeBody": "Lineup is read-only for you. You can no longer publish or edit.",
+    "references": "References",
+    "until": "Until {{date}}",
+    "noEnd": "No end date",
+    "viewSanction": "View the sanction"
+  }
+}

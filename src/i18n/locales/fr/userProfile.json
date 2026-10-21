@@ -1,0 +1,38 @@
+{
+  "title": "Profil",
+  "notFound": {
+    "title": "Profil introuvable",
+    "body": "Aucun compte ne correspond à cette adresse, ou ce profil n'est plus visible.",
+    "action": "Voir les annonces"
+  },
+  "header": {
+    "created": "Compte Discord créé le {{date}}",
+    "openToWork": "Ouvert aux propositions"
+  },
+  "about": {
+    "title": "À propos",
+    "timezone": "Fuseau horaire",
+    "languages": "Langues",
+    "links": "Liens"
+  },
+  "self": {
+    "edit": "Modifier mon profil",
+    "experiences": "Mes expériences"
+  },
+  "bio": {
+    "title": "Présentation"
+  },
+  "experiences": {
+    "title": "Expériences",
+    "manage": "Gérer",
+    "empty": "Aucune expérience renseignée.",
+    "emptySelf": "Vous n'avez pas encore ajouté d'expérience."
+  },
+  "posts": {
+    "title": "Annonces",
+    "count_one": "{{value}} annonce publiée",
+    "count_other": "{{value}} annonces publiées",
+    "empty": "Aucune annonce publiée pour le moment.",
+    "emptySelf": "Vous n'avez aucune annonce publiée."
+  }
+}

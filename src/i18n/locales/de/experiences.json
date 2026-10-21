@@ -1,0 +1,163 @@
+{
+  "title": "Meine Erfahrungen",
+  "list": {
+    "intro": "Ziehen Sie eine Erfahrung am Griff oder nutzen Sie die Pfeile, um die Reihenfolge auf Ihrem Profil zu ändern.",
+    "add": "Erfahrung hinzufügen",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "drag": "{{title}} verschieben",
+    "moveUp": "{{title}} nach oben",
+    "moveDown": "{{title}} nach unten",
+    "moved": "{{title}}: Position {{position}} von {{total}}",
+    "reordered": "Reihenfolge gespeichert",
+    "orderOutdated": "Die Liste wurde anderswo geändert. Sie wurde neu geladen, verschiebe erneut.",
+    "title": "{{position}}, {{name}}"
+  },
+  "empty": {
+    "title": "Keine Erfahrung",
+    "body": "Fügen Sie die Server oder Dienste hinzu, für die Sie gearbeitet haben. Eine verifizierte Erfahrung kann in einer Anzeige hervorgehoben werden."
+  },
+  "aside": {
+    "countTitle": "Erfahrungen",
+    "count": "{{used}} / {{max}}",
+    "profile": "Mein Profil bearbeiten",
+    "verifyTitle": "Verifizierung",
+    "auto": "Automatisch: Für einen Server, auf dem Sie gerade arbeiten, liest Lineup Ihre Berechtigungen dort über Discord.",
+    "manual": "Manuelle Prüfung: Für eine frühere Rolle oder einen Dienst prüft das Moddy-Team Ihre Anfrage.",
+    "reset": "Wer Position, Zeitraum oder Server einer verifizierten Erfahrung ändert, verliert die Verifizierung."
+  },
+  "dnd": {
+    "instructions": "Leertaste oder Eingabe nimmt die Erfahrung auf, Pfeil hoch und runter verschiebt sie, Leertaste oder Eingabe legt sie ab, Escape bricht ab.",
+    "start": "{{title}} aufgenommen.",
+    "over": "{{title}} über Position {{position}} von {{total}}.",
+    "end": "{{title}} auf Position {{position}} von {{total}} abgelegt.",
+    "cancel": "Verschieben von {{title}} abgebrochen."
+  },
+  "dialog": {
+    "createTitle": "Erfahrung hinzufügen",
+    "editTitle": "Erfahrung bearbeiten",
+    "create": "Hinzufügen",
+    "saving": "Speichern",
+    "saveAndReset": "Speichern und Verifizierung entfernen",
+    "created": "Erfahrung hinzugefügt",
+    "updated": "Erfahrung geändert",
+    "limit": "Sie haben {{count}} / {{max}} Erfahrungen. Löschen Sie eine, um eine neue hinzuzufügen."
+  },
+  "fields": {
+    "kind": {
+      "label": "Art",
+      "guild": "Discord-Server",
+      "service": "Anderer Dienst",
+      "locked": "Die Art lässt sich nicht ändern."
+    },
+    "currentServer": "Aktueller Server:",
+    "invite": "Dauerhafte Einladung",
+    "newInvite": "Neue Einladung (optional)",
+    "inviteHelp": "Der Servername stammt aus der Einladung.",
+    "newInviteHelp": "Leer lassen, um den Server zu behalten. Ein anderer Server entfernt die Verifizierung.",
+    "inviteHow": "So erstellen Sie eine dauerhafte Einladung",
+    "name": "Name des Dienstes",
+    "nameHelp": "Zum Beispiel eine Plattform, ein Verein oder ein Unternehmen.",
+    "position": "Position",
+    "positionPlaceholder": "Position wählen",
+    "positionOther": "Name der Position",
+    "description": "Beschreibung",
+    "descriptionHelp": "Was Sie dort gemacht haben. Optional.",
+    "startDate": "Beginn",
+    "endDate": "Ende",
+    "current": "Aktuelle Rolle, kein Enddatum"
+  },
+  "warning": {
+    "before": {
+      "verified": "Wer Position, Zeitraum oder Server ändert, entfernt die Verifizierung.",
+      "pending": "Eine Änderung von Position, Zeitraum oder Server bricht die laufende Prüfungsanfrage ab.",
+      "rejected": "Eine Änderung von Position, Zeitraum oder Server löscht die Ablehnung. Sie können die Verifizierung erneut anfragen."
+    },
+    "resets": {
+      "verified": "Diese Änderung entfernt die Verifizierung. Sie können sie danach erneut anfragen.",
+      "pending": "Diese Änderung bricht die laufende Prüfungsanfrage ab.",
+      "rejected": "Diese Änderung löscht die Ablehnung. Sie können die Verifizierung erneut anfragen."
+    },
+    "keeps": "Ein Enddatum für eine verifizierte, laufende Erfahrung behält die Verifizierung."
+  },
+  "problems": {
+    "inviteRequired": "Füge eine dauerhafte Einladung ein.",
+    "nameRequired": "Geben Sie einen Namen an.",
+    "nameTooLong": "Höchstens {{count}} Zeichen.",
+    "positionRequired": "Wählen Sie eine Position.",
+    "positionOtherRequired": "Geben Sie den Namen der Position an.",
+    "positionOtherTooLong": "Höchstens {{count}} Zeichen.",
+    "descriptionTooLong": "Höchstens {{count}} Zeichen.",
+    "startRequired": "Geben Sie das Startdatum an.",
+    "startFuture": "Das Startdatum darf nicht in der Zukunft liegen.",
+    "endRequired": "Geben Sie das Enddatum an oder wählen Sie „Aktuelle Rolle“.",
+    "endFuture": "Das Enddatum darf nicht in der Zukunft liegen.",
+    "endBeforeStart": "Das Ende darf nicht vor dem Beginn liegen."
+  },
+  "delete": {
+    "title": "{{title}} löschen?",
+    "body": "Diese Erfahrung und ihre Verifizierung werden gelöscht. Das lässt sich nicht rückgängig machen.",
+    "featured": "Hebt eine Ihrer Anzeigen sie hervor, verliert die Anzeige diese Hervorhebung.",
+    "done": "Erfahrung gelöscht"
+  },
+  "status": {
+    "verified": {
+      "discord": "Über Discord verifiziert",
+      "staff": "Vom Moddy-Team verifiziert",
+      "generic": "Verifiziert"
+    },
+    "on": "am {{date}}",
+    "pending": "Prüfungsanfrage gesendet, das Moddy-Team ist noch dran.",
+    "rejected": "Abgelehnt.",
+    "rejectedNoReason": "Es wurde kein Grund angegeben.",
+    "rejectedHelp": "Korrigieren Sie die Erfahrung bei Bedarf und fragen Sie die Verifizierung erneut an.",
+    "unverified": {
+      "service": "Nicht verifiziert. Ein Dienst wird durch eine manuelle Prüfung verifiziert.",
+      "current": "Nicht verifiziert. Nur eine verifizierte Erfahrung kann in einer Anzeige hervorgehoben werden.",
+      "ended": "Nicht verifiziert. Eine beendete Rolle wird durch eine manuelle Prüfung verifiziert."
+    }
+  },
+  "evidence": {
+    "summary": "Geprüftes ansehen",
+    "owner": "Eigentümer",
+    "ownerYes": "Sie sind Eigentümer des Servers",
+    "permissions": "Gefundene Berechtigungen",
+    "checkedAt": "Prüfung",
+    "staffNote": "Notiz des Teams",
+    "private": "Nur für Sie und das Moddy-Team sichtbar.",
+    "permission": {
+      "ADMINISTRATOR": "Administrator",
+      "MANAGE_GUILD": "Server verwalten",
+      "MANAGE_ROLES": "Rollen verwalten",
+      "MANAGE_CHANNELS": "Kanäle verwalten",
+      "KICK_MEMBERS": "Mitglieder kicken",
+      "BAN_MEMBERS": "Mitglieder bannen",
+      "MANAGE_MESSAGES": "Nachrichten verwalten",
+      "MODERATE_MEMBERS": "Mitglieder stummschalten",
+      "MANAGE_NICKNAMES": "Spitznamen verwalten",
+      "MANAGE_EVENTS": "Events verwalten"
+    }
+  },
+  "verify": {
+    "action": "Automatisch verifizieren",
+    "waiting": "Erneut in {{seconds}} s",
+    "success": "Erfahrung verifiziert"
+  },
+  "reauth": {
+    "title": "Erlauben Sie Lineup, Ihre Server zu lesen.",
+    "body": "Die automatische Prüfung liest Ihre Berechtigungen auf dem Server. Sie gehen erneut über Discord und kommen dann hierher zurück.",
+    "action": "Mit Discord erlauben"
+  },
+  "review": {
+    "open": "Manuelle Prüfung anfragen",
+    "intro": "Das Moddy-Team prüft die Anfrage. Sie können eine Angabe ergänzen.",
+    "note": "Notiz für das Team (optional)",
+    "noteHelp": "Zum Beispiel: wie sich Ihre Rolle bestätigen lässt.",
+    "send": "Anfrage senden",
+    "sending": "Senden",
+    "cancel": "Abbrechen",
+    "sent": "Anfrage gesendet",
+    "yourNote": "Ihre Notiz:",
+    "pending": "Prüfung läuft"
+  }
+}

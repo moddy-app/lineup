@@ -1,0 +1,163 @@
+{
+  "title": "My experiences",
+  "list": {
+    "intro": "Drag an experience by its handle, or use the arrows, to change the order shown on your profile.",
+    "add": "Add an experience",
+    "edit": "Edit",
+    "delete": "Delete",
+    "drag": "Move {{title}}",
+    "moveUp": "Move {{title}} up",
+    "moveDown": "Move {{title}} down",
+    "moved": "{{title}}: position {{position}} of {{total}}",
+    "reordered": "Order saved",
+    "orderOutdated": "The list had changed elsewhere. It was reloaded, move it again.",
+    "title": "{{position}}, {{name}}"
+  },
+  "empty": {
+    "title": "No experience",
+    "body": "Add the servers or services you worked for. A verified experience can be featured in a post."
+  },
+  "aside": {
+    "countTitle": "Experiences",
+    "count": "{{used}} / {{max}}",
+    "profile": "Edit my profile",
+    "verifyTitle": "Verification",
+    "auto": "Automatic: for a server where you currently work, Lineup reads your permissions on that server through Discord.",
+    "manual": "Manual review: for a past role or a service, the Moddy team looks at your request.",
+    "reset": "Changing the position, dates or server of a verified experience removes the verification."
+  },
+  "dnd": {
+    "instructions": "Press Space or Enter to pick up the experience, up and down arrows to move it, Space or Enter to drop it, Escape to cancel.",
+    "start": "Picked up {{title}}.",
+    "over": "{{title}} is over position {{position}} of {{total}}.",
+    "end": "{{title}} dropped at position {{position}} of {{total}}.",
+    "cancel": "Move of {{title}} cancelled."
+  },
+  "dialog": {
+    "createTitle": "Add an experience",
+    "editTitle": "Edit the experience",
+    "create": "Add",
+    "saving": "Saving",
+    "saveAndReset": "Save and remove the verification",
+    "created": "Experience added",
+    "updated": "Experience updated",
+    "limit": "You have {{count}} / {{max}} experiences. Delete one to add another."
+  },
+  "fields": {
+    "kind": {
+      "label": "Type",
+      "guild": "Discord server",
+      "service": "Other service",
+      "locked": "The type cannot change."
+    },
+    "currentServer": "Current server:",
+    "invite": "Permanent invite",
+    "newInvite": "New invite (optional)",
+    "inviteHelp": "The server name is taken from the invite.",
+    "newInviteHelp": "Leave empty to keep the server. A different server removes the verification.",
+    "inviteHow": "How to create a permanent invite",
+    "name": "Service name",
+    "nameHelp": "For example a platform, a nonprofit, a company.",
+    "position": "Position",
+    "positionPlaceholder": "Choose a position",
+    "positionOther": "Position name",
+    "description": "Description",
+    "descriptionHelp": "What you did there. Optional.",
+    "startDate": "Start",
+    "endDate": "End",
+    "current": "Current role, no end date"
+  },
+  "warning": {
+    "before": {
+      "verified": "Changing the position, dates or server will remove the verification.",
+      "pending": "Changing the position, dates or server will cancel the review request in progress.",
+      "rejected": "Changing the position, dates or server will clear the refusal. You can ask for a verification again."
+    },
+    "resets": {
+      "verified": "This change will remove the verification. You can ask for it again afterwards.",
+      "pending": "This change will cancel the review request in progress.",
+      "rejected": "This change will clear the refusal. You can ask for a verification again."
+    },
+    "keeps": "Adding an end date to a verified, current experience keeps the verification."
+  },
+  "problems": {
+    "inviteRequired": "Paste a permanent invite.",
+    "nameRequired": "Enter a name.",
+    "nameTooLong": "{{count}} characters at most.",
+    "positionRequired": "Choose a position.",
+    "positionOtherRequired": "Enter the position name.",
+    "positionOtherTooLong": "{{count}} characters at most.",
+    "descriptionTooLong": "{{count}} characters at most.",
+    "startRequired": "Enter the start date.",
+    "startFuture": "The start date cannot be in the future.",
+    "endRequired": "Enter the end date, or tick \"Current role\".",
+    "endFuture": "The end date cannot be in the future.",
+    "endBeforeStart": "The end cannot be before the start."
+  },
+  "delete": {
+    "title": "Delete {{title}}?",
+    "body": "This experience and its verification will be deleted. This cannot be undone.",
+    "featured": "If one of your posts features it, the post loses that highlight.",
+    "done": "Experience deleted"
+  },
+  "status": {
+    "verified": {
+      "discord": "Verified through Discord",
+      "staff": "Verified by the Moddy team",
+      "generic": "Verified"
+    },
+    "on": "on {{date}}",
+    "pending": "Review request sent, waiting for the Moddy team.",
+    "rejected": "Rejected.",
+    "rejectedNoReason": "No reason was given.",
+    "rejectedHelp": "Fix the experience if needed, then ask for a verification again.",
+    "unverified": {
+      "service": "Not verified. A service is verified by a manual review.",
+      "current": "Not verified. Only a verified experience can be featured in a post.",
+      "ended": "Not verified. A past role is verified by a manual review."
+    }
+  },
+  "evidence": {
+    "summary": "See what was checked",
+    "owner": "Owner",
+    "ownerYes": "You own the server",
+    "permissions": "Permissions found",
+    "checkedAt": "Checked",
+    "staffNote": "Team note",
+    "private": "Visible to you and the Moddy team only.",
+    "permission": {
+      "ADMINISTRATOR": "Administrator",
+      "MANAGE_GUILD": "Manage Server",
+      "MANAGE_ROLES": "Manage Roles",
+      "MANAGE_CHANNELS": "Manage Channels",
+      "KICK_MEMBERS": "Kick Members",
+      "BAN_MEMBERS": "Ban Members",
+      "MANAGE_MESSAGES": "Manage Messages",
+      "MODERATE_MEMBERS": "Timeout Members",
+      "MANAGE_NICKNAMES": "Manage Nicknames",
+      "MANAGE_EVENTS": "Manage Events"
+    }
+  },
+  "verify": {
+    "action": "Verify automatically",
+    "waiting": "Retry in {{seconds}} s",
+    "success": "Experience verified"
+  },
+  "reauth": {
+    "title": "Allow Lineup to read your servers.",
+    "body": "The automatic check reads your permissions on the server. You will go through Discord again, then come back here.",
+    "action": "Allow with Discord"
+  },
+  "review": {
+    "open": "Request a manual review",
+    "intro": "The Moddy team looks at the request. You can add a detail.",
+    "note": "Note for the team (optional)",
+    "noteHelp": "For example: how to confirm your role.",
+    "send": "Send the request",
+    "sending": "Sending",
+    "cancel": "Cancel",
+    "sent": "Request sent",
+    "yourNote": "Your note:",
+    "pending": "Review in progress"
+  }
+}

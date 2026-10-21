@@ -1,0 +1,56 @@
+{
+  "unknownName": "Servidor sin nombre",
+  "notFound": {
+    "title": "Servidor no encontrado",
+    "body": "Este servidor no tiene perfil en Lineup, o su perfil no es público.",
+    "action": "Ver servidores"
+  },
+  "stats": {
+    "members": "Miembros",
+    "online": "En línea",
+    "boosts": "Mejoras",
+    "created": "Creado el"
+  },
+  "join": {
+    "action": "Unirse al servidor",
+    "unavailable": "La invitación de este servidor ya no está disponible."
+  },
+  "unlisted": {
+    "title": "Perfil no listado",
+    "body": "Este perfil no aparece en el directorio. Solo los gestores y el staff de Moddy lo ven, igual que sus anuncios."
+  },
+  "inviteLost": {
+    "title": "Invitación por reemplazar",
+    "body": "La invitación guardada ya no existe en Discord, así que el botón Unirse está oculto. Guarde una invitación que no caduque nunca.",
+    "action": "Reemplazar la invitación"
+  },
+  "about": {
+    "title": "Acerca de",
+    "none": "Este servidor aún no tiene descripción.",
+    "topics": "Temática y etiquetas"
+  },
+  "posts": {
+    "title_one": "{{count}} anuncio abierto",
+    "title_other": "{{count}} anuncios abiertos",
+    "titleEmpty": "Anuncios abiertos",
+    "label": "Anuncios del servidor",
+    "emptyTitle": "Sin anuncios abiertos",
+    "emptyBody": "Este servidor no está buscando staff ahora."
+  },
+  "team": {
+    "title": "Equipo",
+    "label": "Equipo del servidor",
+    "since": "{{position}}, desde {{date}}",
+    "emptyTitle": "Equipo sin indicar",
+    "emptyBody": "Aquí solo aparecen las personas con una experiencia verificada en este servidor."
+  },
+  "manage": {
+    "title": "Gestión del servidor",
+    "body": "Gestiona este servidor. Edite el perfil, siga los anuncios o elimine el perfil.",
+    "action": "Gestionar servidor"
+  },
+  "report": {
+    "title": "Denunciar este servidor",
+    "body": "Informe de un perfil engañoso, una suplantación o contenido inapropiado. El equipo de Moddy revisa cada informe."
+  }
+}

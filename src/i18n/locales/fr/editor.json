@@ -1,0 +1,251 @@
+{
+  "titleNew": "Nouvelle annonce",
+  "titleEdit": "Modifier l'annonce",
+  "introNew": "Huit étapes, enregistrées sur cet appareil au fur et à mesure. Vous pouvez publier ou garder un brouillon à la fin.",
+  "introEdit": "Modifiez les étapes voulues, puis enregistrez depuis la dernière. Seuls les champs changés sont envoyés.",
+  "count": "{{used}} / {{max}}",
+  "restored": {
+    "text": "Brouillon local restauré, enregistré",
+    "discard": "Abandonner ce brouillon"
+  },
+  "stepper": {
+    "label": "Étapes de l'annonce",
+    "count": "Étape {{current}} sur {{total}}",
+    "state": {
+      "current": "étape en cours",
+      "done": "terminée",
+      "error": "à corriger",
+      "todo": "pas encore vue"
+    }
+  },
+  "steps": {
+    "type": {
+      "short": "Type",
+      "title": "Type d'annonce",
+      "intro": "Une annonce de serveur recrute pour un serveur que vous gérez. Une annonce personnelle présente quelqu'un qui cherche une équipe."
+    },
+    "content": {
+      "short": "Contenu",
+      "title": "Titre et description",
+      "intro": "Dites qui vous êtes ou ce que le serveur propose, en termes concrets."
+    },
+    "positions": {
+      "short": "Postes",
+      "title": "Postes",
+      "intro": "Les postes recherchés ou visés. Choisissez « Autre » pour écrire vos propres intitulés."
+    },
+    "requirements": {
+      "short": "Conditions",
+      "title": "Conditions",
+      "intro": "Ce que les candidats doivent remplir. Facultatif."
+    },
+    "application": {
+      "short": "Candidature",
+      "title": "Candidature",
+      "intro": "Comment les personnes intéressées vous contactent. Facultatif."
+    },
+    "commitment": {
+      "short": "Rythme",
+      "title": "Engagement, langues et fuseau",
+      "intro": "Tous les champs sont facultatifs."
+    },
+    "extras": {
+      "short": "Options",
+      "title": "Thème, étiquettes et expiration",
+      "intro": "Aide à classer et à retrouver l'annonce. Tout est facultatif."
+    },
+    "review": {
+      "short": "Revue",
+      "title": "Relire et envoyer",
+      "intro": "Vérifiez chaque étape. Une annonce publiée apparaît tout de suite dans le fil."
+    }
+  },
+  "actions": {
+    "next": "Continuer",
+    "previous": "Précédent",
+    "publish": "Publier",
+    "republish": "Publier à nouveau",
+    "saveDraft": "Enregistrer en brouillon",
+    "saveEdit": "Enregistrer les modifications",
+    "saveChanges": "Enregistrer les modifications",
+    "sending": "Envoi en cours"
+  },
+  "done": {
+    "published": "Annonce publiée.",
+    "draft": "Brouillon enregistré.",
+    "saved": "Modifications enregistrées."
+  },
+  "locked": {
+    "hiddenTitle": "Annonce masquée",
+    "hiddenBody": "L'équipe Moddy a masqué cette annonce. Elle ne peut plus être modifiée.",
+    "reason": "Motif : {{reason}}",
+    "myPosts": "Mes annonces",
+    "forbiddenTitle": "Modification impossible",
+    "forbiddenBody": "Seuls l'auteur d'une annonce personnelle et les gestionnaires du serveur peuvent modifier une annonce.",
+    "view": "Voir l'annonce"
+  },
+  "type": {
+    "legend": "Qui publie ?",
+    "kind": {
+      "guild": {
+        "title": "Un serveur recrute",
+        "hint": "Pour un serveur que vous gérez et qui a un profil Lineup."
+      },
+      "user": {
+        "title": "Je cherche une équipe",
+        "hint": "Une annonce à votre nom, avec vos expériences vérifiées."
+      }
+    },
+    "guildLegend": "Serveur",
+    "loadingGuilds": "Chargement de vos serveurs.",
+    "unnamedGuild": "Serveur sans nom",
+    "notClaimed": "Pas encore revendiqué sur Lineup",
+    "claim": "Revendiquer",
+    "noGuilds": {
+      "title": "Aucun serveur géré",
+      "body": "Vous devez gérer un serveur Discord et le revendiquer sur Lineup pour publier en son nom. Vous pouvez aussi publier une annonce personnelle."
+    },
+    "locked": "Le type et le serveur ne changent plus une fois l'annonce créée."
+  },
+  "content": {
+    "title": "Titre",
+    "titleHint": "{{min}} à {{max}} caractères",
+    "description": "Description",
+    "descriptionHint": "{{min}} à {{max}} caractères"
+  },
+  "positions": {
+    "legend": "Postes",
+    "hint": "Jusqu'à {{max}} postes.",
+    "otherLegend": "Intitulés « Autre »",
+    "otherHint": "Un intitulé par poste, {{max}} caractères au plus.",
+    "otherLabel": "Intitulé {{n}}",
+    "removeOther": "Retirer l'intitulé {{n}}",
+    "addOther": "Ajouter un intitulé"
+  },
+  "requirements": {
+    "hint": "Jusqu'à {{max}} conditions.",
+    "none": "Aucune condition pour le moment.",
+    "add": "Ajouter une condition",
+    "item": "Condition {{n}}",
+    "remove": "Retirer la condition {{n}}",
+    "type": "Type de condition",
+    "customLabel": "Titre de la condition",
+    "customValue": "Détail",
+    "value": "Valeur",
+    "range": "Entre {{min}} et {{max}}",
+    "flagOn": "Oui",
+    "flagOff": "Non",
+    "flagAria": "{{name}}",
+    "languages": "Langues demandées",
+    "noValue": "Cette condition n'a pas de valeur à saisir.",
+    "verified": "Vérification par Lineup prévue",
+    "verifiedHint": "Lineup ne vérifie encore aucune candidature : l'annonce affiche seulement que la vérification est prévue."
+  },
+  "application": {
+    "type": "Mode de candidature",
+    "none": "Aucune",
+    "noneHint": "Sans candidature, l'annonce n'a pas de bouton « Postuler ».",
+    "soon": "{{name}} (bientôt)",
+    "url": "Adresse du lien",
+    "urlHint": "Adresse en https uniquement, sans identifiant.",
+    "dmHint": "Les personnes intéressées vous écrivent en message privé sur Discord, à l'auteur de l'annonce."
+  },
+  "commitment": {
+    "hours": "Heures par semaine",
+    "hoursHint": "{{min}} à {{max}}",
+    "openings": "Postes ouverts",
+    "openingsHint": "{{min}} à {{max}}",
+    "compensation": "Rémunération",
+    "compensationNone": "Non précisée",
+    "languages": "Langues",
+    "languagesHint": "Jusqu'à {{max}} langues.",
+    "timezone": "Fuseau horaire",
+    "timezoneHint": "Nom IANA (Europe/Paris) ou décalage UTC+02:00",
+    "useBrowserZone": "Utiliser {{zone}}"
+  },
+  "extras": {
+    "theme": "Thème",
+    "themeNone": "Aucun",
+    "themeNsfw": "Les annonces NSFW sont masquées du fil sauf pour les personnes qui les ont demandées.",
+    "tags": "Ajouter une étiquette",
+    "tagsHint": "Jusqu'à {{max}}. Lettres minuscules, chiffres et tirets, 2 à 24 caractères.",
+    "tagAdd": "Ajouter",
+    "tagsList": "Étiquettes",
+    "tagRemove": "Retirer l'étiquette {{tag}}",
+    "expiry": "Date d'expiration",
+    "expiryNever": "Jamais par défaut. Sinon entre le {{min}} et le {{max}}.",
+    "expiryRange": "Entre le {{min}} et le {{max}}. L'annonce expire à la fin de ce jour.",
+    "expiryClear": "N'expire jamais",
+    "featured": "Expérience mise en avant",
+    "featuredNone": "Aucune",
+    "featuredHint": "Seules vos expériences vérifiées sont proposées.",
+    "featuredEmpty": "Vous n'avez aucune expérience vérifiée.",
+    "featuredLink": "Gérer mes expériences",
+    "featuredLoading": "Chargement de vos expériences.",
+    "featuredUnknown": "Expérience non vérifiée ou supprimée"
+  },
+  "review": {
+    "empty": "Non renseigné",
+    "editShort": "Modifier",
+    "edit": "Modifier : {{step}}",
+    "invalid_one": "{{count}} étape est à corriger avant l'envoi.",
+    "invalid_other": "{{count}} étapes sont à corriger avant l'envoi.",
+    "quotaFull": "Votre limite est atteinte : fermez une annonce ou enregistrez celle-ci en brouillon.",
+    "summary": {
+      "guild": "Serveur : {{name}}",
+      "user": "Annonce personnelle",
+      "requirements_one": "{{count}} condition",
+      "requirements_other": "{{count}} conditions",
+      "hours_one": "{{count}} h par semaine",
+      "hours_other": "{{count}} h par semaine",
+      "openings_one": "{{count}} poste ouvert",
+      "openings_other": "{{count}} postes ouverts",
+      "languages_one": "{{count}} langue",
+      "languages_other": "{{count}} langues",
+      "tags_one": "{{count}} étiquette",
+      "tags_other": "{{count}} étiquettes",
+      "expires": "Expire le {{date}}",
+      "never": "N'expire jamais",
+      "featured": "Expérience mise en avant"
+    }
+  },
+  "banner": {
+    "saveDraft": "Enregistrer en brouillon",
+    "myPosts": "Mes annonces",
+    "claim": "Revendiquer un serveur",
+    "quotaNew": "Un brouillon ne compte pas dans la limite. Vous pourrez le publier quand une place se libère.",
+    "quotaEdit": "Vos modifications sont enregistrées, mais l'annonce n'est pas publiée. Fermez une annonce, puis publiez-la depuis Mes annonces."
+  },
+  "preview": {
+    "title": "Aperçu",
+    "hint": "La carte telle qu'elle apparaît dans le fil.",
+    "titlePlaceholder": "Le titre de votre annonce",
+    "descriptionPlaceholder": "La description apparaîtra ici."
+  },
+  "validation": {
+    "required": "Ce champ est obligatoire.",
+    "tooShort": "{{count}} caractères au moins.",
+    "tooLong": "{{count}} caractères au plus.",
+    "kindRequired": "Choisissez un type d'annonce.",
+    "guildRequired": "Choisissez un serveur.",
+    "guildNotClaimed": "Ce serveur n'est pas revendiqué sur Lineup.",
+    "positionsMin": "Choisissez au moins un poste.",
+    "positionsMax": "{{count}} postes au plus.",
+    "otherRequired": "Écrivez au moins un intitulé pour « Autre ».",
+    "otherMax": "{{count}} intitulés au plus.",
+    "requirementsMax": "{{count}} conditions au plus.",
+    "integer": "Entrez un nombre entier.",
+    "between": "Entre {{min}} et {{max}}.",
+    "languagesMin": "Choisissez au moins une langue.",
+    "languagesMax": "{{count}} langues au plus.",
+    "formUnavailable": "Le formulaire Lineup n'est pas encore disponible.",
+    "urlHttps": "Entrez une adresse en https, sans identifiant ni espace.",
+    "timezone": "Utilisez un nom IANA (Europe/Paris) ou UTC+02:00.",
+    "tagsMax": "{{count}} étiquettes au plus.",
+    "tag": "2 à 24 caractères : minuscules, chiffres, tirets.",
+    "expiryMin": "Choisissez une date à partir de demain.",
+    "expiryMax": "Au plus {{count}} jours à partir d'aujourd'hui.",
+    "featuredUserOnly": "Seule une annonce personnelle peut mettre une expérience en avant.",
+    "featuredNotVerified": "Cette expérience n'est pas vérifiée."
+  }
+}

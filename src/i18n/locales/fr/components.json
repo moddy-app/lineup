@@ -1,0 +1,181 @@
+{
+  "badges": {
+    "label": "Badges",
+    "more_one": "{{count}} autre badge : {{list}}",
+    "more_other": "{{count}} autres badges : {{list}}"
+  },
+  "post": {
+    "kind": {
+      "guild": "Recrute",
+      "user": "Cherche une équipe"
+    },
+    "status": {
+      "draft": "Brouillon",
+      "published": "Publiée",
+      "closed": "Fermée",
+      "hidden": "Masquée",
+      "expired": "Expirée"
+    },
+    "unknownGuild": "Serveur sans nom",
+    "unknownAuthor": "Utilisateur Discord",
+    "positions": "Postes",
+    "hoursPerWeek": "{{value}} h par semaine",
+    "openings_one": "{{value}} poste ouvert",
+    "openings_other": "{{value}} postes ouverts"
+  },
+  "expiry": {
+    "inHours_one": "Expire dans {{value}} heure",
+    "inHours_other": "Expire dans {{value}} heures",
+    "inDays_one": "Expire dans {{value}} jour",
+    "inDays_other": "Expire dans {{value}} jours",
+    "on": "Expire le {{date}}",
+    "expired": "Expirée",
+    "never": "Sans date d'expiration"
+  },
+  "languages": {
+    "label": "Langues",
+    "more": "+{{count}}"
+  },
+  "timezone": {
+    "label": "Fuseau horaire",
+    "localTime": "{{time}} heure locale"
+  },
+  "links": {
+    "label": "Liens"
+  },
+  "requirement": {
+    "label": "Conditions",
+    "unit": {
+      "years_one": "{{value}} an",
+      "years_other": "{{value}} ans",
+      "months_one": "{{value}} mois",
+      "months_other": "{{value}} mois",
+      "days_one": "{{value}} jour",
+      "days_other": "{{value}} jours",
+      "hoursPerWeek_one": "{{value}} heure par semaine",
+      "hoursPerWeek_other": "{{value}} heures par semaine"
+    },
+    "minAge_one": "{{value}} an minimum",
+    "minAge_other": "{{value}} ans minimum",
+    "daysApprox": "{{days}}, environ {{approx}}",
+    "voice": {
+      "required": "Micro requis",
+      "notRequired": "Micro non requis"
+    },
+    "promise": {
+      "label": "Vérification par Lineup prévue",
+      "hint": "Lineup vérifiera cette condition à l'ouverture des candidatures sur Lineup. Rien n'est vérifié pour le moment."
+    },
+    "viewer": {
+      "met": "Vous remplissez cette condition",
+      "notYet": "Pas encore",
+      "hint": "Indication d'après votre compte, sans valeur de vérification."
+    }
+  },
+  "experience": {
+    "title": "{{position}}, {{name}}",
+    "range": "{{start}} à {{end}}",
+    "present": "aujourd'hui",
+    "duration": {
+      "lessThanMonth": "moins d'un mois",
+      "months_one": "{{value}} mois",
+      "months_other": "{{value}} mois",
+      "years_one": "{{value}} an",
+      "years_other": "{{value}} ans",
+      "both": "{{years}} {{months}}"
+    },
+    "showMore": "Voir plus",
+    "showLess": "Voir moins",
+    "verification": {
+      "verified": "Vérifiée",
+      "pending": "En attente",
+      "unverified": "Non vérifiée",
+      "rejected": "Refusée",
+      "tip": {
+        "discord": "Vérifiée via Discord le {{date}}",
+        "staff": "Vérifiée par l'équipe Moddy le {{date}}",
+        "generic": "Vérifiée le {{date}}",
+        "pending": "L'équipe Moddy examine la demande."
+      }
+    }
+  },
+  "report": {
+    "button": "Signaler",
+    "title": {
+      "post": "Signaler cette annonce",
+      "user": "Signaler ce profil",
+      "guild": "Signaler ce serveur"
+    },
+    "intro": "Votre signalement est transmis à l'équipe Moddy. Vous ne recevrez pas de réponse.",
+    "reason": "Motif",
+    "reasons": {
+      "spam": {
+        "label": "Spam",
+        "hint": "Publicité, messages répétés ou sans rapport."
+      },
+      "scam": {
+        "label": "Arnaque",
+        "hint": "Demande d'argent ou de données personnelles."
+      },
+      "inappropriate": {
+        "label": "Contenu inapproprié",
+        "hint": "Contenu choquant, haineux ou interdit par Discord."
+      },
+      "impersonation": {
+        "label": "Usurpation d'identité",
+        "hint": "Se fait passer pour une personne, un serveur ou Moddy."
+      },
+      "other": {
+        "label": "Autre",
+        "hint": "Un autre problème, à préciser ci-dessous."
+      }
+    },
+    "details": "Précisions (facultatif)",
+    "submit": "Envoyer le signalement",
+    "retryIn": "Réessayer dans {{wait}}",
+    "sent": "Signalement envoyé. Merci.",
+    "alreadyTitle": "Déjà signalé",
+    "already": "Vous avez déjà signalé ce contenu. L'équipe Moddy l'examine."
+  },
+  "nsfw": {
+    "title": "Contenu réservé aux adultes",
+    "body": "Ce contenu ne convient pas aux mineurs. Confirmez que vous avez 18 ans ou plus pour l'afficher.",
+    "confirm": "J'ai 18 ans ou plus, afficher",
+    "back": "Retour",
+    "dialog": {
+      "title": "Contenus réservés aux adultes",
+      "body": "Les annonces et les serveurs NSFW sont réservés aux personnes de 18 ans ou plus. Confirmez votre âge pour les afficher dans la liste.",
+      "confirm": "J'ai 18 ans ou plus, continuer"
+    }
+  },
+  "errorState": {
+    "title": "Impossible de charger ce contenu",
+    "notFoundTitle": "Introuvable",
+    "retryIn": "Réessayer dans {{wait}}"
+  },
+  "quota": {
+    "guild_one": "{{used}} / {{limit}} annonce publiée sur ce serveur",
+    "guild_other": "{{used}} / {{limit}} annonces publiées sur ce serveur",
+    "user_one": "{{used}} / {{limit}} annonce publiée",
+    "user_other": "{{used}} / {{limit}} annonces publiées",
+    "full": "Limite atteinte"
+  },
+  "stale": {
+    "text": "Données Discord potentiellement anciennes"
+  },
+  "invite": {
+    "title": "Créer une invitation permanente",
+    "intro": "Lineup demande un lien qui n'expire jamais. Dans Discord :",
+    "steps": {
+      "open": "Ouvrez les paramètres du serveur, puis « Invitations ». Vous pouvez aussi faire un clic droit sur un salon, puis « Inviter des gens » et « Modifier le lien d'invitation ».",
+      "expire": "Réglez « Expire après » sur « N'expire jamais ».",
+      "uses": "Laissez « Nombre maximum d'utilisations » sur « Sans limite ».",
+      "copy": "Copiez le lien et collez-le ici."
+    }
+  },
+  "application": {
+    "apply": "Postuler",
+    "dm": "Contacter en MP",
+    "dmHint": "Ouvre le profil de l'auteur. Le contact se fait en message privé sur Discord."
+  }
+}

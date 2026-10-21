@@ -1,0 +1,58 @@
+{
+  "title": "Modifier mon profil",
+  "intro": "Ce profil est public. Seuls les champs modifiés sont enregistrés.",
+  "saved": "Profil enregistré",
+  "saving": "Enregistrement",
+  "save": "Enregistrer",
+  "reset": "Annuler les modifications",
+  "fields": {
+    "headline": "Titre",
+    "headlineHelp": "Une ligne sous votre nom, par exemple « Modératrice depuis 4 ans ».",
+    "bio": "Présentation",
+    "bioHelp": "Texte brut. Les retours à la ligne sont conservés.",
+    "openToWork": "Ouvert aux propositions",
+    "openToWorkHelp": "Un repère « Ouvert aux propositions » s'affiche sur votre profil."
+  },
+  "links": {
+    "title": "Liens",
+    "help": "{{count}} liens au maximum, en https. Le nom du lien fait 40 caractères au plus.",
+    "label": "Nom du lien",
+    "url": "Adresse (https)",
+    "remove": "Retirer le lien {{label}}",
+    "add": "Ajouter un lien",
+    "count": "{{count}} / {{max}}"
+  },
+  "languages": {
+    "title": "Langues",
+    "help": "{{count}} sélectionnées sur {{max}} au maximum."
+  },
+  "timezone": {
+    "title": "Fuseau horaire",
+    "label": "Fuseau horaire",
+    "help": "Nom IANA (Europe/Paris) ou décalage UTC+02:00. Laissez vide pour ne rien afficher.",
+    "suggestion": "Fuseau de votre navigateur :",
+    "use": "Utiliser"
+  },
+  "summary": {
+    "title": "Aperçu",
+    "noHeadline": "Pas de titre",
+    "languages_one": "{{count}} langue : {{list}}",
+    "languages_other": "{{count}} langues : {{list}}",
+    "noLanguages": "Aucune langue",
+    "links_one": "{{count}} lien",
+    "links_other": "{{count}} liens",
+    "open": "Ouvert aux propositions",
+    "closed": "Pas de recherche indiquée",
+    "view": "Voir mon profil public"
+  },
+  "problems": {
+    "linkLabelRequired": "Donnez un nom au lien.",
+    "linkLabelTooLong": "Le nom fait {{count}} caractères au plus.",
+    "urlInvalid": "Cette adresse n'est pas valide (sans identifiants, ni espaces, ni port).",
+    "urlHttps": "Le lien doit commencer par https://.",
+    "urlTooLong": "L'adresse fait 500 caractères au plus.",
+    "timezoneInvalid": "Fuseau inconnu. Exemples : Europe/Paris, UTC+02:00.",
+    "tooLong": "{{count}} caractères au plus.",
+    "tooMany": "{{count}} éléments au plus."
+  }
+}

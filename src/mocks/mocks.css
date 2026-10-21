@@ -1,0 +1,84 @@
+/*
+ * Styles of the development mock (login page and dev panel). Tokens of the
+ * design kit only; loaded with the mock, never in a production build.
+ */
+
+.mock-fab {
+  position: fixed;
+  bottom: 12px;
+  left: 12px;
+  z-index: 1000;
+}
+
+.mock-panel {
+  position: fixed;
+  bottom: 60px;
+  left: 12px;
+  z-index: 1000;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-l);
+  width: min(380px, calc(100vw - 24px));
+  max-height: min(680px, calc(100dvh - 84px));
+  padding: 20px;
+  overflow-y: auto;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--radius-xl);
+  background-color: var(--md-sys-color-surface-container-lowest);
+  color: var(--md-sys-color-on-surface);
+}
+
+.mock-panel h2 {
+  margin: 0;
+  font-size: var(--text-hero);
+}
+
+.mock-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-m);
+}
+
+.mock-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+}
+
+.mock-section h3 {
+  margin: 0;
+  font-size: var(--text-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.mock-note {
+  margin: 0;
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* The login page. */
+.mock-login .row-meta {
+  white-space: normal;
+}
+
+.mock-login .row-title {
+  white-space: normal;
+}
+
+.mock-login .row-body .status {
+  align-self: flex-start;
+  margin-top: var(--gap-s);
+}
+
+.mock-login a.row {
+  cursor: pointer;
+}
+
+.mock-banner {
+  align-self: flex-start;
+}

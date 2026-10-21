@@ -1,0 +1,140 @@
+{
+  "title": "Gestão do servidor",
+  "pageTitle": "Gerenciar {{name}}",
+  "heading": "Gerenciar {{name}}",
+  "unknownName": "Servidor sem nome",
+  "notFound": {
+    "title": "Servidor não encontrado",
+    "body": "Este servidor não tem perfil no Lineup. Reivindique-o primeiro na página de reivindicação.",
+    "action": "Ver servidores"
+  },
+  "forbidden": {
+    "title": "Você não gerencia este servidor",
+    "body": "É preciso ser dono do servidor ou ter a permissão de Administrador ou Gerenciar servidor. Se você acabou de receber esses direitos, leia seus servidores de novo na página de reivindicação.",
+    "action": "Ver o perfil"
+  },
+  "status": {
+    "listed": "No diretório",
+    "unlisted": "Não listado"
+  },
+  "viewProfile": "Ver o perfil",
+  "saved": "Perfil salvo.",
+  "editor": {
+    "title": "Perfil público",
+    "unsaved": "Alterações não salvas",
+    "save": "Salvar",
+    "saving": "Salvando...",
+    "reset": "Descartar alterações"
+  },
+  "description": {
+    "title": "Descrição",
+    "label": "Descrição do servidor",
+    "hint": "Deixe vazio para mostrar a descrição do Discord.",
+    "discordTitle": "Descrição do Discord",
+    "discordNone": "Este servidor não tem descrição no Discord.",
+    "useDiscord": "Usar a descrição do Discord"
+  },
+  "links": {
+    "title": "Links",
+    "hint": "Até {{count}} links, apenas https. O nome tem no máximo 40 caracteres.",
+    "label": "Nome do link {{n}}",
+    "url": "Endereço do link {{n}}",
+    "remove": "Remover o link {{n}}",
+    "add": "Adicionar um link"
+  },
+  "topics": {
+    "title": "Tema, tags e idiomas"
+  },
+  "theme": {
+    "label": "Tema",
+    "none": "Sem tema"
+  },
+  "tags": {
+    "label": "Tags",
+    "hint": "Separadas por vírgulas. Letras minúsculas, números e hifens, de 2 a 24 caracteres. {{count}} de {{max}}."
+  },
+  "languages": {
+    "label": "Idiomas do servidor ({{count}} de {{max}})"
+  },
+  "invite": {
+    "title": "Convite",
+    "current": "Convite atual:",
+    "valid": "Está funcionando.",
+    "lost": "Não existe mais no Discord: substitua-a.",
+    "none": "Nenhum convite salvo.",
+    "label": "Novo convite",
+    "placeholder": "https://discord.gg/seu-codigo",
+    "hint": "Opcional. Não pode expirar e deve levar a este mesmo servidor.",
+    "how": "Como criar um convite permanente"
+  },
+  "visibility": {
+    "title": "Visibilidade",
+    "label": "Mostrar o servidor no diretório",
+    "on": "Qualquer pessoa pode encontrar este perfil no diretório.",
+    "off": "O perfil e os anúncios somem para todos, exceto gestores e o staff do Moddy."
+  },
+  "errors": {
+    "fixFields": "Corrija os campos indicados e salve de novo.",
+    "descriptionMax": "No máximo {{count}} caracteres.",
+    "linkLabel": "É necessário um nome de 1 a {{max}} caracteres.",
+    "linkUrl": "Digite um endereço https.",
+    "linksMax": "No máximo {{count}} links.",
+    "tagsMax": "No máximo {{count}} tags.",
+    "tagPattern": "\"{{tag}}\" não é válida: de 2 a 24 letras minúsculas, números ou hifens.",
+    "languagesMax": "No máximo {{count}} idiomas.",
+    "inviteLength": "Digite um código ou link de 2 a 200 caracteres."
+  },
+  "snapshot": {
+    "title": "Dados do Discord",
+    "body": "Nome, ícone e contagens são lidos de novo a cada 6 horas. Você pode forçar a leitura uma vez por minuto.",
+    "members": "Membros",
+    "online": "Online",
+    "invite": "Convite:",
+    "inviteValid": "válido",
+    "inviteLost": "não encontrado no Discord",
+    "noInvite": "nenhum",
+    "done": "Dados do Discord atualizados.",
+    "staleDone": "O Discord não respondeu: os dados antigos foram mantidos.",
+    "refresh": "Atualizar agora",
+    "refreshing": "Lendo...",
+    "waitIn": "Disponível em {{seconds}} s"
+  },
+  "danger": {
+    "title": "Excluir o perfil",
+    "body": "O perfil sai do diretório e os anúncios do servidor são fechados. O servidor do Discord não é afetado.",
+    "action": "Excluir o perfil",
+    "confirmTitle": "Excluir o perfil de {{name}}?",
+    "confirmBody": "O que acontece:",
+    "effectPosts": "Os anúncios em rascunho e publicados passam a «fechado». Você poderá reabri-los depois de reivindicar o servidor de novo.",
+    "effectHidden": "Os anúncios ocultados pela equipe do Moddy continuam ocultos.",
+    "effectReclaim": "A descrição, os links, as tags e a visibilidade são perdidos.",
+    "confirm": "Excluir",
+    "done": "O perfil de {{name}} foi excluído."
+  },
+  "posts": {
+    "title": "Anúncios do servidor",
+    "create": "Novo anúncio",
+    "tabs": "Status dos anúncios",
+    "tab": {
+      "all": "Todos",
+      "published": "Publicados",
+      "draft": "Rascunhos",
+      "closed": "Fechados",
+      "hidden": "Ocultos"
+    },
+    "emptyTitle": "Nenhum anúncio",
+    "emptyAll": "Este servidor ainda não tem anúncios. Quem gerencia o servidor pode editar todos.",
+    "emptyTab": "Nenhum anúncio com este status.",
+    "hidden": "Ocultado pela equipe do Moddy: não pode mais ser alterado.",
+    "edit": "Editar",
+    "close": "Fechar",
+    "reopen": "Reabrir",
+    "publish": "Publicar",
+    "delete": "Excluir",
+    "closed": "Anúncio fechado.",
+    "published": "Anúncio publicado.",
+    "deleted": "Anúncio excluído.",
+    "deleteTitle": "Excluir este anúncio?",
+    "deleteBody": "«{{title}}» será excluído definitivamente."
+  }
+}

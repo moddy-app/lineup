@@ -1,0 +1,68 @@
+/* A server's profile (/guilds/:guildId). Tokens only. */
+
+.card.guild-hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space);
+}
+
+.guild-hero-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space);
+  min-width: 0;
+}
+
+.guild-hero-title {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+  min-width: 0;
+}
+
+.guild-hero-title h1 {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--text-title);
+}
+
+.guild-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-l) var(--space);
+}
+
+.guild-note {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-s);
+  margin: 0;
+  font-size: var(--text-small);
+}
+
+.guild-description {
+  max-width: 68ch;
+  margin: 0;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.guild-notice h2 {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-s);
+  font-size: var(--text-subtitle);
+}
+
+.guild-notice h2 .material-symbols-outlined {
+  color: var(--md-sys-color-primary);
+}
+
+.card.section .chips,
+.card.section .link-list {
+  margin: 0;
+}
+
+.guild-hero > .card-actions {
+  margin-top: 0;
+}

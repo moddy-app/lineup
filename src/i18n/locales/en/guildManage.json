@@ -1,0 +1,140 @@
+{
+  "title": "Server management",
+  "pageTitle": "Manage {{name}}",
+  "heading": "Manage {{name}}",
+  "unknownName": "Unnamed server",
+  "notFound": {
+    "title": "Server not found",
+    "body": "This server has no Lineup profile. Claim it first from the claim page.",
+    "action": "Browse servers"
+  },
+  "forbidden": {
+    "title": "You do not manage this server",
+    "body": "You must own the server, or have the Administrator or Manage Server permission. If you just received these rights, read your servers again from the claim page.",
+    "action": "View the profile"
+  },
+  "status": {
+    "listed": "In the directory",
+    "unlisted": "Unlisted"
+  },
+  "viewProfile": "View the profile",
+  "saved": "Profile saved.",
+  "editor": {
+    "title": "Public profile",
+    "unsaved": "Unsaved changes",
+    "save": "Save",
+    "saving": "Saving...",
+    "reset": "Discard changes"
+  },
+  "description": {
+    "title": "Description",
+    "label": "Server description",
+    "hint": "Leave empty to show the Discord description.",
+    "discordTitle": "Discord description",
+    "discordNone": "This server has no description on Discord.",
+    "useDiscord": "Use the Discord description"
+  },
+  "links": {
+    "title": "Links",
+    "hint": "Up to {{count}} links, https only. The label is 40 characters at most.",
+    "label": "Link {{n}} label",
+    "url": "Link {{n}} address",
+    "remove": "Remove link {{n}}",
+    "add": "Add a link"
+  },
+  "topics": {
+    "title": "Theme, tags and languages"
+  },
+  "theme": {
+    "label": "Theme",
+    "none": "No theme"
+  },
+  "tags": {
+    "label": "Tags",
+    "hint": "Separated by commas. Lowercase letters, digits and hyphens, 2 to 24 characters. {{count}} of {{max}}."
+  },
+  "languages": {
+    "label": "Server languages ({{count}} of {{max}})"
+  },
+  "invite": {
+    "title": "Invitation",
+    "current": "Current invitation:",
+    "valid": "It works.",
+    "lost": "It no longer exists on Discord: replace it.",
+    "none": "No invitation saved.",
+    "label": "New invitation",
+    "placeholder": "https://discord.gg/your-code",
+    "hint": "Optional. It must never expire and lead to this same server.",
+    "how": "How to create a permanent invitation"
+  },
+  "visibility": {
+    "title": "Visibility",
+    "label": "Show the server in the directory",
+    "on": "Anyone can find this profile in the directory.",
+    "off": "The profile and its posts disappear for everyone except managers and the Moddy staff."
+  },
+  "errors": {
+    "fixFields": "Fix the highlighted fields, then save again.",
+    "descriptionMax": "At most {{count}} characters.",
+    "linkLabel": "A label of 1 to {{max}} characters is required.",
+    "linkUrl": "Enter an https address.",
+    "linksMax": "At most {{count}} links.",
+    "tagsMax": "At most {{count}} tags.",
+    "tagPattern": "\"{{tag}}\" is not valid: 2 to 24 lowercase letters, digits or hyphens.",
+    "languagesMax": "At most {{count}} languages.",
+    "inviteLength": "Enter a code or a link of 2 to 200 characters."
+  },
+  "snapshot": {
+    "title": "Discord data",
+    "body": "Name, icon and counts are read again every 6 hours. You can force a new read once a minute.",
+    "members": "Members",
+    "online": "Online",
+    "invite": "Invitation:",
+    "inviteValid": "valid",
+    "inviteLost": "not found on Discord",
+    "noInvite": "none",
+    "done": "Discord data refreshed.",
+    "staleDone": "Discord did not answer: the old data is kept.",
+    "refresh": "Refresh now",
+    "refreshing": "Reading...",
+    "waitIn": "Available in {{seconds}} s"
+  },
+  "danger": {
+    "title": "Delete the profile",
+    "body": "The profile leaves the directory and the server's posts are closed. The Discord server is not affected.",
+    "action": "Delete the profile",
+    "confirmTitle": "Delete the profile of {{name}}?",
+    "confirmBody": "What happens:",
+    "effectPosts": "Draft and published posts become \"closed\". You can reopen them after claiming the server again.",
+    "effectHidden": "Posts hidden by the Moddy team stay hidden.",
+    "effectReclaim": "The description, links, tags and visibility settings are lost.",
+    "confirm": "Delete",
+    "done": "The profile of {{name}} is deleted."
+  },
+  "posts": {
+    "title": "Server posts",
+    "create": "New post",
+    "tabs": "Post status",
+    "tab": {
+      "all": "All",
+      "published": "Published",
+      "draft": "Drafts",
+      "closed": "Closed",
+      "hidden": "Hidden"
+    },
+    "emptyTitle": "No posts",
+    "emptyAll": "This server has no posts yet. Everyone who manages the server can edit all of them.",
+    "emptyTab": "No posts with this status.",
+    "hidden": "Hidden by the Moddy team: it can no longer be changed.",
+    "edit": "Edit",
+    "close": "Close",
+    "reopen": "Reopen",
+    "publish": "Publish",
+    "delete": "Delete",
+    "closed": "Post closed.",
+    "published": "Post published.",
+    "deleted": "Post deleted.",
+    "deleteTitle": "Delete this post?",
+    "deleteBody": "\"{{title}}\" will be deleted for good."
+  }
+}

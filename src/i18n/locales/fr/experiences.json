@@ -1,0 +1,163 @@
+{
+  "title": "Mes expériences",
+  "list": {
+    "intro": "Glissez une expérience par sa poignée, ou utilisez les flèches, pour changer l'ordre affiché sur votre profil.",
+    "add": "Ajouter une expérience",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "drag": "Déplacer {{title}}",
+    "moveUp": "Monter {{title}}",
+    "moveDown": "Descendre {{title}}",
+    "moved": "{{title}} : position {{position}} sur {{total}}",
+    "reordered": "Ordre enregistré",
+    "orderOutdated": "La liste avait changé ailleurs. Elle est rechargée, refaites le déplacement.",
+    "title": "{{position}}, {{name}}"
+  },
+  "empty": {
+    "title": "Aucune expérience",
+    "body": "Ajoutez les serveurs ou les services où vous avez travaillé. Une expérience vérifiée peut être mise en avant dans une annonce."
+  },
+  "aside": {
+    "countTitle": "Expériences",
+    "count": "{{used}} / {{max}}",
+    "profile": "Modifier mon profil",
+    "verifyTitle": "Vérification",
+    "auto": "Automatique : pour un serveur où vous êtes en poste, Lineup lit vos permissions sur ce serveur via Discord.",
+    "manual": "Revue manuelle : pour un poste passé ou un service, l'équipe Moddy examine votre demande.",
+    "reset": "Modifier le poste, les dates ou le serveur d'une expérience vérifiée supprime la vérification."
+  },
+  "dnd": {
+    "instructions": "Espace ou Entrée pour prendre l'expérience, flèches haut et bas pour la déplacer, Espace ou Entrée pour la poser, Échap pour annuler.",
+    "start": "{{title}} saisie.",
+    "over": "{{title}} au-dessus de la position {{position}} sur {{total}}.",
+    "end": "{{title}} placée en position {{position}} sur {{total}}.",
+    "cancel": "Déplacement de {{title}} annulé."
+  },
+  "dialog": {
+    "createTitle": "Ajouter une expérience",
+    "editTitle": "Modifier l'expérience",
+    "create": "Ajouter",
+    "saving": "Enregistrement",
+    "saveAndReset": "Enregistrer et retirer la vérification",
+    "created": "Expérience ajoutée",
+    "updated": "Expérience modifiée",
+    "limit": "Vous avez {{count}} / {{max}} expériences. Supprimez-en une pour en ajouter."
+  },
+  "fields": {
+    "kind": {
+      "label": "Type",
+      "guild": "Serveur Discord",
+      "service": "Autre service",
+      "locked": "Le type ne peut pas changer."
+    },
+    "currentServer": "Serveur actuel :",
+    "invite": "Invitation permanente",
+    "newInvite": "Nouvelle invitation (facultatif)",
+    "inviteHelp": "Le nom du serveur est repris de l'invitation.",
+    "newInviteHelp": "Laissez vide pour garder le serveur. Un autre serveur retire la vérification.",
+    "inviteHow": "Comment créer une invitation permanente",
+    "name": "Nom du service",
+    "nameHelp": "Par exemple une plateforme, une association, une entreprise.",
+    "position": "Poste",
+    "positionPlaceholder": "Choisir un poste",
+    "positionOther": "Nom du poste",
+    "description": "Description",
+    "descriptionHelp": "Ce que vous y faisiez. Facultatif.",
+    "startDate": "Début",
+    "endDate": "Fin",
+    "current": "Poste actuel, sans date de fin"
+  },
+  "warning": {
+    "before": {
+      "verified": "Modifier le poste, les dates ou le serveur supprimera la vérification.",
+      "pending": "Modifier le poste, les dates ou le serveur annulera la demande de revue en cours.",
+      "rejected": "Modifier le poste, les dates ou le serveur effacera le refus. Vous pourrez redemander une vérification."
+    },
+    "resets": {
+      "verified": "Cette modification supprimera la vérification. Vous pourrez la redemander ensuite.",
+      "pending": "Cette modification annulera la demande de revue en cours.",
+      "rejected": "Cette modification effacera le refus. Vous pourrez redemander une vérification."
+    },
+    "keeps": "Ajouter une date de fin à une expérience vérifiée et en cours garde la vérification."
+  },
+  "problems": {
+    "inviteRequired": "Collez une invitation permanente.",
+    "nameRequired": "Indiquez un nom.",
+    "nameTooLong": "{{count}} caractères au plus.",
+    "positionRequired": "Choisissez un poste.",
+    "positionOtherRequired": "Indiquez le nom du poste.",
+    "positionOtherTooLong": "{{count}} caractères au plus.",
+    "descriptionTooLong": "{{count}} caractères au plus.",
+    "startRequired": "Indiquez la date de début.",
+    "startFuture": "La date de début ne peut pas être dans le futur.",
+    "endRequired": "Indiquez la date de fin, ou cochez « Poste actuel ».",
+    "endFuture": "La date de fin ne peut pas être dans le futur.",
+    "endBeforeStart": "La fin ne peut pas précéder le début."
+  },
+  "delete": {
+    "title": "Supprimer {{title}} ?",
+    "body": "Cette expérience et sa vérification seront supprimées. C'est définitif.",
+    "featured": "Si une de vos annonces la met en avant, elle perd cette mise en avant.",
+    "done": "Expérience supprimée"
+  },
+  "status": {
+    "verified": {
+      "discord": "Vérifiée via Discord",
+      "staff": "Vérifiée par l'équipe Moddy",
+      "generic": "Vérifiée"
+    },
+    "on": "le {{date}}",
+    "pending": "Demande de revue envoyée, en attente de l'équipe Moddy.",
+    "rejected": "Refusée.",
+    "rejectedNoReason": "Aucun motif n'a été indiqué.",
+    "rejectedHelp": "Corrigez l'expérience si besoin, puis redemandez une vérification.",
+    "unverified": {
+      "service": "Non vérifiée. Un service se vérifie par une revue manuelle.",
+      "current": "Non vérifiée. Seule une expérience vérifiée peut être mise en avant dans une annonce.",
+      "ended": "Non vérifiée. Un poste terminé se vérifie par une revue manuelle."
+    }
+  },
+  "evidence": {
+    "summary": "Voir ce qui a été vérifié",
+    "owner": "Propriétaire",
+    "ownerYes": "Vous êtes propriétaire du serveur",
+    "permissions": "Permissions trouvées",
+    "checkedAt": "Contrôle",
+    "staffNote": "Note de l'équipe",
+    "private": "Visible par vous seul et par l'équipe Moddy.",
+    "permission": {
+      "ADMINISTRATOR": "Administrateur",
+      "MANAGE_GUILD": "Gérer le serveur",
+      "MANAGE_ROLES": "Gérer les rôles",
+      "MANAGE_CHANNELS": "Gérer les salons",
+      "KICK_MEMBERS": "Expulser des membres",
+      "BAN_MEMBERS": "Bannir des membres",
+      "MANAGE_MESSAGES": "Gérer les messages",
+      "MODERATE_MEMBERS": "Exclure temporairement des membres",
+      "MANAGE_NICKNAMES": "Gérer les pseudos",
+      "MANAGE_EVENTS": "Gérer les événements"
+    }
+  },
+  "verify": {
+    "action": "Vérifier automatiquement",
+    "waiting": "Réessayer dans {{seconds}} s",
+    "success": "Expérience vérifiée"
+  },
+  "reauth": {
+    "title": "Autorisez Lineup à lire vos serveurs.",
+    "body": "La vérification automatique lit vos permissions sur le serveur. Vous allez repasser par Discord, puis revenir ici.",
+    "action": "Autoriser avec Discord"
+  },
+  "review": {
+    "open": "Demander une revue manuelle",
+    "intro": "L'équipe Moddy examine la demande. Vous pouvez ajouter une précision.",
+    "note": "Note pour l'équipe (facultatif)",
+    "noteHelp": "Par exemple : comment prouver votre rôle.",
+    "send": "Envoyer la demande",
+    "sending": "Envoi",
+    "cancel": "Annuler",
+    "sent": "Demande envoyée",
+    "yourNote": "Votre note :",
+    "pending": "Revue en cours"
+  }
+}

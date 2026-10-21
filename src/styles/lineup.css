@@ -1,0 +1,970 @@
+/**
+ * Lineup's own styles, on top of the Moddy design system (design-kit).
+ *
+ * Only what the kit does not cover, and only its tokens: colors are Material
+ * theme tokens (--md-sys-color-*), never a hex value; sizes are the kit's
+ * spacing, radius and type tokens. No gradient, no shadow on cards, no
+ * decoration. Motion lives inside prefers-reduced-motion: no-preference.
+ */
+
+:root {
+  /* Fields and selects: the same 16px corners as md-outlined-text-field. */
+  --md-outlined-select-text-field-container-shape: var(--radius-l);
+}
+
+/* ---------------------------------------------------------------------------
+ * Special pages (404, errors) have no footer (DESIGN-SYSTEM §4). The shell
+ * leaves it out for routes that declare handle.special; this covers the
+ * error boundary, which no route declares.
+ * ------------------------------------------------------------------------- */
+
+.app:has(.page.special) > .app-footer {
+  display: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * Suspension: the notice above public pages, and the references of a sanction.
+ * ------------------------------------------------------------------------- */
+
+.suspended-notice {
+  margin-bottom: var(--page-gap);
+}
+
+.sanction-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+}
+
+.card .sanction-details p {
+  margin: 0;
+}
+
+/* The same rhythm as two paragraphs of a card (the kit's `p + p`). */
+.card > p + .sanction-details {
+  margin-top: 10px;
+}
+
+.sanction-references {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-s);
+}
+
+/* ---------------------------------------------------------------------------
+ * Footer: the byline on the left, the language on the right; they wrap
+ * under each other on a narrow window.
+ * ------------------------------------------------------------------------- */
+
+.app-footer-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-l) var(--space);
+}
+
+.app-footer-byline {
+  margin: 0;
+}
+
+.field.language-select {
+  width: auto;
+  min-width: 220px;
+}
+
+/* ---------------------------------------------------------------------------
+ * Forms: fields fill their column, a toggle is its control and its label.
+ * ------------------------------------------------------------------------- */
+
+.field {
+  width: 100%;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-m);
+  cursor: pointer;
+  font-size: var(--text-body);
+  color: var(--md-sys-color-on-surface);
+}
+
+/* A destructive confirmation (delete): the filled button in the error colors. */
+md-filled-button.destructive {
+  --md-filled-button-container-color: var(--md-sys-color-error);
+  --md-filled-button-label-text-color: var(--md-sys-color-on-error);
+  --md-filled-button-hover-label-text-color: var(--md-sys-color-on-error);
+  --md-filled-button-focus-label-text-color: var(--md-sys-color-on-error);
+  --md-filled-button-pressed-label-text-color: var(--md-sys-color-on-error);
+  --md-filled-button-icon-color: var(--md-sys-color-on-error);
+  --md-filled-button-hover-icon-color: var(--md-sys-color-on-error);
+  --md-filled-button-focus-icon-color: var(--md-sys-color-on-error);
+  --md-filled-button-pressed-icon-color: var(--md-sys-color-on-error);
+  --md-filled-button-hover-state-layer-color: var(--md-sys-color-on-error);
+  --md-filled-button-pressed-state-layer-color: var(--md-sys-color-on-error);
+}
+
+/* ---------------------------------------------------------------------------
+ * Loading: a spinner centered in its card; a thin bar under the app bar while
+ * the next page loads (it shows after 200 ms, so quick navigations stay calm).
+ * ------------------------------------------------------------------------- */
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--space);
+}
+
+.nav-progress {
+  position: fixed;
+  top: var(--app-bar-height);
+  right: 0;
+  left: 0;
+  z-index: 9;
+  --md-linear-progress-track-height: 3px;
+  --md-linear-progress-active-indicator-height: 3px;
+  opacity: 0;
+  animation: nav-progress-in 0s 200ms forwards;
+}
+
+@keyframes nav-progress-in {
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Snackbar: a short message at the bottom of the window (Material 3). The kit
+ * has none, so it follows the kit's tooltip: inverse-surface, 4px corners.
+ * Above the footer (z-index 5) and the band under the cards (4).
+ * ------------------------------------------------------------------------- */
+
+.snackbar {
+  position: fixed;
+  bottom: calc(var(--page-gap) + var(--gap-m));
+  left: 50%;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-l);
+  box-sizing: border-box;
+  width: max-content;
+  max-width: min(560px, calc(100vw - 2 * var(--page-gap)));
+  min-height: 48px;
+  padding: var(--gap-s) var(--gap-l);
+  border-radius: var(--radius-xs);
+  background-color: var(--md-sys-color-inverse-surface);
+  color: var(--md-sys-color-inverse-on-surface);
+  font-size: 14px;
+  line-height: 1.4;
+  visibility: hidden;
+  opacity: 0;
+  translate: -50% var(--gap-s);
+}
+
+.snackbar[data-open='true'] {
+  visibility: visible;
+  opacity: 1;
+  translate: -50% 0;
+}
+
+.snackbar-message {
+  flex: 1;
+  min-width: 0;
+  padding-block: var(--gap-s);
+}
+
+.snackbar-action {
+  flex-shrink: 0;
+  margin-inline-end: calc(-1 * var(--gap-s));
+  --md-text-button-label-text-color: var(--md-sys-color-inverse-primary);
+  --md-text-button-hover-label-text-color: var(--md-sys-color-inverse-primary);
+  --md-text-button-focus-label-text-color: var(--md-sys-color-inverse-primary);
+  --md-text-button-pressed-label-text-color: var(--md-sys-color-inverse-primary);
+  --md-text-button-hover-state-layer-color: var(--md-sys-color-inverse-primary);
+  --md-text-button-pressed-state-layer-color: var(--md-sys-color-inverse-primary);
+  --md-focus-ring-color: var(--md-sys-color-inverse-primary);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .snackbar {
+    transition:
+      opacity 200ms var(--ease),
+      translate 200ms var(--ease),
+      visibility 200ms;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Layouts for functional screens (see src/ui/appLayout.tsx). The bento grid is
+ * the brand's look; screens people work in use a main column with an optional
+ * side column, or one narrow column, with the same page gap and cards.
+ * ------------------------------------------------------------------------- */
+
+.app-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--page-gap);
+}
+
+.app-layout.has-aside {
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  align-items: start;
+}
+
+.app-main,
+.app-aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--page-gap);
+  min-width: 0;
+}
+
+.app-aside.sticky {
+  position: sticky;
+  top: calc(var(--app-bar-height) + var(--page-gap));
+}
+
+/* Same breakpoint as the bento: the side column goes under the main one. */
+@media (max-width: 1100px) {
+  .app-layout.has-aside {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .app-aside.sticky {
+    position: static;
+  }
+}
+
+.single-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--page-gap);
+  max-width: 760px;
+  margin-inline: auto;
+}
+
+/* A card with a title row: title on the left, actions on the right. The
+   title is the card's title size whatever its level (one h1 per page). */
+.card.section {
+  gap: var(--space);
+}
+
+.section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-m) var(--gap-l);
+}
+
+.section-head :is(h1, h2) {
+  margin: 0;
+  font-size: var(--text-title);
+  letter-spacing: normal;
+}
+
+.section-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-m);
+}
+
+/* ===========================================================================
+ * DOMAIN COMPONENTS (src/components)
+ *
+ * The pieces several pages share: avatars, server icons, badges, post cards,
+ * conditions, experiences, report dialog, states. They are functional, so
+ * compact and plain; only kit tokens, no hex, no gradient, no card shadow,
+ * hover only on links and buttons, motion only under
+ * prefers-reduced-motion: no-preference.
+ * ======================================================================== */
+
+/* ---------------------------------------------------------------------------
+ * Statuses: a neutral grey (closed, expired, not verified) and a status that
+ * carries a small icon (verified). The kit has default, strong, accent, error.
+ * ------------------------------------------------------------------------- */
+
+.status.neutral {
+  background-color: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.status:has(> .material-symbols-outlined) {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding-inline: 8px 10px;
+}
+
+.status > .material-symbols-outlined {
+  font-size: 14px;
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 600;
+}
+
+/* ---------------------------------------------------------------------------
+ * Tooltips: the kit centers a one-line tooltip under its target. Two variants
+ * for tooltips next to a card's edge or longer than a line: `tooltip-end`
+ * aligns it to the target's right edge, `tooltip-wrap` lets it wrap (260px at
+ * most). Without `tooltip-end` a wrapping tooltip starts at the target's left.
+ * ------------------------------------------------------------------------- */
+
+.tooltip-wrap[data-tooltip]::after {
+  left: 0;
+  width: max-content;
+  max-width: min(260px, 70vw);
+  text-align: start;
+  white-space: normal;
+  transform: none;
+}
+
+.tooltip-end[data-tooltip]::after {
+  right: 0;
+  left: auto;
+}
+
+/* Set by src/components/tooltipSide.ts on a target near a card's edge. */
+[data-tip-side='start'][data-tooltip]::after {
+  left: 0;
+  transform: none;
+}
+
+[data-tip-side='end'][data-tooltip]::after {
+  right: 0;
+  left: auto;
+  transform: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * UserAvatar: the kit's round avatar, with Discord's avatar decoration drawn
+ * over it at 1.2 times its size, centered (so it overhangs by 10% each side).
+ * The overlay is decorative and never takes the pointer.
+ * ------------------------------------------------------------------------- */
+
+.user-avatar {
+  --avatar-size: 40px;
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+}
+
+.user-avatar.small {
+  --avatar-size: 32px;
+}
+.user-avatar.large {
+  --avatar-size: 56px;
+}
+.user-avatar.xl {
+  --avatar-size: 96px;
+}
+
+.user-avatar > .avatar {
+  width: 100%;
+  height: 100%;
+}
+
+.avatar-decoration {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 120%;
+  height: 120%;
+  max-width: none;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * GuildIcon: a server is a rounded square, a person is a circle, so the two
+ * are never mistaken for each other. Corner radius follows the size (about a
+ * quarter of it). Without an icon the placeholder is the kit's square shape
+ * (a polygon, never a circle), sized like the avatars.
+ * ------------------------------------------------------------------------- */
+
+.guild-icon {
+  --icon-size: 40px;
+  flex-shrink: 0;
+  width: var(--icon-size);
+  height: var(--icon-size);
+}
+
+.guild-icon.is-small {
+  --icon-size: 32px;
+}
+.guild-icon.is-large {
+  --icon-size: 56px;
+}
+.guild-icon.is-xl {
+  --icon-size: 96px;
+}
+
+img.guild-icon {
+  border-radius: var(--radius-m);
+  object-fit: cover;
+  background-color: var(--md-sys-color-surface-container);
+}
+
+img.guild-icon.is-small {
+  border-radius: var(--radius-s);
+}
+img.guild-icon.is-large {
+  border-radius: var(--radius-l);
+}
+img.guild-icon.is-xl {
+  border-radius: var(--radius-xl);
+}
+
+.shape.guild-icon {
+  --shape-size: var(--icon-size);
+}
+
+.shape.guild-icon .material-symbols-outlined {
+  font-size: calc(var(--icon-size) * 0.5);
+}
+
+/* ---------------------------------------------------------------------------
+ * BadgeList: icon and name (full) or the icon alone with a tooltip (compact).
+ * Manual badges, granted by the Moddy team, get an accent icon and a darker
+ * label; the others stay neutral.
+ * ------------------------------------------------------------------------- */
+
+.badge-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-s);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.badge-list > li {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.badge-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-sizing: border-box;
+  max-width: 100%;
+  height: 28px;
+  padding-inline: 8px 12px;
+  border-radius: var(--radius-s);
+  background-color: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: var(--text-label);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.badge-item .material-symbols-outlined {
+  flex-shrink: 0;
+  font-size: 16px;
+}
+
+.badge-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.badge-item.manual {
+  color: var(--md-sys-color-on-surface);
+}
+
+.badge-item.manual .material-symbols-outlined {
+  color: var(--md-sys-color-primary);
+}
+
+.badge-item.compact {
+  justify-content: center;
+  width: 28px;
+  padding-inline: 0;
+}
+
+/* "+n": as wide as its digits. Its tooltip lists the hidden badges, one per
+   line, above the list (a card usually has more room above than below). */
+.badge-item.badge-more {
+  width: auto;
+  min-width: 28px;
+  padding-inline: 8px;
+}
+
+.badge-more[data-tooltip]::after {
+  top: auto;
+  bottom: calc(100% + 6px);
+  width: max-content;
+  max-width: min(260px, 70vw);
+  white-space: pre-line;
+}
+
+/* ---------------------------------------------------------------------------
+ * PostCard (feed variant): a whole-card link, compact. The title clamps to two
+ * lines and the excerpt to three, so every card is about the same height.
+ * ------------------------------------------------------------------------- */
+
+.post-card {
+  gap: var(--gap-m);
+}
+
+@media (min-width: 601px) {
+  .post-card {
+    --card-padding: 24px;
+  }
+}
+
+.post-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-s) var(--gap-m);
+  min-width: 0;
+}
+
+/* The name keeps at least 8rem; when the tags would squeeze it below that,
+   they go on their own line instead. */
+.post-head > .row-body {
+  flex: 1 1 8rem;
+}
+
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-s);
+  margin-inline-start: auto;
+}
+
+.post-card .post-title {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  font-size: var(--text-hero);
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.post-card p.post-excerpt {
+  display: -webkit-box;
+  max-width: none;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+/* A chip never grows past its container: a long position label is cut with an ellipsis. */
+.chips .chip {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.chip-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* One wrapped line of facts under a card or a title: compensation, hours,
+   openings, languages, expiry. */
+.meta-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-s) var(--gap-l);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.meta-list,
+.requirement .row-meta,
+.experience-row .row-meta {
+  font-variant-numeric: tabular-nums;
+}
+
+.meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.meta-item .material-symbols-outlined {
+  flex-shrink: 0;
+  font-size: 16px;
+}
+
+.meta-item.expiry-near {
+  color: var(--md-sys-color-on-surface);
+  font-weight: 500;
+}
+
+/* ---------------------------------------------------------------------------
+ * RequirementList: rows whose text wraps (a condition can be a sentence).
+ * ------------------------------------------------------------------------- */
+
+.requirement {
+  align-items: flex-start;
+}
+
+.requirement .row-title,
+.requirement .row-meta {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.requirement-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 4px;
+  font-size: var(--text-label);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.requirement-note .material-symbols-outlined {
+  flex-shrink: 0;
+  font-size: 16px;
+}
+
+.requirement-note.met {
+  color: var(--md-sys-color-primary);
+}
+
+/* ---------------------------------------------------------------------------
+ * ExperienceRow: icon, "Position, Name", dates and duration, a description
+ * that collapses, the verification pill on the right, the owner's actions
+ * under it all.
+ * ------------------------------------------------------------------------- */
+
+.experience-row {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--gap-m);
+}
+
+.experience-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  min-width: 0;
+}
+
+.experience-main > .status {
+  margin-top: 2px;
+}
+
+.experience-row .row-title,
+.experience-row .row-meta {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.experience-row .row-title a {
+  color: inherit;
+}
+
+.experience-row p.experience-description {
+  max-width: none;
+  margin: var(--gap-s) 0 0;
+  font-size: var(--text-body-small);
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+
+.experience-row p.experience-description.is-clamped {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+.experience-toggle {
+  align-self: flex-start;
+  margin-inline-start: -12px;
+  --md-text-button-container-height: 32px;
+}
+
+.experience-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--gap-s);
+}
+
+/* ---------------------------------------------------------------------------
+ * LinkList and TimezoneLabel
+ * ------------------------------------------------------------------------- */
+
+.link-list .row-body {
+  align-items: flex-start;
+  gap: var(--gap-s);
+}
+
+/* The label has priority: up to two lines. The host sits under it. */
+.link-list .row-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  max-width: 100%;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.link-list .pill {
+  max-width: 100%;
+}
+
+.timezone {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-s);
+}
+
+.timezone-icon {
+  font-size: 18px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.timezone-time {
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* ---------------------------------------------------------------------------
+ * ReportDialog: reasons as a list of radio rows (the pill-grey panel step), the
+ * details field, the error under it.
+ * ------------------------------------------------------------------------- */
+
+/* Material Web caps a dialog at 560px: the reasons and the details need more. */
+md-dialog.report-dialog {
+  max-height: min(760px, calc(100% - 48px));
+}
+
+.report-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-l);
+}
+
+.report-form p {
+  margin: 0;
+}
+
+.report-reasons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.report-reasons legend {
+  margin-bottom: var(--gap-s);
+  padding: 0;
+  font-size: var(--text-small);
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.report-reason {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-m);
+  padding: var(--gap-s) var(--gap-m);
+  border-radius: var(--radius-l);
+  background-color: var(--md-sys-color-surface-container);
+  cursor: pointer;
+}
+
+.report-reason md-radio {
+  flex-shrink: 0;
+  margin-block: 2px;
+}
+
+.report-reason-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding-block: 2px;
+}
+
+.report-reason-label {
+  font-size: var(--text-subtitle);
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface);
+}
+
+.report-reason-hint {
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.report-error,
+.report-already {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-s);
+}
+
+.report-error {
+  color: var(--md-sys-color-error);
+}
+
+.report-already {
+  align-items: center;
+  gap: var(--gap-m);
+  margin: 0;
+}
+
+.report-already .material-symbols-outlined {
+  color: var(--md-sys-color-primary);
+}
+
+.report-error .material-symbols-outlined {
+  flex-shrink: 0;
+  font-size: 20px;
+}
+
+/* ---------------------------------------------------------------------------
+ * EmptyState / ErrorState (compact): a quiet band for inside a Section; the
+ * full-size form is a plain card.
+ * ------------------------------------------------------------------------- */
+
+.empty-state.compact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-l);
+  padding: var(--gap-l);
+  border-radius: var(--radius-l);
+  background-color: var(--md-sys-color-surface-container);
+}
+
+.empty-state-text {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+
+.empty-state.compact h3 {
+  margin: 0;
+  font-size: var(--text-subtitle);
+  color: var(--md-sys-color-on-surface);
+}
+
+.empty-state.compact p {
+  max-width: none;
+  margin: 2px 0 0;
+  font-size: var(--text-small);
+}
+
+.empty-state-action {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-s);
+}
+
+/* ---------------------------------------------------------------------------
+ * QuotaMeter, StaleNotice, InviteHelp, ApplicationAction
+ * ------------------------------------------------------------------------- */
+
+.quota-meter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+  width: 100%;
+  --md-linear-progress-active-indicator-height: 6px;
+  --md-linear-progress-track-height: 6px;
+  --md-linear-progress-track-shape: var(--radius-full);
+  --md-linear-progress-active-indicator-color: var(--md-sys-color-primary);
+  --md-linear-progress-track-color: var(--md-sys-color-surface-container-high);
+}
+
+.quota-meter.is-full {
+  --md-linear-progress-active-indicator-color: var(--md-sys-color-error);
+}
+
+.quota-meter p.quota-text {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-s);
+  max-width: none;
+  margin: 0;
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface);
+}
+
+p.stale-notice {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: none;
+  margin: 0;
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.stale-notice .material-symbols-outlined {
+  font-size: 16px;
+}
+
+.invite-help p {
+  margin: 0;
+}
+
+.invite-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+  max-width: 560px;
+  margin: var(--gap-s) 0 0;
+  padding-inline-start: 1.5em;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.invite-steps li::marker {
+  font-weight: 600;
+  color: var(--md-sys-color-primary);
+}
+
+.application-action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-s);
+}
+
+p.application-hint {
+  max-width: 420px;
+  margin: 0;
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.report-reason:hover {
+  background-color: var(--md-sys-color-surface-container-high);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .report-reason {
+    transition: background-color 150ms var(--ease);
+  }
+}

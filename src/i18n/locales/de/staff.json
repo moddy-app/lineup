@@ -1,0 +1,207 @@
+{
+  "title": "Staff-Konsole",
+  "header": {
+    "text": "Warteschlange der Verifizierungen für Erfahrungen, Meldungen, manuelle Abzeichen und ausgeblendete Anzeigen."
+  },
+  "nav": {
+    "label": "Bereiche der Konsole",
+    "reviews": "Verifizierungen",
+    "reports": "Meldungen",
+    "badges": "Abzeichen",
+    "posts": "Anzeigen"
+  },
+  "forbidden": {
+    "title": "Kein Zugriff",
+    "text": "Diese Seite ist für das Moddy-Team. Dieses Konto hat keinen Zugriff."
+  },
+  "person": {
+    "profile": "Profil ansehen"
+  },
+  "retryIn": "Erneut versuchen in {{wait}}",
+  "dialog": {
+    "required": "Dieses Feld ist erforderlich."
+  },
+  "reviews": {
+    "status": "Status",
+    "statuses": {
+      "pending": "Ausstehend",
+      "unverified": "Nicht verifiziert",
+      "verified": "Verifiziert",
+      "rejected": "Abgelehnt"
+    },
+    "empty": {
+      "pendingTitle": "Warteschlange leer",
+      "pendingText": "Keine Prüfanfrage wartet.",
+      "title": "Keine Erfahrungen",
+      "text": "Keine Erfahrung hat diesen Status."
+    },
+    "help": {
+      "title": "Prüfregeln",
+      "order": "Die ältesten Anfragen stehen oben.",
+      "verify": "Verifizieren behält den vorhandenen Nachweis und fügt Ihre Notiz hinzu.",
+      "reject": "Ablehnen braucht eine Begründung, die die Person lesen kann."
+    },
+    "loaded": "{{n}} in dieser Liste geladen.",
+    "updated": "Geändert",
+    "facts": {
+      "requestedAt": "Prüfung angefragt",
+      "reviewNote": "Notiz der Person",
+      "permissions": "Berechtigungen",
+      "owner": "Servereigentümer",
+      "yes": "Ja",
+      "no": "Nein",
+      "roles": "Rollen",
+      "checkedAt": "Discord-Prüfung",
+      "staffNote": "Staff-Notiz",
+      "rejection": "Ablehnungsgrund",
+      "none": "Kein Nachweis gespeichert."
+    },
+    "verify": {
+      "action": "Verifizieren",
+      "title": "Diese Erfahrung verifizieren",
+      "text": "Die Erfahrung wird verifiziert, Methode Staff. Der vorhandene Nachweis bleibt erhalten.",
+      "note": "Notiz (optional)",
+      "confirm": "Verifizieren",
+      "done": "Erfahrung verifiziert."
+    },
+    "reject": {
+      "action": "Ablehnen",
+      "title": "Diese Erfahrung ablehnen",
+      "text": "Die Person sieht diese Begründung und kann nach einer Korrektur erneut eine Prüfung anfragen.",
+      "reason": "Begründung",
+      "confirm": "Ablehnen",
+      "done": "Erfahrung abgelehnt."
+    }
+  },
+  "reports": {
+    "status": "Status",
+    "statuses": {
+      "open": "Offen",
+      "resolved": "Bearbeitet",
+      "dismissed": "Abgewiesen",
+      "all": "Alle"
+    },
+    "states": {
+      "open": "Offen",
+      "resolved": "Bearbeitet",
+      "dismissed": "Abgewiesen"
+    },
+    "targets": {
+      "post": "Anzeige",
+      "user": "Profil",
+      "guild": "Server"
+    },
+    "open": "Öffnen: {{target}}",
+    "reasons": {
+      "spam": "Spam",
+      "scam": "Betrug",
+      "inappropriate": "Unangemessener Inhalt",
+      "impersonation": "Identitätsvortäuschung",
+      "other": "Sonstiges"
+    },
+    "noDetails": "Keine Angaben.",
+    "reporter": "Gemeldet von",
+    "handledBy": "Entschieden von",
+    "hidePost": "Anzeige ausblenden",
+    "empty": {
+      "openTitle": "Keine offenen Meldungen",
+      "openText": "Alle Meldungen sind entschieden.",
+      "title": "Keine Meldungen",
+      "text": "Keine Meldung hat diesen Status."
+    },
+    "help": {
+      "title": "Vor der Entscheidung",
+      "target": "Öffnen Sie zuerst das Ziel. Bearbeiten oder Abweisen ändert das Ziel nicht: blenden Sie die Anzeige separat aus.",
+      "once": "Eine entschiedene Meldung kann nicht erneut entschieden werden."
+    },
+    "loaded": "{{n}} in dieser Liste geladen.",
+    "resolve": {
+      "action": "Bearbeiten",
+      "title": "Als bearbeitet markieren",
+      "text": "Die Meldung wird mit ergriffener Maßnahme geschlossen. Das Ziel wird nicht geändert.",
+      "confirm": "Als bearbeitet markieren",
+      "done": "Meldung bearbeitet."
+    },
+    "dismiss": {
+      "action": "Abweisen",
+      "title": "Ohne Maßnahme abweisen",
+      "text": "Die Meldung wird ohne Maßnahme geschlossen. Sie kann nicht wieder geöffnet werden.",
+      "confirm": "Abweisen",
+      "done": "Meldung abgewiesen."
+    }
+  },
+  "badges": {
+    "listTitle": "Vergebene Abzeichen",
+    "filter": "Entität",
+    "filters": {
+      "all": "Alle",
+      "user": "Personen",
+      "guild": "Server"
+    },
+    "entities": {
+      "user": "Person",
+      "guild": "Server"
+    },
+    "empty": {
+      "title": "Keine manuellen Abzeichen",
+      "text": "Für diesen Filter wurde kein Abzeichen vergeben."
+    },
+    "grantedBy": "Vergeben von",
+    "openEntity": "Profil öffnen ({{badge}}, {{id}})",
+    "revoke": {
+      "action": "Entziehen",
+      "title": "Dieses Abzeichen entziehen",
+      "text": "Das Abzeichen verschwindet sofort vom Profil. Sie können es erneut vergeben.",
+      "confirm": "Entziehen",
+      "done": "Abzeichen entzogen."
+    },
+    "form": {
+      "title": "Abzeichen vergeben",
+      "text": "Angeboten werden nur die manuellen Abzeichen des Katalogs, je nach Entitätstyp.",
+      "entityType": "Entitätstyp",
+      "entityId": "Discord-ID",
+      "entityIdHint": "15 bis 20 Ziffern. Ob die Entität existiert, wird nicht geprüft.",
+      "idInvalid": "Die ID besteht aus 15 bis 20 Ziffern.",
+      "badge": "Abzeichen",
+      "badgeRequired": "Wählen Sie ein Abzeichen.",
+      "notForEntity": "Dieses Abzeichen gibt es für diesen Entitätstyp nicht.",
+      "serverOnly": "Manche Abzeichen gibt es nur für Server.",
+      "note": "Notiz (optional)",
+      "submit": "Vergeben",
+      "done": "Abzeichen vergeben."
+    }
+  },
+  "posts": {
+    "lookup": {
+      "label": "ID oder Link der Anzeige",
+      "hint": "Füge die UUID oder die Adresse der Anzeige ein.",
+      "invalid": "Keine Anzeigen-ID erkannt.",
+      "submit": "Suchen"
+    },
+    "empty": {
+      "title": "Keine Anzeige ausgewählt",
+      "text": "Füge eine ID oder einen Link ein, um den Status zu sehen und sie auszublenden."
+    },
+    "reason": "Begründung:",
+    "help": {
+      "title": "Ausblenden",
+      "hide": "Ausblenden nimmt die Anzeige aus allen öffentlichen Ansichten. Die Person sieht die Begründung und kann sie nicht mehr bearbeiten oder löschen.",
+      "unhide": "Einblenden setzt sie auf geschlossen, nie auf veröffentlicht. Die Person muss sie erneut veröffentlichen."
+    },
+    "hide": {
+      "action": "Ausblenden",
+      "title": "Diese Anzeige ausblenden",
+      "text": "Die Anzeige verschwindet aus den öffentlichen Listen. Die Person liest die Begründung.",
+      "reason": "Begründung",
+      "confirm": "Ausblenden",
+      "done": "Anzeige ausgeblendet."
+    },
+    "unhide": {
+      "action": "Einblenden",
+      "title": "Diese Anzeige einblenden",
+      "text": "Die Anzeige wird geschlossen. Die Person muss sie erneut veröffentlichen, damit sie sichtbar ist.",
+      "confirm": "Einblenden",
+      "done": "Anzeige eingeblendet, sie ist geschlossen."
+    }
+  }
+}

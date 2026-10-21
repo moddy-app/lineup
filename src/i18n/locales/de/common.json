@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "description": "Lineup verbindet Discord-Server, die Staff suchen, mit Menschen, die ein Team suchen."
+  },
+  "nav": {
+    "label": "Hauptnavigation",
+    "feed": "Anzeigen",
+    "guilds": "Server",
+    "staff": "Staff"
+  },
+  "auth": {
+    "login": "Anmelden",
+    "loginWithDiscord": "Mit Discord anmelden",
+    "cancelled": "Anmeldung abgebrochen",
+    "failed": "Die Anmeldung ist nicht zustande gekommen",
+    "loggedOut": "Sie sind abgemeldet",
+    "logout": "Abmelden",
+    "signInRequired": {
+      "title": "Melden Sie sich an, um fortzufahren",
+      "purpose": {
+        "default": "Diese Seite erfordert ein Discord-Konto.",
+        "profile": "Bearbeiten Sie Ihr öffentliches Profil, das Server beim Recruiting sehen.",
+        "experiences": "Fügen Sie Ihre Erfahrungen hinzu und lassen Sie sie verifizieren.",
+        "posts": "Finden Sie Ihre Anzeigen, ob veröffentlicht, als Entwurf oder geschlossen.",
+        "editor": "Verfassen Sie eine Anzeige für einen Server oder für sich selbst.",
+        "claim": "Beanspruchen Sie einen Server, um sein Profil und seine Anzeigen zu verwalten.",
+        "manage": "Verwalten Sie Profil, Anzeigen und Sichtbarkeit eines Servers."
+      }
+    },
+    "sessionError": {
+      "note": "Ihre Sitzung konnte nicht geprüft werden."
+    }
+  },
+  "userMenu": {
+    "profile": "Mein Profil",
+    "editProfile": "Profil bearbeiten",
+    "experiences": "Meine Erfahrung",
+    "posts": "Meine Anzeigen",
+    "guilds": "Meine Server"
+  },
+  "footer": {
+    "byline": "Lineup, ein Dienst von <moddy>Moddy</moddy>",
+    "language": "Sprache"
+  },
+  "actions": {
+    "retry": "Erneut versuchen",
+    "loadMore": "Mehr laden",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "delete": "Löschen",
+    "close": "Schließen",
+    "confirm": "Bestätigen",
+    "back": "Zurück",
+    "backToFeed": "Zurück zu den Anzeigen",
+    "reload": "Seite neu laden"
+  },
+  "status": {
+    "loading": "Wird geladen"
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "body": "Diese Seite hat den Server verlassen, oder die Adresse ist falsch."
+  },
+  "routeError": {
+    "title": "Es ist ein Fehler aufgetreten",
+    "body": "Diese Seite konnte nicht angezeigt werden. Laden Sie sie neu oder gehen Sie zurück zu den Anzeigen."
+  },
+  "suspended": {
+    "title": "Ihr Zugang zu Moddy ist gesperrt.",
+    "body": "Sie können auf Lineup nichts mehr veröffentlichen oder bearbeiten. Öffentliche Seiten bleiben zum Lesen offen.",
+    "noticeBody": "Lineup ist für Sie schreibgeschützt. Sie können nichts mehr veröffentlichen oder bearbeiten.",
+    "references": "Referenzen",
+    "until": "Bis zum {{date}}",
+    "noEnd": "Ohne Enddatum",
+    "viewSanction": "Sanktion ansehen"
+  }
+}

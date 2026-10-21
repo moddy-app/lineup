@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "description": "Lineup conecta los servidores de Discord que reclutan staff con las personas que buscan un equipo."
+  },
+  "nav": {
+    "label": "Navegación principal",
+    "feed": "Anuncios",
+    "guilds": "Servidores",
+    "staff": "Staff"
+  },
+  "auth": {
+    "login": "Iniciar sesión",
+    "loginWithDiscord": "Iniciar sesión con Discord",
+    "cancelled": "Inicio de sesión cancelado",
+    "failed": "No se pudo iniciar sesión",
+    "loggedOut": "Ha cerrado la sesión",
+    "logout": "Cerrar sesión",
+    "signInRequired": {
+      "title": "Inicie sesión para continuar",
+      "purpose": {
+        "default": "Esta página requiere una cuenta de Discord.",
+        "profile": "Edite su perfil público, el que ven los servidores que reclutan.",
+        "experiences": "Añada su experiencia y haga que se verifique.",
+        "posts": "Encuentre sus anuncios publicados, en borrador o cerrados.",
+        "editor": "Redacte un anuncio para un servidor o para usted.",
+        "claim": "Reclame un servidor para gestionar su perfil y sus anuncios.",
+        "manage": "Gestione el perfil, los anuncios y la visibilidad de un servidor."
+      }
+    },
+    "sessionError": {
+      "note": "No se pudo comprobar su sesión."
+    }
+  },
+  "userMenu": {
+    "profile": "Mi perfil",
+    "editProfile": "Editar mi perfil",
+    "experiences": "Mi experiencia",
+    "posts": "Mis anuncios",
+    "guilds": "Mis servidores"
+  },
+  "footer": {
+    "byline": "Lineup, un servicio de <moddy>Moddy</moddy>",
+    "language": "Idioma"
+  },
+  "actions": {
+    "retry": "Reintentar",
+    "loadMore": "Cargar más",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "close": "Cerrar",
+    "confirm": "Confirmar",
+    "back": "Volver",
+    "backToFeed": "Volver a los anuncios",
+    "reload": "Recargar la página"
+  },
+  "status": {
+    "loading": "Cargando"
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "body": "Esta página abandonó el servidor, o la dirección es incorrecta."
+  },
+  "routeError": {
+    "title": "Ha ocurrido un error",
+    "body": "No se pudo mostrar esta página. Recárguela o vuelva a los anuncios."
+  },
+  "suspended": {
+    "title": "Su acceso a Moddy está suspendido.",
+    "body": "Ya no puede publicar ni editar en Lineup. Las páginas públicas siguen abiertas para leer.",
+    "noticeBody": "Lineup está en solo lectura para usted. Ya no puede publicar ni editar.",
+    "references": "Referencias",
+    "until": "Hasta el {{date}}",
+    "noEnd": "Sin fecha de fin",
+    "viewSanction": "Ver la sanción"
+  }
+}

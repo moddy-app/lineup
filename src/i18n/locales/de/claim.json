@@ -1,0 +1,42 @@
+{
+  "title": "Server beanspruchen",
+  "intro": "Wer einen Server beansprucht, legt sein Lineup-Profil an. Es erscheinen nur Server, die Ihnen gehören oder auf denen Sie die Berechtigung Administrator oder Server verwalten haben.",
+  "unknownName": "Server ohne Namen",
+  "success": "{{name}} ist jetzt auf Lineup.",
+  "list": {
+    "title": "Ihre Server",
+    "label": "Server, die Sie verwalten können",
+    "refresh": "Liste aktualisieren",
+    "refreshIn": "Aktualisieren in {{seconds}} s",
+    "refreshed": "Liste erneut von Discord gelesen.",
+    "withModdy": "Moddy ist installiert",
+    "withoutModdy": "Ohne Moddy",
+    "claimed": "Auf Lineup",
+    "profile": "Profil",
+    "manage": "Verwalten",
+    "claim": "Beanspruchen",
+    "emptyTitle": "Kein Server zum Beanspruchen",
+    "emptyBody": "Hier erscheinen nur Server, die Ihnen gehören oder auf denen Sie die Berechtigung Administrator oder Server verwalten haben. Haben Sie gerade einen erstellt, aktualisieren Sie die Liste.",
+    "reauthTitle": "Erlauben Sie Lineup, Ihre Server zu lesen",
+    "reauthBody": "Ihre Sitzung stammt vom Moddy-Dashboard und hat diese Berechtigung nicht. Melden Sie sich erneut mit Discord an.",
+    "reauthAction": "Erneut anmelden"
+  },
+  "form": {
+    "title": "Server-Einladung",
+    "body": "Fügen Sie einen Einladungslink ein, der nie abläuft. Er belegt, dass der Server Ihnen gehört, und wird zum Beitreten-Button im Profil.",
+    "label": "Einladungslink oder -code",
+    "placeholder": "https://discord.gg/ihr-code",
+    "hint": "Der reine Code funktioniert auch.",
+    "selected": "Einladung für {{name}}",
+    "deselect": "Entfernen",
+    "submit": "Beanspruchen",
+    "submitting": "Prüfung..."
+  },
+  "errors": {
+    "tooShort": "Geben Sie mindestens {{count}} Zeichen ein.",
+    "forbiddenHelp": "Haben Sie diese Rechte gerade erst auf Discord erhalten, lesen Sie sie neu ein. Der Antrag wird dann wiederholt.",
+    "rightsChanged": "Ich habe meine Rechte geändert",
+    "rightsChecking": "Rechte werden gelesen...",
+    "openProfile": "Profil öffnen"
+  }
+}

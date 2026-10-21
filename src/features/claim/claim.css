@@ -1,0 +1,80 @@
+/* Claim a server (/guilds/claim). Tokens only. */
+
+.claim-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-l);
+}
+
+.claim-selected {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-m);
+  margin: 0;
+  padding: var(--gap-m) var(--gap-l);
+  border-radius: var(--radius-l);
+  background-color: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface);
+}
+
+.claim-selected > span {
+  flex: 1 1 140px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.claim-error,
+.claim-inline-error {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+  padding: var(--gap-l);
+  border-radius: var(--radius-l);
+  background-color: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface);
+}
+
+.claim-error p,
+.claim-inline-error p {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-s);
+  margin: 0;
+  max-width: none;
+}
+
+.claim-error .material-symbols-outlined {
+  flex-shrink: 0;
+  color: var(--md-sys-color-error);
+}
+
+.claim-error-help {
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.claim-row {
+  flex-wrap: wrap;
+}
+
+.claim-row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-s);
+  margin-inline-start: auto;
+}
+
+.claim-intro h1 {
+  margin: 0 0 var(--gap-m);
+  font-size: var(--text-title);
+  letter-spacing: normal;
+}
+
+/* At phone width a long name wraps the actions under it instead of being cut. */
+@media (max-width: 600px) {
+  .claim-row > .row-body {
+    flex: 1 1 160px;
+    min-width: 160px;
+  }
+}

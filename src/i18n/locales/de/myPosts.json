@@ -1,0 +1,64 @@
+{
+  "title": "Meine Anzeigen",
+  "intro": "Alle Ihre Anzeigen, auch Entwürfe, geschlossene und vom Team ausgeblendete.",
+  "new": "Anzeige veröffentlichen",
+  "tabsLabel": "Status der Anzeigen",
+  "tabs": {
+    "all": "Alle",
+    "published": "Veröffentlicht",
+    "draft": "Entwürfe",
+    "closed": "Geschlossen",
+    "hidden": "Ausgeblendet"
+  },
+  "quota": {
+    "title": "Persönliche Anzeigen",
+    "body": "Es zählen nur Ihre veröffentlichten, nicht abgelaufenen Anzeigen „Ich suche ein Team“. Server-Anzeigen haben ein eigenes Limit von {{guildLimit}} pro Server.",
+    "loading": "Wird gezählt."
+  },
+  "empty": {
+    "all": {
+      "title": "Noch keine Anzeigen",
+      "body": "Veröffentlichen Sie für einen Server, den Sie verwalten, oder für sich selbst, wenn Sie ein Team suchen."
+    },
+    "published": {
+      "title": "Keine veröffentlichte Anzeige",
+      "body": "Eine veröffentlichte Anzeige bleibt im Feed, bis sie geschlossen wird oder abläuft."
+    },
+    "draft": {
+      "title": "Kein Entwurf",
+      "body": "Ein Entwurf zählt nicht zu den Limits und nur Sie können ihn sehen."
+    },
+    "closed": {
+      "title": "Keine geschlossene Anzeige",
+      "body": "Eine geschlossene Anzeige verlässt den Feed. Sie können sie erneut veröffentlichen."
+    },
+    "hidden": {
+      "title": "Keine ausgeblendete Anzeige",
+      "body": "Das Moddy-Team blendet Anzeigen aus, die gegen die Regeln verstoßen, und nennt hier den Grund."
+    }
+  },
+  "row": {
+    "hiddenReason": "Vom Moddy-Team ausgeblendet. Grund: {{reason}}",
+    "hiddenNoReason": "Vom Moddy-Team ausgeblendet. Sie kann nicht mehr bearbeitet werden.",
+    "expired": "Abgelaufen: Ändern Sie das Ablaufdatum, um sie erneut zu veröffentlichen.",
+    "kind": "Art",
+    "actions": "Aktionen für {{title}}"
+  },
+  "actions": {
+    "edit": "Bearbeiten",
+    "close": "Schließen",
+    "publish": "Veröffentlichen",
+    "republish": "Erneut veröffentlichen",
+    "delete": "Löschen"
+  },
+  "done": {
+    "closed": "Anzeige geschlossen.",
+    "published": "Anzeige veröffentlicht.",
+    "deleted": "Anzeige gelöscht."
+  },
+  "delete": {
+    "title": "Diese Anzeige löschen?",
+    "body": "„{{title}}“ wird endgültig gelöscht. Das lässt sich nicht rückgängig machen."
+  },
+  "editFirst": "Bearbeiten"
+}

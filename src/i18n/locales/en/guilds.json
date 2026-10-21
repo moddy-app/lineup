@@ -1,0 +1,32 @@
+{
+  "title": "Servers",
+  "intro": "The Discord servers recruiting staff on Lineup. Open a profile to see the team and the open posts.",
+  "claim": {
+    "action": "Claim a server"
+  },
+  "filters": {
+    "search": "Search servers",
+    "theme": "Theme",
+    "themeAll": "All themes",
+    "nsfw": "Include 18+ servers",
+    "clear": "Clear filters"
+  },
+  "list": {
+    "label": "Servers"
+  },
+  "card": {
+    "unknownName": "Unnamed server",
+    "noCounts": "Member counts unknown",
+    "members_one": "{{value}} member",
+    "members_other": "{{value}} members",
+    "online": "{{value}} online"
+  },
+  "empty": {
+    "title": "No servers yet",
+    "body": "Servers appear here once their managers have claimed them."
+  },
+  "emptyFiltered": {
+    "title": "No server matches",
+    "body": "Change the search or the theme, or clear the filters."
+  }
+}

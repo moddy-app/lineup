@@ -1,0 +1,114 @@
+/* My posts: tabs, rows with their actions, the quota card. Kit tokens only. */
+
+.mp-intro {
+  max-width: none;
+}
+
+.mp-quota {
+  gap: var(--gap-m);
+}
+
+.mp-quota h2 {
+  margin: 0;
+  font-size: var(--text-subtitle);
+}
+
+.mp-quota p {
+  max-width: none;
+  font-size: var(--text-small);
+}
+
+.mp-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mp-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+  min-width: 0;
+  padding-bottom: var(--gap-m);
+  border-bottom: 1px solid var(--md-sys-color-surface-container-high);
+}
+
+.mp-item:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.mp-note,
+.card .mp-note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-s);
+  max-width: none;
+  margin: 0;
+  padding-inline: var(--gap-s);
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.mp-note.is-error,
+.card .mp-note.is-error {
+  color: var(--md-sys-color-error);
+}
+
+.mp-note .material-symbols-outlined {
+  flex-shrink: 0;
+  font-size: 18px;
+}
+
+.mp-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-s);
+  padding-inline: var(--gap-s);
+}
+
+md-text-button.mp-delete {
+  --md-text-button-label-text-color: var(--md-sys-color-error);
+  --md-text-button-icon-color: var(--md-sys-color-error);
+  --md-text-button-hover-label-text-color: var(--md-sys-color-error);
+  --md-text-button-focus-label-text-color: var(--md-sys-color-error);
+  --md-text-button-pressed-label-text-color: var(--md-sys-color-error);
+  --md-text-button-hover-icon-color: var(--md-sys-color-error);
+  --md-text-button-focus-icon-color: var(--md-sys-color-error);
+  --md-text-button-pressed-icon-color: var(--md-sys-color-error);
+  --md-text-button-hover-state-layer-color: var(--md-sys-color-error);
+  --md-text-button-pressed-state-layer-color: var(--md-sys-color-error);
+}
+
+.mp-error {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-s) var(--gap-m);
+  padding: var(--gap-s) var(--gap-m);
+  border-radius: var(--radius-l);
+  background-color: var(--md-sys-color-error-container);
+  color: var(--md-sys-color-on-error-container);
+  font-size: var(--text-body-small);
+}
+
+.mp-error > span {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+.mp-more {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--gap-m);
+}
+
+#mp-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+  min-width: 0;
+}

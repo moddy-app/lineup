@@ -1,0 +1,58 @@
+{
+  "title": "Editar mi perfil",
+  "intro": "Este perfil es público. Solo se guardan los campos que cambie.",
+  "saved": "Perfil guardado",
+  "saving": "Guardando",
+  "save": "Guardar",
+  "reset": "Descartar cambios",
+  "fields": {
+    "headline": "Titular",
+    "headlineHelp": "Una línea bajo su nombre, por ejemplo «Moderadora desde hace 4 años».",
+    "bio": "Presentación",
+    "bioHelp": "Texto sin formato. Se conservan los saltos de línea.",
+    "openToWork": "Abierto a propuestas",
+    "openToWorkHelp": "Su perfil muestra la marca «Abierto a propuestas»."
+  },
+  "links": {
+    "title": "Enlaces",
+    "help": "Hasta {{count}} enlaces, con https. El nombre del enlace tiene 40 caracteres como máximo.",
+    "label": "Nombre del enlace",
+    "url": "Dirección (https)",
+    "remove": "Quitar el enlace {{label}}",
+    "add": "Añadir un enlace",
+    "count": "{{count}} / {{max}}"
+  },
+  "languages": {
+    "title": "Idiomas",
+    "help": "{{count}} seleccionados de {{max}} como máximo."
+  },
+  "timezone": {
+    "title": "Zona horaria",
+    "label": "Zona horaria",
+    "help": "Nombre IANA (Europe/Paris) o desfase UTC+02:00. Déjalo vacío para no mostrar nada.",
+    "suggestion": "Zona de su navegador:",
+    "use": "Usar"
+  },
+  "summary": {
+    "title": "Vista previa",
+    "noHeadline": "Sin titular",
+    "languages_one": "{{count}} idioma: {{list}}",
+    "languages_other": "{{count}} idiomas: {{list}}",
+    "noLanguages": "Ningún idioma",
+    "links_one": "{{count}} enlace",
+    "links_other": "{{count}} enlaces",
+    "open": "Abierto a propuestas",
+    "closed": "Sin buscar",
+    "view": "Ver mi perfil público"
+  },
+  "problems": {
+    "linkLabelRequired": "Pon un nombre al enlace.",
+    "linkLabelTooLong": "El nombre tiene {{count}} caracteres como máximo.",
+    "urlInvalid": "Esta dirección no es válida (sin credenciales, espacios ni puerto).",
+    "urlHttps": "El enlace debe empezar por https://.",
+    "urlTooLong": "La dirección tiene 500 caracteres como máximo.",
+    "timezoneInvalid": "Zona desconocida. Ejemplos: Europe/Paris, UTC+02:00.",
+    "tooLong": "{{count}} caracteres como máximo.",
+    "tooMany": "{{count}} elementos como máximo."
+  }
+}

@@ -1,0 +1,134 @@
+/* My profile editor: the form column and the live summary. Tokens only. */
+
+.me-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--page-gap);
+  min-width: 0;
+}
+
+.me-intro,
+.me-help {
+  margin: 0;
+  max-width: none;
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.me-error {
+  margin: 0;
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-error);
+}
+
+.me-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-l);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.me-link {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr) auto;
+  align-items: start;
+  gap: var(--gap-m);
+  padding: var(--gap-l);
+  border-radius: var(--radius-l);
+  background-color: var(--md-sys-color-surface-container);
+}
+
+.me-link md-icon-button {
+  margin-top: 4px;
+}
+
+@media (max-width: 700px) {
+  .me-link {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .me-link > :nth-child(2) {
+    grid-column: 1;
+  }
+
+  .me-link md-icon-button {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+
+.me-count {
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.me-languages {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--gap-s) var(--gap-l);
+}
+
+.me-zone-suggestion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-m);
+}
+
+.me-zone-suggestion p {
+  margin: 0;
+  font-size: var(--text-body-small);
+}
+
+.me-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-l);
+}
+
+.me-summary h2 {
+  margin: 0;
+  font-size: var(--text-subtitle);
+}
+
+.me-summary-head {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-l);
+  min-width: 0;
+}
+
+.me-summary-head .row-body {
+  align-items: flex-start;
+  gap: var(--gap-s);
+}
+
+.me-summary-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-body-small);
+}
+
+.me-summary-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-m);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.me-summary-list .material-symbols-outlined {
+  flex-shrink: 0;
+  font-size: 20px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.me-form .card-actions {
+  align-items: center;
+}

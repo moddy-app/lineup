@@ -1,0 +1,90 @@
+{
+  "positions": {
+    "moderator": "Moderator",
+    "admin": "Administrator",
+    "community_manager": "Community-Manager",
+    "manager": "Leitung",
+    "communication": "Kommunikation",
+    "developer": "Entwickler",
+    "graphic_designer": "Grafikdesigner",
+    "support": "Support",
+    "event_animator": "Eventleitung",
+    "partnership_manager": "Partnerschaftsmanager",
+    "other": "Andere"
+  },
+  "requirements": {
+    "min_age": "Mindestalter",
+    "account_age_days": "Alter des Discord-Kontos (Tage)",
+    "server_activity": "Aktivität auf dem Server",
+    "experience_months": "Erfahrung (Monate)",
+    "verified_experience": "Auf Lineup verifizierte Erfahrung",
+    "languages": "Gesprochene Sprachen",
+    "availability_hours": "Verfügbarkeit (Stunden pro Woche)",
+    "voice_required": "Mikrofon / Voice erforderlich",
+    "custom": "Eigene Anforderung"
+  },
+  "application_types": {
+    "external_url": "Externer Link",
+    "discord_dm": "Discord-Direktnachricht",
+    "lineup_form": "Lineup-Formular"
+  },
+  "themes": {
+    "gaming": "Gaming",
+    "roleplay": "Rollenspiel",
+    "community": "Community",
+    "education": "Bildung",
+    "tech": "Technik",
+    "art": "Kunst",
+    "music": "Musik",
+    "anime": "Anime",
+    "streaming": "Streaming",
+    "esport": "E-Sport",
+    "nsfw": "NSFW (18+)",
+    "other": "Andere"
+  },
+  "languages": {
+    "fr": "Französisch",
+    "en": "Englisch",
+    "es": "Spanisch",
+    "de": "Deutsch",
+    "pt": "Portugiesisch",
+    "it": "Italienisch",
+    "nl": "Niederländisch",
+    "pl": "Polnisch",
+    "ru": "Russisch",
+    "tr": "Türkisch",
+    "ar": "Arabisch",
+    "ja": "Japanisch",
+    "ko": "Koreanisch",
+    "zh": "Chinesisch"
+  },
+  "compensations": {
+    "volunteer": "Ehrenamtlich",
+    "paid": "Bezahlt",
+    "negotiable": "Verhandelbar"
+  },
+  "badges": {
+    "discord_verified": "Von Discord verifizierter Server",
+    "discord_partner": "Discord-Partner",
+    "moddy_installed": "Moddy installiert",
+    "moddy_premium": "Moddy Premium",
+    "nsfw": "NSFW (18+)",
+    "moddy_staff": "Moddy-Team",
+    "discord_staff": "Discord-Mitarbeiter",
+    "discord_partnered_server_owner": "Inhaber eines Partnerservers",
+    "discord_hypesquad_events": "HypeSquad Events",
+    "discord_bug_hunter_level_1": "Bug-Jäger (Stufe 1)",
+    "discord_bug_hunter_level_2": "Bug-Jäger (Stufe 2)",
+    "discord_hypesquad_house_bravery": "HypeSquad Bravery",
+    "discord_hypesquad_house_brilliance": "HypeSquad Brilliance",
+    "discord_hypesquad_house_balance": "HypeSquad Balance",
+    "discord_early_supporter": "Unterstützer der ersten Stunde",
+    "discord_verified_bot": "Verifizierter Bot",
+    "discord_early_verified_bot_developer": "Früher Entwickler verifizierter Bots",
+    "discord_certified_moderator": "Zertifizierter Discord-Moderator",
+    "discord_active_developer": "Aktiver Entwickler",
+    "lineup_verified": "Von Lineup verifiziert",
+    "moddy_partner": "Moddy-Partner",
+    "moddy_server": "Offizieller Moddy-Server"
+  }
+}

@@ -1,0 +1,207 @@
+{
+  "title": "Staff console",
+  "header": {
+    "text": "Experience verification queue, reports, manual badges and hidden posts."
+  },
+  "nav": {
+    "label": "Console sections",
+    "reviews": "Verifications",
+    "reports": "Reports",
+    "badges": "Badges",
+    "posts": "Posts"
+  },
+  "forbidden": {
+    "title": "Restricted",
+    "text": "This page is for the Moddy team. This account does not have access."
+  },
+  "person": {
+    "profile": "View profile"
+  },
+  "retryIn": "Retry in {{wait}}",
+  "dialog": {
+    "required": "This field is required."
+  },
+  "reviews": {
+    "status": "Status",
+    "statuses": {
+      "pending": "Pending",
+      "unverified": "Unverified",
+      "verified": "Verified",
+      "rejected": "Rejected"
+    },
+    "empty": {
+      "pendingTitle": "Queue is empty",
+      "pendingText": "No review request is waiting.",
+      "title": "No experiences",
+      "text": "No experience has this status."
+    },
+    "help": {
+      "title": "Review rules",
+      "order": "The oldest requests are at the top.",
+      "verify": "Verify keeps the existing proof and adds your note.",
+      "reject": "Reject needs a reason, which the person can read."
+    },
+    "loaded": "{{n}} loaded in this list.",
+    "updated": "Changed",
+    "facts": {
+      "requestedAt": "Review requested",
+      "reviewNote": "Note from the person",
+      "permissions": "Permissions",
+      "owner": "Server owner",
+      "yes": "Yes",
+      "no": "No",
+      "roles": "Roles",
+      "checkedAt": "Discord check",
+      "staffNote": "Staff note",
+      "rejection": "Rejection reason",
+      "none": "No proof recorded."
+    },
+    "verify": {
+      "action": "Verify",
+      "title": "Verify this experience",
+      "text": "The experience becomes verified, staff method. The existing proof is kept.",
+      "note": "Note (optional)",
+      "confirm": "Verify",
+      "done": "Experience verified."
+    },
+    "reject": {
+      "action": "Reject",
+      "title": "Reject this experience",
+      "text": "The person will see this reason and can ask for a new review after fixing it.",
+      "reason": "Reason",
+      "confirm": "Reject",
+      "done": "Experience rejected."
+    }
+  },
+  "reports": {
+    "status": "Status",
+    "statuses": {
+      "open": "Open",
+      "resolved": "Resolved",
+      "dismissed": "Dismissed",
+      "all": "All"
+    },
+    "states": {
+      "open": "Open",
+      "resolved": "Resolved",
+      "dismissed": "Dismissed"
+    },
+    "targets": {
+      "post": "Post",
+      "user": "Profile",
+      "guild": "Server"
+    },
+    "open": "Open: {{target}}",
+    "reasons": {
+      "spam": "Spam",
+      "scam": "Scam",
+      "inappropriate": "Inappropriate content",
+      "impersonation": "Impersonation",
+      "other": "Other"
+    },
+    "noDetails": "No details given.",
+    "reporter": "Reported by",
+    "handledBy": "Decided by",
+    "hidePost": "Hide this post",
+    "empty": {
+      "openTitle": "No open reports",
+      "openText": "Every report has been decided.",
+      "title": "No reports",
+      "text": "No report has this status."
+    },
+    "help": {
+      "title": "Before you decide",
+      "target": "Open the target first. Resolving or dismissing does not change the target: hide the post separately.",
+      "once": "A decided report cannot be decided again."
+    },
+    "loaded": "{{n}} loaded in this list.",
+    "resolve": {
+      "action": "Resolve",
+      "title": "Mark as resolved",
+      "text": "The report is closed with action taken. The target is not changed.",
+      "confirm": "Mark resolved",
+      "done": "Report resolved."
+    },
+    "dismiss": {
+      "action": "Dismiss",
+      "title": "Dismiss without action",
+      "text": "The report is closed with no action. It cannot be reopened.",
+      "confirm": "Dismiss",
+      "done": "Report dismissed."
+    }
+  },
+  "badges": {
+    "listTitle": "Granted badges",
+    "filter": "Entity",
+    "filters": {
+      "all": "All",
+      "user": "People",
+      "guild": "Servers"
+    },
+    "entities": {
+      "user": "Person",
+      "guild": "Server"
+    },
+    "empty": {
+      "title": "No manual badges",
+      "text": "No badge has been granted for this filter."
+    },
+    "grantedBy": "Granted by",
+    "openEntity": "Open profile ({{badge}}, {{id}})",
+    "revoke": {
+      "action": "Revoke",
+      "title": "Revoke this badge",
+      "text": "The badge leaves the profile right away. You can grant it again.",
+      "confirm": "Revoke",
+      "done": "Badge revoked."
+    },
+    "form": {
+      "title": "Grant a badge",
+      "text": "Only the manual badges of the catalog are offered, depending on the entity type.",
+      "entityType": "Entity type",
+      "entityId": "Discord id",
+      "entityIdHint": "15 to 20 digits. The entity is not checked to exist.",
+      "idInvalid": "The id is 15 to 20 digits.",
+      "badge": "Badge",
+      "badgeRequired": "Choose a badge.",
+      "notForEntity": "This badge does not exist for this entity type.",
+      "serverOnly": "Some badges are for servers only.",
+      "note": "Note (optional)",
+      "submit": "Grant",
+      "done": "Badge granted."
+    }
+  },
+  "posts": {
+    "lookup": {
+      "label": "Post id or link",
+      "hint": "Paste the UUID or the address of the post.",
+      "invalid": "No post id found.",
+      "submit": "Look up"
+    },
+    "empty": {
+      "title": "No post selected",
+      "text": "Paste an id or a link to see its status and hide it."
+    },
+    "reason": "Reason:",
+    "help": {
+      "title": "Hiding",
+      "hide": "Hiding removes the post from every public read. The author sees the reason and can no longer edit or delete it.",
+      "unhide": "Unhiding sets it to closed, never to published. The author must publish it again."
+    },
+    "hide": {
+      "action": "Hide",
+      "title": "Hide this post",
+      "text": "The post leaves the public lists. The author reads the reason.",
+      "reason": "Reason",
+      "confirm": "Hide",
+      "done": "Post hidden."
+    },
+    "unhide": {
+      "action": "Unhide",
+      "title": "Unhide this post",
+      "text": "The post becomes closed. The author must publish it again for it to be visible.",
+      "confirm": "Unhide",
+      "done": "Post unhidden, it is closed."
+    }
+  }
+}
