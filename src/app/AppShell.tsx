@@ -1,5 +1,5 @@
 import {useEffect, useMemo, useRef} from 'react';
-import {Outlet, useLocation, useMatches, useNavigate, useNavigation, useNavigationType} from 'react-router';
+import {Outlet, useLocation, useMatches, useNavigate, useNavigationType} from 'react-router';
 
 import {useSession} from '@/auth/session';
 import {kitLabels} from '@/i18n/kitLabels';
@@ -12,6 +12,7 @@ import {isDashboard, isRecruiting, isStaffArea, isTalent} from './navMatch';
 import {paths} from './paths';
 import {LanguageMenu} from './LanguageMenu';
 import {SuspendedNotice} from './SuspendedNotice';
+import {TopProgress} from './TopProgress';
 import {UserMenu} from './UserMenu';
 import {AppLogo, type NavDestination, TopNav} from './TopNav';
 
@@ -31,7 +32,6 @@ export function AppShell() {
   const labels = kitLabels(language);
   const session = useSession();
   const navigate = useNavigate();
-  const navigation = useNavigation();
   const navigationType = useNavigationType();
   const {pathname} = useLocation();
   const matches = useMatches();
@@ -71,6 +71,7 @@ export function AppShell() {
 
   return (
     <div className="app">
+      <TopProgress />
       <moddy-app-bar home-href={paths.home()} labels={labels.appBar} onclick={onKitLinkClick}>
         <AppLogo href={paths.home()} label={labels.appBar.home} />
         <TopNav destinations={destinations} />
@@ -84,10 +85,6 @@ export function AppShell() {
           )
         )}
       </moddy-app-bar>
-
-      {navigation.state !== 'idle' && (
-        <md-linear-progress className="nav-progress" indeterminate aria-label={t('status.loading')} />
-      )}
 
       <main ref={main} className="app-content" id="main-content" tabIndex={-1}>
         {showSuspendedNotice && <SuspendedNotice />}

@@ -75,29 +75,61 @@ md-filled-button.destructive {
 }
 
 /* ---------------------------------------------------------------------------
- * Loading: a spinner centered in its card; a thin bar under the app bar while
- * the next page loads (it shows after 200 ms, so quick navigations stay calm).
+ * Loading (ui/Loading.tsx, app/TopProgress.tsx): a four-color bar at the very
+ * top of the window, above the app bar, over a transparent track; a large
+ * spinner and its label for a whole page; a spinner in a card or a list. Each
+ * fades in after a short delay, so quick loads stay calm.
  * ------------------------------------------------------------------------- */
+
+.top-progress {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1060;
+  pointer-events: none;
+  --md-linear-progress-track-height: 4px;
+  --md-linear-progress-active-indicator-height: 4px;
+  --md-linear-progress-track-color: transparent;
+}
 
 .loading {
   display: flex;
   justify-content: center;
   padding-block: var(--space);
+  --md-circular-progress-size: 40px;
 }
 
-.nav-progress {
-  position: fixed;
-  top: var(--app-bar-height);
-  right: 0;
-  left: 0;
-  z-index: 9;
-  --md-linear-progress-track-height: 3px;
-  --md-linear-progress-active-indicator-height: 3px;
-  opacity: 0;
-  animation: nav-progress-in 0s 200ms forwards;
+.page-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-m);
+  min-height: 50vh;
+  --md-circular-progress-size: 56px;
 }
 
-@keyframes nav-progress-in {
+.page-loading-label {
+  margin: 0;
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .top-progress {
+    opacity: 0;
+    animation: loading-in 200ms var(--ease) 150ms forwards;
+  }
+
+  .loading,
+  .page-loading {
+    opacity: 0;
+    animation: loading-in 300ms var(--ease) 250ms forwards;
+  }
+}
+
+@keyframes loading-in {
   to {
     opacity: 1;
   }
@@ -2273,6 +2305,19 @@ md-dialog {
 /* The kit's menu measures (design-kit/src/css/material.css): 24px corners, 48px items, 16px corners per item, label 16px medium, 24px icons. */
 .dropdown-popover {
   border-radius: var(--radius-xl);
+}
+
+/* As md-menu: no outline, the level-2 shadow of Material (`md-elevation`); an outline again in forced colors. */
+.dropdown-popover {
+  outline: none;
+  --md-elevation-level: 2;
+  --md-elevation-shadow-color: var(--md-sys-color-shadow);
+}
+
+@media (forced-colors: active) {
+  .dropdown-popover {
+    outline: 1px solid CanvasText;
+  }
 }
 
 .dropdown-popover .filter-option {

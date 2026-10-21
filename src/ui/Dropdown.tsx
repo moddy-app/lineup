@@ -218,6 +218,7 @@ export function Dropdown({
             onKeyDown={onKeyDown}
             onClick={(event) => event.stopPropagation()}
           >
+            <md-elevation aria-hidden="true" />
             {top}
             {header && (
               <p className="filter-popover-head" aria-hidden="true">
