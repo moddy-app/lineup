@@ -106,7 +106,9 @@ export function FoundationGallery() {
 
       <Card>
         <h2>Badge strip, flags, inline stats</h2>
-        <p>BadgeStrip leaves out Discord and verification badges. InlineStats are metadata, not figures.</p>
+        <p>
+          BadgeStrip leaves out Discord badges and keeps the verification ones. InlineStats are metadata, not figures.
+        </p>
         <CardVisual>
           <div className="gallery-stack">
             <BadgeStrip

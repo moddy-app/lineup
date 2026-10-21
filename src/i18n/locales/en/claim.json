@@ -35,7 +35,7 @@
     "title": "Add {{name}}",
     "titleFree": "Add a server",
     "intro": "Paste an invitation link to {{name}} that never expires. It becomes the Join button on the profile.",
-    "introModdy": "Moddy is already on {{name}}, but Lineup still asks for an invitation that never expires. Create one on Discord and paste it here.",
+    "introModdy": "Moddy is already on {{name}}. Lineup reads the server and creates the permanent invitation for you.",
     "introFree": "Paste an invitation link that never expires to a server you manage. It proves the server is yours and becomes the Join button on the profile.",
     "how": "How to create a permanent invitation",
     "label": "Invitation link or code",
@@ -43,7 +43,8 @@
     "hint": "The bare code works too.",
     "cancel": "Cancel",
     "submit": "Add",
-    "submitting": "Checking..."
+    "submitting": "Checking...",
+    "adding": "Adding..."
   },
   "errors": {
     "tooShort": "Enter at least {{count}} characters.",

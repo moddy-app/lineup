@@ -11,7 +11,7 @@ import type {PrivateExperience} from '@/api/types';
 import {registerBeforeLogin} from '@/auth/beforeLogin';
 import {useSession} from '@/auth/session';
 import {useAuthAction} from '@/auth/useAuthAction';
-import {InviteHelp, isRetryable, RetryButton} from '@/components';
+import {InviteHelp, isRetryable, RetryButton, ServiceImage} from '@/components';
 import {useT} from '@/i18n/useT';
 import {setItem} from '@/lib/storage';
 import {Checkbox, Dialog, Icon, Select, TextField, useSnackbar} from '@/ui';
@@ -23,6 +23,7 @@ import {
   type ExperienceFormState,
   type ExperienceProblem,
   formFromExperience,
+  imageProblem,
   NAME_MAX,
   POSITION_OTHER_MAX,
   todayIso,
@@ -59,8 +60,8 @@ export function ExperienceDialog({experience, draft, count, max, onClose}: Exper
   const update = useUpdateExperience();
   const editing = experience !== null;
 
-  const [form, setForm] = useState<ExperienceFormState>(
-    () => draft ?? (experience ? formFromExperience(experience) : emptyForm()),
+  const [form, setForm] = useState<ExperienceFormState>(() =>
+    draft ? {...emptyForm(), ...draft} : experience ? formFromExperience(experience) : emptyForm(),
   );
   const [submitted, setSubmitted] = useState(false);
   const [serverErrors, setServerErrors] = useState<Record<string, string>>({});
@@ -219,14 +220,31 @@ export function ExperienceDialog({experience, draft, count, max, onClose}: Exper
             </details>
           </>
         ) : (
-          <TextField
-            label={t('fields.name')}
-            value={form.name}
-            onValueChange={(value) => set('name', value)}
-            maxLength={NAME_MAX}
-            supportingText={t('fields.nameHelp')}
-            errorText={text('name')}
-          />
+          <>
+            <TextField
+              label={t('fields.name')}
+              value={form.name}
+              onValueChange={(value) => set('name', value)}
+              maxLength={NAME_MAX}
+              supportingText={t('fields.nameHelp')}
+              errorText={text('name')}
+            />
+            <div className="exp-image-field">
+              <TextField
+                label={t('fields.image')}
+                value={form.image_url}
+                onValueChange={(value) => set('image_url', value)}
+                type="url"
+                placeholder="https://…"
+                supportingText={t('fields.imageHelp')}
+                errorText={text('image_url')}
+                autocomplete="off"
+              />
+              {form.image_url.trim() !== '' && !imageProblem(form.image_url) && (
+                <ServiceImage url={form.image_url.trim()} size="large" />
+              )}
+            </div>
+          </>
         )}
 
         <Select

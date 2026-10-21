@@ -225,7 +225,7 @@ describe('servers', () => {
     syncGuildProfile(qc, profile, {claimed: true});
 
     expect(qc.getQueryData(queryKeys.guildDetail(GUILD_ID))).toBe(profile);
-    expect(qc.getQueryData(queryKeys.myGuilds())).toEqual([makeMyGuild({name: 'New', claimed: true})]);
+    expect(qc.getQueryData(queryKeys.myGuilds())).toEqual([makeMyGuild({name: 'New', claimed: true, listed: true})]);
     expect(qc.getQueryData<Pages<{tags: string[]}>>(queryKeys.directory({}))!.pages[0]!.items[0]!.tags).toEqual([
       'new',
     ]);
@@ -241,7 +241,7 @@ describe('servers', () => {
   it('a claim adds a server my list did not hold', () => {
     qc.setQueryData(queryKeys.myGuilds(), []);
     syncGuildProfile(qc, makeGuildProfile(), {claimed: true});
-    expect(qc.getQueryData(queryKeys.myGuilds())).toEqual([makeMyGuild({claimed: true})]);
+    expect(qc.getQueryData(queryKeys.myGuilds())).toEqual([makeMyGuild({claimed: true, listed: true})]);
   });
 
   it('deleting a server closes its posts in every cache and unclaims it', () => {
@@ -453,6 +453,8 @@ describe('staff queues', () => {
     const grant: ManualBadgeGrant = {
       entity_type: 'guild',
       entity_id: GUILD_ID,
+      entity_name: null,
+      entity_icon_url: null,
       badge: 'moddy_partner',
       granted_by: '1',
       granted_at: '2026-10-20T15:00:00+00:00',

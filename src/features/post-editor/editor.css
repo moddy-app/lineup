@@ -168,7 +168,7 @@
   min-width: 0;
 }
 
-.ed-field > :is(md-outlined-text-field, md-outlined-select, fieldset) {
+.ed-field > :is(md-outlined-text-field, .select-field, fieldset) {
   align-self: stretch;
 }
 
@@ -568,4 +568,28 @@
 
 .ed-preview .markdown {
   overflow-wrap: anywhere;
+}
+
+/* The author reminder at the top of the editor: who the post is for. */
+.ed-author {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-s);
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.ed-author .avatar,
+.ed-author .guild-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.ed-author .display-name {
+  color: var(--md-sys-color-on-surface);
+  font-weight: 600;
 }

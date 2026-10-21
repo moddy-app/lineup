@@ -52,7 +52,17 @@ export const routes: RouteObject[] = [
           {path: p.guildClaim, element: <Navigate to={paths.myGuilds()} replace />},
           protectedRoutes('claim', [{path: p.myGuilds, lazy: () => import('@/features/claim/ClaimPage')}]),
           protectedRoutes('manage', [
-            {path: p.guildManage, lazy: () => import('@/features/guild-manage/GuildManagePage')},
+            {
+              path: p.guildManage,
+              lazy: () => import('@/features/guild-manage/GuildManageLayout'),
+              children: [
+                {index: true, lazy: () => import('@/features/guild-manage/ProfilePage')},
+                {path: 'invite', lazy: () => import('@/features/guild-manage/InvitePage')},
+                {path: 'posts', lazy: () => import('@/features/guild-manage/PostsPage')},
+                {path: 'discord', lazy: () => import('@/features/guild-manage/DiscordPage')},
+                {path: 'settings', lazy: () => import('@/features/guild-manage/SettingsPage')},
+              ],
+            },
           ]),
           protectedRoutes('profile', [{path: p.me, lazy: () => import('@/features/me-profile/MeProfilePage')}]),
           protectedRoutes('experiences', [

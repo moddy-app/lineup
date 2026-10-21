@@ -4,10 +4,11 @@
   },
   "nav": {
     "label": "Navigation principale",
-    "feed": "Recrutements",
+    "feed": "Projets",
     "guilds": "Serveurs",
     "staff": "Staff",
-    "people": "Candidats"
+    "people": "Profils",
+    "dashboard": "Tableau de bord"
   },
   "auth": {
     "login": "Se connecter",
@@ -35,9 +36,7 @@
   "userMenu": {
     "profile": "Voir mon profil public",
     "experiences": "Expériences",
-    "posts": "Mes annonces",
-    "guilds": "Mes serveurs",
-    "space": "Mon espace"
+    "posts": "Mes annonces"
   },
   "actions": {
     "retry": "Réessayer",

@@ -147,7 +147,6 @@ function Profile({profile}: {profile: UserProfile}) {
                   <ExperienceRow
                     key={experience.id}
                     experience={experience}
-                    lookupGuild
                     href={
                       experience.kind === 'guild' && experience.guild_id ? paths.guild(experience.guild_id) : undefined
                     }

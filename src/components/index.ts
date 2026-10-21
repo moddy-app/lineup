@@ -23,6 +23,7 @@ export {LinkList} from './LinkList';
 export {Markdown} from './Markdown';
 export {confirmNsfw, isNsfw, NSFW_STORAGE_KEY, useNsfwConfirmed} from './nsfw';
 export {NsfwConfirmDialog, NsfwGate} from './NsfwGate';
+export {ServiceImage} from './ServiceImage';
 export {PostCard} from './PostCard';
 export {PostStatusBadge} from './PostStatusBadge';
 export {QuotaMeter} from './QuotaMeter';

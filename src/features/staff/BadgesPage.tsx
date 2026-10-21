@@ -1,5 +1,5 @@
 import {useEffect, useMemo, useState} from 'react';
-import {useSearchParams} from 'react-router';
+import {Link, useSearchParams} from 'react-router';
 import {useQueryClient} from '@tanstack/react-query';
 
 import {useCatalogLabel} from '@/api/catalog';
@@ -10,17 +10,18 @@ import {type InfiniteList, useInfiniteList} from '@/api/pagination';
 import {useCatalog, useStaffBadges} from '@/api/queries';
 import {queryKeys} from '@/api/queryKeys';
 import type {BadgeEntityType, ManualBadgeGrant, StaffBadgesPage} from '@/api/types';
+import {paths} from '@/app/paths';
 import {usePageTitle} from '@/app/usePageTitle';
 import {useSession} from '@/auth/session';
 import {registerBeforeLogin} from '@/auth/beforeLogin';
 import {useAuthAction} from '@/auth/useAuthAction';
 import {badgeIcon} from '@/components/badgeIcons';
-import {RelativeTime} from '@/components';
+import {DisplayName, GuildIcon, RelativeTime, UserAvatar} from '@/components';
 import {useT} from '@/i18n/useT';
 import {getItem, removeItem, setItem} from '@/lib/storage';
 import {Card, Icon, Pill, SettingsPanel, Select, TextField, useSnackbar} from '@/ui';
 
-import {ActionDialog, EntityName, ListBody, PersonLink, SectionHead, StatusChips} from './parts';
+import {ActionDialog, ListBody, PersonLink, SectionHead, StatusChips} from './parts';
 import {BADGE_NOTE_MAX, ENTITY_FILTERS, isEntityId, manualBadgesFor, parseEntityFilter} from './staffLogic';
 
 const DRAFT_KEY = 'lineup-staff-grant';
@@ -237,6 +238,29 @@ function GrantForm() {
   );
 }
 
+/**
+ * Who got the badge: the name and picture of its Lineup profile, linking to it.
+ * Without a profile (`entity_name` null) only the id remains, in the pill next to it.
+ */
+function GrantEntity({grant}: {grant: ManualBadgeGrant}) {
+  const {entity_type: type, entity_id: id, entity_name: name, entity_icon_url: icon} = grant;
+  const picture =
+    type === 'user' ? (
+      <UserAvatar id={id} src={icon} size="small" />
+    ) : (
+      <GuildIcon id={id} iconUrl={icon} size="small" />
+    );
+  if (name === null) return null;
+  return (
+    <span className="staff-person">
+      {picture}
+      <Link to={type === 'user' ? paths.user(id) : paths.guild(id)} className="staff-person-name">
+        <DisplayName name={name} entity={type} focusable={false} />
+      </Link>
+    </span>
+  );
+}
+
 function GrantItem({grant, onRevoke}: {grant: ManualBadgeGrant; onRevoke: () => void}) {
   const {t} = useT('staff');
   const {label} = useCatalogLabel();
@@ -255,7 +279,7 @@ function GrantItem({grant, onRevoke}: {grant: ManualBadgeGrant; onRevoke: () => 
         </div>
         <div className="staff-item-meta">
           <span>{t(`badges.entities.${grant.entity_type}`)}</span>
-          <EntityName type={grant.entity_type} id={grant.entity_id} />
+          <GrantEntity grant={grant} />
           <Pill>{grant.entity_id}</Pill>
         </div>
         {grant.note && <p>{grant.note}</p>}

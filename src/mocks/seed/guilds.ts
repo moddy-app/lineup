@@ -397,7 +397,8 @@ export function seedGuildProfiles(now: Date): GuildProfileRow[] {
     }),
     make({
       guild_id: G.arena,
-      invite_code: 'arena-esport',
+      // The bot could not create an invitation anywhere: `invite.url` is null and the profile hides "Join".
+      invite_code: null,
       claimed_by: U.karim,
       daysAgo: 9,
       description:

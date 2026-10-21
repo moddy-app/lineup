@@ -49,6 +49,7 @@ export const ERROR_CODES = [
   'invite_invalid',
   'invite_expiring',
   'invite_guild_mismatch',
+  'invite_required',
   'theme_invalid',
   'cursor_invalid',
   'lineup_filter_invalid',

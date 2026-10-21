@@ -1,16 +1,16 @@
 {
   "guild": {
-    "title": "Recruiting",
+    "title": "Projects",
     "subtitle": "Discord servers are looking for staff.",
     "action": "Post a listing",
-    "emptyTitle": "No server is recruiting right now",
+    "emptyTitle": "No project right now",
     "emptyBody": "Server listings appear here as soon as they are published."
   },
   "user": {
-    "title": "Candidates",
+    "title": "Profiles",
     "subtitle": "People offer their services to servers.",
     "action": "Offer my services",
-    "emptyTitle": "No candidate right now",
+    "emptyTitle": "No profile right now",
     "emptyBody": "Listings from people appear here as soon as they are published."
   },
   "list": "Listings",

@@ -35,7 +35,7 @@
     "title": "Añadir {{name}}",
     "titleFree": "Añadir un servidor",
     "intro": "Pegue un enlace de invitación a {{name}} que no caduque nunca. Se convierte en el botón Unirse del perfil.",
-    "introModdy": "Moddy ya está en {{name}}, pero Lineup aún pide una invitación que no caduque nunca. Cree una en Discord y péguela aquí.",
+    "introModdy": "Moddy ya está en {{name}}. Lineup lee el servidor y crea la invitación permanente por usted.",
     "introFree": "Pegue un enlace de invitación que no caduque nunca a un servidor que gestione. Demuestra que el servidor es suyo y se convierte en el botón Unirse del perfil.",
     "how": "Cómo crear una invitación permanente",
     "label": "Enlace o código de invitación",
@@ -43,7 +43,8 @@
     "hint": "El código solo también sirve.",
     "cancel": "Cancelar",
     "submit": "Añadir",
-    "submitting": "Comprobando..."
+    "submitting": "Comprobando...",
+    "adding": "Añadiendo..."
   },
   "errors": {
     "tooShort": "Escriba al menos {{count}} caracteres.",

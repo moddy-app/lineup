@@ -35,7 +35,7 @@
     "title": "Adicionar {{name}}",
     "titleFree": "Adicionar um servidor",
     "intro": "Cole um link de convite para {{name}} que nunca expire. Ele vira o botão Entrar do perfil.",
-    "introModdy": "O Moddy já está em {{name}}, mas o Lineup ainda pede um convite que nunca expire. Crie um no Discord e cole aqui.",
+    "introModdy": "O Moddy já está em {{name}}. O Lineup lê o servidor e cria o convite permanente para você.",
     "introFree": "Cole um link de convite que nunca expire para um servidor que você gerencia. Ele prova que o servidor é seu e vira o botão Entrar do perfil.",
     "how": "Como criar um convite permanente",
     "label": "Link ou código de convite",
@@ -43,7 +43,8 @@
     "hint": "O código sozinho também funciona.",
     "cancel": "Cancelar",
     "submit": "Adicionar",
-    "submitting": "Verificando..."
+    "submitting": "Verificando...",
+    "adding": "Adicionando..."
   },
   "errors": {
     "tooShort": "Digite pelo menos {{count}} caracteres.",

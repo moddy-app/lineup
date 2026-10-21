@@ -241,5 +241,9 @@
     "expiryMax": "At most {{count}} days from today.",
     "featuredUserOnly": "Only a personal post can feature an experience.",
     "featuredNotVerified": "This experience is not verified."
+  },
+  "author": {
+    "guild": "Post for the server",
+    "user": "Post as yourself"
   }
 }

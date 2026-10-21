@@ -16,6 +16,7 @@ import type {
 
 import {conflict, notFound, unprocessable} from '../errors';
 import type {Actor, Env} from '../env';
+import type {StoredBadgeGrant} from '../model';
 import {iso} from '../time';
 import {compareKeyed, decodeCursor, pageRows} from './cursor';
 import {toStaffExperience} from './views';
@@ -55,7 +56,7 @@ export function listStaffExperiences(env: Env, query: URLSearchParams): Paginate
     .map((row) => ({at: row.updated_at, id: row.id, row}))
     .sort(compareKeyed(false));
   const {rows: page, nextCursor} = pageRows(rows, limit, after, false);
-  return {items: page.map(({row}) => toStaffExperience(row)), next_cursor: nextCursor};
+  return {items: page.map(({row}) => toStaffExperience(env, row)), next_cursor: nextCursor};
 }
 
 const REPORT_STATUSES = ['open', 'resolved', 'dismissed', 'all'] as const;
@@ -128,6 +129,29 @@ function manualBadge(id: string, type: BadgeEntityType): string {
   return id;
 }
 
+/**
+ * A grant as the console reads it: the entity's name and icon come from its
+ * Lineup profile (a person's, a server's), `null` when it has none.
+ */
+function toBadgeGrant(env: Env, grant: StoredBadgeGrant): ManualBadgeGrant {
+  if (grant.entity_type === 'guild') {
+    const profile = env.db.profiles[grant.entity_id];
+    const guild = env.db.guilds[grant.entity_id];
+    const known = Boolean(profile && guild);
+    return {
+      ...grant,
+      entity_name: known ? (guild?.name ?? null) : null,
+      entity_icon_url: known ? (guild?.icon_url ?? null) : null,
+    };
+  }
+  const user = env.db.users[grant.entity_id];
+  return {
+    ...grant,
+    entity_name: user ? (user.global_name ?? user.username) : null,
+    entity_icon_url: user?.avatar_url ?? null,
+  };
+}
+
 /** `GET /lineup/staff/badges`: newest first, paginated by limit and offset (no cursor). */
 export function listBadgeGrants(env: Env, query: URLSearchParams): StaffBadgesPage {
   const issues = new Issues();
@@ -141,7 +165,7 @@ export function listBadgeGrants(env: Env, query: URLSearchParams): StaffBadgesPa
     .filter((grant) => type === undefined || grant.entity_type === type)
     .sort((a, b) => Date.parse(b.granted_at) - Date.parse(a.granted_at))
     .slice(offset, offset + limit)
-    .map((grant) => ({...grant}));
+    .map((grant) => toBadgeGrant(env, grant));
   return {items};
 }
 
@@ -156,7 +180,7 @@ export function grantBadge(
 ): ManualBadgeGrant {
   const type = entityType(rawType);
   manualBadge(badge, type);
-  const grant: ManualBadgeGrant = {
+  const grant: StoredBadgeGrant = {
     entity_type: type,
     entity_id: entityId,
     badge,
@@ -169,7 +193,7 @@ export function grantBadge(
   );
   if (index >= 0) env.db.badges[index] = grant;
   else env.db.badges.push(grant);
-  return {...grant};
+  return toBadgeGrant(env, grant);
 }
 
 export function revokeBadge(env: Env, rawType: string, entityId: Snowflake, badge: string): void {

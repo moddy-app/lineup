@@ -57,7 +57,7 @@ describe('the seed’s integrity', () => {
     const {server} = createTestApi();
     const db = server.db;
     expect(Object.values(db.users).length).toBeGreaterThanOrEqual(16);
-    const realProfiles = Object.values(db.profiles).filter((profile) => !/^spam-/.test(profile.invite_code));
+    const realProfiles = Object.values(db.profiles).filter((profile) => !/^spam-/.test(profile.invite_code ?? ''));
     expect(realProfiles).toHaveLength(12);
     const statuses = new Set(Object.values(db.posts).map((post) => post.status));
     expect(statuses).toEqual(new Set(['draft', 'published', 'closed', 'hidden']));

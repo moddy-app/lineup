@@ -389,6 +389,11 @@ img.guild-icon.is-xl {
   border-radius: var(--radius-l);
 }
 
+/* A service's image, whatever its size: coins --radius-m (after the size rules, which come first). */
+img.guild-icon.is-image {
+  border-radius: var(--radius-m);
+}
+
 .shape.guild-icon {
   --shape-size: var(--icon-size);
 }
@@ -576,6 +581,124 @@ img.guild-icon.is-xl {
   background: var(--md-sys-color-surface-container-high);
   color: var(--md-sys-color-on-surface-variant);
   font-size: var(--text-label);
+}
+
+/* Tile variant: a square. The head and the foot keep their height, the
+   excerpt takes the rest and is cut. */
+.post-tile {
+  aspect-ratio: 1 / 1;
+  min-width: 0;
+}
+
+/* A phone shows two tiles of about 177 px: no description, one row of positions. */
+@media (max-width: 600px) {
+  .post-tile {
+    --card-padding: 14px;
+  }
+
+  .post-tile p.post-excerpt {
+    display: none;
+  }
+
+  .post-tile .post-title {
+    margin-bottom: auto;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+
+  .post-tile .post-tile-foot .post-positions {
+    flex-wrap: wrap;
+    max-height: 22px;
+  }
+}
+
+.post-tile .post-head {
+  align-items: center;
+}
+
+.post-head-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.post-head-text .post-author-name {
+  max-width: 100%;
+}
+
+.post-tile .post-date::before {
+  content: none;
+}
+
+.post-tile .post-title {
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+/* The description takes what the head, title and foot leave, in whole lines. */
+.post-tile p.post-excerpt {
+  min-height: 0;
+  margin-bottom: auto;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+.post-tile-foot {
+  margin-top: var(--gap-s);
+}
+
+@media (min-width: 1000px) {
+  .post-tile p.post-excerpt {
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+  }
+}
+
+.post-tile-foot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-s);
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--text-label);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.post-tile-foot .post-positions {
+  flex-wrap: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.post-tile-foot .post-position {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.post-tile-foot .post-position:last-child {
+  flex-shrink: 0;
+}
+
+.post-tile-pay {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.post-tile-pay > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.post-tile-pay .material-symbols-outlined {
+  flex-shrink: 0;
+  font-size: 16px;
 }
 
 /* A chip never grows past its container: a long position label is cut with an ellipsis. */
@@ -1223,18 +1346,17 @@ md-dialog {
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
+  /* Follows the size of the text next to it (16px at 16px of text). */
+  width: 1em;
+  height: 1em;
   border-radius: var(--radius-full);
   color: var(--md-sys-color-primary);
-  font-size: var(--text-label);
-  font-weight: 500;
   line-height: 1;
-  transform: translateY(1px);
+  transform: translateY(0.0625em);
 }
 
 .verified-badge .material-symbols-outlined {
-  font-size: 16px;
+  font-size: 1em;
 }
 
 .verified-badge-tip {
@@ -1563,14 +1685,6 @@ md-dialog {
   list-style: none;
 }
 
-.settings-nav-title {
-  margin: 0 0 var(--gap-s);
-  padding-inline: 12px;
-  font-size: var(--text-label);
-  font-weight: 600;
-  color: var(--md-sys-color-on-surface-variant);
-}
-
 .settings-nav a {
   display: flex;
   align-items: center;
@@ -1694,8 +1808,37 @@ md-dialog {
   white-space: nowrap;
 }
 
-.settings-compact-menu {
-  min-width: 16rem;
+/* The context selector above the navigation: you, or a server. */
+.settings-context {
+  min-width: 0;
+}
+
+.settings-context > md-outlined-button {
+  width: 100%;
+  --md-outlined-button-label-text-color: var(--md-sys-color-on-surface);
+  --md-outlined-button-icon-color: var(--md-sys-color-on-surface-variant);
+}
+
+.settings-context-current {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-s);
+  min-width: 0;
+  max-width: 100%;
+}
+
+.settings-context-current .avatar,
+.settings-context-current .guild-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.settings-context-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* A form panel: a card with a small title, fields, actions at the bottom right. */
@@ -1924,7 +2067,8 @@ md-dialog {
   white-space: nowrap;
 }
 
-.filter-option[aria-pressed='true'] {
+.filter-option[aria-pressed='true'],
+.filter-option[data-selected='true'] {
   background-color: var(--md-sys-color-secondary-container);
   color: var(--md-sys-color-on-secondary-container);
 }
@@ -1939,7 +2083,7 @@ md-dialog {
 }
 
 @media (hover: hover) {
-  .filter-option:not([aria-pressed='true']):hover {
+  .filter-option:not([aria-pressed='true'], [data-selected='true'], :disabled):hover {
     background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
   }
 
@@ -1954,6 +2098,160 @@ md-dialog {
   .filter-option,
   .filter-remove {
     transition: background-color 150ms var(--ease);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Dropdown (ui/Dropdown.tsx): the filters' popover as a shared primitive, drawn
+ * in the top layer from a portal and placed from its trigger.
+ * ------------------------------------------------------------------------- */
+
+.dropdown-popover {
+  position: fixed;
+  inset: auto;
+  top: var(--dropdown-y, 0px);
+  left: var(--dropdown-x, 0px);
+  z-index: 1050;
+  width: max-content;
+  min-width: 14rem;
+  margin: 0;
+  border: 0;
+  overflow: visible;
+  translate: none;
+}
+
+.dropdown-popover.match {
+  min-width: max(14rem, var(--dropdown-min, 0px));
+}
+
+.dropdown-popover.wide,
+.dropdown-popover.wide.match {
+  min-width: max(18rem, var(--dropdown-min, 0px));
+}
+
+.dropdown-popover .filter-popover-options {
+  max-height: min(16rem, 60vh);
+}
+
+.filter-option.separated {
+  margin-top: 6px;
+}
+
+.filter-option.destructive {
+  color: var(--md-sys-color-error);
+}
+
+.filter-option:disabled {
+  opacity: 0.38;
+  cursor: default;
+}
+
+.filter-option:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: -2px;
+}
+
+@media (hover: hover) {
+  .filter-option.destructive:not(:disabled):hover {
+    background-color: color-mix(in srgb, var(--md-sys-color-error) 8%, transparent);
+  }
+}
+
+/* Select: a field-like button that opens a Dropdown. */
+
+.select-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+}
+
+.select-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-s);
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 56px;
+  padding: 6px 12px 6px 16px;
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: var(--radius-l);
+  background: transparent;
+  color: var(--md-sys-color-on-surface);
+  font-family: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.select-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.select-label {
+  font-size: var(--text-label);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.select-value {
+  overflow: hidden;
+  font-size: var(--text-body);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.select-chevron {
+  flex-shrink: 0;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.select-trigger[aria-expanded='true'] {
+  border-color: var(--md-sys-color-primary);
+  outline: 1px solid var(--md-sys-color-primary);
+}
+
+.select-trigger[aria-expanded='true'] .select-label {
+  color: var(--md-sys-color-primary);
+}
+
+.select-trigger:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+.select-trigger:disabled {
+  opacity: 0.38;
+  cursor: default;
+}
+
+.select-field.error .select-trigger {
+  border-color: var(--md-sys-color-error);
+}
+
+.select-field.error .select-label,
+.select-field.error .select-support {
+  color: var(--md-sys-color-error);
+}
+
+.select-support {
+  margin: 0;
+  padding: 0 16px;
+  font-size: var(--text-label);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+@media (hover: hover) {
+  .select-trigger:not(:disabled, [aria-expanded='true']):hover {
+    border-color: var(--md-sys-color-on-surface);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .select-trigger {
+    transition: border-color 150ms var(--ease);
   }
 }
 

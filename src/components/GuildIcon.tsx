@@ -19,9 +19,11 @@ interface GuildIconProps {
   /** The placeholder's symbol (a service, outside Discord, uses another). */
   icon?: string;
   className?: string;
+  /** Do not send the page's address to the image's host (an image given by a person). */
+  noReferrer?: boolean;
 }
 
-export function GuildIcon({id, iconUrl, size = 'default', icon = 'groups', className}: GuildIconProps) {
+export function GuildIcon({id, iconUrl, size = 'default', icon = 'groups', className, noReferrer}: GuildIconProps) {
   const [failed, setFailed] = useState<string | null>(null);
   const classes = cx('guild-icon', size !== 'default' && `is-${size}`, className);
 
@@ -33,6 +35,7 @@ export function GuildIcon({id, iconUrl, size = 'default', icon = 'groups', class
         alt=""
         loading="lazy"
         decoding="async"
+        referrerPolicy={noReferrer ? 'no-referrer' : undefined}
         onError={() => setFailed(iconUrl)}
       />
     );

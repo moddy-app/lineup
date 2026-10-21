@@ -41,8 +41,8 @@ import './feed.css';
 const pathOf = (kind: PostKind) => (kind === 'guild' ? paths.feed() : paths.people());
 
 /**
- * The two lists of posts, one component: `guild` is "Recrutements" (servers
- * that recruit, `/`), `user` is "Candidats" (people who offer their services,
+ * The two lists of posts, one component: `guild` is "Projets" (servers
+ * that recruit, `/`), `user` is "Profils" (people who offer their services,
  * `/people`). The route fixes the kind; the other filters live in the URL.
  */
 export function FeedView({kind}: {kind: PostKind}) {
@@ -88,7 +88,7 @@ function PublishButton({kind}: {kind: PostKind}) {
   const label = t(`${kind}.action`);
   if (status === 'anonymous') {
     return (
-      <md-filled-button onclick={() => login(paths.postNew(kind === 'user' ? 'user' : undefined))}>
+      <md-filled-button onclick={() => login(paths.postNew({kind: kind === 'user' ? 'user' : 'guild'}))}>
         <md-icon slot="icon" className="filled" aria-hidden="true">
           edit_square
         </md-icon>
@@ -98,7 +98,7 @@ function PublishButton({kind}: {kind: PostKind}) {
   }
   return (
     <LinkButton
-      to={paths.postNew(kind === 'user' ? 'user' : undefined)}
+      to={paths.postNew({kind: kind === 'user' ? 'user' : 'guild'})}
       icon="edit_square"
       disabled={status === 'suspended'}
     >
@@ -320,10 +320,10 @@ function FeedList({
         {list.isPlaceholderData ? t('updating') : ''}
       </p>
       <h2 className="visually-hidden">{t('list')}</h2>
-      <ul className="feed-list" aria-label={t('list')} aria-busy={list.isPlaceholderData || undefined}>
+      <ul className="feed-grid" aria-label={t('list')} aria-busy={list.isPlaceholderData || undefined}>
         {list.items.map((post) => (
           <li key={post.id}>
-            <PostCard post={post} />
+            <PostCard post={post} variant="tile" />
           </li>
         ))}
       </ul>

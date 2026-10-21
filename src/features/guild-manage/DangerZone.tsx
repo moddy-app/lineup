@@ -13,8 +13,6 @@ import {useT} from '@/i18n/useT';
 import {ConfirmDialog, SettingsPanel, useSnackbar} from '@/ui';
 import {SanctionNotice} from '../guilds/SanctionNotice';
 
-import {SECTION_IDS} from './sectionIds';
-
 /** Deleting the profile. Always behind a confirmation that says what happens to the posts. */
 export function DangerZone({guild}: {guild: GuildProfile}) {
   const {t} = useT('guildManage');
@@ -47,7 +45,6 @@ export function DangerZone({guild}: {guild: GuildProfile}) {
   return (
     <>
       <SettingsPanel
-        id={SECTION_IDS.danger}
         className="manage-panel manage-danger"
         title={t('danger.title')}
         description={t('danger.body')}

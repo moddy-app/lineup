@@ -140,11 +140,6 @@
   display: inline-flex;
 }
 
-md-menu-item.mp-menu-danger {
-  --md-menu-item-label-text-color: var(--md-sys-color-error);
-  --md-menu-item-leading-icon-color: var(--md-sys-color-error);
-}
-
 .mp-note,
 .card .mp-note {
   display: flex;

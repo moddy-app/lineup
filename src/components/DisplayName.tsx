@@ -8,7 +8,7 @@ import {type VerificationEntity, verificationOf} from './verification';
 
 interface DisplayNameProps {
   name: ReactNode;
-  /** The badges of the server or the person; missing on a summary: no mark. */
+  /** The badges of the server or the person (summaries have them too); none: no mark. */
   badges?: readonly Badge[] | null;
   entity: VerificationEntity;
   /** The element of the container: a heading, `strong`... (`span` by default). */

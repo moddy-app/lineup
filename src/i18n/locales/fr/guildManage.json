@@ -1,7 +1,6 @@
 {
   "title": "Gestion du serveur",
   "pageTitle": "Gérer {{name}}",
-  "pageDescription": "Gestion du profil Lineup",
   "unknownName": "Serveur sans nom",
   "notFound": {
     "title": "Serveur introuvable",
@@ -15,15 +14,6 @@
   },
   "viewProfile": "Voir le profil public",
   "saved": "Profil enregistré.",
-  "sections": {
-    "label": "Sections de la page",
-    "profile": "Profil public",
-    "invite": "Invitation",
-    "visibility": "Visibilité",
-    "posts": "Annonces",
-    "discord": "Données Discord",
-    "danger": "Zone de danger"
-  },
   "profile": {
     "title": "Profil public",
     "description": "Ce que voient les personnes qui consultent le serveur."
@@ -118,31 +108,12 @@
     "confirm": "Supprimer",
     "done": "Le profil de {{name}} est supprimé."
   },
-  "posts": {
-    "title": "Annonces du serveur",
-    "create": "Nouvelle annonce",
-    "filters": "Filtrer par statut",
-    "filter": {
-      "all": "Toutes",
-      "published": "Publiées",
-      "draft": "Brouillons",
-      "closed": "Fermées",
-      "hidden": "Masquées"
-    },
-    "menu": "Actions de l'annonce {{title}}",
-    "emptyTitle": "Aucune annonce",
-    "emptyAll": "Ce serveur n'a encore aucune annonce. Toutes les personnes qui gèrent le serveur peuvent les modifier.",
-    "emptyTab": "Aucune annonce avec ce statut.",
-    "hidden": "Masquée par l'équipe Moddy : elle ne peut plus être modifiée.",
-    "edit": "Modifier",
-    "close": "Fermer",
-    "reopen": "Rouvrir",
-    "publish": "Publier",
-    "delete": "Supprimer",
-    "closed": "Annonce fermée.",
-    "published": "Annonce publiée.",
-    "deleted": "Annonce supprimée.",
-    "deleteTitle": "Supprimer cette annonce ?",
-    "deleteBody": "« {{title}} » sera supprimée définitivement."
+  "newPost": "Nouvelle annonce",
+  "pages": {
+    "profile": "Description, thème, étiquettes, langues et liens.",
+    "invite": "L’invitation derrière le bouton Rejoindre.",
+    "posts": "Les annonces de ce serveur.",
+    "discord": "Ce que Lineup lit sur Discord.",
+    "settings": "Visibilité et suppression."
   }
 }

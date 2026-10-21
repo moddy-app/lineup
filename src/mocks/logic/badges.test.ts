@@ -107,7 +107,7 @@ describe('server badges (§10)', () => {
       'manual',
       'manual',
     ]);
-    // The directory card has them all but moddy_premium (follow the cursors: pages can be short or empty).
+    // The directory card has neither Discord's badges nor moddy_premium (follow the cursors: pages can be short or empty).
     let found: Array<{id: string}> | undefined;
     let cursor: string | null = null;
     do {
@@ -119,15 +119,23 @@ describe('server badges (§10)', () => {
       )?.badges;
       cursor = page.json.next_cursor;
     } while (cursor);
-    expect(ids(found ?? [])).toEqual([
-      'discord_verified',
-      'discord_partner',
-      'moddy_installed',
-      'nsfw',
-      'lineup_verified',
-      'moddy_partner',
-      'moddy_server',
-    ]);
+    expect(ids(found ?? [])).toEqual(['moddy_installed', 'nsfw', 'lineup_verified', 'moddy_partner', 'moddy_server']);
+  });
+
+  it('gives the console the name and picture of the entity, null without a Lineup profile', async () => {
+    const api = createTestApi('noe');
+    const list = await api.call('GET', '/lineup/staff/badges');
+    const items = list.json.items as Array<{entity_type: string; entity_id: string; entity_name: string | null}>;
+    expect(items.find((item) => item.entity_id === G.cubelands)).toMatchObject({
+      entity_name: 'Cubelands FR',
+      entity_icon_url: null,
+    });
+    expect(items.find((item) => item.entity_id === U.alex)?.entity_name).toBe('Alex');
+    expect(items.find((item) => item.entity_id === G.cafe)).toMatchObject({entity_name: null, entity_icon_url: null});
+    const granted = await api.call('PUT', `/lineup/staff/badges/guild/${G.arena}/moddy_partner`);
+    expect(granted.json).toMatchObject({entity_name: 'Arena Esport FR', entity_icon_url: null});
+    // `entity_type` is optional: both kinds come back.
+    expect(new Set(items.map((item) => item.entity_type))).toEqual(new Set(['user', 'guild']));
   });
 
   it('shows a manual badge on the server the moment the staff grants it, and removes it with the grant', async () => {

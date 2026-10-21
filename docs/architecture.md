@@ -39,7 +39,8 @@ Chaque feature contient sa page (export `Component`), ses sous-composants, sa lo
 - `RequireAuth` (route de mise en page sans chemin) entoure les pages qui demandent une session. Il affiche : un chargement, l'écran de suspension, l'invitation à se connecter (`SignInPrompt`, selon le `purpose`), ou la page. Avec `staff`, un compte non staff voit la 404 pour ne pas révéler la console.
 - `/__ui` n'existe qu'en développement. `*` mène à `NotFoundPage`.
 - `/staff` redirige vers `/staff/reviews`.
-- Nouvelles routes de la refonte : `/people` (Candidats, provisoirement la `FeedPage`) et `/me/guilds` (Mes serveurs, protégée, `purpose` `claim`, page `ClaimPage`). `/guilds/claim` redirige vers `/me/guilds` (`Navigate replace`) ; `paths.guildClaim()` renvoie `/me/guilds`.
+- Nouvelles routes de la refonte : `/people` (Profils, provisoirement la `FeedPage`) et `/me/guilds` (Mes serveurs, protégée, `purpose` `claim`, page `ClaimPage`). `/guilds/claim` redirige vers `/me/guilds` (`Navigate replace`) ; `paths.guildClaim()` renvoie `/me/guilds`.
+- Tableau de bord : `/me`, `/me/experiences`, `/me/posts`, `/me/guilds`, l'éditeur et `/guilds/:id/manage/*` partagent `SettingsLayout` (sélecteur de contexte et navigation du contexte, `src/ui/dashboardContext.ts`). La gestion d'un serveur est une route parente protégée (`purpose` `manage`, `features/guild-manage/GuildManageLayout`) avec cinq sous-routes `lazy` : index (profil), `invite`, `posts`, `discord`, `settings` ; `paths.guildManage`, `guildManageInvite`, `guildManagePosts`, `guildManageDiscord`, `guildManageSettings`. La barre du haut décide de l'entrée courante dans `app/navMatch.ts`.
 - Avant la connexion, les formulaires enregistrent leur état avec `registerBeforeLogin` (voir [auth.md](auth.md)).
 - Après un déploiement, un onglet ouvert qui demande un script disparu se recharge une fois (`vite:preloadError` dans `main.tsx`).
 

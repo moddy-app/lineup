@@ -29,6 +29,7 @@
     "invite_invalid": "Ce n'est pas un lien d'invitation de serveur.",
     "invite_expiring": "Cette invitation expire. Utilisez-en une qui n'expire jamais.",
     "invite_guild_mismatch": "Cette invitation mène à un autre serveur.",
+    "invite_required": "Moddy n'est pas sur ce serveur. Une invitation permanente est nécessaire.",
     "theme_invalid": "Ce thème n'existe pas.",
     "cursor_invalid": "La liste a changé. Rechargez la page.",
     "lineup_filter_invalid": "Un des filtres n'est pas valide.",

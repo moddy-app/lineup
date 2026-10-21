@@ -5,8 +5,6 @@
     "add": "Añadir una experiencia",
     "edit": "Editar",
     "drag": "Mover {{title}}",
-    "moveUp": "Subir {{title}}",
-    "moveDown": "Bajar {{title}}",
     "moved": "{{title}}: posición {{position}} de {{total}}",
     "reordered": "Orden guardado",
     "orderOutdated": "La lista había cambiado en otro sitio. Se ha recargado, repita el movimiento.",
@@ -65,7 +63,9 @@
     "descriptionHelp": "Lo que hacías allí. Opcional.",
     "startDate": "Inicio",
     "endDate": "Fin",
-    "current": "Puesto actual, sin fecha de fin"
+    "current": "Puesto actual, sin fecha de fin",
+    "image": "Imagen (URL https)",
+    "imageHelp": "Opcional. Un logotipo o una imagen del servicio."
   },
   "warning": {
     "before": {
@@ -92,7 +92,9 @@
     "startFuture": "La fecha de inicio no puede ser futura.",
     "endRequired": "Indique la fecha de fin o marque «Puesto actual».",
     "endFuture": "La fecha de fin no puede ser futura.",
-    "endBeforeStart": "El fin no puede ser anterior al inicio."
+    "endBeforeStart": "El fin no puede ser anterior al inicio.",
+    "imageTooLong": "{{count}} caracteres como máximo.",
+    "imageNotHttps": "Introduzca una dirección que empiece por https://."
   },
   "delete": {
     "title": "¿Eliminar {{title}}?",

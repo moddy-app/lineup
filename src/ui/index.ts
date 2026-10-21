@@ -6,6 +6,8 @@ export {Pill, Status, type StatusVariant, VisuallyHidden} from './Badges';
 export {Card, type CardProps, type CardVariant, type Span} from './Card';
 export {Chip, Chips} from './Chips';
 export {ConfirmDialog, Dialog} from './Dialog';
+export {type DashboardContext, dashboardContext, ME_CONTEXT, sameContext} from './dashboardContext';
+export {Dropdown, type DropdownItem, type DropdownTriggerProps} from './Dropdown';
 export {EdgeCaps} from './EdgeCaps';
 export {Icon} from './Icon';
 export {Bento, CardActions, CardHead, CardText, CardVisual, Page, Panel, Stack} from './layout';

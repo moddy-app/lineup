@@ -63,7 +63,7 @@ h1.post-title {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 4px var(--gap-m);
+  gap: 4px var(--gap-s);
   margin: 0;
   font-size: var(--text-body-small);
   color: var(--md-sys-color-on-surface-variant);
@@ -90,7 +90,7 @@ h1.post-title {
 
 .post-dates::before {
   content: '·';
-  margin-inline-end: var(--gap-m);
+  margin-inline-end: var(--gap-s);
 }
 
 .post-actions {

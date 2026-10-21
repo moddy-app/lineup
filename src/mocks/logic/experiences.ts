@@ -68,7 +68,7 @@ function resetVerification(row: DbExperience): void {
 // ---------------------------------------------------------------------------
 
 export function listMyExperiences(env: Env, actor: Actor): ExperienceList {
-  return {items: experiencesOf(env, actor.id).map(toPrivateExperience)};
+  return {items: experiencesOf(env, actor.id).map((row) => toPrivateExperience(env, row))};
 }
 
 /** `POST /lineup/me/experiences`: `unverified`, added in LAST position. 50 at most. */
@@ -81,11 +81,16 @@ export function createExperience(env: Env, actor: Actor, input: CreateExperience
   let inviteCode: string | null = null;
   // §6.6: `name` is "repris de l'invitation" for a server and ignored if sent.
   let name = input.name ?? '';
+  // A server: the icon and the member count come from the invitation. A service: the image is the person's.
+  let imageUrl: string | null = input.kind === 'service' ? (input.image_url ?? null) : null;
+  let memberCount: number | null = null;
   if (input.kind === 'guild' && input.invite) {
     const {invite, guild} = resolveInvite(env, input.invite);
     guildId = guild.id;
     inviteCode = invite.code;
     name = guild.name;
+    imageUrl = guild.icon_url;
+    memberCount = guild.member_count;
   }
   const now = iso(env.now);
   const row: DbExperience = {
@@ -95,6 +100,8 @@ export function createExperience(env: Env, actor: Actor, input: CreateExperience
     guild_id: guildId,
     invite_code: inviteCode,
     name,
+    image_url: imageUrl,
+    member_count: memberCount,
     position: input.position,
     position_other: input.position === 'other' ? (input.position_other ?? null) : null,
     description: input.description ? input.description : null,
@@ -111,12 +118,13 @@ export function createExperience(env: Env, actor: Actor, input: CreateExperience
     updated_at: now,
   };
   env.db.experiences[row.id] = row;
-  return toPrivateExperience(row);
+  return toPrivateExperience(env, row);
 }
 
 export interface ExperienceUpdate {
   invite?: string;
   name?: string;
+  image_url?: string | null;
   position?: string;
   position_other?: string;
   description?: string | null;
@@ -162,13 +170,20 @@ export function updateExperience(env: Env, actor: Actor, id: Uuid, patch: Experi
   let nextInvite = row.invite_code;
   let nextGuildId = row.guild_id;
   let nextName = row.name;
+  let nextImage = row.image_url;
+  let nextMembers = row.member_count;
   if (patch.invite !== undefined) {
     const {invite, guild} = resolveInvite(env, patch.invite);
     serverChanged = guild.id !== row.guild_id;
     nextInvite = invite.code;
     nextGuildId = guild.id;
     nextName = guild.name;
+    // Read again from the invitation, at each change of invitation.
+    nextImage = guild.icon_url;
+    nextMembers = guild.member_count;
   }
+  // A service's image is the person's (null clears it); for a server `image_url` is ignored.
+  if (row.kind === 'service' && patch.image_url !== undefined) nextImage = patch.image_url;
   // `name` is the person's for a service and ignored for a server.
   const nameChanged = row.kind === 'service' && patch.name !== undefined && patch.name !== row.name;
   if (row.kind === 'service' && patch.name !== undefined) nextName = patch.name;
@@ -190,13 +205,16 @@ export function updateExperience(env: Env, actor: Actor, id: Uuid, patch: Experi
   row.invite_code = nextInvite;
   row.guild_id = nextGuildId;
   row.name = nextName;
+  // Changing the image does not reset a verification (it is not in `otherSensitive`).
+  row.image_url = nextImage;
+  row.member_count = nextMembers;
   row.position = position;
   row.position_other = positionOther;
   row.start_date = startDate;
   row.end_date = endDate;
   if (patch.description !== undefined) row.description = patch.description === '' ? null : patch.description;
   row.updated_at = iso(env.now);
-  return toPrivateExperience(row);
+  return toPrivateExperience(env, row);
 }
 
 /** `PUT /lineup/me/experiences/order`: every id once, exactly. */
@@ -272,7 +290,7 @@ export function verifyExperience(env: Env, actor: Actor, id: Uuid): PrivateExper
       },
     );
   }
-  if (row.status === 'verified') return toPrivateExperience(row);
+  if (row.status === 'verified') return toPrivateExperience(env, row);
   if (!actor.has_lineup_scopes) {
     throw lineupError(403, 'lineup_reauth_required', 'Autorisez Lineup à lire vos serveurs.', {
       login_url: '/lineup/auth/login',
@@ -311,7 +329,7 @@ export function verifyExperience(env: Env, actor: Actor, id: Uuid): PrivateExper
   row.rejection_reason = null;
   row.evidence = {permissions, owner, role_count: roleCount, checked_at: now};
   row.updated_at = now;
-  return toPrivateExperience(row);
+  return toPrivateExperience(env, row);
 }
 
 /** `POST …/request-review`: `unverified` or `rejected` → `pending`; the note stays in the proof. */
@@ -332,7 +350,7 @@ export function requestReview(env: Env, actor: Actor, id: Uuid, note: string | u
   row.rejection_reason = null;
   row.evidence = evidence;
   row.updated_at = now;
-  return toPrivateExperience(row);
+  return toPrivateExperience(env, row);
 }
 
 // ---------------------------------------------------------------------------
@@ -356,7 +374,7 @@ export function staffVerifyExperience(env: Env, staff: Actor, id: Uuid, note: st
   row.rejection_reason = null;
   row.evidence = {...(row.evidence ?? {}), verified_at_by_staff: now, ...(note ? {staff_note: note} : {})};
   row.updated_at = now;
-  return toStaffExperience(row);
+  return toStaffExperience(env, row);
 }
 
 /** Rejects from ANY status; the reason is shown to the owner. */
@@ -368,5 +386,5 @@ export function staffRejectExperience(env: Env, staff: Actor, id: Uuid, reason: 
   row.verified_by = staff.id;
   row.rejection_reason = reason;
   row.updated_at = iso(env.now);
-  return toStaffExperience(row);
+  return toStaffExperience(env, row);
 }

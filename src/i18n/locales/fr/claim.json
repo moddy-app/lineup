@@ -35,7 +35,7 @@
     "title": "Ajouter {{name}}",
     "titleFree": "Ajouter un serveur",
     "intro": "Collez un lien d'invitation de {{name}} qui n'expire jamais. Il devient le bouton Rejoindre du profil.",
-    "introModdy": "Moddy est déjà sur {{name}}, mais Lineup demande encore une invitation qui n'expire jamais. Créez-en une sur Discord et collez-la ici.",
+    "introModdy": "Moddy est déjà sur {{name}}. Lineup lit le serveur et crée pour vous l'invitation permanente.",
     "introFree": "Collez un lien d'invitation qui n'expire jamais vers un serveur que vous gérez. Il prouve que le serveur est le vôtre et devient le bouton Rejoindre du profil.",
     "how": "Comment créer une invitation permanente",
     "label": "Lien ou code d'invitation",
@@ -43,7 +43,8 @@
     "hint": "Le code seul fonctionne aussi.",
     "cancel": "Annuler",
     "submit": "Ajouter",
-    "submitting": "Vérification..."
+    "submitting": "Vérification...",
+    "adding": "Ajout..."
   },
   "errors": {
     "tooShort": "Saisissez au moins {{count}} caractères.",

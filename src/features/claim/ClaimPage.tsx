@@ -5,8 +5,8 @@ import {hasCode, isApiError} from '@/api/client';
 import {errorMessage, fieldErrors} from '@/api/errors';
 import {FIELD_LIMITS} from '@/api/limits';
 import {useClaimGuild, useRefreshMyGuilds} from '@/api/mutations';
-import {useGuild, useMyGuilds} from '@/api/queries';
-import type {MyGuild, RefreshGuildsResponse} from '@/api/types';
+import {useMyGuilds} from '@/api/queries';
+import type {ClaimGuildBody, MyGuild, RefreshGuildsResponse} from '@/api/types';
 import {useRetryAfter} from '@/api/useRetryAfter';
 import {paths} from '@/app/paths';
 import {usePageTitle} from '@/app/usePageTitle';
@@ -14,7 +14,7 @@ import {registerBeforeLogin} from '@/auth/beforeLogin';
 import {useReauthenticate} from '@/auth/reauth';
 import {useSession} from '@/auth/session';
 import {useAuthAction} from '@/auth/useAuthAction';
-import {DisplayName, EmptyState, ErrorState, GuildIcon, InviteHelp, RetryButton, StaleNotice} from '@/components';
+import {EmptyState, ErrorState, GuildIcon, InviteHelp, RetryButton, StaleNotice} from '@/components';
 import {useT} from '@/i18n/useT';
 import {getItem, removeItem, setItem} from '@/lib/storage';
 import {
@@ -34,7 +34,13 @@ import {CLAIM_DRAFT_KEY, type ClaimDraft, parseClaimDraft} from './claimDraft';
 import './claim.css';
 
 /** These land on the invitation field itself. */
-const INVITE_CODES = ['invite_invalid', 'invite_not_found', 'invite_expiring', 'invite_guild_mismatch'];
+const INVITE_CODES = [
+  'invite_invalid',
+  'invite_not_found',
+  'invite_expiring',
+  'invite_guild_mismatch',
+  'invite_required',
+];
 
 /** The dialog: a number to start it afresh at each opening, the server it targets, an invitation to start from. */
 interface DialogState {
@@ -206,27 +212,18 @@ export function Component() {
   );
 }
 
-/** A server already on Lineup: its name (with the verification mark), whether it is listed, and the two ways in. */
+/** A server already on Lineup: its name, whether it is in the directory (`listed`), and the two ways in. */
 function ClaimedRow({guild}: {guild: MyGuild}) {
   const {t} = useT('claim');
-  const profile = useGuild(guild.id).data;
   return (
     <li className="claim-item inner-card">
       <GuildIcon id={guild.id} iconUrl={guild.icon_url} />
       <div className="claim-item-body">
-        <DisplayName
-          as="strong"
-          className="claim-item-name"
-          name={profile?.name ?? guild.name ?? t('unknownName')}
-          badges={profile?.badges}
-          entity="guild"
-        />
-        {profile && (
-          <span className="claim-item-meta">
-            <Icon name={profile.listed ? 'visibility' : 'visibility_off'} filled />
-            {profile.listed ? t('onLineup.listed') : t('onLineup.unlisted')}
-          </span>
-        )}
+        <strong className="claim-item-name">{guild.name ?? t('unknownName')}</strong>
+        <span className="claim-item-meta">
+          <Icon name={guild.listed ? 'visibility' : 'visibility_off'} filled />
+          {guild.listed ? t('onLineup.listed') : t('onLineup.unlisted')}
+        </span>
       </div>
       <div className="claim-item-actions">
         <LinkButton to={paths.guild(guild.id)} variant="text">
@@ -251,7 +248,12 @@ interface ClaimDialogProps {
   rightsStale: boolean;
 }
 
-/** Claiming a server needs an invitation that never expires: this dialog asks for it. */
+/**
+ * Claiming a server. Moddy on the server (`has_moddy`): `guild_id` alone, the
+ * API creates the permanent invitation itself, so there is no field. Without
+ * Moddy (or when the API answers `invite_required`): an invitation that never
+ * expires, which this dialog asks for.
+ */
 function ClaimDialog({open, target, initialInvite, onClose, refreshRights, rightsBusy, rightsStale}: ClaimDialogProps) {
   const {t} = useT('claim');
   const {t: tErrors} = useT('errors');
@@ -263,32 +265,41 @@ function ClaimDialog({open, target, initialInvite, onClose, refreshRights, right
 
   const [invite, setInvite] = useState(initialInvite);
   const [error, setError] = useState<unknown>(null);
+  // Moddy left the server since the list was read: the API asked for an invitation after all.
+  const [needsInvite, setNeedsInvite] = useState(false);
   const guildId = target?.id ?? null;
+  const direct = target !== null && target.has_moddy && !needsInvite;
 
   // Signing in leaves the page: keep what was typed, and the server it was for.
   useEffect(() => {
-    if (!open) return undefined;
+    if (!open || direct) return undefined;
     return registerBeforeLogin(() => {
       const draft: ClaimDraft = {invite, guildId};
       void setItem(CLAIM_DRAFT_KEY, draft, 'session');
     });
-  }, [open, invite, guildId]);
+  }, [open, direct, invite, guildId]);
 
   const trimmed = invite.trim();
   const tooShort = trimmed.length > 0 && trimmed.length < FIELD_LIMITS.guild.inviteMin;
 
   const submit = async () => {
     setError(null);
-    if (trimmed.length < FIELD_LIMITS.guild.inviteMin) {
+    if (!direct && trimmed.length < FIELD_LIMITS.guild.inviteMin) {
       setError('local');
       return;
     }
+    const body: ClaimGuildBody = direct
+      ? {guild_id: target.id}
+      : target
+        ? {invite: trimmed, guild_id: target.id}
+        : {invite: trimmed};
     try {
-      const profile = await auth.run(() => claim.mutateAsync({invite: trimmed}));
+      const profile = await auth.run(() => claim.mutateAsync(body));
       if (!profile) return;
       snackbar.show({message: t('success', {name: profile.name ?? t('unknownName')})});
       void navigate(paths.guildManage(profile.id));
     } catch (caught) {
+      if (hasCode(caught, 'invite_required')) setNeedsInvite(true);
       setError(caught);
     }
   };
@@ -305,14 +316,10 @@ function ClaimDialog({open, target, initialInvite, onClose, refreshRights, right
     return fieldErrors(error, tErrors).invite;
   };
   const inviteError = inviteMessage();
-  const showAlert = error !== null && !inviteError && error !== 'local';
+  const showAlert = error !== null && (direct || !inviteError) && error !== 'local';
 
   const name = target ? (target.name ?? t('unknownName')) : null;
-  const intro = target
-    ? target.has_moddy
-      ? t('dialog.introModdy', {name})
-      : t('dialog.intro', {name})
-    : t('dialog.introFree');
+  const intro = target ? (direct ? t('dialog.introModdy', {name}) : t('dialog.intro', {name})) : t('dialog.introFree');
 
   return (
     <Dialog
@@ -323,10 +330,10 @@ function ClaimDialog({open, target, initialInvite, onClose, refreshRights, right
         <>
           <md-text-button onclick={onClose}>{t('dialog.cancel')}</md-text-button>
           <md-filled-button
-            disabled={claim.isPending || !canWrite || tooShort || trimmed === ''}
+            disabled={claim.isPending || !canWrite || (!direct && (tooShort || trimmed === ''))}
             onclick={() => void submit()}
           >
-            {claim.isPending ? t('dialog.submitting') : t('dialog.submit')}
+            {claim.isPending ? (direct ? t('dialog.adding') : t('dialog.submitting')) : t('dialog.submit')}
           </md-filled-button>
         </>
       }
@@ -340,21 +347,23 @@ function ClaimDialog({open, target, initialInvite, onClose, refreshRights, right
         noValidate
       >
         <p className="claim-dialog-intro">{intro}</p>
-        <TextField
-          label={t('dialog.label')}
-          value={invite}
-          onValueChange={(value) => {
-            setInvite(value);
-            if (error !== null) setError(null);
-          }}
-          placeholder={t('dialog.placeholder')}
-          supportingText={t('dialog.hint')}
-          errorText={inviteError}
-          maxLength={FIELD_LIMITS.guild.inviteMax}
-          autocomplete="off"
-          inputMode="url"
-          required
-        />
+        {!direct && (
+          <TextField
+            label={t('dialog.label')}
+            value={invite}
+            onValueChange={(value) => {
+              setInvite(value);
+              if (error !== null) setError(null);
+            }}
+            placeholder={t('dialog.placeholder')}
+            supportingText={t('dialog.hint')}
+            errorText={inviteError}
+            maxLength={FIELD_LIMITS.guild.inviteMax}
+            autocomplete="off"
+            inputMode="url"
+            required
+          />
+        )}
         {showAlert && (
           <ClaimError
             error={error}
@@ -364,10 +373,12 @@ function ClaimDialog({open, target, initialInvite, onClose, refreshRights, right
             stale={rightsStale}
           />
         )}
-        <details className="claim-details">
-          <summary>{t('dialog.how')}</summary>
-          <InviteHelp hideTitle />
-        </details>
+        {!direct && (
+          <details className="claim-details">
+            <summary>{t('dialog.how')}</summary>
+            <InviteHelp hideTitle />
+          </details>
+        )}
       </form>
     </Dialog>
   );

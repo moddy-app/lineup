@@ -1,13 +1,14 @@
-import type {MdMenu} from '@material/web/menu/menu.js';
-import {Fragment, type HTMLAttributes, type ReactNode, useId, useLayoutEffect, useRef, useState} from 'react';
+import {type HTMLAttributes, type ReactNode, useId} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router';
 
-import {useMyGuilds} from '@/api/queries';
 import {paths} from '@/app/paths';
 import {useT} from '@/i18n/useT';
 import {cx} from '@/lib/cx';
 
 import {Card} from './Card';
+import {ContextSwitcher} from './ContextSwitcher';
+import {type DashboardContext, dashboardContext} from './dashboardContext';
+import {Dropdown} from './Dropdown';
 import {Icon} from './Icon';
 import {Page} from './layout';
 
@@ -17,7 +18,7 @@ import {Page} from './layout';
  *  - showcase (public, read-only): `ShowcasePage` + `PageHeader`, content
  *    directly on the page background;
  *  - management (private, settings): `SettingsLayout`, a side navigation
- *    ("Mon espace") and form panels (`SettingsPanel`).
+ *    (context selector and pages) and form panels (`SettingsPanel`).
  */
 
 type DivProps = Omit<HTMLAttributes<HTMLDivElement>, 'className'> & {className?: string};
@@ -61,13 +62,13 @@ export function PageHeader({title, subtitle, actions, leading, meta, className}:
 }
 
 // ---------------------------------------------------------------------------
-// Management pages
+// Management pages (the dashboard)
 // ---------------------------------------------------------------------------
 
-/** `/posts/new` and `/posts/:id/edit` belong to the posts of "My space". */
-const EDITOR_PATH = /^\/posts\/[^/]+\/edit\/?$/;
-
 const under = (pathname: string, prefix: string) => pathname === prefix || pathname.startsWith(`${prefix}/`);
+const same = (pathname: string, path: string) => pathname.replace(/\/$/, '') === path;
+/** `/posts/new` and `/posts/:id/edit` belong to the posts of the dashboard. */
+const EDITOR_PATH = /^\/posts\/(?:new|[^/]+\/edit)\/?$/;
 
 export interface SettingsLink {
   to: string;
@@ -77,55 +78,45 @@ export interface SettingsLink {
 }
 
 export interface SettingsNavGroup {
-  /** Name of the group ("My space", "Managed servers"); also names the `nav`. */
+  /** Name of the group; also names the `nav`. */
   title?: string;
   links: SettingsLink[];
 }
 
 /**
- * Under 900 px (CSS): one full-width button showing where you are ("My space ·
- * Servers"), opening a menu with the same entries as the side navigation,
- * a divider between groups. Hidden above 900 px.
+ * Under 900 px (CSS): one full-width button showing where you are, opening a
+ * popover (`Dropdown`) with the same entries as the side navigation. Hidden
+ * above 900 px.
  */
-export function CompactNav({groups}: {groups: SettingsNavGroup[]}) {
+export function CompactNav({groups, placeholder}: {groups: SettingsNavGroup[]; placeholder?: string}) {
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
-  const [anchor, setAnchor] = useState<HTMLElement | null>(null);
-  const menuRef = useRef<MdMenu | null>(null);
-  useLayoutEffect(() => {
-    if (menuRef.current) menuRef.current.anchorElement = anchor;
-  }, [anchor]);
-
   const currentGroup = groups.find((group) => group.links.some((link) => link.current));
   const current = currentGroup?.links.find((link) => link.current);
-  const label = [currentGroup?.title, current?.label].filter(Boolean).join(' · ');
+  const label = [currentGroup?.title, current?.label].filter(Boolean).join(' · ') || (placeholder ?? '');
 
   return (
     <div className="settings-compact-nav">
-      <md-outlined-button
-        ref={setAnchor}
-        trailing-icon
-        aria-haspopup="menu"
-        aria-expanded={open}
-        onclick={() => setOpen((previous) => !previous)}
-      >
-        {current && <Icon name={current.icon} />}
-        <span className="settings-compact-label">{label}</span>
-        <md-icon slot="icon">expand_more</md-icon>
-      </md-outlined-button>
-      <md-menu ref={menuRef} open={open} onclose={() => setOpen(false)} className="settings-compact-menu">
-        {groups.map((group, index) => (
-          <Fragment key={group.title ?? index}>
-            {index > 0 && <md-divider />}
-            {group.links.map((link) => (
-              <md-menu-item key={link.to} selected={link.current} onclick={() => navigate(link.to)}>
-                <md-icon slot="start">{link.icon}</md-icon>
-                <div slot="headline">{link.label}</div>
-              </md-menu-item>
-            ))}
-          </Fragment>
-        ))}
-      </md-menu>
+      <Dropdown
+        label={label}
+        matchTrigger
+        items={groups.flatMap((group, groupIndex) =>
+          group.links.map((link, index) => ({
+            key: link.to,
+            label: link.label,
+            icon: link.icon,
+            selected: link.current,
+            separated: groupIndex > 0 && index === 0,
+            onSelect: () => void navigate(link.to),
+          })),
+        )}
+        trigger={({ref, onActivate, ...aria}) => (
+          <md-outlined-button {...aria} ref={ref} trailing-icon onclick={onActivate}>
+            {current && <Icon name={current.icon} />}
+            <span className="settings-compact-label">{label}</span>
+            <md-icon slot="icon">expand_more</md-icon>
+          </md-outlined-button>
+        )}
+      />
     </div>
   );
 }
@@ -139,24 +130,47 @@ function SettingsNavLink({to, icon, label, current}: SettingsLink) {
   );
 }
 
-/**
- * The side navigation of "My space": the four pages, then the servers you
- * manage. The servers come from `useMyGuilds`; while they load, or if the
- * request fails or asks for a new sign-in, the list is simply left out.
- */
-function SettingsNav() {
+/** The entries of a context: the person's four pages, or a server's five. */
+function useContextLinks(context: DashboardContext): SettingsLink[] {
   const {t} = useT('components');
   const {pathname} = useLocation();
-  const myGuilds = useMyGuilds();
-  const managed = (myGuilds.data ?? []).filter((guild) => guild.claimed);
-
-  const links: SettingsLink[] = [
-    {
-      to: paths.me(),
-      icon: 'person',
-      label: t('settings.nav.profile'),
-      current: pathname.replace(/\/$/, '') === paths.me(),
-    },
+  if (context.kind === 'guild') {
+    const id = context.guildId;
+    return [
+      {
+        to: paths.guildManage(id),
+        icon: 'badge',
+        label: t('settings.guildNav.profile'),
+        current: same(pathname, paths.guildManage(id)),
+      },
+      {
+        to: paths.guildManageInvite(id),
+        icon: 'link',
+        label: t('settings.guildNav.invite'),
+        current: under(pathname, paths.guildManageInvite(id)),
+      },
+      {
+        to: paths.guildManagePosts(id),
+        icon: 'campaign',
+        label: t('settings.guildNav.posts'),
+        current: under(pathname, paths.guildManagePosts(id)) || EDITOR_PATH.test(pathname),
+      },
+      {
+        to: paths.guildManageDiscord(id),
+        icon: 'sync',
+        label: t('settings.guildNav.discord'),
+        current: under(pathname, paths.guildManageDiscord(id)),
+      },
+      {
+        to: paths.guildManageSettings(id),
+        icon: 'settings',
+        label: t('settings.guildNav.settings'),
+        current: under(pathname, paths.guildManageSettings(id)),
+      },
+    ];
+  }
+  return [
+    {to: paths.me(), icon: 'person', label: t('settings.nav.profile'), current: same(pathname, paths.me())},
     {
       to: paths.myExperiences(),
       icon: 'work_history',
@@ -167,36 +181,25 @@ function SettingsNav() {
       to: paths.myPosts(),
       icon: 'campaign',
       label: t('settings.nav.posts'),
-      current: under(pathname, paths.myPosts()) || under(pathname, paths.postNew()) || EDITOR_PATH.test(pathname),
-    },
-    {
-      to: paths.myGuilds(),
-      icon: 'groups',
-      label: t('settings.nav.guilds'),
-      current: under(pathname, paths.myGuilds()),
+      current: under(pathname, paths.myPosts()) || EDITOR_PATH.test(pathname),
     },
   ];
+}
 
-  const groups: SettingsNavGroup[] = [{title: t('settings.title'), links}];
-  if (managed.length > 0) {
-    groups.push({
-      title: t('settings.managed'),
-      links: managed.map((guild) => ({
-        to: paths.guildManage(guild.id),
-        icon: 'settings',
-        label: guild.name ?? guild.id,
-        current: under(pathname, paths.guildManage(guild.id)),
-      })),
-    });
-  }
+/**
+ * The side navigation of the dashboard: the context selector (you, or one of
+ * the servers you manage), then the pages of that context. Under 900 px the
+ * pages become a `CompactNav` under the selector.
+ */
+function SettingsNav({context}: {context: DashboardContext}) {
+  const {t} = useT('components');
+  const links = useContextLinks(context);
 
   return (
     <div className="settings-nav">
-      <CompactNav groups={groups} />
-      <nav aria-labelledby="settings-nav-title">
-        <p className="settings-nav-title" id="settings-nav-title">
-          {t('settings.title')}
-        </p>
+      <ContextSwitcher context={context} />
+      <CompactNav groups={[{links}]} placeholder={t('settings.context.manage')} />
+      <nav aria-label={t('settings.navLabel')}>
         <ul>
           {links.map((link) => (
             <li key={link.to}>
@@ -205,25 +208,6 @@ function SettingsNav() {
           ))}
         </ul>
       </nav>
-      {managed.length > 0 && (
-        <nav aria-labelledby="settings-managed-title">
-          <p className="settings-nav-title" id="settings-managed-title">
-            {t('settings.managed')}
-          </p>
-          <ul>
-            {managed.map((guild) => (
-              <li key={guild.id}>
-                <SettingsNavLink
-                  to={paths.guildManage(guild.id)}
-                  icon="settings"
-                  label={guild.name ?? guild.id}
-                  current={under(pathname, paths.guildManage(guild.id))}
-                />
-              </li>
-            ))}
-          </ul>
-        </nav>
-      )}
     </div>
   );
 }
@@ -236,18 +220,26 @@ interface SettingsLayoutProps {
   actions?: ReactNode;
   children: ReactNode;
   className?: string;
+  /**
+   * Whose dashboard this is. By default deduced from the address
+   * (`dashboardContext`); a page that knows better (the editor of a server's
+   * post) says so.
+   */
+  context?: DashboardContext;
 }
 
 /**
- * A management page: the "My space" navigation on the left (a compact list
- * above the content under 900 px), then the page's title and its content,
- * usually `SettingsPanel`s.
+ * A management page: the context selector and the navigation on the left (a
+ * selector and a compact list above the content under 900 px), then the
+ * page's title and its content, usually `SettingsPanel`s.
  */
-export function SettingsLayout({title, description, actions, children, className}: SettingsLayoutProps) {
+export function SettingsLayout({title, description, actions, children, className, context}: SettingsLayoutProps) {
+  const {pathname, search} = useLocation();
+  const current = context ?? dashboardContext(pathname, search);
   return (
     <Page className={cx('settings-page', className)}>
       <div className="settings-layout">
-        <SettingsNav />
+        <SettingsNav context={current} />
         <div className="settings-main">
           <header className="settings-head">
             <div className="settings-head-text">

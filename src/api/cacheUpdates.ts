@@ -330,6 +330,7 @@ export function upsertMyGuild(list: MyGuild[], profile: GuildProfile, claimed = 
     icon_url: profile.icon_url,
     has_moddy: profile.has_moddy,
     claimed,
+    listed: claimed && profile.listed,
   };
   const present = list.find((current) => current.id === profile.id);
   if (!present) return [...list, entry].sort(byName);
@@ -337,7 +338,8 @@ export function upsertMyGuild(list: MyGuild[], profile: GuildProfile, claimed = 
     present.name === entry.name &&
     present.icon_url === entry.icon_url &&
     present.has_moddy === entry.has_moddy &&
-    present.claimed === entry.claimed
+    present.claimed === entry.claimed &&
+    present.listed === entry.listed
   ) {
     return list;
   }
@@ -347,13 +349,19 @@ export function upsertMyGuild(list: MyGuild[], profile: GuildProfile, claimed = 
 /** After the profile was deleted: the server stays in the list, no longer claimed. */
 export function unclaimMyGuild(list: MyGuild[], guildId: Snowflake): MyGuild[] {
   return list.some((current) => current.id === guildId && current.claimed)
-    ? list.map((current) => (current.id === guildId ? {...current, claimed: false} : current))
+    ? list.map((current) => (current.id === guildId ? {...current, claimed: false, listed: false} : current))
     : list;
 }
 
 const byName = (a: MyGuild, b: MyGuild) => (a.name ?? '').localeCompare(b.name ?? '');
 
-/** The directory card of a server, from its full profile. Cards leave out `moddy_premium`. */
+/** The directory's description: the profile's text cut at 160 characters, with "…" when it was longer. */
+export function cardDescription(description: string | null): string | null {
+  if (!description) return null;
+  return description.length > 160 ? `${description.slice(0, 160)}…` : description;
+}
+
+/** The directory card of a server, from its full profile. Cards leave out Discord's badges and `moddy_premium`. */
 export function toGuildCard(profile: GuildProfile): GuildCard {
   return {
     id: profile.id,
@@ -363,7 +371,9 @@ export function toGuildCard(profile: GuildProfile): GuildCard {
     presence_count: profile.presence_count,
     theme: profile.theme,
     tags: profile.tags,
-    badges: profile.badges.filter((badge) => badge.id !== 'moddy_premium'),
+    badges: profile.badges.filter((badge) => badge.id !== 'moddy_premium' && badge.source !== 'discord'),
+    description: cardDescription(profile.description),
+    nsfw: profile.theme === 'nsfw' || profile.badges.some((badge) => badge.id === 'nsfw'),
   };
 }
 

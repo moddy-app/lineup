@@ -20,6 +20,13 @@ describe('paths', () => {
     expect(paths.user('a/b')).toBe('/users/a%2Fb');
     expect(paths.guildManage('1 2')).toBe('/guilds/1%202/manage');
   });
+
+  it("has a page per section of a server's management", () => {
+    expect(paths.guildManageInvite('1')).toBe('/guilds/1/manage/invite');
+    expect(paths.guildManagePosts('1')).toBe('/guilds/1/manage/posts');
+    expect(paths.guildManageDiscord('1')).toBe('/guilds/1/manage/discord');
+    expect(paths.guildManageSettings('1')).toBe('/guilds/1/manage/settings');
+  });
 });
 
 describe('routes', () => {
@@ -59,5 +66,23 @@ describe('routes', () => {
     expect(matched('/me/guilds')).toContain(routePatterns.myGuilds);
     expect(matched('/guilds/123')).toContain(routePatterns.guild);
     expect(matched('/guilds/claim')).toContain(routePatterns.guildClaim);
+  });
+
+  it('nests the management pages of a server under one layout route', () => {
+    const matched = (path: string) =>
+      router(path)
+        .state.matches.map((match) => match.route.path)
+        .filter(Boolean);
+    expect(matched('/guilds/1/manage')).toEqual(['/', routePatterns.guildManage]);
+    for (const [path, child] of [
+      ['/guilds/1/manage/invite', 'invite'],
+      ['/guilds/1/manage/posts', 'posts'],
+      ['/guilds/1/manage/discord', 'discord'],
+      ['/guilds/1/manage/settings', 'settings'],
+    ] as const) {
+      expect(matched(path), path).toEqual(['/', routePatterns.guildManage, child]);
+    }
+    // The public profile is not a management page.
+    expect(matched('/guilds/1')).toEqual(['/', routePatterns.guild]);
   });
 });

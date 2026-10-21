@@ -58,6 +58,20 @@
   letter-spacing: normal;
 }
 
+/* The description from the directory: two lines, cut by the API at 160 characters. */
+.guild-card .guild-card-description {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  max-width: none;
+  overflow-wrap: anywhere;
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
 .guild-card-foot {
   display: flex;
   flex-wrap: wrap;

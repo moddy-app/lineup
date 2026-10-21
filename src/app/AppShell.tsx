@@ -12,23 +12,13 @@ import {verificationLabel, verificationOf} from '@/components/verification';
 import {Icon} from '@/ui';
 
 import type {RouteHandle} from './handle';
+import {isDashboard, isRecruiting, isServers, isStaffArea, isTalent} from './navMatch';
 import {paths} from './paths';
 import {LanguageMenu} from './LanguageMenu';
 import {SuspendedNotice} from './SuspendedNotice';
 
 /** Whether a nav destination covers the current page. */
 type Match = (pathname: string) => boolean;
-
-const startsWith =
-  (...prefixes: string[]): Match =>
-  (pathname) =>
-    prefixes.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
-
-/** Recruiting: the feed of servers that recruit, and a post (also while writing or editing it). */
-const isRecruiting: Match = (pathname) => pathname === '/' || startsWith('/posts')(pathname);
-
-/** Talent: the people who offer their services, and their profiles. */
-const isTalent: Match = startsWith('/people', '/users');
 
 function NavItem({to, icon, label, match}: {to: string; icon: string; label: string; match: Match}) {
   const {pathname} = useLocation();
@@ -101,19 +91,17 @@ export function AppShell() {
         <nav slot="nav" className="app-nav" aria-label={t('nav.label')}>
           <NavItem to={paths.feed()} icon="campaign" label={t('nav.feed')} match={isRecruiting} />
           <NavItem to={paths.people()} icon="person_search" label={t('nav.people')} match={isTalent} />
-          <NavItem to={paths.guilds()} icon="groups" label={t('nav.guilds')} match={startsWith('/guilds')} />
-          {isStaff && (
-            <NavItem to={paths.staff()} icon="shield_person" label={t('nav.staff')} match={startsWith('/staff')} />
-          )}
+          <NavItem to={paths.guilds()} icon="groups" label={t('nav.guilds')} match={isServers} />
+          {me && <NavItem to={paths.me()} icon="dashboard" label={t('nav.dashboard')} match={isDashboard} />}
+          {isStaff && <NavItem to={paths.staff()} icon="shield_person" label={t('nav.staff')} match={isStaffArea} />}
         </nav>
         <LanguageMenu />
         <moddy-theme-menu labels={labels.theme} />
         {user && me ? (
           <moddy-user-menu user={user} labels={labels.userMenu} onsign-out={() => void session.logout()}>
             <UserMenuItem href={paths.user(me.id)} icon="person" label={t('userMenu.profile')} />
-            <UserMenuItem href={paths.me()} icon="dashboard" label={t('userMenu.space')} />
+            <UserMenuItem href={paths.me()} icon="dashboard" label={t('nav.dashboard')} />
             <UserMenuItem href={paths.myPosts()} icon="campaign" label={t('userMenu.posts')} />
-            <UserMenuItem href={paths.myGuilds()} icon="groups" label={t('userMenu.guilds')} />
             <UserMenuItem href={paths.myExperiences()} icon="work_history" label={t('userMenu.experiences')} />
           </moddy-user-menu>
         ) : (

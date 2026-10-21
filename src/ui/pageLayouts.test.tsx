@@ -1,4 +1,4 @@
-import {screen, waitFor, within} from '@testing-library/react';
+import {fireEvent, screen, waitFor, within} from '@testing-library/react';
 import {beforeAll, describe, expect, it} from 'vitest';
 
 import {makeMe, makeMyGuild} from '@/api/fixtures';
@@ -30,80 +30,135 @@ const guilds = () =>
   ]);
 
 describe('SettingsLayout', () => {
-  it('shows "Mon espace" with the four pages, the current one marked, then the content', async () => {
+  const settle = (path: string, route = path) => {
     mockApi({'GET /lineup/me': () => json(200, makeMe()), 'GET /lineup/me/guilds': guilds});
-    renderApp([settingsRoute('me/posts')], {path: '/me/posts'});
-    const nav = await screen.findByRole('navigation', {name: 'Mon espace'});
+    return renderApp([settingsRoute(route)], {path: `/${path}`});
+  };
+
+  it('shows the personal pages (no "Serveurs"), the current one marked, then the content', async () => {
+    settle('me/posts');
+    const nav = await screen.findByRole('navigation', {name: 'Pages du tableau de bord'});
     const links = within(nav).getAllByRole('link');
     expect(links.map((link) => link.textContent?.replace(/^[a-z_]+/, ''))).toEqual([
       'Profil',
       'Expériences',
       'Annonces',
-      'Serveurs',
     ]);
-    expect(links.map((link) => link.getAttribute('href'))).toEqual([
-      '/me',
-      '/me/experiences',
-      '/me/posts',
-      '/me/guilds',
-    ]);
-    expect(links.map((link) => link.getAttribute('aria-current'))).toEqual([null, null, 'page', null]);
+    expect(links.map((link) => link.getAttribute('href'))).toEqual(['/me', '/me/experiences', '/me/posts']);
+    expect(links.map((link) => link.getAttribute('aria-current'))).toEqual([null, null, 'page']);
     expect(screen.getByRole('heading', {level: 1}).textContent).toBe('Mes annonces');
     expect(screen.getByRole('heading', {level: 2}).textContent).toBe('Panneau');
     expect(screen.getByText('Contenu')).toBeTruthy();
   });
 
-  it('lists the claimed servers under "Serveurs gérés", linking to their management page', async () => {
-    mockApi({'GET /lineup/me': () => json(200, makeMe()), 'GET /lineup/me/guilds': guilds});
-    renderApp([settingsRoute('guilds/:guildId/manage')], {path: '/guilds/111/manage'});
-    const managed = await screen.findByRole('navigation', {name: 'Serveurs gérés'});
-    const links = within(managed).getAllByRole('link');
-    expect(links).toHaveLength(1);
-    expect(links[0]?.getAttribute('href')).toBe('/guilds/111/manage');
-    expect(links[0]?.getAttribute('aria-current')).toBe('page');
-    expect(links[0]?.textContent).toContain('Atelier du Phénix');
-    // On a management page, "Serveurs" (the list) is not the current page.
-    const space = screen.getByRole('navigation', {name: 'Mon espace'});
+  it('shows the pages of a server under /guilds/:id/manage', async () => {
+    settle('guilds/111/manage/posts', 'guilds/:guildId/manage/posts');
+    const nav = await screen.findByRole('navigation', {name: 'Pages du tableau de bord'});
+    const links = within(nav).getAllByRole('link');
+    expect(links.map((link) => link.getAttribute('href'))).toEqual([
+      '/guilds/111/manage',
+      '/guilds/111/manage/invite',
+      '/guilds/111/manage/posts',
+      '/guilds/111/manage/discord',
+      '/guilds/111/manage/settings',
+    ]);
+    expect(links.map((link) => link.getAttribute('aria-current'))).toEqual([null, null, 'page', null, null]);
+  });
+
+  it('marks no page as current on "Gérer mes serveurs"', async () => {
+    settle('me/guilds');
+    const nav = await screen.findByRole('navigation', {name: 'Pages du tableau de bord'});
     expect(
-      within(space)
+      within(nav)
         .getAllByRole('link')
-        .some((link) => link.getAttribute('aria-current') === 'page'),
+        .some((link) => link.hasAttribute('aria-current')),
     ).toBe(false);
   });
 
-  it('renders without the managed list when the request fails', async () => {
+  it('offers a selector: you, the claimed servers, then "Gérer mes serveurs"', async () => {
+    const {container} = settle('me/posts');
+    const button = await waitFor(() => {
+      const found = container.querySelector<HTMLElement>('.settings-context md-outlined-button');
+      expect(found).not.toBeNull();
+      return found!;
+    });
+    await waitFor(() => expect(button.textContent).toContain('Alex'));
+    fireEvent.click(button);
+    const menu = await screen.findByRole('menu', {name: 'Gérer'});
+    const items = [...menu.querySelectorAll<HTMLElement>('[role^="menuitem"]')];
+    expect(items.map((item) => item.textContent?.replace(/^[a-z_]+/, '').replace(/check$/, ''))).toEqual([
+      expect.stringContaining('Alex'),
+      'Atelier du Phénix',
+      'Gérer mes serveurs',
+    ]);
+    expect(items[0]?.getAttribute('aria-checked')).toBe('true');
+  });
+
+  it('shows the server of the address in the selector', async () => {
+    const {container} = settle('guilds/111/manage', 'guilds/:guildId/manage');
+    await waitFor(() =>
+      expect(container.querySelector('.settings-context-name')?.textContent).toBe('Atelier du Phénix'),
+    );
+  });
+
+  it('keeps only you when the list of servers fails', async () => {
     mockApi({
       'GET /lineup/me': () => json(200, makeMe()),
       'GET /lineup/me/guilds': () => json(502, {code: 'discord_unavailable', error: 'Discord indisponible'}),
     });
-    renderApp([settingsRoute('me')], {path: '/me'});
+    const {container} = renderApp([settingsRoute('me')], {path: '/me'});
     expect(await screen.findByText('Contenu')).toBeTruthy();
-    await waitFor(() => expect(screen.getByRole('navigation', {name: 'Mon espace'})).toBeTruthy());
-    expect(screen.queryByRole('navigation', {name: 'Serveurs gérés'})).toBeNull();
+    fireEvent.click(container.querySelector<HTMLElement>('.settings-context md-outlined-button')!);
+    const menu = await screen.findByRole('menu', {name: 'Gérer'});
+    expect([...menu.querySelectorAll<HTMLElement>('[role^="menuitem"]')]).toHaveLength(2);
   });
 
-  it('offers a compact button with the current section and a menu with the same entries', async () => {
-    mockApi({'GET /lineup/me': () => json(200, makeMe()), 'GET /lineup/me/guilds': guilds});
-    const {container} = renderApp([settingsRoute('me/posts')], {path: '/me/posts'});
+  it('offers a compact button with the current page and a menu with the same entries', async () => {
+    const {container} = settle('me/posts');
     const compact = await waitFor(() => {
-      const found = container.querySelector('.settings-compact-nav');
+      const found = container.querySelector<HTMLElement>('.settings-compact-nav');
       expect(found).not.toBeNull();
-      expect(found?.querySelectorAll('md-menu-item')).toHaveLength(5);
-      return found as HTMLElement;
+      return found!;
     });
-    expect(compact.querySelector('.settings-compact-label')?.textContent).toBe('Mon espace · Annonces');
-    const items = [...compact.querySelectorAll('md-menu-item')].map((item) =>
-      item.textContent?.replace(/^[a-z_]+/, ''),
-    );
-    expect(items).toEqual(['Profil', 'Expériences', 'Annonces', 'Serveurs', 'Atelier du Phénix']);
-    expect(compact.querySelectorAll('md-divider')).toHaveLength(1);
-    expect(compact.querySelectorAll('md-menu-item[selected]')).toHaveLength(1);
+    expect(compact.querySelector('.settings-compact-label')?.textContent).toBe('Annonces');
+    fireEvent.click(compact.querySelector<HTMLElement>('md-outlined-button')!);
+    const menu = await screen.findByRole('menu', {name: 'Annonces'});
+    const items = [...menu.querySelectorAll<HTMLElement>('[role^="menuitem"]')];
+    expect(items.map((item) => item.textContent?.replace(/^[a-z_]+/, '').replace(/check$/, ''))).toEqual([
+      'Profil',
+      'Expériences',
+      'Annonces',
+    ]);
+    expect(items.map((item) => item.getAttribute('aria-checked'))).toEqual(['false', 'false', 'true']);
   });
 
   it('marks the editor pages as part of "Annonces"', async () => {
+    settle('posts/abc/edit', 'posts/:postId/edit');
+    const nav = await screen.findByRole('navigation', {name: 'Pages du tableau de bord'});
+    expect(
+      within(nav)
+        .getByRole('link', {name: /Annonces/})
+        .getAttribute('aria-current'),
+    ).toBe('page');
+  });
+
+  it('takes the context from a prop when the address does not say it', async () => {
     mockApi({'GET /lineup/me': () => json(200, makeMe()), 'GET /lineup/me/guilds': guilds});
-    renderApp([settingsRoute('posts/:postId/edit')], {path: '/posts/abc/edit'});
-    const nav = await screen.findByRole('navigation', {name: 'Mon espace'});
+    renderApp(
+      [
+        {
+          path: 'posts/:postId/edit',
+          element: (
+            <SettingsLayout title="Éditeur" context={{kind: 'guild', guildId: '111'}}>
+              x
+            </SettingsLayout>
+          ),
+        },
+      ],
+      {path: '/posts/abc/edit'},
+    );
+    const nav = await screen.findByRole('navigation', {name: 'Pages du tableau de bord'});
+    expect(within(nav).getAllByRole('link')).toHaveLength(5);
     expect(
       within(nav)
         .getByRole('link', {name: /Annonces/})

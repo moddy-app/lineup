@@ -1,7 +1,8 @@
 /** Reports in every status, and the manual badges the staff granted. */
 
-import type {ManualBadgeGrant, Report} from '@/api/types';
+import type {Report} from '@/api/types';
 
+import type {StoredBadgeGrant} from '../model';
 import {DAY, HOUR, iso} from '../time';
 import {G, postId, reportId, U} from './ids';
 
@@ -117,7 +118,7 @@ export function seedReports(now: Date): Report[] {
   ];
 }
 
-export function seedBadgeGrants(now: Date): ManualBadgeGrant[] {
+export function seedBadgeGrants(now: Date): StoredBadgeGrant[] {
   const ago = (days: number) => iso(now.getTime() - days * DAY);
   const grant = (
     entity_type: 'user' | 'guild',
@@ -125,12 +126,14 @@ export function seedBadgeGrants(now: Date): ManualBadgeGrant[] {
     badge: string,
     days: number,
     note: string | null,
-  ): ManualBadgeGrant => ({entity_type, entity_id, badge, granted_by: U.noe, granted_at: ago(days), note});
+  ): StoredBadgeGrant => ({entity_type, entity_id, badge, granted_by: U.noe, granted_at: ago(days), note});
   return [
     grant('guild', G.moddy, 'moddy_server', 400, 'Serveur officiel'),
     grant('guild', G.moddy, 'lineup_verified', 400, null),
     grant('guild', G.anime, 'moddy_partner', 120, 'Partenariat signé'),
     grant('guild', G.cubelands, 'lineup_verified', 60, 'Équipe et propriétaire vérifiés'),
+    // No Lineup profile for this server: the console shows the id alone.
+    grant('guild', G.cafe, 'moddy_partner', 12, 'Partenaire avant son arrivée sur Lineup'),
     grant('user', U.alex, 'lineup_verified', 60, null),
     grant('user', U.amira, 'moddy_partner', 90, 'Collaboration sur les annonces de partenariat'),
   ];

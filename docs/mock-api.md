@@ -56,6 +56,14 @@ Bouton "Mock" en bas à gauche, replié par défaut (anglais). Contrôles : pers
 
 Résolus par le Discord du mock dans l'ordre documenté : invitation, droits, doublon. La même table sert aux expériences et à `PUT /lineup/guilds/{id}`. Exemples pour Camille : `cafe-des-mods` (201), `studio-nocturne` (201), `corbeau-guilde` (403 puis 201 après `refresh-guilds`), `marche-arcanes` (403 `guild_suspended`), `atelier-phenix` (409 déjà revendiqué), `nocturne-temp` (422 `invite_expiring`), `vieux-code` (404 `invite_not_found`), `groupe-mp` (422 `invite_invalid`), `zzz999` (404). Table complète dans `src/mocks/README.md`.
 
+## Contrat récent reproduit par le mock
+
+- `POST /lineup/guilds/claim` : `{invite}`, `{guild_id}` ou les deux (aucun : 422 `value_error`). `guild_id` seul avec Moddy sur le serveur : l'invitation permanente est créée par le mock (`moddy-<8 derniers chiffres de l'id>`) ; sans Moddy : 422 `invite_required` ; invitation et `guild_id` de deux serveurs : 422 `invite_guild_mismatch`. Café des Mods (Moddy) passe sans invitation ; Studio Nocturne demande `studio-nocturne`.
+- `PUT /lineup/guilds/{id}` avec `invite: null` : nouvelle invitation par Moddy, sinon 422 `invite_required`.
+- `GET /lineup/guilds/{id}` : `snapshot_at` pour un gestionnaire seulement ; Arena Esport FR a `invite.url` nul.
+- Expériences : `image_url` (https, 500 caractères, modifiable pour un service, ignoré pour un serveur) et `member_count` (lus dans l'invitation pour un serveur) ; `experience.guild` pour un serveur à profil listé.
+- Résumés (`post.guild`, `post.author`, `team[].user`, `experience.guild`, `me.user`, cartes) : `badges` sans badges Discord ni `moddy_premium` ; `post.guild.nsfw` ; cartes d'annuaire avec `description` (160 caractères, « … ») et `nsfw` ; `listed` sur `me/guilds` ; `entity_name` et `entity_icon_url` sur les badges staff.
+
 ## Données de départ
 
 Environ 12 serveurs revendiqués (dont un NSFW par thème, un NSFW par niveau Discord, un non listé, un suspendu, un à invitation supprimée, un à instantané périmé), 16 personnes, environ 40 annonces dans tous les statuts, des expériences avec preuves dans tous les statuts, des signalements ouverts, résolus et rejetés. Le fil et l'annuaire contiennent des lignes de remplissage de comptes suspendus : avec les tailles de page par défaut, la page 2 est vide avec un `next_cursor` non nul. Les limites : signalements 10 par heure, `verify` 5 par 10 minutes, `refresh` 1 par minute et par serveur.

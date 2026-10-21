@@ -33,6 +33,15 @@ export const STEP_IDS = [
 ] as const;
 export type StepId = (typeof STEP_IDS)[number];
 
+/**
+ * The steps shown. The type step is left out when something already fixes the
+ * author: editing, the dashboard of a server (`?guild=`), the personal
+ * dashboard (`?kind=user`).
+ */
+export function stepsFor(typeFixed: boolean): StepId[] {
+  return STEP_IDS.filter((id) => !(typeFixed && id === 'type'));
+}
+
 export interface RequirementDraft {
   /** Stable key for React lists. */
   key: string;

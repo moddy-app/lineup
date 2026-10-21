@@ -11,8 +11,6 @@ import {InlineStats, RetryButton, StaleNotice} from '@/components';
 import {useT} from '@/i18n/useT';
 import {SettingsPanel, useSnackbar} from '@/ui';
 
-import {SECTION_IDS} from './sectionIds';
-
 /** The Discord snapshot of the server and the button that reads it again (one per minute). */
 export function SnapshotCard({guild}: {guild: GuildProfile}) {
   const {t} = useT('guildManage');
@@ -37,7 +35,6 @@ export function SnapshotCard({guild}: {guild: GuildProfile}) {
   const rateLimited = hasCode(error, 'lineup_rate_limited');
   return (
     <SettingsPanel
-      id={SECTION_IDS.discord}
       className="manage-panel"
       title={t('snapshot.title')}
       description={t('snapshot.body')}

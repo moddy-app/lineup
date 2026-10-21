@@ -1,7 +1,6 @@
 {
   "title": "Gestão do servidor",
   "pageTitle": "Gerenciar {{name}}",
-  "pageDescription": "Gestão do perfil no Lineup",
   "unknownName": "Servidor sem nome",
   "notFound": {
     "title": "Servidor não encontrado",
@@ -15,15 +14,6 @@
   },
   "viewProfile": "Ver o perfil público",
   "saved": "Perfil salvo.",
-  "sections": {
-    "label": "Seções da página",
-    "profile": "Perfil público",
-    "invite": "Convite",
-    "visibility": "Visibilidade",
-    "posts": "Anúncios",
-    "discord": "Dados do Discord",
-    "danger": "Zona de perigo"
-  },
   "profile": {
     "title": "Perfil público",
     "description": "O que as pessoas veem ao abrir o servidor."
@@ -118,31 +108,12 @@
     "confirm": "Excluir",
     "done": "O perfil de {{name}} foi excluído."
   },
-  "posts": {
-    "title": "Anúncios do servidor",
-    "create": "Novo anúncio",
-    "filters": "Filtrar por status",
-    "filter": {
-      "all": "Todos",
-      "published": "Publicados",
-      "draft": "Rascunhos",
-      "closed": "Fechados",
-      "hidden": "Ocultos"
-    },
-    "menu": "Ações do anúncio {{title}}",
-    "emptyTitle": "Nenhum anúncio",
-    "emptyAll": "Este servidor ainda não tem anúncios. Quem gerencia o servidor pode editar todos.",
-    "emptyTab": "Nenhum anúncio com este status.",
-    "hidden": "Ocultado pela equipe do Moddy: não pode mais ser alterado.",
-    "edit": "Editar",
-    "close": "Fechar",
-    "reopen": "Reabrir",
-    "publish": "Publicar",
-    "delete": "Excluir",
-    "closed": "Anúncio fechado.",
-    "published": "Anúncio publicado.",
-    "deleted": "Anúncio excluído.",
-    "deleteTitle": "Excluir este anúncio?",
-    "deleteBody": "«{{title}}» será excluído definitivamente."
+  "newPost": "Novo anúncio",
+  "pages": {
+    "profile": "Descrição, tema, tags, idiomas e links.",
+    "invite": "O convite por trás do botão Entrar.",
+    "posts": "Os anúncios deste servidor.",
+    "discord": "O que o Lineup lê no Discord.",
+    "settings": "Visibilidade e exclusão."
   }
 }

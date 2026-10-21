@@ -1,8 +1,7 @@
-import type {MdOutlinedSelect} from '@material/web/select/outlined-select.js';
-
 import {cx} from '@/lib/cx';
 
-import {useControlledElement} from './useControlledElement';
+import {Dropdown} from './Dropdown';
+import {Icon} from './Icon';
 
 export interface SelectOption {
   value: string;
@@ -25,37 +24,64 @@ interface SelectProps {
   id?: string;
 }
 
-/** md-outlined-select as a controlled React input. */
-export function Select({value, onValueChange, options, errorText, error, className, ...props}: SelectProps) {
-  const {ref, handleChange} = useControlledElement<MdOutlinedSelect, string>(
-    value,
-    (element) => element.value,
-    (element, next) => {
-      element.value = next;
-    },
-    onValueChange,
-  );
-
+/**
+ * A select: a field-like button (label, value, chevron) that opens the shared
+ * `Dropdown` as a listbox. A long list (more than 8 options, time zones) gets
+ * the wide popover and scrolls inside.
+ */
+export function Select({
+  label,
+  value,
+  onValueChange,
+  options,
+  name,
+  required,
+  disabled,
+  supportingText,
+  errorText,
+  error,
+  className,
+  id,
+}: SelectProps) {
+  const selected = options.find((option) => option.value === value);
+  const invalid = Boolean(error || errorText);
+  const note = errorText || supportingText;
   return (
-    <md-outlined-select
-      {...props}
-      ref={ref}
-      className={cx('field', className)}
-      value={value}
-      error={Boolean(error || errorText)}
-      errorText={errorText ?? ''}
-      onchange={handleChange}
-    >
-      {options.map((option) => (
-        <md-select-option
-          key={option.value}
-          value={option.value}
-          disabled={option.disabled}
-          selected={option.value === value}
-        >
-          <div slot="headline">{option.label}</div>
-        </md-select-option>
-      ))}
-    </md-outlined-select>
+    <div className={cx('select-field', invalid && 'error', className)}>
+      <Dropdown
+        role="listbox"
+        label={label}
+        matchTrigger
+        wide={options.length > 8}
+        items={options.map((option) => ({
+          key: option.value,
+          label: option.label,
+          disabled: option.disabled,
+          selected: option.value === value,
+          onSelect: () => onValueChange(option.value),
+        }))}
+        trigger={({ref, onActivate, ...aria}) => (
+          <button
+            {...aria}
+            type="button"
+            ref={ref}
+            id={id}
+            className="select-trigger"
+            disabled={disabled}
+            aria-required={required || undefined}
+            aria-invalid={invalid || undefined}
+            onClick={onActivate}
+          >
+            <span className="select-text">
+              <span className="select-label">{label}</span>
+              <span className="select-value">{selected?.label ?? ' '}</span>
+            </span>
+            <Icon name="expand_more" className="select-chevron" />
+          </button>
+        )}
+      />
+      {name && <input type="hidden" name={name} value={value} />}
+      {note && <p className="select-support">{note}</p>}
+    </div>
   );
 }

@@ -74,9 +74,11 @@ export function userBadges(env: Env, user: DbUser): Badge[] {
 
 /**
  * The badges of a summary (`post.guild`, `post.author`, `team[].user`, `GET /lineup/me`):
- * the same as the full profile, without Discord's (they have no place next to a name).
- * Not in the real API yet (docs/backend-notes.md, "Badges sur les résumés").
+ * the same as the full profile, without Discord's and without `moddy_premium`.
+ * This is what the real API now sends on summaries (docs/backend-notes.md, "Réponses reçues").
  */
 export function summaryBadges(badges: Badge[]): Badge[] {
-  return badges.filter((entry) => entry.source !== 'discord' && !entry.id.startsWith('discord_'));
+  return badges.filter(
+    (entry) => entry.source !== 'discord' && !entry.id.startsWith('discord_') && entry.id !== 'moddy_premium',
+  );
 }

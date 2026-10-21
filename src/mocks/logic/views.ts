@@ -8,6 +8,7 @@
 import type {
   Application,
   Experience,
+  ExperienceGuild,
   GuildCard,
   GuildProfile,
   MeProfileRow,
@@ -31,7 +32,7 @@ import type {DbExperience, DbPost, DbUser, DiscordGuild, GuildProfileRow} from '
 import {iso, snowflakeDate} from '../time';
 import {canManageGuildQuietly} from './access';
 import {guildBadges, summaryBadges, userBadges} from './badges';
-import {canEditPost, isExpired, isUserSuspended} from './visibility';
+import {canEditPost, isExpired, isGuildSuspended, isNsfwGuild, isUserSuspended} from './visibility';
 
 export const MAX_PROFILE_POSTS = 20;
 const SERVER_REFRESH_AFTER_MS = 6 * 3600_000;
@@ -48,6 +49,7 @@ function postGuild(env: Env, guildId: Snowflake | null): PostGuild | null {
     id: guildId,
     name: guild?.name ?? null,
     icon_url: guild?.icon_url ?? null,
+    nsfw: isNsfwGuild(env, guildId),
     badges: summaryBadges(guildBadges(env, guildId, {includePremium: false})),
   };
 }
@@ -96,14 +98,33 @@ export function toPostDetail(env: Env, row: DbPost, viewer: Viewer | null): Post
 // Experiences
 // ---------------------------------------------------------------------------
 
-function experienceBase(row: DbExperience) {
+/**
+ * `experience.guild`: the server's summary when it has a Lineup profile that is
+ * listed (and not suspended); null otherwise, and for a service.
+ */
+function experienceGuild(env: Env, row: DbExperience): ExperienceGuild | null {
+  if (row.kind !== 'guild' || !row.guild_id) return null;
+  const profile = env.db.profiles[row.guild_id];
+  if (!profile?.listed || isGuildSuspended(env, row.guild_id)) return null;
+  const guild = env.db.guilds[row.guild_id];
+  return {
+    id: row.guild_id,
+    name: guild?.name ?? null,
+    icon_url: guild?.icon_url ?? null,
+    badges: summaryBadges(guildBadges(env, row.guild_id, {includePremium: false})),
+  };
+}
+
+function experienceBase(env: Env, row: DbExperience) {
   return {
     id: row.id,
     kind: row.kind,
     guild_id: row.guild_id,
     name: row.name,
     invite_url: row.kind === 'guild' && row.invite_code ? `https://discord.gg/${row.invite_code}` : null,
-    guild: null,
+    image_url: row.image_url,
+    member_count: row.kind === 'guild' ? row.member_count : null,
+    guild: experienceGuild(env, row),
     position: row.position,
     position_other: row.position_other,
     description: row.description,
@@ -119,10 +140,10 @@ function experienceBase(row: DbExperience) {
  * party gets no `rejected` experience (the caller filters them out), and a
  * `pending` one is presented as `unverified` (the review is private).
  */
-export function toPublicExperience(row: DbExperience): Experience {
+export function toPublicExperience(env: Env, row: DbExperience): Experience {
   const hidePending = row.status === 'pending';
   return {
-    ...experienceBase(row),
+    ...experienceBase(env, row),
     verification: hidePending
       ? {status: 'unverified', method: null, verified_at: null}
       : {status: row.status, method: row.method, verified_at: row.verified_at},
@@ -130,9 +151,9 @@ export function toPublicExperience(row: DbExperience): Experience {
 }
 
 /** The owner's and the staff's view: evidence, rejection reason, timestamps (§5). */
-export function toPrivateExperience(row: DbExperience): PrivateExperience {
+export function toPrivateExperience(env: Env, row: DbExperience): PrivateExperience {
   return {
-    ...experienceBase(row),
+    ...experienceBase(env, row),
     verification: {
       status: row.status,
       method: row.method,
@@ -145,8 +166,8 @@ export function toPrivateExperience(row: DbExperience): PrivateExperience {
   };
 }
 
-export const toStaffExperience = (row: DbExperience): StaffExperience => ({
-  ...toPrivateExperience(row),
+export const toStaffExperience = (env: Env, row: DbExperience): StaffExperience => ({
+  ...toPrivateExperience(env, row),
   user_id: row.user_id,
 });
 
@@ -193,8 +214,16 @@ export function guildCard(env: Env, profile: GuildProfileRow): GuildCard {
     presence_count: guild?.presence_count ?? null,
     theme: profile.theme,
     tags: [...profile.tags],
-    badges: guildBadges(env, profile.guild_id, {includePremium: false}),
+    badges: summaryBadges(guildBadges(env, profile.guild_id, {includePremium: false})),
+    description: cardDescription(profile.description ?? guild?.description ?? null),
+    nsfw: isNsfwGuild(env, profile.guild_id),
   };
+}
+
+/** The directory's description: cut at 160 characters, with "…" when it was longer. */
+export function cardDescription(text: string | null): string | null {
+  if (!text) return null;
+  return text.length > 160 ? `${text.slice(0, 160)}…` : text;
 }
 
 export function userSummary(env: Env, user: DbUser): UserSummary {
@@ -263,6 +292,7 @@ export function toGuildProfile(
 ): GuildProfile {
   const guild: DiscordGuild | undefined = env.db.guilds[profile.guild_id];
   const stale = refreshGuildSnapshot(env, profile);
+  const canManage = !suspendedViewer && canManageGuildQuietly(env, actor, profile.guild_id);
   return {
     id: profile.guild_id,
     name: guild?.name ?? null,
@@ -271,11 +301,10 @@ export function toGuildProfile(
     splash_url: guild?.splash_url ?? null,
     description: profile.description ?? guild?.description ?? null,
     discord_description: guild?.description ?? null,
-    invite: {
-      code: profile.invite_code,
-      url: `https://discord.gg/${profile.invite_code}`,
-      valid: !profile.invite_invalid,
-    },
+    // No code: the bot could not create an invitation anywhere, so there is nothing to join with.
+    invite: profile.invite_code
+      ? {code: profile.invite_code, url: `https://discord.gg/${profile.invite_code}`, valid: !profile.invite_invalid}
+      : {code: '', url: null, valid: true},
     links: profile.links.map((entry) => ({...entry})),
     theme: profile.theme,
     tags: [...profile.tags],
@@ -291,7 +320,9 @@ export function toGuildProfile(
     posts: liveGuildPosts(env, profile.guild_id),
     team: teamOf(env, profile.guild_id),
     stale,
-    can_manage: !suspendedViewer && canManageGuildQuietly(env, actor, profile.guild_id),
+    // Managers only (it feeds "updated … ago"); null for anyone else.
+    snapshot_at: canManage ? profile.snapshot_at : null,
+    can_manage: canManage,
   };
 }
 
@@ -359,8 +390,8 @@ export function toUserProfile(env: Env, user: DbUser, viewer: Viewer | null): Us
   const privateView = isSelf || viewer?.is_staff === true;
   const rows = experiencesOf(env, user.id);
   const experiences: ProfileExperience[] = privateView
-    ? rows.map(toPrivateExperience)
-    : rows.filter((row) => row.status !== 'rejected').map(toPublicExperience);
+    ? rows.map((row) => toPrivateExperience(env, row))
+    : rows.filter((row) => row.status !== 'rejected').map((row) => toPublicExperience(env, row));
   const profile = user.profile;
   return {
     id: user.id,

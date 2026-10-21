@@ -6,11 +6,14 @@ export const NAME_MAX = 100;
 export const DESCRIPTION_MAX = 1000;
 export const POSITION_OTHER_MAX = 40;
 export const NOTE_MAX = 500;
+export const IMAGE_URL_MAX = 500;
 
 export interface ExperienceFormState {
   kind: 'guild' | 'service';
   invite: string;
   name: string;
+  /** A service only: an https URL, or empty. */
+  image_url: string;
   position: string;
   position_other: string;
   description: string;
@@ -24,6 +27,8 @@ export type ExperienceProblemKey =
   | 'inviteRequired'
   | 'nameRequired'
   | 'nameTooLong'
+  | 'imageTooLong'
+  | 'imageNotHttps'
   | 'positionRequired'
   | 'positionOtherRequired'
   | 'positionOtherTooLong'
@@ -52,6 +57,7 @@ export function emptyForm(): ExperienceFormState {
     kind: 'guild',
     invite: '',
     name: '',
+    image_url: '',
     position: '',
     position_other: '',
     description: '',
@@ -66,6 +72,7 @@ export function formFromExperience(experience: PrivateExperience): ExperienceFor
     kind: experience.kind,
     invite: '',
     name: experience.name,
+    image_url: experience.kind === 'service' ? (experience.image_url ?? '') : '',
     position: experience.position,
     position_other: experience.position_other ?? '',
     description: experience.description ?? '',
@@ -73,6 +80,22 @@ export function formFromExperience(experience: PrivateExperience): ExperienceFor
     end_date: experience.end_date ?? '',
     current: experience.end_date === null,
   };
+}
+
+/** An image is an https URL of 500 characters at most, without spaces. Empty is fine. */
+export function imageProblem(value: string): ExperienceProblem | null {
+  const url = value.trim();
+  if (url.length === 0) return null;
+  if (url.length > IMAGE_URL_MAX) return {key: 'imageTooLong', count: IMAGE_URL_MAX};
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol !== 'https:' || /\s/.test(url) || parsed.username || parsed.password) {
+      return {key: 'imageNotHttps'};
+    }
+  } catch {
+    return {key: 'imageNotHttps'};
+  }
+  return null;
 }
 
 export function validateExperience(
@@ -87,6 +110,8 @@ export function validateExperience(
     const name = state.name.trim();
     if (name.length === 0) problems.name = {key: 'nameRequired'};
     else if (name.length > NAME_MAX) problems.name = {key: 'nameTooLong', count: NAME_MAX};
+    const image = imageProblem(state.image_url);
+    if (image) problems.image_url = image;
   }
   if (!state.position) problems.position = {key: 'positionRequired'};
   if (state.position === 'other') {
@@ -121,7 +146,7 @@ function common(state: ExperienceFormState) {
 export function createBody(state: ExperienceFormState): CreateExperienceBody {
   return state.kind === 'guild'
     ? {kind: 'guild', invite: state.invite.trim(), ...common(state)}
-    : {kind: 'service', name: state.name.trim(), ...common(state)};
+    : {kind: 'service', name: state.name.trim(), image_url: state.image_url.trim() || null, ...common(state)};
 }
 
 /** Only what changed. A new invitation is sent when one was typed. */
@@ -131,6 +156,11 @@ export function updateBody(experience: PrivateExperience, state: ExperienceFormS
     if (state.invite.trim()) body.invite = state.invite.trim();
   } else if (state.name.trim() !== experience.name) {
     body.name = state.name.trim();
+  }
+  // The image is the person's for a service only; emptying the field clears it. It never resets a verification.
+  if (experience.kind === 'service') {
+    const image = state.image_url.trim() || null;
+    if (image !== (experience.image_url ?? null)) body.image_url = image;
   }
   if (state.position !== experience.position) body.position = state.position;
   const other = state.position === 'other' ? state.position_other.trim() : null;

@@ -1,7 +1,6 @@
 {
   "title": "Serververwaltung",
   "pageTitle": "{{name}} verwalten",
-  "pageDescription": "Verwaltung des Lineup-Profils",
   "unknownName": "Server ohne Namen",
   "notFound": {
     "title": "Server nicht gefunden",
@@ -15,15 +14,6 @@
   },
   "viewProfile": "Öffentliches Profil ansehen",
   "saved": "Profil gespeichert.",
-  "sections": {
-    "label": "Abschnitte der Seite",
-    "profile": "Öffentliches Profil",
-    "invite": "Einladung",
-    "visibility": "Sichtbarkeit",
-    "posts": "Anzeigen",
-    "discord": "Discord-Daten",
-    "danger": "Gefahrenzone"
-  },
   "profile": {
     "title": "Öffentliches Profil",
     "description": "Was Personen sehen, die den Server öffnen."
@@ -118,31 +108,12 @@
     "confirm": "Löschen",
     "done": "Das Profil von {{name}} ist gelöscht."
   },
-  "posts": {
-    "title": "Anzeigen des Servers",
-    "create": "Neue Anzeige",
-    "filters": "Nach Status filtern",
-    "filter": {
-      "all": "Alle",
-      "published": "Veröffentlicht",
-      "draft": "Entwürfe",
-      "closed": "Geschlossen",
-      "hidden": "Ausgeblendet"
-    },
-    "menu": "Aktionen für die Anzeige {{title}}",
-    "emptyTitle": "Keine Anzeigen",
-    "emptyAll": "Dieser Server hat noch keine Anzeigen. Alle, die den Server verwalten, können sie bearbeiten.",
-    "emptyTab": "Keine Anzeigen mit diesem Status.",
-    "hidden": "Vom Moddy-Team ausgeblendet: sie kann nicht mehr geändert werden.",
-    "edit": "Bearbeiten",
-    "close": "Schließen",
-    "reopen": "Wieder öffnen",
-    "publish": "Veröffentlichen",
-    "delete": "Löschen",
-    "closed": "Anzeige geschlossen.",
-    "published": "Anzeige veröffentlicht.",
-    "deleted": "Anzeige gelöscht.",
-    "deleteTitle": "Diese Anzeige löschen?",
-    "deleteBody": "„{{title}}“ wird endgültig gelöscht."
+  "newPost": "Neue Anzeige",
+  "pages": {
+    "profile": "Beschreibung, Thema, Tags, Sprachen und Links.",
+    "invite": "Die Einladung hinter dem Beitreten-Button.",
+    "posts": "Die Anzeigen dieses Servers.",
+    "discord": "Was Lineup von Discord liest.",
+    "settings": "Sichtbarkeit und Löschung."
   }
 }

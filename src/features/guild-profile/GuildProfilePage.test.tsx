@@ -49,6 +49,13 @@ describe('guild profile', () => {
     );
   });
 
+  it('has no join button when the bot could create no invitation (url null)', async () => {
+    setup({invite: {code: '', url: null, valid: true}, can_manage: false});
+    await screen.findByRole('heading', {level: 1});
+    expect(document.querySelector('md-filled-button')).toBeNull();
+    expect(screen.queryByRole('status')).toBeNull();
+  });
+
   it('has no join button when the invite is lost, and tells managers in one line', async () => {
     setup({invite: {code: 'x', url: 'https://discord.gg/x', valid: false}, listed: false});
     await screen.findByRole('heading', {level: 1});

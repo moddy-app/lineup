@@ -72,7 +72,7 @@ describe('DisplayName', () => {
 });
 
 describe('BadgeStrip', () => {
-  it('leaves out Discord badges and the verification badges', () => {
+  it('leaves out Discord badges and keeps the verification badges', () => {
     renderWithCatalog(
       <BadgeStrip
         badges={[
@@ -87,14 +87,15 @@ describe('BadgeStrip', () => {
       />,
     );
     const items = screen.getAllByRole('img');
-    expect(items.map((item) => item.getAttribute('aria-label'))).toEqual(['Moddy installé', 'Partenaire Moddy']);
-    expect(items[0]?.getAttribute('data-tooltip')).toBe('Moddy installé');
-    expect(items[0]?.querySelector('.filled')?.textContent).toBe('smart_toy');
+    expect(items.map((item) => item.getAttribute('aria-label'))).toHaveLength(5);
+    const installed = items.find((item) => item.getAttribute('aria-label') === 'Moddy installé');
+    expect(installed?.getAttribute('data-tooltip')).toBe('Moddy installé');
+    expect(installed?.querySelector('.filled')?.textContent).toBe('smart_toy');
   });
 
   it('renders nothing when no badge qualifies', () => {
     const {container} = renderWithCatalog(
-      <BadgeStrip badges={[badge('moddy_staff'), badge('discord_staff', 'discord')]} />,
+      <BadgeStrip badges={[badge('discord_staff', 'discord'), badge('discord_partner')]} />,
     );
     expect(container.querySelector('.badge-strip')).toBeNull();
     const none = renderWithCatalog(<BadgeStrip badges={undefined} />);

@@ -241,5 +241,9 @@
     "expiryMax": "Como máximo {{count}} días desde hoy.",
     "featuredUserOnly": "Solo un anuncio personal puede destacar una experiencia.",
     "featuredNotVerified": "Esta experiencia no está verificada."
+  },
+  "author": {
+    "guild": "Anuncio para el servidor",
+    "user": "Anuncio a su nombre"
   }
 }

@@ -26,7 +26,7 @@ Une session venue du tableau de bord peut ne pas avoir le scope qui lit les serv
 
 ## Brouillons : `registerBeforeLogin`
 
-Se connecter recharge toute la page. Un formulaire qui contient du travail non envoyé appelle `registerBeforeLogin(callback)` (renvoie la fonction de désinscription) ; `login()` et la reconnexion exécutent les callbacks juste avant de partir. Un callback qui lève ne bloque ni les autres ni la connexion. Les brouillons vont dans `sessionStorage` (ou `localStorage` pour l'annonce et l'expérience) et sont restaurés au retour. Clés : `lineup.postDraft.<id|new>`, `lineup-experience-draft`, `lineup-me-profile-draft`, `guild-manage-draft:<guildId>`, `lineup-staff-grant`.
+Se connecter recharge toute la page. Un formulaire qui contient du travail non envoyé appelle `registerBeforeLogin(callback)` (renvoie la fonction de désinscription) ; `login()` et la reconnexion exécutent les callbacks juste avant de partir. Un callback qui lève ne bloque ni les autres ni la connexion. Les brouillons vont dans `sessionStorage` (ou `localStorage` pour l'annonce et l'expérience) et sont restaurés au retour. Clés : `lineup.postDraft.<id|new>`, `lineup-experience-draft`, `lineup-me-profile-draft`, `guild-manage-draft:<guildId>:<profile|invite|visibility>`, `lineup-staff-grant`.
 
 ## Suspension
 

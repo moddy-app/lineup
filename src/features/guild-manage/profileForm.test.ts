@@ -2,7 +2,15 @@ import {describe, expect, it} from 'vitest';
 
 import type {GuildProfile} from '@/api/types';
 
-import {buildUpdate, hasChanges, lineupDescription, parseTags, validateValues, valuesFromProfile} from './profileForm';
+import {
+  buildUpdate,
+  SCOPE_FIELDS,
+  hasChanges,
+  lineupDescription,
+  parseTags,
+  validateValues,
+  valuesFromProfile,
+} from './profileForm';
 
 const profile = {
   description: 'Texte Lineup',
@@ -49,5 +57,28 @@ describe('profile form', () => {
       limits,
     );
     expect(Object.keys(issues).sort()).toEqual(['invite', 'links.0.label', 'links.0.url', 'tags']);
+  });
+
+  it('sends only the fields of the page it is built for', () => {
+    const base = valuesFromProfile(profile);
+    const edited = {...base, description: 'Autre', theme: '', invite: 'abc-def', listed: false};
+    expect(buildUpdate(base, edited, 'profile')).toEqual({description: 'Autre', theme: null});
+    expect(buildUpdate(base, edited, 'invite')).toEqual({invite: 'abc-def'});
+    expect(buildUpdate(base, edited, 'visibility')).toEqual({listed: false});
+    expect(buildUpdate(base, edited)).toEqual({description: 'Autre', theme: null, invite: 'abc-def', listed: false});
+  });
+
+  it('checks only the fields of the page', () => {
+    const base = valuesFromProfile(profile);
+    const bad = {...base, tags: 'Bad Tag!', invite: 'a'};
+    expect(Object.keys(validateValues(bad, limits, 'profile'))).toEqual(['tags']);
+    expect(Object.keys(validateValues(bad, limits, 'invite'))).toEqual(['invite']);
+    expect(validateValues(bad, limits, 'visibility')).toEqual({});
+  });
+
+  it('gives each field to exactly one page', () => {
+    const all = Object.values(SCOPE_FIELDS).flat();
+    expect(new Set(all).size).toBe(all.length);
+    expect(all.sort()).toEqual(Object.keys(valuesFromProfile(profile)).sort());
   });
 });

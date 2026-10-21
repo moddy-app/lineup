@@ -104,6 +104,20 @@ describe('the public feed', () => {
     }
   });
 
+  it('tells on post.guild whether the server is NSFW, so the age gate does not depend on the theme', async () => {
+    const api = createTestApi();
+    for (const [guild, nsfw] of [
+      [G.nox, true],
+      [G.velvet, true],
+      [G.cubelands, false],
+    ] as const) {
+      const response = await api.call('GET', '/lineup/posts', {query: {guild_id: guild, include_nsfw: 'true'}});
+      expect(response.json.items[0].guild).toMatchObject({id: guild, nsfw});
+      expect(Array.isArray(response.json.items[0].guild.badges)).toBe(true);
+      expect(Array.isArray(response.json.items[0].author.badges)).toBe(true);
+    }
+  });
+
   it('leaves out the posts of an unlisted server and expired ones', async () => {
     const api = createTestApi();
     expect(ids(await api.call('GET', '/lineup/posts', {query: {guild_id: G.hyrule}}))).toEqual([]);

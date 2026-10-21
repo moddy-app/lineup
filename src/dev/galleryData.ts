@@ -89,7 +89,7 @@ export const LINKS: Link[] = [
 const guildPost = (overrides: Partial<Post>): Post =>
   makePost({
     guild_id: GUILD_ID,
-    guild: {id: GUILD_ID, name: 'Cubelands FR', icon_url: ICON},
+    guild: {id: GUILD_ID, name: 'Cubelands FR', icon_url: ICON, nsfw: false, badges: []},
     ...overrides,
   });
 
@@ -114,7 +114,7 @@ export const POST_USER: Post = makePost({
   positions: ['moderator', 'support'],
   languages: ['fr'],
   commitment: {hours_per_week: 12, compensation: 'negotiable', openings: null},
-  author: {id: USER_ID, username: 'alex', global_name: 'Alex Martin', avatar_url: AVATAR},
+  author: {id: USER_ID, username: 'alex', global_name: 'Alex Martin', avatar_url: AVATAR, badges: []},
   published_at: hoursAgo(30),
 });
 
@@ -125,7 +125,13 @@ export const POST_LONG: Post = guildPost({
     'Un très long texte de description qui dépasse largement les trois lignes autorisées dans la carte du fil, pour vérifier que la coupure se fait proprement avec des points de suspension et que la carte garde une hauteur raisonnable. '.repeat(
       3,
     ),
-  guild: {id: GUILD_IDS[1]!, name: 'Un nom de serveur très long qui doit être tronqué proprement', icon_url: null},
+  guild: {
+    id: GUILD_IDS[1]!,
+    name: 'Un nom de serveur très long qui doit être tronqué proprement',
+    icon_url: null,
+    nsfw: false,
+    badges: [],
+  },
   guild_id: GUILD_IDS[1]!,
   positions: ['other', 'graphic_designer', 'partnership_manager', 'event_animator'],
   positions_other: ['Responsable des relations avec les partenaires et les sponsors'],

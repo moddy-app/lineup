@@ -7,11 +7,11 @@ import type {GuildCard, GuildProfile, MyGuild, Paginated, RefreshGuildsResponse,
 
 import {conflict, forbidden, notFound, rateLimited, sanctionError, unprocessable} from '../errors';
 import type {Actor, Env, Viewer} from '../env';
-import type {GuildProfileRow} from '../model';
+import type {DiscordGuild, GuildProfileRow} from '../model';
 import {iso} from '../time';
 import {canManageGuild, canManageGuildQuietly, manageableGuilds} from './access';
 import {compareKeyed, decodeCursor, pageRows} from './cursor';
-import {resolveInvite} from './discord';
+import {requireDiscord, resolveInvite} from './discord';
 import {isTheme} from './schemas';
 import {Issues, Params} from './validate';
 import {guildCard, toGuildProfile} from './views';
@@ -94,20 +94,61 @@ export function getGuildProfile(env: Env, viewer: Viewer | null, guildId: Snowfl
 // ---------------------------------------------------------------------------
 
 /**
- * `POST /lineup/guilds/claim`. The order of checks is the documented one:
- * resolve the invitation → the person's rights → already claimed.
- * (The server's suspension is checked with the rights, before the duplicate.)
+ * The permanent invitation Moddy creates itself on a server where it is
+ * present (or the one it created earlier).
  */
-export function claimGuild(env: Env, actor: Actor, body: {invite: string}): GuildProfile {
-  const {invite, guild} = resolveInvite(env, body.invite);
-  requireManager(env, actor, guild.id);
+function moddyInvite(env: Env, guild: DiscordGuild): string {
+  const code = `moddy-${guild.id.slice(-8)}`;
+  if (!env.db.invites[code]) {
+    env.db.invites[code] = {code, kind: 'guild', guild_id: guild.id, expires_at: null};
+  }
+  return code;
+}
+
+export const inviteRequired = () =>
+  unprocessable('invite_required', 'Moddy n’est pas sur ce serveur : une invitation est nécessaire.');
+
+/**
+ * `POST /lineup/guilds/claim`, with `invite`, `guild_id` or both.
+ *
+ * With an invitation, the documented order: resolve the invitation → (two
+ * servers: 422 `invite_guild_mismatch`) → the person's rights → already
+ * claimed. With `guild_id` alone: rights → already claimed → Moddy must be on
+ * the server (422 `invite_required`), which then creates the permanent
+ * invitation itself. (The server's suspension is checked with the rights,
+ * before the duplicate.)
+ */
+export function claimGuild(env: Env, actor: Actor, body: {invite?: string; guild_id?: Snowflake}): GuildProfile {
+  let guild: DiscordGuild;
+  let inviteCode: string | null;
+  if (body.invite !== undefined) {
+    const resolved = resolveInvite(env, body.invite);
+    if (body.guild_id !== undefined && body.guild_id !== resolved.guild.id) {
+      throw unprocessable('invite_guild_mismatch', 'Cette invitation mène à un autre serveur.');
+    }
+    guild = resolved.guild;
+    inviteCode = resolved.invite.code;
+    requireManager(env, actor, guild.id);
+  } else {
+    const guildId = body.guild_id ?? '';
+    requireManager(env, actor, guildId);
+    const known = env.db.guilds[guildId];
+    if (!known) throw forbidden('lineup_guild_forbidden');
+    guild = known;
+    inviteCode = null;
+  }
   if (env.db.profiles[guild.id]) {
     throw conflict('lineup_guild_already_claimed', 'Ce serveur est déjà sur Lineup.', {guild_id: guild.id});
+  }
+  if (inviteCode === null) {
+    requireDiscord(env);
+    if (!guild.has_moddy) throw inviteRequired();
+    inviteCode = moddyInvite(env, guild);
   }
   const now = iso(env.now);
   const profile: GuildProfileRow = {
     guild_id: guild.id,
-    invite_code: invite.code,
+    invite_code: inviteCode,
     description: null,
     links: [],
     theme: null,
@@ -142,9 +183,15 @@ export function updateGuild(env: Env, actor: Actor, guildId: Snowflake, body: Gu
   const profile = env.db.profiles[guildId];
   if (!profile) throw notFound('lineup_guild_not_found');
 
-  // `invite: null` is ignored (§6.2); a new one must be permanent and lead to THIS server.
+  // A new invitation must be permanent and lead to THIS server. `invite: null` asks Moddy to generate one:
+  // only when it is on the server (422 `invite_required` otherwise).
   let inviteCode: string | undefined;
-  if (typeof body.invite === 'string') {
+  if (body.invite === null) {
+    const guild = env.db.guilds[guildId];
+    requireDiscord(env);
+    if (!guild?.has_moddy) throw inviteRequired();
+    inviteCode = moddyInvite(env, guild);
+  } else if (typeof body.invite === 'string') {
     const resolved = resolveInvite(env, body.invite);
     if (resolved.guild.id !== guildId) {
       throw unprocessable('invite_guild_mismatch', 'Cette invitation mène à un autre serveur.');
@@ -204,9 +251,10 @@ export function refreshGuild(env: Env, actor: Actor, guildId: Snowflake): GuildP
   profile.snapshot_at = iso(env.now);
   profile.has_moddy = guild.has_moddy;
   // The invitation still has to exist at Discord for `invite.valid` to hold.
-  const code = profile.invite_code.toLowerCase();
-  const invite = env.db.invites[code];
-  profile.invite_invalid = !(invite && invite.guild_id === guildId) && guild.vanity_url_code?.toLowerCase() !== code;
+  const code = profile.invite_code?.toLowerCase();
+  const invite = code ? env.db.invites[code] : undefined;
+  profile.invite_invalid =
+    code !== undefined && !(invite && invite.guild_id === guildId) && guild.vanity_url_code?.toLowerCase() !== code;
   return view(false);
 }
 
@@ -222,6 +270,7 @@ function toMyGuild(env: Env, guildId: Snowflake): MyGuild {
     icon_url: guild?.icon_url ?? null,
     has_moddy: guild?.has_moddy ?? false,
     claimed: Boolean(env.db.profiles[guildId]),
+    listed: env.db.profiles[guildId]?.listed ?? false,
   };
 }
 

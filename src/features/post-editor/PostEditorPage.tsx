@@ -17,7 +17,21 @@ import {useUserQuota} from '@/features/my-posts/useUserQuota';
 import {useLanguage} from '@/i18n/useLanguage';
 import {useT} from '@/i18n/useT';
 import {getItem, removeItem, setItem} from '@/lib/storage';
-import {Icon, LinkButton, PageLoading, SettingsLayout, SettingsPanel, useSnackbar, VisuallyHidden} from '@/ui';
+import {GuildIcon} from '@/components/GuildIcon';
+import {DisplayName} from '@/components';
+import {defaultAvatarUrl} from '@/lib/discord';
+import {
+  Avatar,
+  type DashboardContext,
+  Icon,
+  LinkButton,
+  ME_CONTEXT,
+  PageLoading,
+  SettingsLayout,
+  SettingsPanel,
+  useSnackbar,
+  VisuallyHidden,
+} from '@/ui';
 
 import './editor.css';
 import {useIssueText} from './useIssueText';
@@ -33,6 +47,7 @@ import {
   mergeStoredForm,
   stepOfField,
   STEP_IDS,
+  stepsFor,
   type StepId,
   toCreateBody,
   toUpdateBody,
@@ -58,8 +73,13 @@ export function Component() {
   usePageTitle(postId ? t('titleEdit') : t('titleNew'));
   const catalog = useCatalog();
   const post = usePost(postId);
+  const [searchParams] = useSearchParams();
+  const guilds = useMyGuilds();
+  const guildParam = searchParams.get('guild');
 
-  if (catalog.isPending || (postId && post.isPending)) return <PageLoading />;
+  // `?guild=` fixes the author: know whether it is one of my servers before showing the form.
+  if (catalog.isPending || (postId && post.isPending) || (!postId && guildParam && guilds.isPending))
+    return <PageLoading />;
   if (catalog.isError)
     return (
       <Shell editing={postId !== undefined}>
@@ -104,7 +124,16 @@ export function Component() {
       );
     }
   }
-  return <EditorForm key={postId ?? 'new'} catalog={catalog.data} initialPost={postId ? data : undefined} />;
+  const fixedGuildId =
+    !postId && guildParam && guilds.data?.some((entry) => entry.claimed && entry.id === guildParam) ? guildParam : null;
+  return (
+    <EditorForm
+      key={postId ?? 'new'}
+      catalog={catalog.data}
+      initialPost={postId ? data : undefined}
+      fixedGuildId={fixedGuildId}
+    />
+  );
 }
 
 function Shell({children, editing}: {children: React.ReactNode; editing: boolean}) {
@@ -134,13 +163,22 @@ function focusField(name: string) {
   window.requestAnimationFrame(() => {
     const box = document.querySelector<HTMLElement>(`[data-field="${name}"]`);
     const target = box?.querySelector<HTMLElement>(
-      'md-outlined-text-field, md-outlined-select, md-checkbox, md-radio, md-switch, md-icon-button, md-text-button',
+      'md-outlined-text-field, .select-trigger, md-checkbox, md-radio, md-switch, md-icon-button, md-text-button',
     );
     (target ?? box)?.focus();
   });
 }
 
-function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post | undefined}) {
+function EditorForm({
+  catalog,
+  initialPost,
+  fixedGuildId,
+}: {
+  catalog: Catalog;
+  initialPost: Post | undefined;
+  /** The server the dashboard context fixes as the author of a new post. */
+  fixedGuildId: string | null;
+}) {
   const {t} = useT('editor');
   const {t: tErrors} = useT('errors');
   const {label} = useCatalogLabel();
@@ -163,13 +201,27 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
   const key = draftKey(initialPost?.id);
   const [base, setBase] = useState<Post | undefined>(initialPost);
   // `?kind=user` (from the candidates page) starts a personal post: the type step is skipped.
-  const presetUser = !editing && searchParams.get('kind') === 'user';
+  const presetUser = !editing && fixedGuildId === null && searchParams.get('kind') === 'user';
+  // `?kind=guild` (from the projects page) preselects a server post; the type step stays to pick the server.
+  const presetGuild = !editing && fixedGuildId === null && searchParams.get('kind') === 'guild';
+  // Something fixes the author (the post, a server's dashboard, the personal one): no type step.
+  const typeFixed = editing || presetUser || fixedGuildId !== null;
+  const steps = useMemo(() => stepsFor(typeFixed), [typeFixed]);
   const pristine = useMemo(
-    () => (base ? formFromPost(base) : presetUser ? {...EMPTY_FORM, kind: 'user' as const} : EMPTY_FORM),
-    [base, presetUser],
+    () =>
+      base
+        ? formFromPost(base)
+        : fixedGuildId
+          ? {...EMPTY_FORM, kind: 'guild' as const, guildId: fixedGuildId}
+          : presetUser
+            ? {...EMPTY_FORM, kind: 'user' as const}
+            : presetGuild
+              ? {...EMPTY_FORM, kind: 'guild' as const}
+              : EMPTY_FORM,
+    [base, presetUser, presetGuild, fixedGuildId],
   );
   const focusExpiry = editing && searchParams.get('focus') === 'expiry';
-  const firstStep: StepId = focusExpiry ? 'extras' : editing || presetUser ? 'content' : 'type';
+  const firstStep: StepId = focusExpiry ? 'extras' : steps[0]!;
 
   // A form saved in this browser comes back, with a notice.
   const [restored] = useState(() => {
@@ -180,9 +232,9 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
   });
   const [restoredAt, setRestoredAt] = useState<number | null>(restored?.savedAt ?? null);
   const [form, setForm] = useState<FormState>(restored?.form ?? pristine);
-  const [step, setStep] = useState<StepId>(restored?.step ?? firstStep);
+  const [step, setStep] = useState<StepId>(restored && steps.includes(restored.step) ? restored.step : firstStep);
   const [visited, setVisited] = useState<Set<StepId>>(
-    () => new Set<StepId>(editing ? STEP_IDS.filter((id) => id !== 'review') : presetUser ? ['type'] : []),
+    () => new Set<StepId>(editing ? STEP_IDS.filter((id) => id !== 'review') : typeFixed ? ['type'] : []),
   );
   const [showErrors, setShowErrors] = useState<Set<StepId>>(() => new Set());
   const [serverErrors, setServerErrors] = useState<Record<string, string>>({});
@@ -212,20 +264,6 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
   useEffect(() => {
     if (focusExpiry) focusField('expiresOn');
   }, [focusExpiry]);
-
-  // `?guild=<id>` (from a server's page) preselects that server, if it is one of mine.
-  const guildParam = searchParams.get('guild');
-  const [preselected, setPreselected] = useState(false);
-  if (!preselected && !editing && guildParam && guilds.data) {
-    setPreselected(true);
-    if (
-      guilds.data.some((entry) => entry.claimed && entry.id === guildParam) &&
-      form.kind === '' &&
-      form.guildId === ''
-    ) {
-      setForm({...form, kind: 'guild', guildId: guildParam});
-    }
-  }
 
   const rules = useMemo(
     () => ({
@@ -265,7 +303,7 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
     });
   };
 
-  const index = STEP_IDS.indexOf(step);
+  const index = steps.indexOf(step);
   const first = (stepIssues: Issues | undefined) => Object.keys(stepIssues ?? {})[0];
 
   const next = () => {
@@ -275,9 +313,9 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
       focusField(first(stepIssues)!);
       return;
     }
-    go(STEP_IDS[Math.min(index + 1, STEP_IDS.length - 1)]!);
+    go(steps[Math.min(index + 1, steps.length - 1)]!);
   };
-  const previous = () => go(STEP_IDS[Math.max(index - 1, editing ? 1 : 0)]!);
+  const previous = () => go(steps[Math.max(index - 1, 0)]!);
 
   const discard = () => {
     removeItem(key);
@@ -319,7 +357,7 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
     }
     setBanner(error);
     window.requestAnimationFrame(() => document.querySelector('.ed-banner')?.scrollIntoView({block: 'center'}));
-    if (code && CLAIM_CODES.includes(code) && !editing) go('type');
+    if (code && CLAIM_CODES.includes(code) && !typeFixed) go('type');
   };
 
   const submit = async (mode: SubmitMode) => {
@@ -424,7 +462,7 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
     return visited.has(id) ? 'done' : 'todo';
   };
   const rows: ReviewRow[] = STEP_IDS.filter((id): id is Exclude<StepId, 'review'> => id !== 'review')
-    .filter((id) => !(editing && id === 'type'))
+    .filter((id) => steps.includes(id))
     .map((id) => ({
       step: id,
       title: t(`steps.${id}.title`),
@@ -438,7 +476,10 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
 
   const stepProps: StepProps = {form, set, err, catalog, editing};
 
-  const visibleSteps = STEP_IDS.filter((id) => !(editing && id === 'type'));
+  const visibleSteps = steps;
+  // Whose dashboard this is: the server of the post (or of `?guild=`), else the person.
+  const authorGuildId = form.kind === 'guild' && form.guildId !== '' ? form.guildId : null;
+  const context: DashboardContext = typeFixed && authorGuildId ? {kind: 'guild', guildId: authorGuildId} : ME_CONTEXT;
   const position = visibleSteps.indexOf(step) + 1;
   const stepName = t(`steps.${step}.short`);
   const canPublish = !editing || status !== 'published';
@@ -474,15 +515,19 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
       </>
     ) : (
       <>
-        {index > (editing ? 1 : 0) && (
-          <md-outlined-button onclick={previous}>{t('actions.previous')}</md-outlined-button>
-        )}
+        {index > 0 && <md-outlined-button onclick={previous}>{t('actions.previous')}</md-outlined-button>}
         <md-filled-button onclick={next}>{t('actions.next')}</md-filled-button>
       </>
     );
 
   return (
-    <SettingsLayout title={editing ? t('titleEdit') : t('titleNew')} className="ed-page">
+    <SettingsLayout title={editing ? t('titleEdit') : t('titleNew')} className="ed-page" context={context}>
+      <EditorAuthor
+        guildId={authorGuildId}
+        fallbackName={base?.guild?.name ?? null}
+        fallbackIcon={base?.guild?.icon_url ?? null}
+      />
+
       {restoredAt !== null && (
         <div className="ed-restored" role="status">
           <Icon name="restore" filled />
@@ -567,5 +612,39 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
         </SettingsPanel>
       </div>
     </SettingsLayout>
+  );
+}
+
+/** A discreet reminder of who the post is for: the server (icon and name) or you (avatar and name). */
+function EditorAuthor({
+  guildId,
+  fallbackName,
+  fallbackIcon,
+}: {
+  guildId: string | null;
+  fallbackName: string | null;
+  fallbackIcon: string | null;
+}) {
+  const {t} = useT('editor');
+  const guilds = useMyGuilds();
+  const {me} = useSession();
+  if (guildId) {
+    const entry = guilds.data?.find((guild) => guild.id === guildId);
+    return (
+      <p className="ed-author">
+        <GuildIcon id={guildId} iconUrl={entry?.icon_url ?? fallbackIcon} size="small" />
+        <span>{t('author.guild')}</span>
+        <DisplayName name={entry?.name ?? fallbackName ?? t('type.unnamedGuild')} entity="guild" />
+      </p>
+    );
+  }
+  const user = me?.user;
+  if (!user) return null;
+  return (
+    <p className="ed-author">
+      <Avatar src={user.avatar_url ?? defaultAvatarUrl(user.id)} size="small" />
+      <span>{t('author.user')}</span>
+      <DisplayName name={user.global_name ?? user.username} badges={user.badges} entity="user" />
+    </p>
   );
 }

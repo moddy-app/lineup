@@ -228,6 +228,7 @@ function GuildCardLink({guild}: {guild: GuildCard}) {
             },
           ]}
         />
+        {guild.description && <p className="guild-card-description">{guild.description}</p>}
         {(guild.theme || guild.badges.length > 0) && (
           <div className="guild-card-foot">
             {guild.theme && <TagLabel icon="category">{label('themes', guild.theme)}</TagLabel>}

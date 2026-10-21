@@ -107,11 +107,6 @@
   display: inline-flex;
 }
 
-md-menu-item.exp-delete {
-  --md-menu-item-label-text-color: var(--md-sys-color-error);
-  --md-menu-item-leading-icon-color: var(--md-sys-color-error);
-}
-
 .exp-rules {
   font-size: var(--text-body-small);
   color: var(--md-sys-color-on-surface-variant);
@@ -317,6 +312,22 @@ md-dialog.experience-dialog {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: var(--gap-l);
+}
+
+/* The image field and its preview, side by side. The preview is a fixed size so that it never overflows at 390 px. */
+.exp-image-field {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-l);
+}
+
+.exp-image-field > :first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.exp-image-field .guild-icon {
+  margin-block-start: var(--gap-s);
 }
 
 .exp-current-server {

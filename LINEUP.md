@@ -347,13 +347,17 @@ staff), et son profil et ses annonces disparaissent des lectures publiques (404)
 
 ### Revendiquer un serveur : l'invitation **permanente**
 
-`POST /lineup/guilds/claim { "invite": "<code ou lien>" }`. L'invitation sert de :
+`POST /lineup/guilds/claim { "invite": "<code ou lien>" }` ou `{ "guild_id": "<id>" }` (au moins l'un des deux).
+**Avec Moddy sur le serveur** (`has_moddy: true` dans `GET /lineup/me/guilds`), envoyer `guild_id` **seul** : il n'y a
+plus de champ d'invitation à afficher, l'API lit le serveur par le bot et crée elle-même l'invitation permanente.
+**Sans Moddy**, l'invitation reste obligatoire (`guild_id` seul : `422 invite_required`). Si `invite` et `guild_id`
+désignent deux serveurs : `422 invite_guild_mismatch`. L'invitation sert de :
 
 - **preuve** de l'identité du serveur (on la résout chez Discord pour obtenir `guild_id`) ;
 - **lien public** (« Rejoindre ») affiché sur le profil ;
 - **source du nombre de membres en ligne**.
 
-Elle est exigée **y compris pour un serveur Moddy**. Seule une invitation **qui n'expire
+Elle n'est plus exigée pour un serveur Moddy (voir ci-dessus). Seule une invitation **qui n'expire
 jamais** est acceptée (une vanity URL convient) ; sinon `422 invite_expiring`. Une
 invitation vers un groupe privé ou un ami est refusée (`invite_invalid`).
 
@@ -372,6 +376,10 @@ L'invitation est aussi exigée, avec la même règle, pour une **expérience sur
 (`kind: "guild"`, §7) et pour changer l'invitation d'un profil (`PUT /lineup/guilds/{id}`,
 qui refuse une invitation menant à un autre serveur : `422 invite_guild_mismatch`).
 
+`PUT /lineup/guilds/{id}` avec `"invite": null` demande à Moddy de générer une nouvelle invitation
+permanente ; possible seulement si Moddy est sur le serveur (sinon `422 invite_required`). Quand le bot n'a pu créer
+d'invitation nulle part, `invite.url` vaut `null` : masquer « Rejoindre ».
+
 Si l'invitation est supprimée plus tard dans Discord, le profil reste mais
 `invite.valid` passe à `false` au prochain rafraîchissement de l'instantané : inviter les
 gestionnaires à en recréer une et à l'enregistrer via `PUT`.
@@ -379,9 +387,10 @@ gestionnaires à en recréer une et à l'enregistrer via `PUT`.
 ### Lister « mes serveurs »
 
 `GET /lineup/me/guilds` rend l'union des serveurs Moddy de la session et des serveurs
-Discord que la personne gère, avec `has_moddy` (le bot y est) et `claimed` (un profil
-Lineup existe déjà). C'est l'écran de départ de « Revendiquer / gérer un serveur » :
-pour un serveur `claimed: false`, proposer le formulaire d'invitation.
+Discord que la personne gère, avec `has_moddy` (le bot y est), `claimed` (un profil
+Lineup existe déjà) et `listed` (le profil existe et est visible dans l'annuaire ; `false` sans profil). C'est l'écran
+de départ de « Revendiquer / gérer un serveur » : pour un serveur `claimed: false`, proposer « Ajouter » (sans champ
+si `has_moddy`, avec le formulaire d'invitation sinon).
 
 ---
 
@@ -557,6 +566,11 @@ retirable à la main). Table de correspondance : `catalog.DISCORD_FLAG_BADGES` (
 `routers/auth._DISCORD_FLAGS`, sans `TEAM_PSEUDO_USER` ni `BOT_HTTP_INTERACTIONS`). Le profil
 utilisateur les expose, après les badges calculés Moddy, dans l'ordre du catalogue.
 
+**Badges sur les résumés.** Un tableau `badges` (même forme) figure sur `post.guild` et `post.author`,
+`team[].user`, `experience.guild`, `GET /lineup/me` (`user.badges`) et les cartes de l'annuaire. Ces badges ne
+contiennent ni badges Discord ni `moddy_premium` : de quoi afficher la coche de vérification à côté d'un nom. Les
+badges Discord restent sur le profil utilisateur complet.
+
 ### Annonce (`Post`)
 
 Forme **publique** (flux, détail, profils). `guild` est `null` pour une annonce `user` ;
@@ -591,8 +605,8 @@ inconnus).
   "created_at": "2026-10-20T13:58:02.100000+00:00",
   "updated_at": "2026-10-20T14:03:11.482913+00:00",
   "is_expired": false,
-  "guild": { "id": "812345678901234567", "name": "Cubelands FR", "icon_url": "https://cdn.discordapp.com/icons/812345678901234567/a1b2c3.png" },
-  "author": { "id": "345678901234567890", "username": "alex", "global_name": "Alex", "avatar_url": "https://cdn.discordapp.com/avatars/345678901234567890/d4e5f6.png" }
+  "guild": { "id": "812345678901234567", "name": "Cubelands FR", "icon_url": "https://cdn.discordapp.com/icons/812345678901234567/a1b2c3.png", "nsfw": false, "badges": [] },
+  "author": { "id": "345678901234567890", "username": "alex", "global_name": "Alex", "avatar_url": "https://cdn.discordapp.com/avatars/345678901234567890/d4e5f6.png", "badges": [] }
 }
 ```
 
@@ -603,6 +617,7 @@ Points de lecture :
 - `expires_at: null` = **n'expire jamais**. `is_expired` est calculé à chaque lecture.
 - `published_at` est posé à la **première** publication et jamais remis à `null`
   (une annonce fermée puis rouverte garde sa date d'origine : elle ne « remonte » pas dans le flux).
+- `guild.nsfw` : le serveur est NSFW (thème `nsfw` ou niveau Discord 1 ou 3) ; la porte d'âge peut s'appuyer dessus, plus seulement sur le thème de l'annonce.
 - `hidden_reason` (motif de masquage) n'est présent **que dans la vue privée** (voir ci-dessous).
 - URLs d'images : `https://cdn.discordapp.com/{icons|avatars|banners|splashes}/<id>/<hash>.png` (`.gif` si le hash commence par `a_`) ; `null` si absent. Elles sont déjà construites, ne rien recomposer.
 
@@ -619,7 +634,9 @@ aussi `can_edit`.
   "guild_id": "812345678901234567",
   "name": "Cubelands FR",
   "invite_url": "https://discord.gg/cubelands",
-  "guild": null,
+  "image_url": "https://cdn.discordapp.com/icons/812345678901234567/a1b2c3.png",
+  "member_count": 4120,
+  "guild": { "id": "812345678901234567", "name": "Cubelands FR", "icon_url": "https://cdn.discordapp.com/icons/812345678901234567/a1b2c3.png", "badges": [] },
   "position": "moderator",
   "position_other": null,
   "description": "Modération du texte et du vocal, gestion des tickets.",
@@ -635,9 +652,13 @@ aussi `can_edit`.
 }
 ```
 
-- `kind: "service"` : `guild_id`, `invite_url` valent `null`, `name` est saisi à la main.
-- `guild` est **toujours `null`** (champ réservé) : pour afficher le serveur, appeler
-  `GET /lineup/guilds/{guild_id}` (qui peut répondre 404 si le serveur n'a pas de profil).
+- `kind: "service"` : `guild_id`, `invite_url` et `member_count` valent `null`, `name` est saisi à la main.
+- `image_url` et `member_count` : pour un serveur, lus dans l'invitation fournie, à la création et quand
+  l'invitation change (`image_url` du corps est ignoré). Pour un service, `image_url` est une URL https saisie
+  (≤ 500 caractères, modifiable ; `null` l'efface) et `member_count` vaut `null`. Changer l'image ne remet pas la
+  vérification à zéro.
+- `guild` : `{id, name, icon_url, badges}` quand le serveur a un profil Lineup listé, sinon `null` (aussi pour un
+  service). Plus besoin d'un `GET /lineup/guilds/{guild_id}` par expérience (qui renvoyait 404 sans profil).
 - `verification.method` : `discord_oauth` | `moddy_staff` | `moddy_staff_system` (réservé) | `null`.
 - **Vue publique** (profil d'un tiers) : exactement ci-dessus — **jamais de preuve**.
 - **Vue privée** (propriétaire, staff : `GET/POST/PATCH /lineup/me/experiences…`, profil
@@ -664,10 +685,12 @@ aussi `can_edit`.
 ```json
 { "id": "345678901234567890", "username": "alex", "global_name": "Alex", "display_name": "Alex",
   "avatar_url": "https://cdn.discordapp.com/avatars/345678901234567890/d4e5f6.png",
-  "avatar_decoration": { "asset": "a_7f3b…", "sku_id": "1144058844004233369", "url": "https://cdn.discordapp.com/avatar-decoration-presets/a_7f3b….png" } }
+  "avatar_decoration": { "asset": "a_7f3b…", "sku_id": "1144058844004233369", "url": "https://cdn.discordapp.com/avatar-decoration-presets/a_7f3b….png" },
+  "badges": [] }
 ```
 
-`display_name` = `global_name` sinon `username`. `avatar_decoration` vaut `null` sans décoration.
+`display_name` = `global_name` sinon `username`. `avatar_decoration` vaut `null` sans décoration. `badges` : voir §5
+(sans badges Discord ni `moddy_premium`).
 
 ---
 
@@ -701,7 +724,8 @@ Auth : session. Résumé de la session. **Jamais d'e-mail ni de jeton.**
     "avatar_url": "https://cdn.discordapp.com/avatars/345678901234567890/d4e5f6.png",
     "banner_url": null,
     "avatar_decoration_data": null,
-    "is_staff": false
+    "is_staff": false,
+    "badges": []
   },
   "has_lineup_scopes": true,
   "login_url": "/lineup/auth/login",
@@ -733,10 +757,12 @@ Auth : session. Serveurs que la personne peut gérer sur Lineup, triés par nom.
 
 ```json
 [
-  { "id": "812345678901234567", "name": "Cubelands FR", "icon_url": "https://cdn.discordapp.com/icons/812345678901234567/a1b2c3.png", "has_moddy": true, "claimed": true },
-  { "id": "923456789012345678", "name": "Atelier d'Alex", "icon_url": null, "has_moddy": false, "claimed": false }
+  { "id": "812345678901234567", "name": "Cubelands FR", "icon_url": "https://cdn.discordapp.com/icons/812345678901234567/a1b2c3.png", "has_moddy": true, "claimed": true, "listed": true },
+  { "id": "923456789012345678", "name": "Atelier d'Alex", "icon_url": null, "has_moddy": false, "claimed": false, "listed": false }
 ]
 ```
+
+`listed` : le profil existe et est visible dans l'annuaire (`false` sans profil).
 
 Erreurs : `401`. (Discord muet : la liste ne contient alors que les serveurs Moddy de la
 session ; utiliser `refresh-guilds` pour connaître `stale`.)
@@ -747,7 +773,7 @@ Auth : session. Corps : aucun. Relit la liste Discord en **sautant le cache** (�
 après « j'ai créé/obtenu un serveur » ou avant une revendication qui échoue en 403).
 
 ```json
-{ "guilds": [ { "id": "812345678901234567", "name": "Cubelands FR", "icon_url": "…", "has_moddy": true, "claimed": true } ], "stale": false }
+{ "guilds": [ { "id": "812345678901234567", "name": "Cubelands FR", "icon_url": "…", "has_moddy": true, "claimed": true, "listed": true } ], "stale": false }
 ```
 
 `stale: true` : Discord n'a pas répondu, `guilds` vient de la session (incomplet). Ne met
@@ -780,26 +806,32 @@ Query :
   "items": [
     { "id": "812345678901234567", "name": "Cubelands FR", "icon_url": "https://cdn.discordapp.com/icons/812345678901234567/a1b2c3.png",
       "member_count": 4120, "presence_count": 640, "theme": "gaming", "tags": ["minecraft"],
+      "description": "Le plus grand serveur de survie Minecraft francophone.", "nsfw": false,
       "badges": [ { "id": "moddy_installed", "label": { "fr": "Moddy installé", "en": "Moddy installed" }, "source": "computed" } ] }
   ],
   "next_cursor": "WyIyMDI2LTEwLTIwVDEzOjU4OjAyKzAwOjAwIiwgIjgxMjM0NTY3ODkwMTIzNDU2NyJd"
 }
 ```
 
-Les `badges` d'une carte excluent `moddy_premium` (coûteux à calculer par serveur) ; le
-profil complet l'inclut. `member_count` / `presence_count` peuvent être `null`.
+Les `badges` d'une carte excluent les badges Discord et `moddy_premium` ; le profil complet
+les inclut. `description` : description Lineup, sinon description Discord, tronquée à 160 caractères avec « … »
+(`null` sans description) ; `nsfw` : booléen (thème `nsfw` ou niveau Discord 1 ou 3). `member_count` / `presence_count` peuvent être `null`.
 Erreurs : `422 theme_invalid` · `422 cursor_invalid`.
 
 #### `POST /lineup/guilds/claim` — revendiquer un serveur
 
-Auth : session. Corps : `{ "invite": "https://discord.gg/cubelands" }` (2–200 car.).
-Réponse : **`201`** + profil serveur complet (même forme que `GET /lineup/guilds/{id}`, ci-dessous). Ordre : résolution de l'invitation → droits → doublon.
+Auth : session. Corps : `{ "invite": "https://discord.gg/cubelands" }` (2–200 car.) ou `{ "guild_id": "812345678901234567" }`
+(ou les deux ; au moins un). Avec `has_moddy: true`, `guild_id` seul suffit : l'API lit les informations du serveur et
+crée l'invitation permanente. Réponse : **`201`** + profil serveur complet (même forme que `GET /lineup/guilds/{id}`,
+ci-dessous). Ordre avec une invitation : résolution de l'invitation → droits → doublon.
 
 | Statut | `code` | Quand |
 |---|---|---|
 | 422 | `invite_invalid` | invitation malformée, hôte non Discord, ou qui ne mène pas à un serveur |
 | 404 | `invite_not_found` | invitation inconnue ou expirée |
 | 422 | `invite_expiring` | l'invitation a une date d'expiration |
+| 422 | `invite_required` | `guild_id` seul, mais Moddy n'est pas sur le serveur : demander une invitation |
+| 422 | `invite_guild_mismatch` | `invite` et `guild_id` désignent deux serveurs |
 | 403 | `lineup_guild_forbidden` | la personne ne gère pas ce serveur (§3) |
 | 403 | `guild_suspended` (objet de sanction) | serveur suspendu globalement |
 | 409 | `lineup_guild_already_claimed` | un profil existe déjà ; le corps porte `guild_id` (afficher « Ce serveur est déjà sur Lineup » avec lien vers `/guilds/{guild_id}`) |
@@ -836,10 +868,11 @@ le gère). Pas de cache serveur.
   "posts": [ /* annonces publiées et non expirées du serveur (forme publique §5), 20 max, NSFW inclus */ ],
   "team": [
     { "user": { "id": "345678901234567890", "username": "alex", "global_name": "Alex", "display_name": "Alex",
-                "avatar_url": "https://cdn.discordapp.com/avatars/345678901234567890/d4e5f6.png", "avatar_decoration": null },
+                "avatar_url": "https://cdn.discordapp.com/avatars/345678901234567890/d4e5f6.png", "avatar_decoration": null, "badges": [] },
       "position": "moderator", "position_other": null, "since": "2024-03-01" }
   ],
   "stale": false,
+  "snapshot_at": null,
   "can_manage": false
 }
 ```
@@ -847,7 +880,10 @@ le gère). Pas de cache serveur.
 - `description` = description Lineup, **avec repli sur la description Discord** ;
   `discord_description` = celle de Discord seule (pour pré-remplir un éditeur).
 - `invite.valid: false` : l'invitation du profil n'existe plus chez Discord (masquer le
-  bouton « Rejoindre », inviter les gestionnaires à la remplacer).
+  bouton « Rejoindre », inviter les gestionnaires à la remplacer). `invite.url` vaut `null` quand le bot n'a pu créer
+  d'invitation nulle part : masquer « Rejoindre » aussi.
+- `snapshot_at` : date ISO de l'instantané Discord, **pour les gestionnaires seulement** (`null` pour les autres) ; sert
+  à « mis à jour il y a… ».
 - `created_at` = date de création du **serveur** (déduite du snowflake), pas du profil Lineup.
 - `boost_tier` : `premium_tier` Discord (0–3) de l'instantané ; `null` tant que l'instantané date d'avant son ajout (rafraîchi sous 6 h, ou via `POST …/refresh`).
 - `has_moddy` : valeur de l'instantané (rafraîchie toutes les 6 h) ; `/lineup/me/guilds`
@@ -874,12 +910,12 @@ seuls les champs envoyés changent.
 | `theme` | string \| null | id du catalogue ; `null` efface |
 | `tags` | string[] | ≤ 10, `^[a-z0-9-]{2,24}$` ; non nullable |
 | `languages` | string[] | ≤ 10 ids du catalogue ; non nullable |
-| `invite` | string | nouvelle invitation **permanente du même serveur** ; (`null` ignoré) |
+| `invite` | string \| null | nouvelle invitation **permanente du même serveur** ; `null` demande à Moddy d'en générer une (seulement si Moddy est sur le serveur, sinon `422 invite_required`) |
 | `listed` | bool | non nullable |
 
 Réponse : `200` + profil serveur complet. Erreurs : `403 lineup_guild_forbidden` ·
 `403 guild_suspended` · `404 lineup_guild_not_found` (pas de profil) · `404 invite_not_found` ·
-`422 invite_invalid` / `invite_expiring` / `invite_guild_mismatch` · `503 discord_unavailable`.
+`422 invite_invalid` / `invite_expiring` / `invite_guild_mismatch` / `invite_required` · `503 discord_unavailable`.
 
 #### `DELETE /lineup/guilds/{guild_id}`
 
@@ -1169,6 +1205,7 @@ position**).
 | `kind` | `"guild"` \| `"service"` | **requis** |
 | `invite` | string | **requis** si `guild` (invitation permanente) ; interdit si `service` |
 | `name` | string | **requis** si `service` (1–100) ; **ignoré** si `guild` (repris de l'invitation) |
+| `image_url` | string \| null | service seulement : URL https ≤ 500 car. ; `null` ou absent = pas d'image ; **ignoré** si `guild` (l'icône vient de l'invitation) |
 | `position` | string | **requis**, id du catalogue |
 | `position_other` | string | obligatoire ssi `position = "other"` (1–40) |
 | `description` | string \| null | ≤ 1000 |
@@ -1181,7 +1218,8 @@ Erreurs : `409 lineup_experience_limit` (50 max) · `404 invite_not_found` · `4
 #### `PATCH /lineup/me/experiences/{exp_id}`
 
 Champs modifiables : `invite` (serveur seulement), `name` (service seulement ; ignoré pour un
-serveur), `position`, `position_other`, `description`, `start_date`, `end_date`. **`kind` est
+serveur), `image_url` (service seulement, `null` l'efface ; ignoré pour un serveur ; ne remet pas la
+vérification à zéro), `position`, `position_other`, `description`, `start_date`, `end_date`. **`kind` est
 immuable** (le champ est refusé : 422). `position` et `start_date` ne sont pas nullables ;
 `end_date: null` = « en cours ». Passer à un poste du catalogue vide `position_other`.
 
@@ -1254,12 +1292,12 @@ Un autre `status` → 422 standard.
 
 Corps facultatif `{ "note": "…" }` (≤ 500). Valide **depuis n'importe quel statut** ; méthode
 `moddy_staff`, `verified_by` = le staff ; la preuve existante est conservée et complétée
-(`staff_note`, `verified_at_by_staff`). Réponse : l'expérience. Erreur : `404 lineup_experience_not_found`.
+(`staff_note`, `verified_at_by_staff`). Réponse : l'expérience (vue privée + `user_id`). Erreur : `404 lineup_experience_not_found`.
 
 #### `POST /lineup/staff/experiences/{exp_id}/reject`
 
 Corps : `{ "reason": "…" }` (1–500, **obligatoire**, visible du propriétaire). Rejette depuis
-n'importe quel statut. Réponse : l'expérience (`status: "rejected"`, `rejection_reason`).
+n'importe quel statut. Réponse : l'expérience (`status: "rejected"`, `rejection_reason`, + `user_id`).
 Erreur : `404 lineup_experience_not_found`.
 
 #### `GET /lineup/staff/badges`
@@ -1268,17 +1306,20 @@ Query : `entity_type` (`user` \| `guild`), `limit` (1–200, déf. 100), `offset
 **manuels** attribués, du plus récent au plus ancien.
 
 ```json
-{ "items": [ { "entity_type": "guild", "entity_id": "812345678901234567", "badge": "moddy_partner",
+{ "items": [ { "entity_type": "guild", "entity_id": "812345678901234567",
+               "entity_name": "Cubelands FR", "entity_icon_url": "https://cdn.discordapp.com/icons/812345678901234567/a1b2c3.png", "badge": "moddy_partner",
                "granted_by": "100000000000000001", "granted_at": "2026-10-20T15:00:00.000000+00:00", "note": "Partenariat signé" } ] }
 ```
 
+`entity_type` est facultatif. `entity_name` et `entity_icon_url` viennent du profil Lineup de l'entité (nom et avatar
+d'une personne, nom et icône d'un serveur) ; `null` si elle n'en a pas.
 Erreur : `422 lineup_entity_type_invalid`.
 
 #### `PUT /lineup/staff/badges/{entity_type}/{entity_id}/{badge}`
 
 Corps facultatif `{ "note": "…" }` (≤ 200). Attribue (ou ré-attribue, note comprise ; idempotent)
 un badge **manuel** (`lineup_verified`, `moddy_partner`, `moddy_server`). Réponse : le badge
-comme ci-dessus. Erreurs : `422 lineup_entity_type_invalid` · `422 lineup_badge_invalid` (inconnu,
+comme ci-dessus (avec `entity_name` et `entity_icon_url`). Erreurs : `422 lineup_entity_type_invalid` · `422 lineup_badge_invalid` (inconnu,
 calculé, ou pas attribuable à ce type d'entité : `moddy_server` n'existe que pour un serveur).
 Ne vérifie pas que l'entité existe.
 
@@ -1532,7 +1573,7 @@ Une annonce sans `application` est valide (pas de bouton de candidature).
   suspendu. Les profils (serveur et utilisateur) listent au plus **20** annonces et incluent les annonces
   NSFW (liste ciblée).
 - Le NSFW est filtré dans le **flux** par `include_nsfw` (défaut `false`) ; voir §9 pour le détail.
-- Un profil serveur **non listé** ne cache pas ses annonces : elles restent dans le flux (voir §16).
+- Un profil serveur **non listé** cache aussi ses annonces : absentes du flux et du détail (404 pour un tiers ; voir §9 et §16).
 
 ---
 
@@ -1570,9 +1611,9 @@ normalement (`can_manage: true`).
 
 **NSFW** — un serveur est NSFW si son thème Lineup est `nsfw` **ou** si son `nsfw_level` Discord vaut 1
 (explicite) ou 3 (réservé aux adultes). Effets côté API : retiré de l'annuaire et des annonces du flux
-sauf `include_nsfw=true` ; badge calculé `nsfw`. **L'API ne bloque pas** `GET /lineup/guilds/{id}` ni
+sauf `include_nsfw=true` ; badge calculé `nsfw` ; `nsfw` (booléen) sur les cartes de l'annuaire et sur `post.guild`. **L'API ne bloque pas** `GET /lineup/guilds/{id}` ni
 `GET /lineup/posts/{id}` pour un serveur NSFW : c'est au front d'afficher un écran d'âge (« Contenu
-réservé aux adultes ») quand le badge `nsfw` ou le thème `nsfw` est présent, et de n'activer
+réservé aux adultes ») quand `nsfw` (carte, `post.guild`), le badge `nsfw` ou le thème `nsfw` est présent, et de n'activer
 `include_nsfw` que sur choix explicite de la personne.
 
 **Suspendu / blacklisté** — un serveur sous sanction `ban` n'a plus de profil (404), ses annonces sortent
@@ -1606,7 +1647,7 @@ Un badge a un `id`, un `label` `{fr, en}` et une `source` :
 | `discord_verified` | serveur | calculé | feature Discord `VERIFIED` |
 | `discord_partner` | serveur | calculé | feature Discord `PARTNERED` |
 | `moddy_installed` | serveur | calculé | le bot Moddy est sur le serveur (valeur de l'instantané, ≤ 6 h) |
-| `moddy_premium` | serveur **et** utilisateur | calculé | premium effectif (serveur : `premium.guild_premium_effective` ; utilisateur : abonnement actif ou attribut `PREMIUM`, coupé par une sanction globale). **Absent des cartes de l'annuaire** (coût) |
+| `moddy_premium` | serveur **et** utilisateur | calculé | premium effectif (serveur : `premium.guild_premium_effective` ; utilisateur : abonnement actif ou attribut `PREMIUM`, coupé par une sanction globale). **Absent des cartes de l'annuaire et des résumés** (coût) |
 | `nsfw` | serveur | calculé | `nsfw_level` Discord 1 ou 3 (le thème `nsfw` Lineup est distinct) |
 | `moddy_staff` | utilisateur | calculé | la personne est dans `staff_permissions` |
 | `lineup_verified` | serveur **et** utilisateur | manuel | « Vérifié par Lineup » |
@@ -1614,8 +1655,9 @@ Un badge a un `id`, un `label` `{fr, en}` et une `source` :
 | `moddy_server` | serveur | manuel | « Serveur officiel Moddy » |
 
 Les badges sont rendus dans l'ordre du catalogue. Une lecture de badge qui échoue (base, premium) est
-**silencieusement ignorée** (jamais une 500). Les badges publics Discord de la personne (HypeSquad…)
-**ne sont pas** exposés.
+**silencieusement ignorée** (jamais une 500). Les badges publics Discord de la personne (HypeSquad…,
+`source: "discord"`) sont **toujours** envoyés sur le profil utilisateur complet (`GET /lineup/users/{id}`), jamais sur
+les résumés (§5).
 
 ---
 
@@ -1670,7 +1712,8 @@ contexte entre parenthèses.
 | 409 | `lineup_report_already_handled` | | signalement déjà traité |
 | 422 | `invite_invalid` | | invitation malformée / sans serveur |
 | 422 | `invite_expiring` | | invitation non permanente |
-| 422 | `invite_guild_mismatch` | | l'invitation mène à un autre serveur |
+| 422 | `invite_guild_mismatch` | | l'invitation mène à un autre serveur (profil, ou `invite` et `guild_id` d'une revendication) |
+| 422 | `invite_required` | | `guild_id` seul sans Moddy sur le serveur (revendication), ou `invite: null` sans Moddy (`PUT`) |
 | 422 | `theme_invalid` | | thème inconnu (annuaire) |
 | 422 | `cursor_invalid` | | curseur altéré |
 | 422 | `lineup_filter_invalid` | `field` | filtre invalide (flux, mes annonces) |
@@ -1714,14 +1757,17 @@ contexte entre parenthèses.
 
 ### Flux de revendication
 
-1. `GET /lineup/me/guilds` → liste ; pour un serveur `claimed: false`, formulaire « Collez une invitation permanente »
-   avec l'aide « N'expire jamais » (§3).
+1. `GET /lineup/me/guilds` → liste ; pour un serveur `claimed: false` : si `has_moddy`, « Ajouter » envoie
+   `{ "guild_id" }` seul ; sinon formulaire « Collez une invitation permanente » avec l'aide « N'expire jamais » (§3).
+   `listed` dit « Dans l'annuaire » ou « Masqué » pour un serveur `claimed: true`.
 2. `POST /lineup/guilds/claim` → `201` : rediriger vers `/guilds/:id/manage`.
 3. Erreurs : `invite_expiring` → rappeler comment créer une invitation permanente · `invite_not_found` →
    « invitation invalide ou expirée » · `invite_invalid` → « ce n'est pas un lien d'invitation de serveur » ·
    `lineup_guild_forbidden` → « Il faut être propriétaire ou avoir *Administrateur* / *Gérer le serveur* » + bouton
    « J'ai changé mes droits » → `POST /lineup/me/refresh-guilds` puis réessayer · `lineup_guild_already_claimed` → lien
-   vers le profil · `guild_suspended` → message de sanction · `discord_unavailable` → « Réessayer ».
+   vers le profil · `guild_suspended` → message de sanction · `discord_unavailable` → « Réessayer » ·
+   `invite_required` (Moddy est parti depuis la lecture de la liste) → afficher le champ d'invitation ·
+   `invite_guild_mismatch` → « cette invitation mène à un autre serveur ».
 
 ### Traitement des erreurs importantes
 
@@ -1799,7 +1845,7 @@ encore tourné) ; les clés étrangères **internes** à Lineup sont permises. I
 | Colonne | Type | Notes |
 |---|---|---|
 | `guild_id` | `BIGINT` PK | |
-| `invite_code` | `TEXT` | invitation permanente |
+| `invite_code` | `TEXT` | invitation permanente ; `NULL` si le bot n'a pu en créer nulle part (`invite.url` nul) |
 | `description` | `TEXT` | |
 | `links` | `JSONB` `'[]'` | |
 | `theme` | `TEXT` | id du catalogue |
@@ -1824,6 +1870,8 @@ Index : `(listed, created_at DESC, guild_id DESC)` (annuaire), `(claimed_by)`.
 | `guild_id` | `BIGINT` | `CHECK (kind <> 'guild' OR guild_id IS NOT NULL)` |
 | `invite_code` | `TEXT` | |
 | `name` | `TEXT NOT NULL` | |
+| `image_url` | `TEXT` | serveur : icône lue dans l'invitation ; service : URL https saisie |
+| `member_count` | `INTEGER` | serveur : lu dans l'invitation ; `NULL` pour un service |
 | `position` | `TEXT NOT NULL` | catalogue |
 | `position_other` | `TEXT` | |
 | `description` | `TEXT` | |
@@ -1918,5 +1966,4 @@ signaleur et cible) ; index `(status, created_at DESC)`.
 - **Le NSFW n'est pas bloqué par l'API** sur les routes de détail (§9) : écran d'âge côté front.
 - **Aucune notification** n'est émise (ni au signaleur, ni à l'auteur d'une annonce masquée) : l'état se lit
   dans l'API.
-- **`guild` dans une expérience est toujours `null`** (champ réservé).
 - **`lineup_form`** : réservé (§1).

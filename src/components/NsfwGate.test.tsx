@@ -28,6 +28,15 @@ describe('isNsfw', () => {
     expect(isNsfw({})).toBe(false);
     expect(isNsfw({badges: [], theme: null})).toBe(false);
   });
+
+  it('is true for a directory card or a post whose server is NSFW', () => {
+    expect(isNsfw({nsfw: true, theme: 'gaming'})).toBe(true);
+    expect(isNsfw({nsfw: false, theme: 'gaming'})).toBe(false);
+    expect(isNsfw({theme: 'gaming', guild: {nsfw: true}})).toBe(true);
+    expect(isNsfw({theme: 'gaming', guild: {nsfw: false}})).toBe(false);
+    expect(isNsfw({theme: 'nsfw', guild: null})).toBe(true);
+    expect(isNsfw({theme: null, guild: null})).toBe(false);
+  });
 });
 
 describe('NsfwGate', () => {

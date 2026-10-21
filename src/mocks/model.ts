@@ -101,7 +101,8 @@ export interface DiscordGuild {
 /** `lineup_guild_profiles`. The Discord snapshot is read from `DiscordGuild` (fresh at each refresh). */
 export interface GuildProfileRow {
   guild_id: Snowflake;
-  invite_code: string;
+  /** Null: the bot could not create an invitation anywhere (`invite.url` is null). */
+  invite_code: string | null;
   description: string | null;
   links: Link[];
   theme: string | null;
@@ -140,6 +141,9 @@ export interface Invite {
   expires_at: IsoDateTime | null;
 }
 
+/** A manual badge as stored: `entity_name` and `entity_icon_url` come from the entity's Lineup profile when read. */
+export type StoredBadgeGrant = Omit<ManualBadgeGrant, 'entity_name' | 'entity_icon_url'>;
+
 /** `lineup_posts`. */
 export type DbPost = Omit<Post, 'is_expired' | 'guild' | 'author'> & {hidden_reason: string | null};
 
@@ -151,6 +155,10 @@ export interface DbExperience {
   guild_id: Snowflake | null;
   invite_code: string | null;
   name: string;
+  /** A server: its icon, read from the invitation. A service: an https URL the person typed. */
+  image_url: string | null;
+  /** A server only, read from the invitation. */
+  member_count: number | null;
   position: string;
   position_other: string | null;
   description: string | null;
@@ -186,7 +194,7 @@ export interface DbData {
   posts: Record<Uuid, DbPost>;
   experiences: Record<Uuid, DbExperience>;
   reports: Record<Uuid, Report>;
-  /** Manual badges, newest grants last. */
-  badges: ManualBadgeGrant[];
+  /** Manual badges, newest grants last (the name and icon of the entity are added when read). */
+  badges: StoredBadgeGrant[];
   guildListCache: Record<Snowflake, GuildListCache>;
 }

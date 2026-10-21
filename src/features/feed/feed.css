@@ -1,8 +1,4 @@
-/* The recruitment and candidate lists: one reading column. Tokens only. */
-
-.feed-page {
-  max-width: 52.5rem;
-}
+/* The recruitment and candidate lists: a grid of square tiles. Tokens only. */
 
 .feed-state {
   display: flex;
@@ -10,21 +6,37 @@
   padding-block: var(--page-gap);
 }
 
-.feed-list {
-  display: flex;
-  flex-direction: column;
+.feed-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--gap-m);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.feed-list[aria-busy='true'] {
+.feed-grid > li {
+  display: flex;
+  min-width: 0;
+}
+
+.feed-grid > li > .post-tile {
+  flex: 1;
+}
+
+/* From 15 rem a tile: 4 columns at 1400 px; 2 on a phone. */
+@media (min-width: 601px) {
+  .feed-grid {
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  }
+}
+
+.feed-grid[aria-busy='true'] {
   opacity: 0.6;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .feed-list {
+  .feed-grid {
     transition: opacity 200ms var(--ease);
   }
 }

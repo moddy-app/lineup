@@ -5,8 +5,6 @@
     "add": "Erfahrung hinzufügen",
     "edit": "Bearbeiten",
     "drag": "{{title}} verschieben",
-    "moveUp": "{{title}} nach oben",
-    "moveDown": "{{title}} nach unten",
     "moved": "{{title}}: Position {{position}} von {{total}}",
     "reordered": "Reihenfolge gespeichert",
     "orderOutdated": "Die Liste wurde anderswo geändert. Sie wurde neu geladen, verschiebe erneut.",
@@ -65,7 +63,9 @@
     "descriptionHelp": "Was Sie dort gemacht haben. Optional.",
     "startDate": "Beginn",
     "endDate": "Ende",
-    "current": "Aktuelle Rolle, kein Enddatum"
+    "current": "Aktuelle Rolle, kein Enddatum",
+    "image": "Bild (https-URL)",
+    "imageHelp": "Optional. Ein Logo oder ein Bild des Dienstes."
   },
   "warning": {
     "before": {
@@ -92,7 +92,9 @@
     "startFuture": "Das Startdatum darf nicht in der Zukunft liegen.",
     "endRequired": "Geben Sie das Enddatum an oder wählen Sie „Aktuelle Rolle“.",
     "endFuture": "Das Enddatum darf nicht in der Zukunft liegen.",
-    "endBeforeStart": "Das Ende darf nicht vor dem Beginn liegen."
+    "endBeforeStart": "Das Ende darf nicht vor dem Beginn liegen.",
+    "imageTooLong": "Höchstens {{count}} Zeichen.",
+    "imageNotHttps": "Geben Sie eine Adresse ein, die mit https:// beginnt."
   },
   "delete": {
     "title": "{{title}} löschen?",

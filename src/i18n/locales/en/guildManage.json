@@ -1,7 +1,6 @@
 {
   "title": "Server management",
   "pageTitle": "Manage {{name}}",
-  "pageDescription": "Lineup profile management",
   "unknownName": "Unnamed server",
   "notFound": {
     "title": "Server not found",
@@ -15,15 +14,6 @@
   },
   "viewProfile": "View public profile",
   "saved": "Profile saved.",
-  "sections": {
-    "label": "Page sections",
-    "profile": "Public profile",
-    "invite": "Invitation",
-    "visibility": "Visibility",
-    "posts": "Posts",
-    "discord": "Discord data",
-    "danger": "Danger zone"
-  },
   "profile": {
     "title": "Public profile",
     "description": "What people see when they open the server."
@@ -118,31 +108,12 @@
     "confirm": "Delete",
     "done": "The profile of {{name}} is deleted."
   },
-  "posts": {
-    "title": "Server posts",
-    "create": "New post",
-    "filters": "Filter by status",
-    "filter": {
-      "all": "All",
-      "published": "Published",
-      "draft": "Drafts",
-      "closed": "Closed",
-      "hidden": "Hidden"
-    },
-    "menu": "Actions for post {{title}}",
-    "emptyTitle": "No posts",
-    "emptyAll": "This server has no posts yet. Everyone who manages the server can edit all of them.",
-    "emptyTab": "No posts with this status.",
-    "hidden": "Hidden by the Moddy team: it can no longer be changed.",
-    "edit": "Edit",
-    "close": "Close",
-    "reopen": "Reopen",
-    "publish": "Publish",
-    "delete": "Delete",
-    "closed": "Post closed.",
-    "published": "Post published.",
-    "deleted": "Post deleted.",
-    "deleteTitle": "Delete this post?",
-    "deleteBody": "\"{{title}}\" will be deleted for good."
+  "newPost": "New post",
+  "pages": {
+    "profile": "Description, theme, tags, languages and links.",
+    "invite": "The invitation behind the Join button.",
+    "posts": "The posts of this server.",
+    "discord": "What Lineup reads from Discord.",
+    "settings": "Visibility and deletion."
   }
 }
