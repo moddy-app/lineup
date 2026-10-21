@@ -2267,7 +2267,33 @@ md-dialog {
 }
 
 .dropdown-popover .filter-popover-options {
-  max-height: min(16rem, 60vh);
+  max-height: min(20rem, 60vh);
+}
+
+/* The kit's menu measures (design-kit/src/css/material.css): 24px corners, 48px items, 16px corners per item, label 16px medium, 24px icons. */
+.dropdown-popover {
+  border-radius: var(--radius-xl);
+}
+
+.dropdown-popover .filter-option {
+  min-height: 48px;
+  padding: 0 12px;
+  border-radius: var(--radius-l);
+  font-size: var(--text-body);
+  font-weight: 500;
+  gap: var(--gap-m);
+}
+
+.dropdown-popover .filter-option .material-symbols-outlined {
+  font-size: 24px;
+}
+
+.dropdown-popover .filter-option:not(.destructive, [data-selected='true']) .material-symbols-outlined:first-child {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.dropdown-popover .filter-popover-head {
+  padding: 4px 12px 6px;
 }
 
 .filter-option.separated {
