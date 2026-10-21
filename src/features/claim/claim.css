@@ -1,37 +1,121 @@
-/* Claim a server (/guilds/claim). Tokens only. */
+/* My servers (/me/guilds). Tokens only. */
 
+.claim-refresh {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-s);
+}
+
+.claim-refresh-wait {
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* Lists of servers: one inner card each. */
+.claim-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.claim-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-m) var(--gap-l);
+}
+
+.claim-item-body {
+  display: flex;
+  flex: 1 1 12rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-s);
+  min-width: 0;
+}
+
+.claim-item-name {
+  max-width: 100%;
+  font-size: var(--text-body);
+}
+
+.claim-item-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.claim-item-meta .material-symbols-outlined {
+  font-size: 16px;
+}
+
+/* A fact about the server, not a state of the page: only "Moddy installed" takes the accent. */
+.claim-item-moddy .material-symbols-outlined {
+  color: var(--md-sys-color-primary);
+}
+
+.claim-item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-s);
+  margin-inline-start: auto;
+}
+
+.claim-none {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* The claim dialog. */
 .claim-form {
   display: flex;
   flex-direction: column;
   gap: var(--gap-l);
+  min-width: 0;
 }
 
-.claim-selected {
+.claim-form p {
+  margin: 0;
+  max-width: none;
+}
+
+.claim-target {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: var(--gap-m);
-  margin: 0;
+}
+
+.claim-details {
   padding: var(--gap-m) var(--gap-l);
   border-radius: var(--radius-l);
   background-color: var(--md-sys-color-surface-container);
+}
+
+.claim-details > summary {
+  cursor: pointer;
+  font-weight: 500;
   color: var(--md-sys-color-on-surface);
 }
 
-.claim-selected > span {
-  flex: 1 1 140px;
-  min-width: 0;
-  overflow-wrap: anywhere;
+.claim-details[open] > summary {
+  margin-bottom: var(--gap-m);
 }
 
 .claim-error,
 .claim-inline-error {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: var(--gap-m);
   padding: var(--gap-l);
   border-radius: var(--radius-l);
-  background-color: var(--md-sys-color-surface-container);
+  background-color: var(--md-sys-color-surface-container-high);
   color: var(--md-sys-color-on-surface);
 }
 
@@ -54,27 +138,10 @@
   color: var(--md-sys-color-on-surface-variant);
 }
 
-.claim-row {
-  flex-wrap: wrap;
-}
-
-.claim-row-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap-s);
-  margin-inline-start: auto;
-}
-
-.claim-intro h1 {
-  margin: 0 0 var(--gap-m);
-  font-size: var(--text-title);
-  letter-spacing: normal;
-}
-
-/* At phone width a long name wraps the actions under it instead of being cut. */
+/* At phone width a long name keeps its line and the actions go under it. */
 @media (max-width: 600px) {
-  .claim-row > .row-body {
-    flex: 1 1 160px;
-    min-width: 160px;
+  .claim-item-actions {
+    flex: 1 0 100%;
+    margin-inline-start: 0;
   }
 }

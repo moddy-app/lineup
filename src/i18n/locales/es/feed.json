@@ -1,43 +1,36 @@
 {
-  "title": "Anuncios",
-  "intro": "Servidores que buscan personal y personas que buscan equipo.",
+  "guild": {
+    "title": "Reclutamiento",
+    "subtitle": "Servidores de Discord buscan staff.",
+    "action": "Publicar un anuncio",
+    "emptyTitle": "Ningún servidor recluta por ahora",
+    "emptyBody": "Los anuncios de servidores aparecen aquí en cuanto se publican."
+  },
+  "user": {
+    "title": "Candidatos",
+    "subtitle": "Personas ofrecen sus servicios a servidores.",
+    "action": "Ofrecer mis servicios",
+    "emptyTitle": "Ningún candidato por ahora",
+    "emptyBody": "Los anuncios de personas aparecen aquí en cuanto se publican."
+  },
   "list": "Lista de anuncios",
   "updating": "Actualizando los resultados",
   "loadingMore": "Cargando más anuncios",
   "end": "Fin de la lista, {{count}} anuncios mostrados.",
-  "publish": {
-    "title": "Publicar un anuncio",
-    "body": "Para un servidor que gestiona o para usted.",
-    "action": "Publicar un anuncio"
-  },
   "filters": {
-    "title": "Filtros",
-    "open": "Filtros",
-    "openCount": "Filtros ({{count}})",
-    "show": "Ver anuncios",
-    "reset": "Restablecer filtros",
-    "kind": {
-      "label": "Tipo de anuncio",
-      "all": "Todos los anuncios",
-      "guild": "Servidores que reclutan",
-      "user": "Personas que buscan"
-    },
-    "q": "Búsqueda",
+    "search": "Buscar",
     "positions": "Puestos",
     "languages": "Idiomas",
     "theme": "Temática",
-    "allThemes": "Todas las temáticas",
     "compensation": "Remuneración",
-    "anyCompensation": "Todas",
-    "tags": "Etiquetas",
-    "tagsHelp": "Separadas por comas.",
-    "nsfw": "Incluir contenido para adultos"
+    "nsfw": "Contenido para adultos",
+    "nsfwHide": "Ocultar",
+    "nsfwShow": "Mostrar",
+    "reset": "Restablecer los filtros"
   },
   "empty": {
-    "noneTitle": "Todavía no hay anuncios",
-    "noneBody": "Los anuncios publicados aparecen aquí. Publique el primero.",
-    "filteredTitle": "Ningún anuncio coincide con estos filtros",
-    "filteredBody": "Quita un filtro o restablécelos para ver todos los anuncios."
+    "filteredTitle": "Ningún anuncio con estos filtros",
+    "filteredBody": "Quite un filtro para ver más anuncios."
   },
   "invalid": {
     "title": "No se pudo aplicar esta búsqueda",

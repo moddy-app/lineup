@@ -34,7 +34,9 @@
   },
   "languages": {
     "label": "Langues",
-    "more": "+{{count}}"
+    "more": "+{{count}}",
+    "line_one": "Langue :",
+    "line_other": "Langues :"
   },
   "timezone": {
     "label": "Fuseau horaire",
@@ -74,7 +76,6 @@
   },
   "experience": {
     "title": "{{position}}, {{name}}",
-    "range": "{{start}} à {{end}}",
     "present": "aujourd'hui",
     "duration": {
       "lessThanMonth": "moins d'un mois",
@@ -177,5 +178,27 @@
     "apply": "Postuler",
     "dm": "Contacter en MP",
     "dmHint": "Ouvre le profil de l'auteur. Le contact se fait en message privé sur Discord."
+  },
+  "verification": {
+    "moddy_staff": "Équipe Moddy",
+    "moddy_server": "Serveur officiel Moddy",
+    "lineup_verified_guild": "Serveur vérifié",
+    "lineup_verified_user": "Compte vérifié"
+  },
+  "settings": {
+    "title": "Mon espace",
+    "managed": "Serveurs gérés",
+    "nav": {
+      "profile": "Profil",
+      "experiences": "Expériences",
+      "posts": "Annonces",
+      "guilds": "Serveurs"
+    }
+  },
+  "filters": {
+    "open": "Filtres",
+    "add": "Ajouter un filtre",
+    "allUsed": "Tous les filtres sont utilisés",
+    "remove": "Retirer"
   }
 }

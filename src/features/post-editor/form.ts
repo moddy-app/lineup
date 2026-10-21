@@ -364,7 +364,8 @@ export function validateStep(step: StepId, form: FormState, rules: Rules, editin
           fail('commitment.openings', 'between', {min: openingsMin, max: openingsMax});
         }
       }
-      if (form.languages.length > limits.max_languages) fail('languages', 'languagesMax', {count: limits.max_languages});
+      if (form.languages.length > limits.max_languages)
+        fail('languages', 'languagesMax', {count: limits.max_languages});
       if (form.timezone.trim() !== '' && !isValidTimezone(form.timezone.trim())) fail('timezone', 'timezone');
       break;
     }
@@ -519,9 +520,7 @@ export function formFromPost(post: Post): FormState {
       key: newRequirementKey(),
       type: requirement.type,
       text:
-        typeof requirement.value === 'number' || typeof requirement.value === 'string'
-          ? String(requirement.value)
-          : '',
+        typeof requirement.value === 'number' || typeof requirement.value === 'string' ? String(requirement.value) : '',
       flag: typeof requirement.value === 'boolean' ? requirement.value : true,
       langs: Array.isArray(requirement.value) ? requirement.value : [],
       label: requirement.label ?? '',

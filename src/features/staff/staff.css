@@ -1,74 +1,105 @@
-/* Staff console: layout, section links, queue items. Kit tokens only. */
+/* Staff console: sections, status chips, dense rows. Kit tokens only.
+   The layout and the side navigation reuse the .settings-* classes. */
 
-.staff-console {
+.staff-main {
+  max-width: 920px;
+}
+
+.staff-section {
   display: flex;
   flex-direction: column;
-  gap: var(--page-gap);
+  gap: var(--gap-m);
   min-width: 0;
 }
 
-.staff-title {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--gap-m);
-}
-
-.staff-intro {
-  max-width: none;
-  margin: 0;
-}
-
-.staff-nav {
+.staff-section-head {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
-}
-
-.staff-nav a {
-  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  height: 40px;
-  padding-inline: 12px 16px;
+  gap: var(--gap-s) var(--gap-l);
+}
+
+.staff-section-title {
+  margin: 0;
+  font-size: var(--text-subtitle);
+  color: var(--md-sys-color-on-surface);
+}
+
+/* Selectable status chips */
+
+.staff-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-s);
+}
+
+.staff-chip {
+  box-sizing: border-box;
+  height: 28px;
+  padding: 0 12px;
+  border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--radius-full);
-  font-size: var(--text-body-small);
-  font-weight: 500;
+  background: transparent;
   color: var(--md-sys-color-on-surface-variant);
-  text-decoration: none;
+  font-family: inherit;
+  font-size: var(--text-label);
+  line-height: 1;
   white-space: nowrap;
+  cursor: pointer;
 }
 
-.staff-nav a .material-symbols-outlined {
-  font-size: 22px;
-}
-
-.staff-nav a[aria-current='page'] {
+.staff-chip[aria-pressed='true'] {
+  border-color: transparent;
   background-color: var(--md-sys-color-secondary-container);
   color: var(--md-sys-color-on-secondary-container);
+  font-weight: 600;
 }
 
-.staff-nav a[aria-current='page'] .material-symbols-outlined {
-  font-variation-settings: 'FILL' 1;
-}
-
-.staff-nav a:focus-visible {
+.staff-chip:focus-visible,
+.staff-rules summary:focus-visible,
+.staff-evidence summary:focus-visible {
   outline: 2px solid var(--md-sys-color-primary);
   outline-offset: 2px;
 }
 
 @media (hover: hover) {
-  .staff-nav a:not([aria-current='page']):hover {
+  .staff-chip[aria-pressed='false']:hover {
     background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
-    color: var(--md-sys-color-on-surface);
   }
 }
 
-/* Lists and items */
+/* Folded text: the rules, the evidence */
+
+.staff-rules,
+.staff-evidence {
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.staff-rules summary,
+.staff-evidence summary {
+  width: fit-content;
+  cursor: pointer;
+}
+
+.staff-rules ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+  margin: var(--gap-s) 0 0;
+  padding-inline-start: 1.2em;
+}
+
+.staff-evidence .staff-facts {
+  margin-top: var(--gap-s);
+}
+
+/* Dense list: one row per item, hairlines between, actions at the right */
 
 .staff-items {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-l);
+  gap: var(--gap-s);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -76,10 +107,19 @@
 
 .staff-item {
   display: flex;
-  flex-direction: column;
-  gap: var(--gap-m);
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-m) var(--gap-l);
   min-width: 0;
-  padding: var(--gap-l);
+}
+
+.staff-item-main {
+  display: flex;
+  flex: 1 1 22rem;
+  flex-direction: column;
+  gap: var(--gap-s);
+  min-width: 0;
 }
 
 .staff-item-head {
@@ -111,30 +151,27 @@
   overflow-wrap: anywhere;
 }
 
-.staff-item .experience-row {
-  padding: 0;
-  background: none;
-}
-
 .staff-item-actions {
   display: flex;
+  flex: 0 0 auto;
   flex-wrap: wrap;
+  align-items: center;
   justify-content: flex-end;
   gap: var(--gap-s);
 }
 
 .staff-person {
   display: inline-flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: var(--gap-s);
   min-width: 0;
+  max-width: 100%;
 }
 
 .staff-person-name {
+  min-width: 0;
   font-weight: 600;
   color: var(--md-sys-color-on-surface);
-  overflow-wrap: anywhere;
 }
 
 .staff-facts {
@@ -167,35 +204,47 @@
   color: var(--md-sys-color-error);
 }
 
-.staff-filter {
-  max-width: 320px;
-}
-
 .staff-more {
   display: flex;
   justify-content: center;
 }
 
-.staff-steps {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-s);
-  margin: 0;
-  padding-inline-start: 1.2em;
-  font-size: var(--text-body-small);
-  color: var(--md-sys-color-on-surface-variant);
-}
+/* Forms: the badge grant, the post lookup */
 
 .staff-form {
-  margin-top: var(--gap-l);
   display: flex;
   flex-direction: column;
-  gap: var(--gap-l);
+  gap: var(--gap-m);
 }
 
-.staff-form p {
-  max-width: none;
-  margin: 0;
+.staff-form-row,
+.staff-lookup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--gap-m);
+}
+
+.staff-form-row > *,
+.staff-lookup > .field {
+  flex: 1 1 12rem;
+  min-width: 0;
+}
+
+.staff-form-row > md-filled-button,
+.staff-lookup > md-filled-button {
+  flex: 0 0 auto;
+  margin-top: 8px;
+}
+
+.staff-card > .staff-found {
+  margin-top: var(--gap-l);
+}
+
+.staff-found {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
 }
 
 .staff-dialog-body {
@@ -223,18 +272,6 @@
   font-size: 20px;
 }
 
-.staff-lookup {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: var(--gap-m);
-}
-
-.staff-lookup .field {
-  flex: 1 1 280px;
-  min-width: 0;
-}
-
 .staff-reason {
   padding: var(--gap-m);
   border-radius: var(--radius-l);
@@ -256,12 +293,9 @@
   font-size: 22px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .staff-nav a {
-    transition: background-color 150ms var(--ease);
+@media (max-width: 600px) {
+  .staff-item-actions {
+    flex-basis: 100%;
+    justify-content: flex-start;
   }
-}
-
-.staff-steps + p {
-  margin-top: var(--gap-m);
 }

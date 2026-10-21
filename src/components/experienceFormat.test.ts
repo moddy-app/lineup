@@ -61,9 +61,9 @@ describe('formatDuration (French)', () => {
 
 describe('formatRange (French)', () => {
   it('names the month and year, without a time zone shift', () => {
-    expect(formatRange('2024-03-01', null, t)).toBe("mars 2024 à aujourd'hui");
-    expect(formatRange('2021-01-01', '2023-03-31', t)).toBe('janvier 2021 à mars 2023');
-    expect(formatRange('2024-01-01', '2024-12-31', t)).toBe('janvier 2024 à décembre 2024');
+    expect(formatRange('2024-03-01', null, t)).toBe("mars 2024 – aujourd'hui");
+    expect(formatRange('2021-01-01', '2023-03-31', t)).toBe('janvier 2021 – mars 2023');
+    expect(formatRange('2024-01-01', '2024-12-31', t)).toBe('janvier 2024 – décembre 2024');
   });
 });
 

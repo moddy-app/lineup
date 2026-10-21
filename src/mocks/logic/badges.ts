@@ -71,3 +71,12 @@ export function userBadges(env: Env, user: DbUser): Badge[] {
   ids.push(...manualBadges(env, 'user', user.id));
   return inCatalogOrder(ids);
 }
+
+/**
+ * The badges of a summary (`post.guild`, `post.author`, `team[].user`, `GET /lineup/me`):
+ * the same as the full profile, without Discord's (they have no place next to a name).
+ * Not in the real API yet (docs/backend-notes.md, "Badges sur les résumés").
+ */
+export function summaryBadges(badges: Badge[]): Badge[] {
+  return badges.filter((entry) => entry.source !== 'discord' && !entry.id.startsWith('discord_'));
+}

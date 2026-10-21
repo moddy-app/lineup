@@ -41,7 +41,7 @@
       "verify": "Verificar conserva la prueba existente y añade su nota.",
       "reject": "Rechazar requiere un motivo, que la persona puede leer."
     },
-    "loaded": "{{n}} cargadas en esta lista.",
+    "evidence": "Prueba",
     "updated": "Modificada",
     "facts": {
       "requestedAt": "Revisión solicitada",
@@ -114,7 +114,6 @@
       "target": "Abra primero el destino. Resolver o descartar no modifica el destino: oculta el anuncio por separado.",
       "once": "Una denuncia decidida no se puede volver a decidir."
     },
-    "loaded": "{{n}} cargadas en esta lista.",
     "resolve": {
       "action": "Resolver",
       "title": "Marcar como resuelta",
@@ -147,7 +146,6 @@
       "text": "No se ha concedido ninguna insignia para este filtro."
     },
     "grantedBy": "Concedida por",
-    "openEntity": "Abrir perfil ({{badge}}, {{id}})",
     "revoke": {
       "action": "Retirar",
       "title": "Retirar esta insignia",
@@ -176,10 +174,9 @@
       "label": "ID o enlace del anuncio",
       "hint": "Pegue el UUID o la dirección del anuncio.",
       "invalid": "No se reconoce ningún ID de anuncio.",
-      "submit": "Buscar"
+      "submit": "Cargar"
     },
     "empty": {
-      "title": "Ningún anuncio seleccionado",
       "text": "Pegue un ID o un enlace para ver su estado y ocultarlo."
     },
     "reason": "Motivo:",

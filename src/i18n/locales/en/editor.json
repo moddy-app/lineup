@@ -1,8 +1,6 @@
 {
   "titleNew": "New post",
   "titleEdit": "Edit post",
-  "introNew": "Eight steps, saved on this device as you go. You can publish or keep a draft at the end.",
-  "introEdit": "Change the steps you need, then save from the last one. Only the changed fields are sent.",
   "count": "{{used}} / {{max}}",
   "restored": {
     "text": "Local draft restored, saved",
@@ -10,29 +8,29 @@
   },
   "stepper": {
     "label": "Post steps",
-    "count": "Step {{current}} of {{total}}",
     "state": {
       "current": "current step",
       "done": "done",
       "error": "needs fixing",
       "todo": "not seen yet"
-    }
+    },
+    "compact": "Step {{current}} of {{total}} · {{name}}"
   },
   "steps": {
     "type": {
       "short": "Type",
       "title": "Post type",
-      "intro": "A server post recruits for a server you manage. A personal post presents someone looking for a team."
+      "intro": "Choose who publishes. This cannot be changed later."
     },
     "content": {
       "short": "Content",
       "title": "Title and description",
-      "intro": "Say who you are or what the server offers, in concrete terms."
+      "intro": "Say who you are or what the server offers."
     },
     "positions": {
       "short": "Roles",
       "title": "Roles",
-      "intro": "The roles wanted or aimed at. Choose \"Other\" to write your own names."
+      "intro": "Pick the roles, or \"Other\" to write your own."
     },
     "requirements": {
       "short": "Requirements",
@@ -42,26 +40,26 @@
     "application": {
       "short": "Applying",
       "title": "How to apply",
-      "intro": "How interested people get in touch. Optional."
+      "intro": "How people contact you. Optional."
     },
     "commitment": {
       "short": "Commitment",
       "title": "Commitment, languages and time zone",
-      "intro": "Every field is optional."
+      "intro": "Everything is optional."
     },
     "extras": {
       "short": "Options",
       "title": "Theme, tags and expiry",
-      "intro": "Helps sort and find the post. Everything is optional."
+      "intro": "Helps sort and find the post. Optional."
     },
     "review": {
       "short": "Review",
       "title": "Review and send",
-      "intro": "Check each step. A published post shows in the feed right away."
+      "intro": "Check before sending. A published post shows in the feed right away."
     }
   },
   "actions": {
-    "next": "Continue",
+    "next": "Next",
     "previous": "Back",
     "publish": "Publish",
     "republish": "Publish again",
@@ -92,8 +90,8 @@
         "hint": "For a server you manage that has a Lineup profile."
       },
       "user": {
-        "title": "I am looking for a team",
-        "hint": "A post in your name, with your verified experiences."
+        "title": "Offer my services",
+        "hint": "A post in your name, to find a team."
       }
     },
     "guildLegend": "Server",
@@ -111,11 +109,10 @@
     "title": "Title",
     "titleHint": "{{min}} to {{max}} characters",
     "description": "Description",
-    "descriptionHint": "{{min}} to {{max}} characters"
+    "descriptionHint": "{{min}} to {{max}} characters. Markdown is supported."
   },
   "positions": {
     "legend": "Roles",
-    "hint": "Up to {{max}} roles.",
     "otherLegend": "\"Other\" names",
     "otherHint": "One name per role, {{max}} characters at most.",
     "otherLabel": "Name {{n}}",
@@ -123,7 +120,6 @@
     "addOther": "Add a name"
   },
   "requirements": {
-    "hint": "Up to {{max}} requirements.",
     "none": "No requirement yet.",
     "add": "Add a requirement",
     "item": "Requirement {{n}}",
@@ -139,7 +135,8 @@
     "languages": "Languages required",
     "noValue": "This requirement has no value to enter.",
     "verified": "Lineup verification planned",
-    "verifiedHint": "Lineup does not check any application yet: the post only shows that verification is planned."
+    "verifiedHint": "Lineup does not check anything yet: the post only states that a check is planned.",
+    "counter": "{{used}} of {{max}} requirements"
   },
   "application": {
     "type": "Application method",
@@ -158,7 +155,6 @@
     "compensation": "Compensation",
     "compensationNone": "Not specified",
     "languages": "Languages",
-    "languagesHint": "Up to {{max}} languages.",
     "timezone": "Time zone",
     "timezoneHint": "IANA name (Europe/Paris) or offset UTC+02:00",
     "useBrowserZone": "Use {{zone}}"
@@ -178,7 +174,6 @@
     "expiryClear": "Never expires",
     "featured": "Featured experience",
     "featuredNone": "None",
-    "featuredHint": "Only your verified experiences are offered.",
     "featuredEmpty": "You have no verified experience.",
     "featuredLink": "Manage my experiences",
     "featuredLoading": "Loading your experiences.",
@@ -218,7 +213,6 @@
   },
   "preview": {
     "title": "Preview",
-    "hint": "The card as it appears in the feed.",
     "titlePlaceholder": "Your post title",
     "descriptionPlaceholder": "The description will show here."
   },

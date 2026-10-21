@@ -1,4 +1,4 @@
-/* My profile editor: the form column and the live summary. Tokens only. */
+/* My profile: panels, then a bar with Save / Cancel while there are changes. Tokens only. */
 
 .me-form {
   display: flex;
@@ -7,18 +7,38 @@
   min-width: 0;
 }
 
-.me-intro,
-.me-help {
+.settings-panel .me-help,
+.me-actionbar .me-help {
   margin: 0;
   max-width: none;
   font-size: var(--text-body-small);
   color: var(--md-sys-color-on-surface-variant);
 }
 
-.me-error {
+.settings-panel .me-error,
+.me-actionbar .me-error {
   margin: 0;
+  max-width: none;
   font-size: var(--text-body-small);
   color: var(--md-sys-color-error);
+}
+
+.me-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-s);
+}
+
+.me-preview md-text-button {
+  margin-inline-start: -12px;
+}
+
+.me-preview-body {
+  align-self: stretch;
+  padding: var(--gap-l);
+  border-radius: var(--radius-l);
+  background-color: var(--md-sys-color-surface-container);
 }
 
 .me-links {
@@ -35,9 +55,6 @@
   grid-template-columns: minmax(0, 2fr) minmax(0, 3fr) auto;
   align-items: start;
   gap: var(--gap-m);
-  padding: var(--gap-l);
-  border-radius: var(--radius-l);
-  background-color: var(--md-sys-color-surface-container);
 }
 
 .me-link md-icon-button {
@@ -47,6 +64,7 @@
 @media (max-width: 700px) {
   .me-link {
     grid-template-columns: minmax(0, 1fr) auto;
+    padding-bottom: var(--gap-l);
   }
 
   .me-link > :nth-child(2) {
@@ -60,14 +78,32 @@
 }
 
 .me-count {
+  margin-inline-end: auto;
   font-size: var(--text-body-small);
   color: var(--md-sys-color-on-surface-variant);
 }
 
 .me-languages {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
   gap: var(--gap-s) var(--gap-l);
+}
+
+.me-language {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-s);
+}
+
+.me-language img {
+  display: block;
+  height: 16px;
+  width: auto;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-xs);
+  object-fit: cover;
+  outline: 1px solid var(--md-sys-color-outline-variant);
+  outline-offset: -1px;
 }
 
 .me-zone-suggestion {
@@ -82,53 +118,24 @@
   font-size: var(--text-body-small);
 }
 
-.me-summary {
+.me-actionbar {
+  position: sticky;
+  bottom: var(--page-gap);
+  z-index: 4;
   display: flex;
-  flex-direction: column;
-  gap: var(--gap-l);
-}
-
-.me-summary h2 {
-  margin: 0;
-  font-size: var(--text-subtitle);
-}
-
-.me-summary-head {
-  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: var(--gap-l);
-  min-width: 0;
-}
-
-.me-summary-head .row-body {
-  align-items: flex-start;
-  gap: var(--gap-s);
-}
-
-.me-summary-list {
-  display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   gap: var(--gap-m);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  font-size: var(--text-body-small);
+  padding: var(--gap-m) var(--gap-l);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--radius-xl);
+  background-color: var(--md-sys-color-surface-container-lowest);
 }
 
-.me-summary-list li {
+.me-actionbar-buttons {
   display: flex;
-  align-items: flex-start;
+  flex-wrap: wrap;
   gap: var(--gap-m);
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-
-.me-summary-list .material-symbols-outlined {
-  flex-shrink: 0;
-  font-size: 20px;
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-.me-form .card-actions {
-  align-items: center;
+  margin-inline-start: auto;
 }

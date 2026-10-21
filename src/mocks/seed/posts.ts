@@ -723,6 +723,23 @@ export function seedPosts(now: Date): DbPost[] {
         status: 'draft',
       }),
     ),
+    // Alex has a `lineup_verified` badge: a personal post by a verified account, visible in the feed.
+    make(
+      45,
+      userPost(U.alex, {
+        title: 'Fondateur de serveur, disponible pour conseiller une équipe de modération',
+        description:
+          "J'ai monté et animé un serveur de développement de jeux de 2 700 membres. Je peux aider une équipe à structurer sa modération : règlement, rôles, procédure de sanction, formation des nouveaux.\n\nMissions courtes de préférence.",
+        positions: ['community_manager', 'moderator'],
+        application: dm,
+        languages: ['fr', 'en'],
+        timezone: 'Europe/Paris',
+        commitment: commit(5, 'negotiable', null),
+        theme: 'tech',
+        tags: ['moderation', 'formation'],
+        published: 4,
+      }),
+    ),
   ];
 }
 

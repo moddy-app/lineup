@@ -8,7 +8,9 @@ import {routes} from './routes';
  * LINEUP.md section 6, route by route: method, path and who may call it. 41 routes, of which
  * `GET /lineup/auth/login` is a browser navigation (never a request), plus the dashboard's `POST /auth/logout`.
  */
-const DOC: ReadonlyArray<readonly [method: string, path: string, auth: 'public' | 'optional' | 'session' | 'staff' | 'any_session']> = [
+const DOC: ReadonlyArray<
+  readonly [method: string, path: string, auth: 'public' | 'optional' | 'session' | 'staff' | 'any_session']
+> = [
   ['GET', '/lineup/me', 'session'],
   ['GET', '/lineup/me/guilds', 'session'],
   ['POST', '/lineup/me/refresh-guilds', 'session'],

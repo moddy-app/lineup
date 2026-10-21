@@ -1,14 +1,12 @@
 {
   "title": "Servidores",
-  "intro": "Os servidores do Discord que recrutam staff no Lineup. Abra um perfil para ver a equipe e os anúncios abertos.",
-  "claim": {
-    "action": "Reivindicar um servidor"
-  },
+  "subtitle": "Os servidores do Discord que recrutam staff. Abra um perfil para ver a equipe e os anúncios.",
+  "add": "Adicionar meu servidor",
   "filters": {
     "search": "Buscar servidores",
     "theme": "Tema",
-    "themeAll": "Todos os temas",
-    "nsfw": "Incluir servidores 18+",
+    "adult": "Conteúdo adulto",
+    "adultYes": "Incluir servidores 18+",
     "clear": "Limpar filtros"
   },
   "list": {
@@ -16,10 +14,8 @@
   },
   "card": {
     "unknownName": "Servidor sem nome",
-    "noCounts": "Membros desconhecidos",
-    "members_one": "{{value}} membro",
-    "members_other": "{{value}} membros",
-    "online": "{{value}} online"
+    "members_one": "membro",
+    "members_other": "membros"
   },
   "empty": {
     "title": "Nenhum servidor ainda",

@@ -1,35 +1,48 @@
 {
-  "title": "Reivindicar um servidor",
-  "intro": "Reivindicar um servidor cria o perfil dele no Lineup. Só aparecem os servidores dos quais você é dono ou onde tem a permissão de Administrador ou Gerenciar servidor.",
+  "title": "Servidores",
+  "description": "Os servidores do Discord que você gerencia",
   "unknownName": "Servidor sem nome",
   "success": "{{name}} está no Lineup.",
-  "list": {
-    "title": "Seus servidores",
-    "label": "Servidores que você pode gerenciar",
-    "refresh": "Atualizar a lista",
-    "refreshIn": "Atualizar em {{seconds}} s",
-    "refreshed": "Lista lida novamente do Discord.",
-    "withModdy": "O Moddy está instalado",
-    "withoutModdy": "Sem o Moddy",
-    "claimed": "No Lineup",
-    "profile": "Perfil",
+  "refresh": {
+    "label": "Atualizar a lista",
+    "in": "Atualizar em {{seconds}} s",
+    "done": "Lista lida novamente do Discord."
+  },
+  "onLineup": {
+    "title": "No Lineup",
+    "label": "Servidores no Lineup",
+    "listed": "No diretório",
+    "unlisted": "Oculto",
     "manage": "Gerenciar",
-    "claim": "Reivindicar",
-    "emptyTitle": "Nenhum servidor para reivindicar",
+    "profile": "Ver o perfil"
+  },
+  "toAdd": {
+    "title": "Para adicionar",
+    "label": "Servidores para adicionar",
+    "withModdy": "Moddy instalado",
+    "add": "Adicionar",
+    "withInvite": "Adicionar com um convite",
+    "none": "Todos os seus servidores já estão no Lineup."
+  },
+  "list": {
+    "emptyTitle": "Nenhum servidor para gerenciar",
     "emptyBody": "Aqui só aparecem os servidores dos quais você é dono ou onde tem a permissão de Administrador ou Gerenciar servidor. Se acabou de criar um, atualize a lista.",
     "reauthTitle": "Autorize o Lineup a ler seus servidores",
     "reauthBody": "Sua sessão vem do painel do Moddy e não tem essa permissão. Entre novamente com o Discord.",
     "reauthAction": "Entrar novamente"
   },
-  "form": {
-    "title": "Convite do servidor",
-    "body": "Cole um link de convite que nunca expira. Ele prova que o servidor é seu e vira o botão Entrar do perfil.",
+  "dialog": {
+    "title": "Adicionar {{name}}",
+    "titleFree": "Adicionar um servidor",
+    "intro": "Cole um link de convite para {{name}} que nunca expire. Ele vira o botão Entrar do perfil.",
+    "introModdy": "O Moddy já está em {{name}}, mas o Lineup ainda pede um convite que nunca expire. Crie um no Discord e cole aqui.",
+    "introFree": "Cole um link de convite que nunca expire para um servidor que você gerencia. Ele prova que o servidor é seu e vira o botão Entrar do perfil.",
+    "how": "Como criar um convite permanente",
     "label": "Link ou código de convite",
     "placeholder": "https://discord.gg/seu-codigo",
     "hint": "O código sozinho também funciona.",
-    "selected": "Convite de {{name}}",
-    "deselect": "Remover",
-    "submit": "Reivindicar",
+    "cancel": "Cancelar",
+    "submit": "Adicionar",
     "submitting": "Verificando..."
   },
   "errors": {

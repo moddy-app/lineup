@@ -1,38 +1,48 @@
 {
   "title": "Gestão do servidor",
   "pageTitle": "Gerenciar {{name}}",
-  "heading": "Gerenciar {{name}}",
+  "pageDescription": "Gestão do perfil no Lineup",
   "unknownName": "Servidor sem nome",
   "notFound": {
     "title": "Servidor não encontrado",
-    "body": "Este servidor não tem perfil no Lineup. Reivindique-o primeiro na página de reivindicação.",
+    "body": "Este servidor não tem perfil no Lineup. Adicione-o primeiro na página Servidores.",
     "action": "Ver servidores"
   },
   "forbidden": {
     "title": "Você não gerencia este servidor",
-    "body": "É preciso ser dono do servidor ou ter a permissão de Administrador ou Gerenciar servidor. Se você acabou de receber esses direitos, leia seus servidores de novo na página de reivindicação.",
+    "body": "É preciso ser dono do servidor ou ter a permissão de Administrador ou Gerenciar servidor. Se você acabou de receber esses direitos, atualize a lista na página Servidores.",
     "action": "Ver o perfil"
   },
-  "status": {
-    "listed": "No diretório",
-    "unlisted": "Não listado"
-  },
-  "viewProfile": "Ver o perfil",
+  "viewProfile": "Ver o perfil público",
   "saved": "Perfil salvo.",
-  "editor": {
+  "sections": {
+    "label": "Seções da página",
+    "profile": "Perfil público",
+    "invite": "Convite",
+    "visibility": "Visibilidade",
+    "posts": "Anúncios",
+    "discord": "Dados do Discord",
+    "danger": "Zona de perigo"
+  },
+  "profile": {
     "title": "Perfil público",
+    "description": "O que as pessoas veem ao abrir o servidor."
+  },
+  "bar": {
     "unsaved": "Alterações não salvas",
     "save": "Salvar",
     "saving": "Salvando...",
-    "reset": "Descartar alterações"
+    "reset": "Cancelar"
   },
   "description": {
     "title": "Descrição",
     "label": "Descrição do servidor",
-    "hint": "Deixe vazio para mostrar a descrição do Discord.",
-    "discordTitle": "Descrição do Discord",
+    "hint": "Markdown aceito. Deixe vazio para mostrar a descrição do Discord.",
+    "discordTitle": "Descrição do Discord:",
     "discordNone": "Este servidor não tem descrição no Discord.",
-    "useDiscord": "Usar a descrição do Discord"
+    "useDiscord": "Usar a descrição do Discord",
+    "preview": "Pré-visualização",
+    "hidePreview": "Ocultar a pré-visualização"
   },
   "links": {
     "title": "Links",
@@ -43,7 +53,7 @@
     "add": "Adicionar um link"
   },
   "topics": {
-    "title": "Tema, tags e idiomas"
+    "title": "Tema e tags"
   },
   "theme": {
     "label": "Tema",
@@ -58,9 +68,11 @@
   },
   "invite": {
     "title": "Convite",
-    "current": "Convite atual:",
-    "valid": "Está funcionando.",
-    "lost": "Não existe mais no Discord: substitua-a.",
+    "description": "O link do botão Entrar do perfil.",
+    "current": "Convite atual",
+    "valid": "Válido",
+    "lost": "Não encontrado no Discord",
+    "lostHelp": "Ele não existe mais no Discord: substitua-o.",
     "none": "Nenhum convite salvo.",
     "label": "Novo convite",
     "placeholder": "https://discord.gg/seu-codigo",
@@ -88,11 +100,6 @@
     "title": "Dados do Discord",
     "body": "Nome, ícone e contagens são lidos de novo a cada 6 horas. Você pode forçar a leitura uma vez por minuto.",
     "members": "Membros",
-    "online": "Online",
-    "invite": "Convite:",
-    "inviteValid": "válido",
-    "inviteLost": "não encontrado no Discord",
-    "noInvite": "nenhum",
     "done": "Dados do Discord atualizados.",
     "staleDone": "O Discord não respondeu: os dados antigos foram mantidos.",
     "refresh": "Atualizar agora",
@@ -100,8 +107,8 @@
     "waitIn": "Disponível em {{seconds}} s"
   },
   "danger": {
-    "title": "Excluir o perfil",
-    "body": "O perfil sai do diretório e os anúncios do servidor são fechados. O servidor do Discord não é afetado.",
+    "title": "Zona de perigo",
+    "body": "Excluir o perfil o tira do diretório e fecha os anúncios do servidor. O servidor do Discord não é afetado.",
     "action": "Excluir o perfil",
     "confirmTitle": "Excluir o perfil de {{name}}?",
     "confirmBody": "O que acontece:",
@@ -114,14 +121,15 @@
   "posts": {
     "title": "Anúncios do servidor",
     "create": "Novo anúncio",
-    "tabs": "Status dos anúncios",
-    "tab": {
+    "filters": "Filtrar por status",
+    "filter": {
       "all": "Todos",
       "published": "Publicados",
       "draft": "Rascunhos",
       "closed": "Fechados",
       "hidden": "Ocultos"
     },
+    "menu": "Ações do anúncio {{title}}",
     "emptyTitle": "Nenhum anúncio",
     "emptyAll": "Este servidor ainda não tem anúncios. Quem gerencia o servidor pode editar todos.",
     "emptyTab": "Nenhum anúncio com este status.",

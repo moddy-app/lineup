@@ -1,38 +1,48 @@
 {
   "title": "Gestión del servidor",
   "pageTitle": "Gestionar {{name}}",
-  "heading": "Gestionar {{name}}",
+  "pageDescription": "Gestión del perfil de Lineup",
   "unknownName": "Servidor sin nombre",
   "notFound": {
     "title": "Servidor no encontrado",
-    "body": "Este servidor no tiene perfil en Lineup. Reclámelo primero desde la página de reclamación.",
+    "body": "Este servidor no tiene perfil en Lineup. Añádalo primero desde la página Servidores.",
     "action": "Ver servidores"
   },
   "forbidden": {
     "title": "No gestionas este servidor",
-    "body": "Hay que ser propietario del servidor, o tener el permiso de Administrador o Gestionar servidor. Si acaba de recibir estos permisos, vuelva a leer sus servidores desde la página de reclamación.",
+    "body": "Hay que ser propietario del servidor, o tener el permiso de Administrador o Gestionar servidor. Si acaba de recibir estos permisos, actualice la lista desde la página Servidores.",
     "action": "Ver el perfil"
   },
-  "status": {
-    "listed": "En el directorio",
-    "unlisted": "No listado"
-  },
-  "viewProfile": "Ver el perfil",
+  "viewProfile": "Ver el perfil público",
   "saved": "Perfil guardado.",
-  "editor": {
+  "sections": {
+    "label": "Secciones de la página",
+    "profile": "Perfil público",
+    "invite": "Invitación",
+    "visibility": "Visibilidad",
+    "posts": "Anuncios",
+    "discord": "Datos de Discord",
+    "danger": "Zona de peligro"
+  },
+  "profile": {
     "title": "Perfil público",
+    "description": "Lo que ve quien abre el servidor."
+  },
+  "bar": {
     "unsaved": "Cambios sin guardar",
     "save": "Guardar",
     "saving": "Guardando...",
-    "reset": "Descartar cambios"
+    "reset": "Cancelar"
   },
   "description": {
     "title": "Descripción",
     "label": "Descripción del servidor",
-    "hint": "Déjalo vacío para mostrar la descripción de Discord.",
-    "discordTitle": "Descripción de Discord",
+    "hint": "Se admite Markdown. Déjelo vacío para mostrar la descripción de Discord.",
+    "discordTitle": "Descripción de Discord:",
     "discordNone": "Este servidor no tiene descripción en Discord.",
-    "useDiscord": "Usar la descripción de Discord"
+    "useDiscord": "Usar la descripción de Discord",
+    "preview": "Vista previa",
+    "hidePreview": "Ocultar la vista previa"
   },
   "links": {
     "title": "Enlaces",
@@ -43,7 +53,7 @@
     "add": "Añadir un enlace"
   },
   "topics": {
-    "title": "Temática, etiquetas e idiomas"
+    "title": "Temática y etiquetas"
   },
   "theme": {
     "label": "Temática",
@@ -58,9 +68,11 @@
   },
   "invite": {
     "title": "Invitación",
-    "current": "Invitación actual:",
-    "valid": "Funciona.",
-    "lost": "Ya no existe en Discord: reemplázala.",
+    "description": "El enlace del botón Unirse del perfil.",
+    "current": "Invitación actual",
+    "valid": "Válida",
+    "lost": "No encontrada en Discord",
+    "lostHelp": "Ya no existe en Discord: reemplácela.",
     "none": "No hay invitación guardada.",
     "label": "Nueva invitación",
     "placeholder": "https://discord.gg/su-codigo",
@@ -88,11 +100,6 @@
     "title": "Datos de Discord",
     "body": "El nombre, el icono y los miembros se leen de nuevo cada 6 horas. Puede forzar la lectura una vez por minuto.",
     "members": "Miembros",
-    "online": "En línea",
-    "invite": "Invitación:",
-    "inviteValid": "válida",
-    "inviteLost": "no encontrada en Discord",
-    "noInvite": "ninguna",
     "done": "Datos de Discord actualizados.",
     "staleDone": "Discord no respondió: se conservan los datos antiguos.",
     "refresh": "Actualizar ahora",
@@ -100,8 +107,8 @@
     "waitIn": "Disponible en {{seconds}} s"
   },
   "danger": {
-    "title": "Eliminar el perfil",
-    "body": "El perfil sale del directorio y los anuncios del servidor se cierran. El servidor de Discord no se toca.",
+    "title": "Zona de peligro",
+    "body": "Eliminar el perfil lo quita del directorio y cierra los anuncios del servidor. El servidor de Discord no se toca.",
     "action": "Eliminar el perfil",
     "confirmTitle": "¿Eliminar el perfil de {{name}}?",
     "confirmBody": "Lo que ocurre:",
@@ -114,14 +121,15 @@
   "posts": {
     "title": "Anuncios del servidor",
     "create": "Nuevo anuncio",
-    "tabs": "Estado de los anuncios",
-    "tab": {
+    "filters": "Filtrar por estado",
+    "filter": {
       "all": "Todos",
       "published": "Publicados",
       "draft": "Borradores",
       "closed": "Cerrados",
       "hidden": "Ocultos"
     },
+    "menu": "Acciones del anuncio {{title}}",
     "emptyTitle": "Sin anuncios",
     "emptyAll": "Este servidor aún no tiene anuncios. Quienes gestionan el servidor pueden editarlos todos.",
     "emptyTab": "No hay anuncios con este estado.",

@@ -6,51 +6,55 @@
     "action": "Ver servidores"
   },
   "stats": {
-    "members": "Membros",
-    "online": "Online",
-    "boosts": "Impulsos",
+    "members_one": "membro",
+    "members_other": "membros",
+    "boosts_one": "boost",
+    "boosts_other": "boosts",
     "created": "Criado em"
   },
+  "info": {
+    "title": "Informações",
+    "theme": "Tema"
+  },
   "join": {
-    "action": "Entrar no servidor",
-    "unavailable": "O convite deste servidor não está mais disponível."
+    "action": "Entrar no servidor"
   },
-  "unlisted": {
-    "title": "Perfil não listado",
-    "body": "Este perfil não aparece no diretório. Só os gestores e o staff do Moddy o veem, assim como os anúncios."
+  "manage": {
+    "action": "Gerenciar"
   },
-  "inviteLost": {
-    "title": "Convite a substituir",
-    "body": "O convite salvo não existe mais no Discord, então o botão Entrar está oculto. Salve um convite que nunca expira.",
-    "action": "Substituir o convite"
+  "notices": {
+    "unlisted": "Este perfil não está no diretório. Só os gestores e a equipe da Moddy o veem.",
+    "inviteLost": "O convite salvo não existe mais: o botão Entrar está oculto.",
+    "inviteLostAction": "Substituir o convite"
+  },
+  "menu": {
+    "label": "Mais ações",
+    "report": "Denunciar este servidor",
+    "copyLink": "Copiar link",
+    "copied": "Link copiado.",
+    "copyFailed": "Não foi possível copiar.",
+    "copyId": "Copiar o ID do servidor",
+    "idCopied": "ID copiado."
   },
   "about": {
     "title": "Sobre",
     "none": "Este servidor ainda não tem descrição.",
-    "topics": "Tema e tags"
+    "topics": "Etiquetas"
+  },
+  "links": {
+    "title": "Links"
   },
   "posts": {
     "title_one": "{{count}} anúncio aberto",
     "title_other": "{{count}} anúncios abertos",
     "titleEmpty": "Anúncios abertos",
     "label": "Anúncios do servidor",
-    "emptyTitle": "Nenhum anúncio aberto",
-    "emptyBody": "Este servidor não está recrutando agora."
+    "empty": "Este servidor não está recrutando agora."
   },
   "team": {
     "title": "Equipe",
     "label": "Equipe do servidor",
     "since": "{{position}}, desde {{date}}",
-    "emptyTitle": "Equipe não informada",
-    "emptyBody": "Só aparecem aqui as pessoas com uma experiência verificada neste servidor."
-  },
-  "manage": {
-    "title": "Gestão do servidor",
-    "body": "Você gerencia este servidor. Edite o perfil, acompanhe os anúncios ou exclua o perfil.",
-    "action": "Gerenciar servidor"
-  },
-  "report": {
-    "title": "Denunciar este servidor",
-    "body": "Denuncie um perfil enganoso, uma falsificação de identidade ou conteúdo impróprio. A equipe do Moddy analisa cada denúncia."
+    "empty": "Só aparecem aqui as pessoas com uma experiência verificada neste servidor."
   }
 }

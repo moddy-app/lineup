@@ -1,4 +1,6 @@
 export {AppLayout, Section, SingleColumn} from './appLayout';
+export {CompactNav, PageHeader, SettingsLayout, SettingsPanel, ShowcasePage} from './pageLayouts';
+export type {SettingsLink, SettingsNavGroup} from './pageLayouts';
 export {Avatar, type AvatarSize} from './Avatar';
 export {Pill, Status, type StatusVariant, VisuallyHidden} from './Badges';
 export {Card, type CardProps, type CardVariant, type Span} from './Card';
@@ -7,6 +9,7 @@ export {ConfirmDialog, Dialog} from './Dialog';
 export {EdgeCaps} from './EdgeCaps';
 export {Icon} from './Icon';
 export {Bento, CardActions, CardHead, CardText, CardVisual, Page, Panel, Stack} from './layout';
+export {InnerCard, InnerCards} from './InnerCard';
 export {LinkButton} from './LinkButton';
 export {PageLoading, Spinner} from './Loading';
 export {Row, RowBody, Rows} from './Rows';

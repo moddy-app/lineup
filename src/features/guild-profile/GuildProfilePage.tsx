@@ -1,4 +1,4 @@
-import {useParams} from 'react-router';
+import {Link, useParams} from 'react-router';
 
 import {useCatalogLabel} from '@/api/catalog';
 import {hasCode} from '@/api/client';
@@ -7,41 +7,32 @@ import type {GuildProfile, TeamMember} from '@/api/types';
 import {paths} from '@/app/paths';
 import {usePageTitle} from '@/app/usePageTitle';
 import {
-  BadgeList,
+  BadgeStrip,
+  DisplayName,
   EmptyState,
+  Fact,
+  FactList,
   ErrorState,
   GuildIcon,
   isNsfw,
-  LanguageList,
   LinkList,
+  LanguageFlags,
+  Markdown,
   NsfwGate,
-  useNsfwConfirmed,
   PostCard,
-  ReportButton,
   StaleNotice,
+  TagLabel,
+  useNsfwConfirmed,
   UserAvatar,
 } from '@/components';
+import {safeLinks} from '@/components/links';
 import {useLanguage} from '@/i18n/useLanguage';
 import {useT} from '@/i18n/useT';
-import {formatDate, formatMonthYear} from '@/lib/format';
+import {formatMonthYear, formatNumber} from '@/lib/format';
 import {safeHttpsUrl} from '@/lib/url';
-import {
-  AppLayout,
-  Card,
-  CardActions,
-  Chip,
-  Chips,
-  Icon,
-  LinkButton,
-  Page,
-  PageLoading,
-  Row,
-  RowBody,
-  Rows,
-  Section,
-  Stat,
-} from '@/ui';
+import {Card, Icon, LinkButton, Page, PageHeader, InnerCard, InnerCards, PageLoading, ShowcasePage} from '@/ui';
 
+import {GuildActionsMenu} from './GuildActionsMenu';
 import './guildProfile.css';
 
 export function Component() {
@@ -56,7 +47,7 @@ export function Component() {
 
   if (query.isError || !guild) {
     return (
-      <AppLayout>
+      <ShowcasePage>
         {hasCode(query.error, 'lineup_guild_not_found') ? (
           <EmptyState
             icon="search_off"
@@ -74,7 +65,7 @@ export function Component() {
         ) : (
           <ErrorState error={query.error} onRetry={() => void query.refetch()} retrying={query.isFetching} />
         )}
-      </AppLayout>
+      </ShowcasePage>
     );
   }
 
@@ -93,123 +84,159 @@ export function Component() {
 
 function GuildView({guild}: {guild: GuildProfile}) {
   const {t} = useT('guildProfile');
-  const {label} = useCatalogLabel();
   useLanguage();
   const name = guild.name ?? t('unknownName');
   const inviteUrl = guild.invite?.valid ? safeHttpsUrl(guild.invite.url) : null;
-  const description = guild.description?.trim();
+  const banner = safeHttpsUrl(guild.banner_url) ?? safeHttpsUrl(guild.splash_url);
+  const manageUrl = paths.guildManage(guild.id);
 
   return (
-    <AppLayout
-      aside={
-        <>
-          {guild.can_manage && (
-            <Section title={t('manage.title')}>
-              <p>{t('manage.body')}</p>
-              <CardActions>
-                <LinkButton to={paths.guildManage(guild.id)} icon="settings">
+    <ShowcasePage className="guild-profile">
+      <Card as="section" className="guild-head">
+        {banner && <img className="guild-banner" src={banner} alt="" decoding="async" />}
+        <PageHeader
+          leading={<GuildIcon id={guild.id} iconUrl={guild.icon_url} size="xl" />}
+          title={<DisplayName name={name} badges={guild.badges} entity="guild" />}
+          meta={<BadgeStrip badges={guild.badges} />}
+          actions={
+            <>
+              {inviteUrl && (
+                <LinkButton to={inviteUrl} icon="login">
+                  {t('join.action')}
+                </LinkButton>
+              )}
+              {guild.can_manage && (
+                <LinkButton to={manageUrl} variant="outlined" icon="settings">
                   {t('manage.action')}
                 </LinkButton>
-              </CardActions>
-            </Section>
-          )}
-          <TeamCard team={guild.team} />
-          {!guild.can_manage && (
-            <Card>
-              <h2>{t('report.title')}</h2>
-              <p>{t('report.body')}</p>
-              <CardActions>
-                <ReportButton target={{type: 'guild', id: guild.id}} />
-              </CardActions>
-            </Card>
-          )}
-        </>
-      }
-    >
-      <Card as="section" className="guild-hero">
-        <div className="guild-hero-head">
-          <GuildIcon id={guild.id} iconUrl={guild.icon_url} size="xl" />
-          <div className="guild-hero-title">
-            <h1>{name}</h1>
-            <BadgeList badges={guild.badges} />
-          </div>
-        </div>
-        <div className="guild-stats">
-          {guild.member_count !== null && <Stat value={guild.member_count} label={t('stats.members')} />}
-          {guild.presence_count !== null && <Stat value={guild.presence_count} label={t('stats.online')} />}
-          {guild.boosts !== null && guild.boosts > 0 && <Stat value={guild.boosts} label={t('stats.boosts')} />}
-          <Stat value={formatDate(guild.created_at, 'medium')} label={t('stats.created')} />
-        </div>
-        {inviteUrl ? (
-          <CardActions>
-            <LinkButton to={inviteUrl} icon="login">
-              {t('join.action')}
-            </LinkButton>
-          </CardActions>
-        ) : (
-          <p className="guild-note">
-            <Icon name="link_off" filled />
-            {t('join.unavailable')}
-          </p>
-        )}
-        {guild.stale && <StaleNotice />}
+              )}
+              <GuildActionsMenu guildId={guild.id} canReport={!guild.can_manage} />
+            </>
+          }
+        />
       </Card>
 
-      {guild.can_manage && !guild.listed && (
-        <Card className="guild-notice" role="status">
-          <h2>
-            <Icon name="visibility_off" filled />
-            {t('unlisted.title')}
-          </h2>
-          <p>{t('unlisted.body')}</p>
-        </Card>
+      {guild.stale && <StaleNotice />}
+
+      {guild.can_manage && (!guild.listed || (guild.invite && !guild.invite.valid)) && (
+        <ul className="guild-notices" role="status">
+          {!guild.listed && (
+            <li>
+              <Icon name="visibility_off" filled />
+              <span>{t('notices.unlisted')}</span>
+            </li>
+          )}
+          {guild.invite && !guild.invite.valid && (
+            <li>
+              <Icon name="link_off" filled />
+              <span>{t('notices.inviteLost')}</span>
+              <Link to={manageUrl}>{t('notices.inviteLostAction')}</Link>
+            </li>
+          )}
+        </ul>
       )}
 
-      {guild.can_manage && guild.invite && !guild.invite.valid && (
-        <Card className="guild-notice" role="status">
-          <h2>
-            <Icon name="link_off" filled />
-            {t('inviteLost.title')}
-          </h2>
-          <p>{t('inviteLost.body')}</p>
-          <CardActions>
-            <LinkButton to={paths.guildManage(guild.id)} variant="outlined" icon="edit">
-              {t('inviteLost.action')}
-            </LinkButton>
-          </CardActions>
-        </Card>
+      <div className="guild-body">
+        <div className="guild-main">
+          <AboutSection guild={guild} />
+          <PostsSection guild={guild} />
+        </div>
+        <aside className="guild-side">
+          <InfoCard guild={guild} />
+          <LinksCard guild={guild} />
+          <TeamCard team={guild.team} />
+        </aside>
+      </div>
+    </ShowcasePage>
+  );
+}
+
+function AboutSection({guild}: {guild: GuildProfile}) {
+  const {t} = useT('guildProfile');
+  const description = guild.description?.trim();
+  return (
+    <Card as="section" className="guild-section" aria-labelledby="guild-about">
+      <h2 id="guild-about">{t('about.title')}</h2>
+      {description ? <Markdown>{description}</Markdown> : <p className="guild-empty">{t('about.none')}</p>}
+      {guild.tags.length > 0 && (
+        <ul className="guild-pills" aria-label={t('about.topics')}>
+          {guild.tags.map((tag) => (
+            <li key={tag}>
+              <TagLabel>{tag}</TagLabel>
+            </li>
+          ))}
+        </ul>
       )}
+    </Card>
+  );
+}
 
-      <Section title={t('about.title')}>
-        {description ? <p className="guild-description">{description}</p> : <p>{t('about.none')}</p>}
-        {(guild.theme || guild.tags.length > 0) && (
-          <Chips aria-label={t('about.topics')}>
-            {guild.theme && <Chip icon="category">{label('themes', guild.theme)}</Chip>}
-            {guild.tags.map((tag) => (
-              <Chip key={tag} mono>
-                {tag}
-              </Chip>
-            ))}
-          </Chips>
-        )}
-        {guild.languages.length > 0 && <LanguageList codes={guild.languages} />}
-        {guild.links.length > 0 && <LinkList links={guild.links} />}
-      </Section>
+function LinksCard({guild}: {guild: GuildProfile}) {
+  const {t} = useT('guildProfile');
+  if (safeLinks(guild.links).length === 0) return null;
+  return (
+    <Card as="section" className="guild-links-card" aria-labelledby="guild-links">
+      <h2 id="guild-links">{t('links.title')}</h2>
+      <LinkList links={guild.links} />
+    </Card>
+  );
+}
 
-      <Section title={guild.posts.length > 0 ? t('posts.title', {count: guild.posts.length}) : t('posts.titleEmpty')}>
-        {guild.posts.length === 0 ? (
-          <EmptyState compact icon="campaign" title={t('posts.emptyTitle')}>
-            {t('posts.emptyBody')}
-          </EmptyState>
-        ) : (
-          <Rows as="ul" aria-label={t('posts.label')}>
-            {guild.posts.map((post) => (
-              <PostCard key={post.id} post={post} variant="row" />
-            ))}
-          </Rows>
+function PostsSection({guild}: {guild: GuildProfile}) {
+  const {t} = useT('guildProfile');
+  return (
+    <Card as="section" className="guild-section" aria-labelledby="guild-posts">
+      <h2 id="guild-posts">
+        {guild.posts.length > 0 ? t('posts.title', {count: guild.posts.length}) : t('posts.titleEmpty')}
+      </h2>
+      {guild.posts.length === 0 ? (
+        <p className="guild-empty">{t('posts.empty')}</p>
+      ) : (
+        <InnerCards aria-label={t('posts.label')}>
+          {guild.posts.map((post) => (
+            <PostCard key={post.id} post={post} variant="row" />
+          ))}
+        </InnerCards>
+      )}
+    </Card>
+  );
+}
+
+function InfoCard({guild}: {guild: GuildProfile}) {
+  const {t} = useT('guildProfile');
+  const {label} = useCatalogLabel();
+  useLanguage();
+  const boosts = guild.boosts !== null && guild.boosts > 0 ? guild.boosts : null;
+  return (
+    <Card as="section" className="guild-info" aria-labelledby="guild-info-title">
+      <h2 id="guild-info-title">{t('info.title')}</h2>
+      <FactList>
+        {guild.member_count !== null && (
+          <Fact icon="group" label={t('stats.members', {count: guild.member_count})}>
+            <strong className="numeric">{formatNumber(guild.member_count)}</strong>{' '}
+            {t('stats.members', {count: guild.member_count})}
+          </Fact>
         )}
-      </Section>
-    </AppLayout>
+        {boosts !== null && (
+          <Fact icon="rocket_launch" label={t('stats.boosts', {count: boosts})}>
+            <strong className="numeric">{formatNumber(boosts)}</strong> {t('stats.boosts', {count: boosts})}
+          </Fact>
+        )}
+        <Fact icon="calendar_today">
+          {t('stats.created')} <strong>{formatMonthYear(guild.created_at)}</strong>
+        </Fact>
+        {guild.theme && (
+          <Fact icon="category" label={t('info.theme')}>
+            {label('themes', guild.theme)}
+          </Fact>
+        )}
+        {guild.languages.length > 0 && (
+          <Fact icon="translate">
+            <LanguageFlags codes={guild.languages} labelled="text" />
+          </Fact>
+        )}
+      </FactList>
+    </Card>
   );
 }
 
@@ -218,13 +245,12 @@ function TeamCard({team}: {team: TeamMember[]}) {
   const {label} = useCatalogLabel();
   useLanguage();
   return (
-    <Section title={t('team.title')}>
+    <Card as="section" className="guild-team" aria-labelledby="guild-team-title">
+      <h2 id="guild-team-title">{t('team.title')}</h2>
       {team.length === 0 ? (
-        <EmptyState compact icon="badge" title={t('team.emptyTitle')}>
-          {t('team.emptyBody')}
-        </EmptyState>
+        <p className="guild-empty">{t('team.empty')}</p>
       ) : (
-        <Rows as="ul" aria-label={t('team.label')}>
+        <InnerCards aria-label={t('team.label')}>
           {team.map((member) => {
             const position =
               member.position === 'other' && member.position_other
@@ -232,21 +258,30 @@ function TeamCard({team}: {team: TeamMember[]}) {
                 : label('positions', member.position);
             const display = member.user.display_name ?? member.user.username ?? member.user.id;
             return (
-              <Row key={member.user.id} to={paths.user(member.user.id)}>
+              <InnerCard as="li" key={member.user.id} to={paths.user(member.user.id)}>
                 <UserAvatar
                   id={member.user.id}
                   src={member.user.avatar_url}
                   decoration={member.user.avatar_decoration}
+                  size="small"
                 />
-                <RowBody
-                  title={<strong>{display}</strong>}
-                  meta={t('team.since', {position, date: formatMonthYear(member.since)})}
-                />
-              </Row>
+                <span className="guild-member">
+                  <DisplayName
+                    name={display}
+                    badges={member.user.badges}
+                    entity="user"
+                    className="guild-member-name"
+                    focusable={false}
+                  />
+                  <span className="guild-member-meta">
+                    {t('team.since', {position, date: formatMonthYear(member.since)})}
+                  </span>
+                </span>
+              </InnerCard>
             );
           })}
-        </Rows>
+        </InnerCards>
       )}
-    </Section>
+    </Card>
   );
 }

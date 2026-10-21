@@ -241,7 +241,10 @@ describe('error shape 3: plain text', () => {
   });
 
   it('treats a 200 with an empty body (logout) as a success', async () => {
-    vi.stubGlobal('fetch', vi.fn(async () => new Response(null, {status: 200})));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response(null, {status: 200})),
+    );
     await expect(apiFetch('/auth/logout', {method: 'POST'})).resolves.toBeUndefined();
   });
 

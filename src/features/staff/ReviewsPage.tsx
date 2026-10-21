@@ -7,12 +7,13 @@ import {useInfiniteList} from '@/api/pagination';
 import type {Paginated, StaffExperience} from '@/api/types';
 import {paths} from '@/app/paths';
 import {usePageTitle} from '@/app/usePageTitle';
-import {ExperienceRow, RelativeTime} from '@/components';
+import {RelativeTime} from '@/components';
+import {ExperienceRow} from '@/components/ExperienceRow';
 import {useT} from '@/i18n/useT';
-import {Bento, Card, Pill, Rows, Section, Select, Shape, Stack, Status} from '@/ui';
+import {Card, Pill, Status} from '@/ui';
 import {formatNumber} from '@/lib/format';
 
-import {ActionDialog, ListBody, PersonLink} from './parts';
+import {ActionDialog, ListBody, PersonLink, Rules, SectionHead, StatusChips} from './parts';
 import {parseReviewStatus, REASON_MAX, REVIEW_STATUSES} from './staffLogic';
 
 type Pending = {kind: 'verify' | 'reject'; experience: StaffExperience} | null;
@@ -31,25 +32,27 @@ export function Component() {
   const current = pending?.experience;
 
   return (
-    <Bento>
-      <Stack span={8}>
-        <Section
-          title={t('nav.reviews')}
-          actions={
-            <Select
-              className="staff-filter"
-              label={t('reviews.status')}
-              value={status}
-              onValueChange={(value) => {
-                const next = new URLSearchParams(params);
-                if (value === 'pending') next.delete('status');
-                else next.set('status', value);
-                setParams(next, {replace: true});
-              }}
-              options={REVIEW_STATUSES.map((value) => ({value, label: t(`reviews.statuses.${value}`)}))}
-            />
-          }
-        >
+    <>
+      <section className="staff-section">
+        <SectionHead title={t('nav.reviews')}>
+          <StatusChips
+            label={t('reviews.status')}
+            value={status}
+            onChange={(value) => {
+              const next = new URLSearchParams(params);
+              if (value === 'pending') next.delete('status');
+              else next.set('status', value);
+              setParams(next, {replace: true});
+            }}
+            options={REVIEW_STATUSES.map((value) => ({value, label: t(`reviews.statuses.${value}`)}))}
+          />
+        </SectionHead>
+        <Rules title={t('reviews.help.title')}>
+          <li>{t('reviews.help.order')}</li>
+          <li>{t('reviews.help.verify')}</li>
+          <li>{t('reviews.help.reject')}</li>
+        </Rules>
+        <Card className="staff-card">
           <ListBody
             list={list}
             emptyIcon="task_alt"
@@ -67,20 +70,8 @@ export function Component() {
               ))}
             </ul>
           </ListBody>
-        </Section>
-      </Stack>
-      <Stack span={4} sticky>
-        <Card>
-          <Shape shape="pentagon" tone="secondary" icon="rule" />
-          <h2>{t('reviews.help.title')}</h2>
-          <ol className="staff-steps">
-            <li>{t('reviews.help.order')}</li>
-            <li>{t('reviews.help.verify')}</li>
-            <li>{t('reviews.help.reject')}</li>
-          </ol>
-          {!list.isLoading && !list.isError && <p>{t('reviews.loaded', {n: formatNumber(list.items.length)})}</p>}
         </Card>
-      </Stack>
+      </section>
 
       <ActionDialog
         open={pending?.kind === 'verify'}
@@ -103,7 +94,7 @@ export function Component() {
         successMessage={t('reviews.reject.done')}
         onSubmit={(reason) => reject.mutateAsync({experienceId: current!.id, reason})}
       />
-    </Bento>
+    </>
   );
 }
 
@@ -138,36 +129,40 @@ function ReviewItem({
   if (verification.rejection_reason) facts.push([t('reviews.facts.rejection'), verification.rejection_reason, true]);
 
   return (
-    <li className="panel staff-item">
-      <div className="staff-item-head">
-        <PersonLink id={experience.user_id} lookup />
-        <span className="staff-item-meta">
-          {t('reviews.updated')} <RelativeTime value={experience.updated_at} />
-          {verification.status !== 'pending' && (
-            <Status variant={verification.status === 'rejected' ? 'error' : 'default'}>
-              {t(`reviews.statuses.${verification.status}`)}
-            </Status>
-          )}
-        </span>
-      </div>
-      <Rows>
+    <li className="staff-item inner-card">
+      <div className="staff-item-main">
+        <div className="staff-item-head">
+          <PersonLink id={experience.user_id} showId />
+          <span className="staff-item-meta">
+            {t('reviews.updated')} <RelativeTime value={experience.updated_at} />
+            {verification.status !== 'pending' && (
+              <Status variant={verification.status === 'rejected' ? 'error' : 'default'}>
+                {t(`reviews.statuses.${verification.status}`)}
+              </Status>
+            )}
+          </span>
+        </div>
         <ExperienceRow
+          as="div"
           experience={experience}
           href={experience.guild_id ? paths.guild(experience.guild_id) : undefined}
         />
-      </Rows>
-      {facts.length > 0 ? (
-        <dl className="staff-facts">
-          {facts.map(([label, value, isError]) => (
-            <div key={label}>
-              <dt>{label}</dt>
-              <dd className={isError ? 'is-error' : undefined}>{value}</dd>
-            </div>
-          ))}
-        </dl>
-      ) : (
-        <p className="staff-item-meta">{t('reviews.facts.none')}</p>
-      )}
+        {facts.length > 0 ? (
+          <details className="staff-evidence">
+            <summary>{t('reviews.evidence')}</summary>
+            <dl className="staff-facts">
+              {facts.map(([label, value, isError]) => (
+                <div key={label}>
+                  <dt>{label}</dt>
+                  <dd className={isError ? 'is-error' : undefined}>{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </details>
+        ) : (
+          <p className="staff-item-meta">{t('reviews.facts.none')}</p>
+        )}
+      </div>
       <div className="staff-item-actions">
         {verification.status !== 'rejected' && (
           <md-outlined-button onclick={onReject}>{t('reviews.reject.action')}</md-outlined-button>

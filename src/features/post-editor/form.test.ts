@@ -62,31 +62,42 @@ describe('validateStep', () => {
       params: {min: 13, max: 99},
     });
     const custom = {...emptyRequirement('custom'), text: 'Savoir utiliser Moddy'};
-    expect(validateStep('requirements', valid({requirements: [custom]}), rules, false)['requirements.0.label']).toEqual({
-      message: 'required',
-      params: undefined,
-    });
-    const langs = emptyRequirement('languages');
-    expect(validateStep('requirements', valid({requirements: [langs]}), rules, false)['requirements.0.value']?.message).toBe(
-      'languagesMin',
+    expect(validateStep('requirements', valid({requirements: [custom]}), rules, false)['requirements.0.label']).toEqual(
+      {
+        message: 'required',
+        params: undefined,
+      },
     );
-    expect(validateStep('requirements', valid({requirements: [emptyRequirement('voice_required')]}), rules, false)).toEqual({});
+    const langs = emptyRequirement('languages');
+    expect(
+      validateStep('requirements', valid({requirements: [langs]}), rules, false)['requirements.0.value']?.message,
+    ).toBe('languagesMin');
+    expect(
+      validateStep('requirements', valid({requirements: [emptyRequirement('voice_required')]}), rules, false),
+    ).toEqual({});
   });
 
   it('requires an https URL for an external application', () => {
     const base = valid({applicationType: 'external_url'});
     expect(validateStep('application', base, rules, false)['application.url']?.message).toBe('required');
-    expect(validateStep('application', {...base, applicationUrl: 'http://x.fr'}, rules, false)['application.url']?.message).toBe(
-      'urlHttps',
+    expect(
+      validateStep('application', {...base, applicationUrl: 'http://x.fr'}, rules, false)['application.url']?.message,
+    ).toBe('urlHttps');
+    expect(validateStep('application', {...base, applicationUrl: 'https://forms.example.com/a'}, rules, false)).toEqual(
+      {},
     );
-    expect(validateStep('application', {...base, applicationUrl: 'https://forms.example.com/a'}, rules, false)).toEqual({});
-    expect(validateStep('application', valid({applicationType: 'lineup_form'}), rules, false).application?.message).toBe(
-      'formUnavailable',
-    );
+    expect(
+      validateStep('application', valid({applicationType: 'lineup_form'}), rules, false).application?.message,
+    ).toBe('formUnavailable');
   });
 
   it('checks the commitment ranges, the zone and the tags', () => {
-    const issues = validateStep('commitment', valid({hours: '169', openings: '0', timezone: 'Mars/Base'}), rules, false);
+    const issues = validateStep(
+      'commitment',
+      valid({hours: '169', openings: '0', timezone: 'Mars/Base'}),
+      rules,
+      false,
+    );
     expect(issues['commitment.hours_per_week']?.message).toBe('between');
     expect(issues['commitment.openings']?.message).toBe('between');
     expect(issues.timezone?.message).toBe('timezone');
@@ -100,13 +111,16 @@ describe('validateStep', () => {
     expect(validateStep('extras', valid({expiresOn: '2026-10-20'}), rules, false).expiresOn?.message).toBe('expiryMin');
     expect(validateStep('extras', valid({expiresOn: '2027-04-19'}), rules, false).expiresOn?.message).toBe('expiryMax');
     expect(validateStep('extras', valid({expiresOn: max}), rules, false)).toEqual({});
-    expect(validateStep('extras', valid({expiresOn: '2026-10-01'}), {...rules, unchangedExpiry: '2026-10-01'}, false)).toEqual({});
+    expect(
+      validateStep('extras', valid({expiresOn: '2026-10-01'}), {...rules, unchangedExpiry: '2026-10-01'}, false),
+    ).toEqual({});
   });
 
   it('forbids a featured experience on a server post and an unverified one', () => {
-    expect(validateStep('extras', valid({kind: 'guild', featuredExperienceId: 'e1'}), rules, false).featuredExperienceId?.message).toBe(
-      'featuredUserOnly',
-    );
+    expect(
+      validateStep('extras', valid({kind: 'guild', featuredExperienceId: 'e1'}), rules, false).featuredExperienceId
+        ?.message,
+    ).toBe('featuredUserOnly');
     expect(
       validateStep('extras', valid({featuredExperienceId: 'e1'}), {...rules, verifiedExperienceIds: ['e2']}, false)
         .featuredExperienceId?.message,
@@ -115,7 +129,9 @@ describe('validateStep', () => {
 
   it('needs a claimed server for a server post', () => {
     const form = valid({kind: 'guild', guildId: '1'});
-    expect(validateStep('type', form, {...rules, claimedGuildIds: ['2']}, false).guildId?.message).toBe('guildNotClaimed');
+    expect(validateStep('type', form, {...rules, claimedGuildIds: ['2']}, false).guildId?.message).toBe(
+      'guildNotClaimed',
+    );
     expect(validateStep('type', form, {...rules, claimedGuildIds: ['1']}, false)).toEqual({});
     expect(validateStep('type', EMPTY_FORM, rules, true)).toEqual({});
   });
@@ -128,7 +144,14 @@ describe('validateStep', () => {
 describe('bodies', () => {
   it('builds a creation body without empty optional fields', () => {
     const body = toCreateBody(valid(), catalog, now, 'draft');
-    expect(body).toMatchObject({kind: 'user', status: 'draft', timezone: null, commitment: null, application: null, expires_at: null});
+    expect(body).toMatchObject({
+      kind: 'user',
+      status: 'draft',
+      timezone: null,
+      commitment: null,
+      application: null,
+      expires_at: null,
+    });
     expect('guild_id' in body).toBe(false);
   });
 
@@ -139,7 +162,10 @@ describe('bodies', () => {
       hours: '5',
       compensation: 'volunteer',
       applicationType: 'discord_dm',
-      requirements: [{...emptyRequirement('account_age_days'), text: '180', verified: true}, {...emptyRequirement('verified_experience')}],
+      requirements: [
+        {...emptyRequirement('account_age_days'), text: '180', verified: true},
+        {...emptyRequirement('verified_experience')},
+      ],
     });
     const body = toCreateBody(form, catalog, now, 'published');
     expect(body.guild_id).toBe('812');
@@ -152,7 +178,12 @@ describe('bodies', () => {
   });
 
   it('never sends verified_by_lineup for a requirement that cannot be checked', () => {
-    const body = toCreateBody(valid({requirements: [{...emptyRequirement('voice_required'), verified: true}]}), catalog, now, 'draft');
+    const body = toCreateBody(
+      valid({requirements: [{...emptyRequirement('voice_required'), verified: true}]}),
+      catalog,
+      now,
+      'draft',
+    );
     expect(body.requirements).toEqual([{type: 'voice_required', value: true, verified_by_lineup: false}]);
   });
 

@@ -41,7 +41,7 @@
       "verify": "Valider garde la preuve existante et ajoute votre note.",
       "reject": "Refuser demande un motif, que la personne peut lire."
     },
-    "loaded": "{{n}} chargées dans cette liste.",
+    "evidence": "Preuve",
     "updated": "Modifiée",
     "facts": {
       "requestedAt": "Revue demandée",
@@ -114,7 +114,6 @@
       "target": "Ouvrez la cible avant de décider. Traiter ou classer ne modifie pas la cible : masquez l'annonce séparément.",
       "once": "Un signalement décidé ne peut plus être redécidé."
     },
-    "loaded": "{{n}} chargés dans cette liste.",
     "resolve": {
       "action": "Traiter",
       "title": "Marquer comme traité",
@@ -147,7 +146,6 @@
       "text": "Aucun badge n'a été attribué pour ce filtre."
     },
     "grantedBy": "Attribué par",
-    "openEntity": "Ouvrir le profil ({{badge}}, {{id}})",
     "revoke": {
       "action": "Retirer",
       "title": "Retirer ce badge",
@@ -176,10 +174,9 @@
       "label": "Identifiant ou lien de l'annonce",
       "hint": "Collez l'UUID ou l'adresse de l'annonce.",
       "invalid": "Aucun identifiant d'annonce reconnu.",
-      "submit": "Chercher"
+      "submit": "Charger"
     },
     "empty": {
-      "title": "Aucune annonce sélectionnée",
       "text": "Collez un identifiant ou un lien pour voir son statut et la masquer."
     },
     "reason": "Motif :",

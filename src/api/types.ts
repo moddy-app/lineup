@@ -164,6 +164,11 @@ export interface UserSummary {
   display_name: string | null;
   avatar_url: string | null;
   avatar_decoration: AvatarDecoration | null;
+  /**
+   * Not in the API yet (docs/backend-notes.md, "Badges sur les résumés"): the mock gives it, the app shows
+   * nothing when it is missing. Never Discord's badges.
+   */
+  badges?: Badge[];
 }
 
 // ---- Posts ------------------------------------------------------------------
@@ -215,6 +220,11 @@ export interface PostGuild {
   id: Snowflake;
   name: string | null;
   icon_url: string | null;
+  /**
+   * Not in the API yet (docs/backend-notes.md, "Badges sur les résumés"): the mock gives it, the app shows
+   * nothing when it is missing. Never Discord's badges.
+   */
+  badges?: Badge[];
 }
 
 /** From the stored snapshots, never from Discord: fields are null when unknown. */
@@ -223,6 +233,11 @@ export interface PostAuthor {
   username: string | null;
   global_name: string | null;
   avatar_url: string | null;
+  /**
+   * Not in the API yet (docs/backend-notes.md, "Badges sur les résumés"): the mock gives it, the app shows
+   * nothing when it is missing. Never Discord's badges.
+   */
+  badges?: Badge[];
 }
 
 /** The public view of a post (feed, detail, profiles). */
@@ -492,6 +507,11 @@ export interface MeUser {
   banner_url: string | null;
   avatar_decoration_data: DiscordFreeObject | null;
   is_staff: boolean;
+  /**
+   * Not in the API yet (docs/backend-notes.md, "Badges sur les résumés"): the mock gives it, the app shows
+   * nothing when it is missing. Never Discord's badges.
+   */
+  badges?: Badge[];
 }
 
 /** `GET /lineup/me`. Also the session test: a 401 means signed out. */

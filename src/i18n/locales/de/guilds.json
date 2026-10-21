@@ -1,14 +1,12 @@
 {
   "title": "Server",
-  "intro": "Die Discord-Server, die auf Lineup Staff suchen. Öffnen Sie ein Profil, um das Team und die offenen Anzeigen zu sehen.",
-  "claim": {
-    "action": "Server beanspruchen"
-  },
+  "subtitle": "Die Discord-Server, die Staff suchen. Öffnen Sie ein Profil, um das Team und die Anzeigen zu sehen.",
+  "add": "Meinen Server hinzufügen",
   "filters": {
     "search": "Server suchen",
     "theme": "Thema",
-    "themeAll": "Alle Themen",
-    "nsfw": "18+-Server einbeziehen",
+    "adult": "Inhalte für Erwachsene",
+    "adultYes": "18+-Server einbeziehen",
     "clear": "Filter zurücksetzen"
   },
   "list": {
@@ -16,10 +14,8 @@
   },
   "card": {
     "unknownName": "Server ohne Namen",
-    "noCounts": "Mitgliederzahl unbekannt",
-    "members_one": "{{value}} Mitglied",
-    "members_other": "{{value}} Mitglieder",
-    "online": "{{value}} online"
+    "members_one": "Mitglied",
+    "members_other": "Mitglieder"
   },
   "empty": {
     "title": "Noch keine Server",

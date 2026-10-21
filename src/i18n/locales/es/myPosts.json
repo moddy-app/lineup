@@ -1,7 +1,6 @@
 {
-  "title": "Mis anuncios",
-  "intro": "Todos sus anuncios, incluidos los borradores, los cerrados y los ocultados por el equipo.",
-  "new": "Publicar un anuncio",
+  "title": "Anuncios",
+  "new": "Nuevo anuncio",
   "tabsLabel": "Estado de los anuncios",
   "tabs": {
     "all": "Todos",
@@ -11,8 +10,6 @@
     "hidden": "Ocultos"
   },
   "quota": {
-    "title": "Anuncios personales",
-    "body": "Solo cuentan sus anuncios «Busco equipo» publicados y no caducados. Los anuncios de servidor tienen su propio límite, de {{guildLimit}} por servidor.",
     "loading": "Calculando."
   },
   "empty": {
@@ -40,16 +37,17 @@
   "row": {
     "hiddenReason": "Ocultado por el equipo de Moddy. Motivo: {{reason}}",
     "hiddenNoReason": "Ocultado por el equipo de Moddy. Ya no se puede editar.",
-    "expired": "Caducado: cambie la fecha de caducidad para publicarlo de nuevo.",
-    "kind": "Tipo",
-    "actions": "Acciones del anuncio {{title}}"
+    "actions": "Acciones del anuncio {{title}}",
+    "forMe": "Para mí",
+    "unknownGuild": "Servidor sin nombre",
+    "more": "Más acciones para {{title}}"
   },
   "actions": {
     "edit": "Editar",
     "close": "Cerrar",
     "publish": "Publicar",
-    "republish": "Publicar de nuevo",
-    "delete": "Eliminar"
+    "delete": "Eliminar",
+    "reopen": "Reabrir"
   },
   "done": {
     "closed": "Anuncio cerrado.",
@@ -59,6 +57,5 @@
   "delete": {
     "title": "¿Eliminar este anuncio?",
     "body": "«{{title}}» se eliminará de forma definitiva. Esta acción no se puede deshacer."
-  },
-  "editFirst": "Editar"
+  }
 }

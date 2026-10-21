@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {useSearchParams} from 'react-router';
+import {Link, useNavigate, useSearchParams} from 'react-router';
 
 import {errorMessage} from '@/api/errors';
 import {useClosePost, useDeletePost, usePublishPost} from '@/api/mutations';
@@ -10,11 +10,22 @@ import {paths} from '@/app/paths';
 import {usePageTitle} from '@/app/usePageTitle';
 import {useAuthAction} from '@/auth/useAuthAction';
 import {useSession} from '@/auth/session';
-import {EmptyState, ErrorState, isRetryable, PostCard, QuotaMeter, RetryButton} from '@/components';
+import {
+  DisplayName,
+  EmptyState,
+  ErrorState,
+  ExpiryLabel,
+  isRetryable,
+  PostStatusBadge,
+  QuotaMeter,
+  RelativeTime,
+  RetryButton,
+} from '@/components';
 import {useT} from '@/i18n/useT';
-import {AppLayout, Card, ConfirmDialog, Icon, LinkButton, Rows, Section, Spinner, useSnackbar} from '@/ui';
+import {Card, ConfirmDialog, Icon, LinkButton, SettingsLayout, Spinner, useSnackbar} from '@/ui';
 
 import './myPosts.css';
+import {RowMenu, type RowMenuItem} from './RowMenu';
 import {useUserQuota} from './useUserQuota';
 
 const TABS = ['all', 'published', 'draft', 'closed', 'hidden'] as const;
@@ -37,67 +48,58 @@ export function Component() {
   const quota = useUserQuota();
   const catalog = useCatalog();
   const limit = catalog.data?.limits.max_published_posts_per_user ?? 3;
-  const guildLimit = catalog.data?.limits.max_published_posts_per_guild ?? 5;
 
   return (
-    <AppLayout
-      stickyAside
-      aside={
-        <Card className="mp-quota">
-          <h2>{t('quota.title')}</h2>
-          {quota.ready ? (
-            <QuotaMeter used={quota.used} limit={limit} scope="user" />
-          ) : quota.list.isError ? (
-            <ErrorState compact error={quota.list.error} onRetry={quota.list.refetch} />
-          ) : (
-            <p>{t('quota.loading')}</p>
-          )}
-          <p>{t('quota.body', {guildLimit})}</p>
-        </Card>
+    <SettingsLayout
+      title={t('title')}
+      actions={
+        <LinkButton to={paths.postNew()} icon="add">
+          {t('new')}
+        </LinkButton>
       }
     >
-      <Section
-        level={1}
-        title={t('title')}
-        actions={
-          <LinkButton to={paths.postNew()} icon="add">
-            {t('new')}
-          </LinkButton>
-        }
-      >
-        <p className="mp-intro">{t('intro')}</p>
-        <md-tabs
-          aria-label={t('tabsLabel')}
-          activeTabIndex={TABS.indexOf(tab)}
-          onchange={(event) => {
-            const next = TABS[event.currentTarget.activeTabIndex] ?? 'all';
-            setParams(next === 'all' ? {} : {status: next}, {replace: true});
-          }}
-        >
-          {TABS.map((value) => (
-            <md-primary-tab key={value} id={`mp-tab-${value}`} aria-controls="mp-panel">
-              {t(`tabs.${value}`)}
-            </md-primary-tab>
-          ))}
-        </md-tabs>
-        <div id="mp-panel" role="tabpanel" aria-labelledby={`mp-tab-${tab}`}>
-          <PostList list={list} tab={tab} />
-        </div>
-      </Section>
-    </AppLayout>
+      <div className="mp-quota">
+        {quota.ready ? (
+          <QuotaMeter used={quota.used} limit={limit} scope="user" />
+        ) : quota.list.isError ? (
+          <ErrorState compact error={quota.list.error} onRetry={quota.list.refetch} />
+        ) : (
+          <p className="mp-quota-loading">{t('quota.loading')}</p>
+        )}
+      </div>
+
+      <div className="mp-filters" role="group" aria-label={t('tabsLabel')}>
+        {TABS.map((value) => (
+          <button
+            key={value}
+            type="button"
+            className="mp-chip"
+            aria-pressed={value === tab}
+            onClick={() => setParams(value === 'all' ? {} : {status: value}, {replace: true})}
+          >
+            {value === tab && <Icon name="check" />}
+            {t(`tabs.${value}`)}
+          </button>
+        ))}
+      </div>
+
+      <PostList list={list} tab={tab} />
+    </SettingsLayout>
   );
 }
 
 function PostList({list, tab}: {list: InfiniteList<PrivatePost>; tab: Tab}) {
   const {t} = useT('myPosts');
   const {t: tCommon} = useT('common');
-  const {canWrite} = useSession();
+  const {canWrite, me} = useSession();
   const auth = useAuthAction();
   const snackbar = useSnackbar();
   const {t: tErrors} = useT('errors');
   const close = useClosePost();
   const publish = usePublishPost();
   const remove = useDeletePost();
+  const navigate = useNavigate();
+  const goEdit = (id: string) => void navigate(paths.postEdit(id));
 
   const [busy, setBusy] = useState<string | null>(null);
   const [failure, setFailure] = useState<{id: string; action: RowAction; error: unknown} | null>(null);
@@ -113,7 +115,10 @@ function PostList({list, tab}: {list: InfiniteList<PrivatePost>; tab: Tab}) {
         else await remove.mutateAsync(post.id);
         return true;
       });
-      if (done) snackbar.show({message: t(`done.${action === 'close' ? 'closed' : action === 'publish' ? 'published' : 'deleted'}`)});
+      if (done)
+        snackbar.show({
+          message: t(`done.${action === 'close' ? 'closed' : action === 'publish' ? 'published' : 'deleted'}`),
+        });
     } catch (error) {
       setFailure({id: post.id, action, error});
     } finally {
@@ -123,12 +128,21 @@ function PostList({list, tab}: {list: InfiniteList<PrivatePost>; tab: Tab}) {
   };
 
   if (list.isLoading) return <Spinner />;
-  if (list.isError) return <ErrorState compact error={list.error} onRetry={list.refetch} retrying={list.isRefetching} />;
+  if (list.isError)
+    return <ErrorState compact error={list.error} onRetry={list.refetch} retrying={list.isRefetching} />;
   if (list.isEmpty) {
     return (
       <EmptyState
         compact
-        icon={tab === 'hidden' ? 'visibility_off' : tab === 'draft' ? 'draft' : tab === 'closed' ? 'inventory_2' : 'campaign'}
+        icon={
+          tab === 'hidden'
+            ? 'visibility_off'
+            : tab === 'draft'
+              ? 'draft'
+              : tab === 'closed'
+                ? 'inventory_2'
+                : 'campaign'
+        }
         title={t(`empty.${tab}.title`)}
         action={
           <LinkButton to={paths.postNew()} icon="add">
@@ -143,72 +157,113 @@ function PostList({list, tab}: {list: InfiniteList<PrivatePost>; tab: Tab}) {
 
   return (
     <>
-      <ul className="mp-list" aria-busy={list.isRefetching}>
-        {list.items.map((post) => {
-          const mine = busy === post.id;
-          const error = failure?.id === post.id ? failure : null;
-          const editable = post.status !== 'hidden';
-          return (
-            <li key={post.id} className="mp-item">
-              <Rows>
-                <PostCard post={post} variant="row" showStatus />
-              </Rows>
-              {post.status === 'hidden' && (
-                <p className="mp-note is-error">
-                  <Icon name="visibility_off" filled />
-                  {post.hidden_reason
-                    ? t('row.hiddenReason', {reason: post.hidden_reason})
-                    : t('row.hiddenNoReason')}
-                </p>
-              )}
-              {post.status === 'published' && post.is_expired && (
-                <p className="mp-note">
-                  <Icon name="event_busy" filled />
-                  {t('row.expired')}
-                </p>
-              )}
-              {editable && (
-                <div className="mp-actions" role="group" aria-label={t('row.actions', {title: post.title})}>
-                  <LinkButton to={paths.postEdit(post.id)} variant="outlined" icon="edit">
-                    {t('actions.edit')}
-                  </LinkButton>
-                  {post.status === 'published' && (
-                    <md-outlined-button disabled={mine || !canWrite} onclick={() => void run(post, 'close')}>
-                      <md-icon slot="icon" className="filled" aria-hidden="true">
-                        inventory_2
-                      </md-icon>
-                      {t('actions.close')}
-                    </md-outlined-button>
+      <Card className="mp-card">
+        <ul className="mp-list" aria-busy={list.isRefetching}>
+          {list.items.map((post) => {
+            const mine = busy === post.id;
+            const error = failure?.id === post.id ? failure : null;
+            const hidden = post.status === 'hidden';
+            const off = mine || !canWrite;
+
+            const menu: RowMenuItem[] = [];
+            if (post.status === 'draft') {
+              menu.push({key: 'edit', icon: 'edit', label: t('actions.edit'), onSelect: () => goEdit(post.id)});
+            }
+            if (post.status === 'published') {
+              menu.push({
+                key: 'close',
+                icon: 'inventory_2',
+                label: t('actions.close'),
+                disabled: off,
+                onSelect: () => void run(post, 'close'),
+              });
+            }
+            if (post.status === 'closed') {
+              menu.push({
+                key: 'reopen',
+                icon: 'lock_open',
+                label: t('actions.reopen'),
+                disabled: off,
+                onSelect: () => void run(post, 'publish'),
+              });
+            }
+            if (!hidden) {
+              menu.push({
+                key: 'delete',
+                icon: 'delete',
+                label: t('actions.delete'),
+                danger: true,
+                disabled: off,
+                onSelect: () => setToDelete(post),
+              });
+            }
+
+            const isGuild = post.kind === 'guild';
+            return (
+              <li key={post.id} className="mp-item inner-card">
+                <div className="mp-line">
+                  <div className="mp-main">
+                    <p className="mp-title">
+                      <Link to={paths.post(post.id)}>{post.title}</Link>
+                    </p>
+                    <p className="mp-meta">
+                      {isGuild ? (
+                        <DisplayName
+                          name={post.guild?.name ?? t('row.unknownGuild')}
+                          badges={post.guild?.badges}
+                          entity="guild"
+                          className="mp-owner"
+                        />
+                      ) : (
+                        <DisplayName
+                          name={t('row.forMe')}
+                          badges={me?.user.badges}
+                          entity="user"
+                          className="mp-owner"
+                        />
+                      )}
+                      <PostStatusBadge status={post.status} isExpired={post.is_expired} />
+                      <RelativeTime
+                        value={post.status === 'published' ? (post.published_at ?? post.created_at) : post.updated_at}
+                      />
+                      <ExpiryLabel expiresAt={post.expires_at} isExpired={false} />
+                    </p>
+                  </div>
+                  {!hidden && (
+                    <div className="mp-actions" role="group" aria-label={t('row.actions', {title: post.title})}>
+                      {post.status === 'draft' ? (
+                        <md-text-button disabled={off} onclick={() => void run(post, 'publish')}>
+                          {t('actions.publish')}
+                        </md-text-button>
+                      ) : (
+                        <LinkButton to={paths.postEdit(post.id)} variant="text">
+                          {t('actions.edit')}
+                        </LinkButton>
+                      )}
+                      <RowMenu label={post.title} items={menu} />
+                    </div>
                   )}
-                  {(post.status === 'draft' || post.status === 'closed') && (
-                    <md-outlined-button disabled={mine || !canWrite} onclick={() => void run(post, 'publish')}>
-                      <md-icon slot="icon" className="filled" aria-hidden="true">
-                        publish
-                      </md-icon>
-                      {post.status === 'closed' ? t('actions.republish') : t('actions.publish')}
-                    </md-outlined-button>
-                  )}
-                  <md-text-button className="mp-delete" disabled={mine || !canWrite} onclick={() => setToDelete(post)}>
-                    <md-icon slot="icon" className="filled" aria-hidden="true">
-                      delete
-                    </md-icon>
-                    {t('actions.delete')}
-                  </md-text-button>
                 </div>
-              )}
-              {error && (
-                <div className="mp-error" role="alert">
-                  <Icon name="error" filled />
-                  <span>{errorMessage(error.error, tErrors)}</span>
-                  {isRetryable(error.error) && (
-                    <RetryButton error={error.error} busy={mine} onRetry={() => void run(post, error.action)} />
-                  )}
-                </div>
-              )}
-            </li>
-          );
-        })}
-      </ul>
+                {hidden && (
+                  <p className="mp-note">
+                    <Icon name="visibility_off" filled />
+                    {post.hidden_reason ? t('row.hiddenReason', {reason: post.hidden_reason}) : t('row.hiddenNoReason')}
+                  </p>
+                )}
+                {error && (
+                  <div className="mp-error" role="alert">
+                    <Icon name="error" filled />
+                    <span>{errorMessage(error.error, tErrors)}</span>
+                    {isRetryable(error.error) && (
+                      <RetryButton error={error.error} busy={mine} onRetry={() => void run(post, error.action)} />
+                    )}
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </Card>
       {list.isLoadMoreError && <ErrorState compact error={list.error} onRetry={list.loadMore} />}
       {list.hasMore && !list.isLoadMoreError && (
         <div className="mp-more">

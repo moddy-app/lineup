@@ -1,7 +1,6 @@
 {
-  "title": "Mes annonces",
-  "intro": "Toutes vos annonces, y compris les brouillons, les annonces fermées et celles masquées par l'équipe.",
-  "new": "Publier une annonce",
+  "title": "Annonces",
+  "new": "Nouvelle annonce",
   "tabsLabel": "Statut des annonces",
   "tabs": {
     "all": "Toutes",
@@ -11,8 +10,6 @@
     "hidden": "Masquées"
   },
   "quota": {
-    "title": "Annonces personnelles",
-    "body": "Seules vos annonces « Je cherche une équipe » publiées et non expirées comptent. Les annonces de serveur ont leur propre limite, de {{guildLimit}} par serveur.",
     "loading": "Calcul en cours."
   },
   "empty": {
@@ -40,16 +37,17 @@
   "row": {
     "hiddenReason": "Masquée par l'équipe Moddy. Motif : {{reason}}",
     "hiddenNoReason": "Masquée par l'équipe Moddy. Elle ne peut plus être modifiée.",
-    "expired": "Expirée : modifiez la date d'expiration pour la publier à nouveau.",
-    "kind": "Type",
-    "actions": "Actions de l'annonce {{title}}"
+    "actions": "Actions de l'annonce {{title}}",
+    "forMe": "Pour moi",
+    "unknownGuild": "Serveur sans nom",
+    "more": "Plus d'actions pour {{title}}"
   },
   "actions": {
     "edit": "Modifier",
     "close": "Fermer",
     "publish": "Publier",
-    "republish": "Publier à nouveau",
-    "delete": "Supprimer"
+    "delete": "Supprimer",
+    "reopen": "Rouvrir"
   },
   "done": {
     "closed": "Annonce fermée.",
@@ -59,6 +57,5 @@
   "delete": {
     "title": "Supprimer cette annonce ?",
     "body": "« {{title}} » sera supprimée définitivement. Cette action ne peut pas être annulée."
-  },
-  "editFirst": "Modifier"
+  }
 }

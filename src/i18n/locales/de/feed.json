@@ -1,46 +1,39 @@
 {
-  "title": "Anzeigen",
-  "intro": "Server, die Personal suchen, und Personen, die ein Team suchen.",
+  "guild": {
+    "title": "Rekrutierung",
+    "subtitle": "Discord-Server suchen Staff.",
+    "action": "Anzeige veröffentlichen",
+    "emptyTitle": "Derzeit rekrutiert kein Server",
+    "emptyBody": "Anzeigen von Servern erscheinen hier, sobald sie veröffentlicht sind."
+  },
+  "user": {
+    "title": "Kandidaten",
+    "subtitle": "Personen bieten Servern ihre Dienste an.",
+    "action": "Meine Dienste anbieten",
+    "emptyTitle": "Derzeit keine Kandidaten",
+    "emptyBody": "Anzeigen von Personen erscheinen hier, sobald sie veröffentlicht sind."
+  },
   "list": "Liste der Anzeigen",
   "updating": "Ergebnisse werden aktualisiert",
   "loadingMore": "Weitere Anzeigen werden geladen",
   "end": "Ende der Liste, {{count}} Anzeigen angezeigt.",
-  "publish": {
-    "title": "Anzeige veröffentlichen",
-    "body": "Für einen Server, den Sie verwalten, oder für sich selbst.",
-    "action": "Anzeige veröffentlichen"
-  },
   "filters": {
-    "title": "Filter",
-    "open": "Filter",
-    "openCount": "Filter ({{count}})",
-    "show": "Anzeigen ansehen",
-    "reset": "Filter zurücksetzen",
-    "kind": {
-      "label": "Art der Anzeige",
-      "all": "Alle Anzeigen",
-      "guild": "Server, die Personal suchen",
-      "user": "Personen auf der Suche"
-    },
-    "q": "Suche",
+    "search": "Suchen",
     "positions": "Positionen",
     "languages": "Sprachen",
     "theme": "Thema",
-    "allThemes": "Alle Themen",
     "compensation": "Vergütung",
-    "anyCompensation": "Alle",
-    "tags": "Tags",
-    "tagsHelp": "Durch Kommas getrennt.",
-    "nsfw": "Inhalte für Erwachsene einbeziehen"
+    "nsfw": "Inhalte für Erwachsene",
+    "nsfwHide": "Ausblenden",
+    "nsfwShow": "Anzeigen",
+    "reset": "Filter zurücksetzen"
   },
   "empty": {
-    "noneTitle": "Noch keine Anzeigen",
-    "noneBody": "Veröffentlichte Anzeigen erscheinen hier. Veröffentliche die erste.",
-    "filteredTitle": "Keine Anzeige passt zu diesen Filtern",
-    "filteredBody": "Entfernen Sie einen Filter oder setzen Sie alle zurück, um alle Anzeigen zu sehen."
+    "filteredTitle": "Keine Anzeige für diese Filter",
+    "filteredBody": "Entfernen Sie einen Filter, um mehr Anzeigen zu sehen."
   },
   "invalid": {
     "title": "Diese Suche konnte nicht angewendet werden",
-    "restart": "Neu beginnen"
+    "restart": "Von vorn beginnen"
   }
 }

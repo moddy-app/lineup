@@ -8,11 +8,12 @@ import {useLanguage} from '@/i18n/useLanguage';
 import {useT} from '@/i18n/useT';
 import {clientNavigation} from '@/lib/clientNav';
 import {defaultAvatarUrl} from '@/lib/discord';
+import {verificationLabel, verificationOf} from '@/components/verification';
 import {Icon} from '@/ui';
 
-import {Footer} from './Footer';
 import type {RouteHandle} from './handle';
 import {paths} from './paths';
+import {LanguageMenu} from './LanguageMenu';
 import {SuspendedNotice} from './SuspendedNotice';
 
 /** Whether a nav destination covers the current page. */
@@ -23,8 +24,11 @@ const startsWith =
   (pathname) =>
     prefixes.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
 
-/** The posts: the feed, a post, writing one, your own. */
-const isPosts: Match = (pathname) => pathname === '/' || startsWith('/posts', '/me/posts')(pathname);
+/** Recruiting: the feed of servers that recruit, and a post (also while writing or editing it). */
+const isRecruiting: Match = (pathname) => pathname === '/' || startsWith('/posts')(pathname);
+
+/** Talent: the people who offer their services, and their profiles. */
+const isTalent: Match = startsWith('/people', '/users');
 
 function NavItem({to, icon, label, match}: {to: string; icon: string; label: string; match: Match}) {
   const {pathname} = useLocation();
@@ -37,7 +41,8 @@ function NavItem({to, icon, label, match}: {to: string; icon: string; label: str
 }
 
 /**
- * The frame of every page: app bar, content, footer.
+ * The frame of every page: app bar and content (no footer: the language
+ * selector is in the bar).
  *
  *  - The kit's components get their labels in the current language.
  *  - The app bar's own links (logo, menu items) are shadow-DOM anchors: one
@@ -47,6 +52,7 @@ function NavItem({to, icon, label, match}: {to: string; icon: string; label: str
  */
 export function AppShell() {
   const {t} = useT('common');
+  const {t: tc} = useT('components');
   const language = useLanguage();
   const labels = kitLabels(language);
   const session = useSession();
@@ -57,7 +63,6 @@ export function AppShell() {
   const matches = useMatches();
 
   const isStaff = session.me?.user.is_staff === true;
-  const special = matches.some((match) => (match.handle as RouteHandle | undefined)?.special);
   // A page that needs a session shows the suspension screen itself; every other page gets the notice.
   const showSuspendedNotice =
     session.status === 'suspended' && !matches.some((match) => (match.handle as RouteHandle | undefined)?.requiresAuth);
@@ -65,15 +70,17 @@ export function AppShell() {
   const me = session.me?.user;
   const user = useMemo<ModdyUser | null>(() => {
     if (!me) return null;
+    const verification = verificationOf(me.badges, 'user');
     return {
       handle: me.username,
       name: me.global_name ?? undefined,
       avatar: me.avatar_url ?? defaultAvatarUrl(me.id),
-      // The API gives neither a verification kind nor Moddy Max here.
-      verified: undefined,
+      // The tooltip of the check in the menu: what kind of verification (from the badges, when the API gives them).
+      verified: verification ? verificationLabel(verification, 'user', tc) : undefined,
+      // The API does not give Moddy Max here.
       max: false,
     };
-  }, [me]);
+  }, [me, tc]);
 
   const onKitLinkClick = useMemo(() => clientNavigation(navigate), [navigate]);
 
@@ -92,20 +99,22 @@ export function AppShell() {
     <div className="app">
       <moddy-app-bar home-href={paths.home()} labels={labels.appBar} onclick={onKitLinkClick}>
         <nav slot="nav" className="app-nav" aria-label={t('nav.label')}>
-          <NavItem to={paths.feed()} icon="campaign" label={t('nav.feed')} match={isPosts} />
+          <NavItem to={paths.feed()} icon="campaign" label={t('nav.feed')} match={isRecruiting} />
+          <NavItem to={paths.people()} icon="person_search" label={t('nav.people')} match={isTalent} />
           <NavItem to={paths.guilds()} icon="groups" label={t('nav.guilds')} match={startsWith('/guilds')} />
           {isStaff && (
             <NavItem to={paths.staff()} icon="shield_person" label={t('nav.staff')} match={startsWith('/staff')} />
           )}
         </nav>
+        <LanguageMenu />
         <moddy-theme-menu labels={labels.theme} />
         {user && me ? (
           <moddy-user-menu user={user} labels={labels.userMenu} onsign-out={() => void session.logout()}>
             <UserMenuItem href={paths.user(me.id)} icon="person" label={t('userMenu.profile')} />
-            <UserMenuItem href={paths.me()} icon="edit" label={t('userMenu.editProfile')} />
-            <UserMenuItem href={paths.myExperiences()} icon="work_history" label={t('userMenu.experiences')} />
+            <UserMenuItem href={paths.me()} icon="dashboard" label={t('userMenu.space')} />
             <UserMenuItem href={paths.myPosts()} icon="campaign" label={t('userMenu.posts')} />
-            <UserMenuItem href={paths.guildClaim()} icon="groups" label={t('userMenu.guilds')} />
+            <UserMenuItem href={paths.myGuilds()} icon="groups" label={t('userMenu.guilds')} />
+            <UserMenuItem href={paths.myExperiences()} icon="work_history" label={t('userMenu.experiences')} />
           </moddy-user-menu>
         ) : (
           session.status === 'anonymous' && (
@@ -122,8 +131,6 @@ export function AppShell() {
         {showSuspendedNotice && <SuspendedNotice />}
         <Outlet />
       </main>
-
-      {!special && <Footer />}
     </div>
   );
 }

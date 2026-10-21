@@ -17,17 +17,7 @@ import {useUserQuota} from '@/features/my-posts/useUserQuota';
 import {useLanguage} from '@/i18n/useLanguage';
 import {useT} from '@/i18n/useT';
 import {getItem, removeItem, setItem} from '@/lib/storage';
-import {
-  AppLayout,
-  Card,
-  CardActions,
-  Icon,
-  LinkButton,
-  PageLoading,
-  Panel,
-  useSnackbar,
-  VisuallyHidden,
-} from '@/ui';
+import {Icon, LinkButton, PageLoading, SettingsLayout, SettingsPanel, useSnackbar, VisuallyHidden} from '@/ui';
 
 import './editor.css';
 import {useIssueText} from './useIssueText';
@@ -70,14 +60,30 @@ export function Component() {
   const post = usePost(postId);
 
   if (catalog.isPending || (postId && post.isPending)) return <PageLoading />;
-  if (catalog.isError) return <Shell editing={postId !== undefined}><ErrorState error={catalog.error} onRetry={() => void catalog.refetch()} /></Shell>;
+  if (catalog.isError)
+    return (
+      <Shell editing={postId !== undefined}>
+        <ErrorState error={catalog.error} onRetry={() => void catalog.refetch()} />
+      </Shell>
+    );
   const data = post.data;
   if (postId) {
-    if (post.isError || !data) return <Shell editing={postId !== undefined}><ErrorState error={post.error ?? new Error('missing')} onRetry={() => void post.refetch()} /></Shell>;
+    if (post.isError || !data)
+      return (
+        <Shell editing={postId !== undefined}>
+          <ErrorState error={post.error ?? new Error('missing')} onRetry={() => void post.refetch()} />
+        </Shell>
+      );
     if (data.status === 'hidden') {
       return (
         <Shell editing={postId !== undefined}>
-          <EmptyState icon="visibility_off" title={t('locked.hiddenTitle')} tone="secondary" shape="octagon" action={<LinkButton to={paths.myPosts()}>{t('locked.myPosts')}</LinkButton>}>
+          <EmptyState
+            icon="visibility_off"
+            title={t('locked.hiddenTitle')}
+            tone="secondary"
+            shape="octagon"
+            action={<LinkButton to={paths.myPosts()}>{t('locked.myPosts')}</LinkButton>}
+          >
             {t('locked.hiddenBody')}
             {data.hidden_reason ? ` ${t('locked.reason', {reason: data.hidden_reason})}` : ''}
           </EmptyState>
@@ -87,7 +93,11 @@ export function Component() {
     if (!data.can_edit) {
       return (
         <Shell editing={postId !== undefined}>
-          <EmptyState icon="lock" title={t('locked.forbiddenTitle')} action={<LinkButton to={paths.post(data.id)}>{t('locked.view')}</LinkButton>}>
+          <EmptyState
+            icon="lock"
+            title={t('locked.forbiddenTitle')}
+            action={<LinkButton to={paths.post(data.id)}>{t('locked.view')}</LinkButton>}
+          >
             {t('locked.forbiddenBody')}
           </EmptyState>
         </Shell>
@@ -99,12 +109,7 @@ export function Component() {
 
 function Shell({children, editing}: {children: React.ReactNode; editing: boolean}) {
   const {t} = useT('editor');
-  return (
-    <AppLayout>
-      <h1 className="ed-sr-title">{editing ? t('titleEdit') : t('titleNew')}</h1>
-      {children}
-    </AppLayout>
-  );
+  return <SettingsLayout title={editing ? t('titleEdit') : t('titleNew')}>{children}</SettingsLayout>;
 }
 
 // ---------------------------------------------------------------------------
@@ -128,7 +133,9 @@ type SubmitMode = 'publish' | 'draft';
 function focusField(name: string) {
   window.requestAnimationFrame(() => {
     const box = document.querySelector<HTMLElement>(`[data-field="${name}"]`);
-    const target = box?.querySelector<HTMLElement>('md-outlined-text-field, md-outlined-select, md-checkbox, md-radio, md-switch, md-icon-button, md-text-button');
+    const target = box?.querySelector<HTMLElement>(
+      'md-outlined-text-field, md-outlined-select, md-checkbox, md-radio, md-switch, md-icon-button, md-text-button',
+    );
     (target ?? box)?.focus();
   });
 }
@@ -142,7 +149,7 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
   const [searchParams] = useSearchParams();
   const snackbar = useSnackbar();
   const auth = useAuthAction();
-  const {me, canWrite} = useSession();
+  const {canWrite} = useSession();
   const issueText = useIssueText();
 
   const guilds = useMyGuilds();
@@ -155,9 +162,14 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
   const editing = initialPost !== undefined;
   const key = draftKey(initialPost?.id);
   const [base, setBase] = useState<Post | undefined>(initialPost);
-  const pristine = useMemo(() => (base ? formFromPost(base) : EMPTY_FORM), [base]);
+  // `?kind=user` (from the candidates page) starts a personal post: the type step is skipped.
+  const presetUser = !editing && searchParams.get('kind') === 'user';
+  const pristine = useMemo(
+    () => (base ? formFromPost(base) : presetUser ? {...EMPTY_FORM, kind: 'user' as const} : EMPTY_FORM),
+    [base, presetUser],
+  );
   const focusExpiry = editing && searchParams.get('focus') === 'expiry';
-  const firstStep: StepId = focusExpiry ? 'extras' : editing ? 'content' : 'type';
+  const firstStep: StepId = focusExpiry ? 'extras' : editing || presetUser ? 'content' : 'type';
 
   // A form saved in this browser comes back, with a notice.
   const [restored] = useState(() => {
@@ -170,7 +182,7 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
   const [form, setForm] = useState<FormState>(restored?.form ?? pristine);
   const [step, setStep] = useState<StepId>(restored?.step ?? firstStep);
   const [visited, setVisited] = useState<Set<StepId>>(
-    () => new Set<StepId>(editing ? STEP_IDS.filter((id) => id !== 'review') : []),
+    () => new Set<StepId>(editing ? STEP_IDS.filter((id) => id !== 'review') : presetUser ? ['type'] : []),
   );
   const [showErrors, setShowErrors] = useState<Set<StepId>>(() => new Set());
   const [serverErrors, setServerErrors] = useState<Record<string, string>>({});
@@ -206,7 +218,11 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
   const [preselected, setPreselected] = useState(false);
   if (!preselected && !editing && guildParam && guilds.data) {
     setPreselected(true);
-    if (guilds.data.some((entry) => entry.claimed && entry.id === guildParam) && form.kind === '' && form.guildId === '') {
+    if (
+      guilds.data.some((entry) => entry.claimed && entry.id === guildParam) &&
+      form.kind === '' &&
+      form.guildId === ''
+    ) {
       setForm({...form, kind: 'guild', guildId: guildParam});
     }
   }
@@ -278,9 +294,12 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
     if (isApiError(error) && error.validation && error.validation.length > 0) {
       const mapped = mapServerIssues(error.validation);
       const messages: Record<string, string> = {};
-      for (const entry of mapped) if (entry.step !== 'review') messages[entry.field] ??= issueMessage(entry.issue, tErrors);
+      for (const entry of mapped)
+        if (entry.step !== 'review') messages[entry.field] ??= issueMessage(entry.issue, tErrors);
       setServerErrors(messages);
-      const stepsWithIssues = mapped.map((entry) => entry.step).filter((id): id is Exclude<StepId, 'review'> => id !== 'review');
+      const stepsWithIssues = mapped
+        .map((entry) => entry.step)
+        .filter((id): id is Exclude<StepId, 'review'> => id !== 'review');
       if (stepsWithIssues.length < mapped.length) setBanner(error);
       if (stepsWithIssues.length > 0) {
         const target = STEP_IDS.find((id) => id !== 'review' && stepsWithIssues.includes(id))!;
@@ -299,9 +318,7 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
       return;
     }
     setBanner(error);
-    window.requestAnimationFrame(() =>
-      document.querySelector('.ed-banner')?.scrollIntoView({block: 'center'}),
-    );
+    window.requestAnimationFrame(() => document.querySelector('.ed-banner')?.scrollIntoView({block: 'center'}));
     if (code && CLAIM_CODES.includes(code) && !editing) go('type');
   };
 
@@ -320,7 +337,9 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
     try {
       const result = await auth.run(async () => {
         if (!editing || !base) {
-          return create.mutateAsync(toCreateBody(form, catalog, new Date(), mode === 'publish' ? 'published' : 'draft'));
+          return create.mutateAsync(
+            toCreateBody(form, catalog, new Date(), mode === 'publish' ? 'published' : 'draft'),
+          );
         }
         const body = toUpdateBody(form, base, catalog, new Date());
         let post: Post = base;
@@ -364,7 +383,9 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
     content: form.title.trim() || t('review.empty'),
     positions:
       form.positions
-        .map((id) => (id === 'other' && form.positionsOther.length > 0 ? form.positionsOther.join(', ') : label('positions', id)))
+        .map((id) =>
+          id === 'other' && form.positionsOther.length > 0 ? form.positionsOther.join(', ') : label('positions', id),
+        )
         .join(', ') || t('review.empty'),
     requirements: t('review.summary.requirements', {count: form.requirements.length}),
     application:
@@ -383,15 +404,20 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
       ]
         .filter(Boolean)
         .join(' · ') || t('review.empty'),
-    extras:
-      [
-        form.theme && label('themes', form.theme),
-        form.tags.length > 0 && t('review.summary.tags', {count: form.tags.length}),
-        form.expiresOn ? t('review.summary.expires', {date: new Intl.DateTimeFormat(language, {dateStyle: 'medium'}).format(new Date(`${form.expiresOn}T12:00:00`))}) : t('review.summary.never'),
-        form.featuredExperienceId && t('review.summary.featured'),
-      ]
-        .filter(Boolean)
-        .join(' · '),
+    extras: [
+      form.theme && label('themes', form.theme),
+      form.tags.length > 0 && t('review.summary.tags', {count: form.tags.length}),
+      form.expiresOn
+        ? t('review.summary.expires', {
+            date: new Intl.DateTimeFormat(language, {dateStyle: 'medium'}).format(
+              new Date(`${form.expiresOn}T12:00:00`),
+            ),
+          })
+        : t('review.summary.never'),
+      form.featuredExperienceId && t('review.summary.featured'),
+    ]
+      .filter(Boolean)
+      .join(' · '),
   };
   const stateOf = (id: StepId): 'done' | 'error' | 'todo' => {
     if (issues[id]) return visited.has(id) || id === 'review' ? 'error' : 'todo';
@@ -412,122 +438,134 @@ function EditorForm({catalog, initialPost}: {catalog: Catalog; initialPost: Post
 
   const stepProps: StepProps = {form, set, err, catalog, editing};
 
-  return (
-    <AppLayout
-      aside={
-        <PostPreview form={form} catalog={catalog} guild={guild} base={base} author={me?.user} />
-      }
-      stickyAside
-    >
-      <Card className="ed-head">
-        <div className="ed-head-row">
-          <div>
-            <h1>{editing ? t('titleEdit') : t('titleNew')}</h1>
-            <p>{editing ? t('introEdit') : t('introNew')}</p>
-          </div>
-        </div>
-        {restoredAt !== null && (
-          <Panel className="ed-restored" role="status">
-            <Icon name="restore" filled />
-            <p>
-              {t('restored.text')} <RelativeTime value={new Date(restoredAt).toISOString()} />
-            </p>
-            <md-text-button onclick={discard}>{t('restored.discard')}</md-text-button>
-          </Panel>
+  const visibleSteps = STEP_IDS.filter((id) => !(editing && id === 'type'));
+  const position = visibleSteps.indexOf(step) + 1;
+  const stepName = t(`steps.${step}.short`);
+  const canPublish = !editing || status !== 'published';
+
+  const actions =
+    step === 'review' ? (
+      <>
+        <md-outlined-button disabled={busy} onclick={previous}>
+          {t('actions.previous')}
+        </md-outlined-button>
+        {canPublish && (
+          <md-outlined-button disabled={busy || !canWrite} onclick={() => void submit('draft')}>
+            {busy && lastMode === 'draft'
+              ? t('actions.sending')
+              : editing
+                ? t('actions.saveEdit')
+                : t('actions.saveDraft')}
+          </md-outlined-button>
         )}
-        <nav aria-label={t('stepper.label')}>
+        {canPublish ? (
+          <md-filled-button disabled={busy || !canWrite} onclick={() => void submit('publish')}>
+            {busy && lastMode === 'publish'
+              ? t('actions.sending')
+              : status === 'closed'
+                ? t('actions.republish')
+                : t('actions.publish')}
+          </md-filled-button>
+        ) : (
+          <md-filled-button disabled={busy || !canWrite} onclick={() => void submit('draft')}>
+            {busy ? t('actions.sending') : t('actions.saveChanges')}
+          </md-filled-button>
+        )}
+      </>
+    ) : (
+      <>
+        {index > (editing ? 1 : 0) && (
+          <md-outlined-button onclick={previous}>{t('actions.previous')}</md-outlined-button>
+        )}
+        <md-filled-button onclick={next}>{t('actions.next')}</md-filled-button>
+      </>
+    );
+
+  return (
+    <SettingsLayout title={editing ? t('titleEdit') : t('titleNew')} className="ed-page">
+      {restoredAt !== null && (
+        <div className="ed-restored" role="status">
+          <Icon name="restore" filled />
+          <p>
+            {t('restored.text')} <RelativeTime value={new Date(restoredAt).toISOString()} />
+          </p>
+          <md-text-button onclick={discard}>{t('restored.discard')}</md-text-button>
+        </div>
+      )}
+
+      <div className="ed-progress">
+        <p className="ed-progress-text numeric">
+          {t('stepper.compact', {current: position, total: visibleSteps.length, name: stepName})}
+        </p>
+        <md-linear-progress value={position} max={visibleSteps.length} aria-hidden="true" />
+      </div>
+
+      <div className="ed-body">
+        <nav className="ed-stepper-nav" aria-label={t('stepper.label')}>
           <ol className="ed-stepper">
-            {STEP_IDS.filter((id) => !(editing && id === 'type')).map((id) => {
+            {visibleSteps.map((id) => {
               const state = stateOf(id);
               const current = id === step;
-              const icon = current ? 'edit' : state === 'error' ? 'error' : state === 'done' ? 'check_circle' : 'radio_button_unchecked';
+              const icon = current
+                ? 'edit'
+                : state === 'error'
+                  ? 'error'
+                  : state === 'done'
+                    ? 'check_circle'
+                    : 'radio_button_unchecked';
               return (
                 <li key={id} className={`ed-step is-${current ? 'current' : state}`}>
-                  <md-text-button aria-current={current ? 'step' : undefined} onclick={() => go(id)}>
-                    <md-icon slot="icon" className="filled" aria-hidden="true">
-                      {icon}
-                    </md-icon>
+                  <button type="button" aria-current={current ? 'step' : undefined} onClick={() => go(id)}>
+                    <Icon name={icon} filled />
                     <span className="ed-step-label">{t(`steps.${id}.short`)}</span>
-                    <VisuallyHidden>
-                      {' '}
-                      {t(`stepper.state.${current ? 'current' : state}`)}
-                    </VisuallyHidden>
-                  </md-text-button>
+                    <VisuallyHidden> {t(`stepper.state.${current ? 'current' : state}`)}</VisuallyHidden>
+                  </button>
                 </li>
               );
             })}
           </ol>
         </nav>
-      </Card>
 
-      <Card className="ed-step-card" aria-labelledby="ed-step-title">
-        <div className="ed-step-head">
-          <p className="ed-step-count numeric">{t('stepper.count', {current: index + 1, total: STEP_IDS.length})}</p>
-          <h2 id="ed-step-title" ref={heading} tabIndex={-1}>
-            {t(`steps.${step}.title`)}
-          </h2>
-          <p>{t(`steps.${step}.intro`)}</p>
-        </div>
-
-        {banner !== null && (
-          <SubmitBanner
-            error={banner}
-            editing={editing}
-            busy={busy}
-            onRetry={() => void submit(lastMode)}
-            onSaveDraft={() => void submit('draft')}
-          />
-        )}
-
-        {step === 'type' && <TypeStep {...stepProps} guilds={guilds} />}
-        {step === 'content' && <ContentStep {...stepProps} />}
-        {step === 'positions' && <PositionsStep {...stepProps} />}
-        {step === 'requirements' && <RequirementsStep {...stepProps} />}
-        {step === 'application' && <ApplicationStep {...stepProps} />}
-        {step === 'commitment' && <CommitmentStep {...stepProps} />}
-        {step === 'extras' && <ExtrasStep {...stepProps} experiences={experiences} now={now} />}
-        {step === 'review' && (
-          <ReviewStep
-            rows={rows}
-            onGo={(id) => {
-              setShowErrors((current) => new Set(current).add(id));
-              go(id, Object.keys(issues[id] ?? {})[0]);
-            }}
-            quota={form.kind === 'user' && willPublish && quota.ready ? {used: quota.used, limit: userLimit} : null}
-          />
-        )}
-
-        <CardActions>
-          {step === 'review' ? (
-            <>
-              {(!editing || status !== 'published') && (
-                <md-filled-button disabled={busy || !canWrite} onclick={() => void submit('publish')}>
-                  {busy && lastMode === 'publish' ? t('actions.sending') : status === 'closed' ? t('actions.republish') : t('actions.publish')}
-                </md-filled-button>
-              )}
-              {editing && status === 'published' ? (
-                <md-filled-button disabled={busy || !canWrite} onclick={() => void submit('draft')}>
-                  {busy ? t('actions.sending') : t('actions.saveChanges')}
-                </md-filled-button>
-              ) : (
-                <md-outlined-button disabled={busy || !canWrite} onclick={() => void submit('draft')}>
-                  {busy && lastMode === 'draft' ? t('actions.sending') : editing ? t('actions.saveEdit') : t('actions.saveDraft')}
-                </md-outlined-button>
-              )}
-              <md-text-button disabled={busy} onclick={previous}>
-                {t('actions.previous')}
-              </md-text-button>
-            </>
-          ) : (
-            <>
-              <md-filled-button onclick={next}>{t('actions.next')}</md-filled-button>
-              {index > (editing ? 1 : 0) && (
-                <md-text-button onclick={previous}>{t('actions.previous')}</md-text-button>
-              )}
-            </>
+        <SettingsPanel
+          className="ed-panel"
+          title={
+            <span ref={heading} tabIndex={-1} className="ed-panel-title">
+              {t(`steps.${step}.title`)}
+            </span>
+          }
+          description={t(`steps.${step}.intro`)}
+          actions={actions}
+        >
+          {banner !== null && (
+            <SubmitBanner
+              error={banner}
+              editing={editing}
+              busy={busy}
+              onRetry={() => void submit(lastMode)}
+              onSaveDraft={() => void submit('draft')}
+            />
           )}
-        </CardActions>
-      </Card>
-    </AppLayout>
+
+          {step === 'type' && <TypeStep {...stepProps} guilds={guilds} />}
+          {step === 'content' && <ContentStep {...stepProps} />}
+          {step === 'positions' && <PositionsStep {...stepProps} />}
+          {step === 'requirements' && <RequirementsStep {...stepProps} />}
+          {step === 'application' && <ApplicationStep {...stepProps} />}
+          {step === 'commitment' && <CommitmentStep {...stepProps} />}
+          {step === 'extras' && <ExtrasStep {...stepProps} experiences={experiences} now={now} />}
+          {step === 'review' && (
+            <ReviewStep
+              rows={rows}
+              onGo={(id) => {
+                setShowErrors((current) => new Set(current).add(id));
+                go(id, Object.keys(issues[id] ?? {})[0]);
+              }}
+              quota={form.kind === 'user' && willPublish && quota.ready ? {used: quota.used, limit: userLimit} : null}
+              preview={<PostPreview title={form.title} description={form.description} />}
+            />
+          )}
+        </SettingsPanel>
+      </div>
+    </SettingsLayout>
   );
 }

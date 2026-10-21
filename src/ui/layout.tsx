@@ -6,7 +6,7 @@ import type {Span} from './Card';
 
 type DivProps = Omit<HTMLAttributes<HTMLDivElement>, 'className'> & {className?: string; children?: ReactNode};
 
-/** The content column (1240px at most, centered). `special`: 404, errors, sign-in; no footer. */
+/** The content column (1240px at most, centered). `special`: 404, errors, sign-in. */
 export function Page({special, className, ...props}: DivProps & {special?: boolean}) {
   return <div {...props} className={cx('page', special && 'special', className)} />;
 }

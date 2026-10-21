@@ -1,12 +1,15 @@
+import type {MdIconButton} from '@material/web/iconbutton/icon-button.js';
+import type {MdMenu} from '@material/web/menu/menu.js';
+import {ExperienceList} from '@/components/ExperienceRow';
 import {useQueryClient} from '@tanstack/react-query';
-import {type ReactNode, useState} from 'react';
+import {type ReactNode, useLayoutEffect, useRef, useState} from 'react';
 import {Link, useNavigate, useParams} from 'react-router';
 
 import {useCatalogLabel} from '@/api/catalog';
 import {hasCode} from '@/api/client';
 import {errorMessage} from '@/api/errors';
 import {useClosePost, useDeletePost, usePublishPost} from '@/api/mutations';
-import {useMyExperiences, useMyProfile, usePost, useUser} from '@/api/queries';
+import {useGuild, useMyExperiences, useMyProfile, usePost, useUser} from '@/api/queries';
 import {queryKeys} from '@/api/queryKeys';
 import type {PostDetail} from '@/api/types';
 import {useRetryAfter} from '@/api/useRetryAfter';
@@ -16,17 +19,21 @@ import {useAuthAction} from '@/auth/useAuthAction';
 import {useSession} from '@/auth/session';
 import {
   ApplicationAction,
-  CommitmentSummary,
+  DisplayName,
+  Fact,
+  FactList,
+  TagLabel,
   ErrorState,
   ExperienceRow,
   ExpiryLabel,
   GuildIcon,
+  InlineStats,
   isNsfw,
-  LanguageList,
+  LanguageFlags,
+  Markdown,
   NsfwGate,
-  PostStatusBadge,
   RelativeTime,
-  ReportButton,
+  ReportDialog,
   RequirementList,
   type RequirementViewer,
   RetryButton,
@@ -34,27 +41,23 @@ import {
   UserAvatar,
 } from '@/components';
 import {positionItems} from '@/components/positions';
+import {formatNumber} from '@/lib/format';
 import {useT} from '@/i18n/useT';
 import {
-  Bento,
   Card,
   CardActions,
-  Chip,
-  Chips,
   ConfirmDialog,
   Icon,
   LinkButton,
   Page,
   Pill,
-  Rows,
+  ShowcasePage,
   Shape,
   Spinner,
-  Stack,
-  Status,
   useSnackbar,
 } from '@/ui';
 
-import {ownerActions} from './postActions';
+import {type OwnerAction, ownerActions} from './postActions';
 import './post.css';
 
 export function Component() {
@@ -70,13 +73,9 @@ export function Component() {
   if (query.isError) {
     if (hasCode(query.error, 'lineup_post_not_found')) return <NotFound />;
     return (
-      <Page>
-        <Bento>
-          <Stack span={8}>
-            <ErrorState error={query.error} onRetry={() => void query.refetch()} retrying={query.isFetching} />
-          </Stack>
-        </Bento>
-      </Page>
+      <ShowcasePage className="post-page">
+        <ErrorState error={query.error} onRetry={() => void query.refetch()} retrying={query.isFetching} />
+      </ShowcasePage>
     );
   }
   return <PostView post={query.data} onDeleted={() => setDeleted(true)} />;
@@ -85,16 +84,12 @@ export function Component() {
 function Loading() {
   const {t} = useT('post');
   return (
-    <Page>
-      <Bento>
-        <Stack span={8}>
-          <Card aria-busy="true">
-            <h1 className="visually-hidden">{t('title')}</h1>
-            <Spinner />
-          </Card>
-        </Stack>
-      </Bento>
-    </Page>
+    <ShowcasePage className="post-page">
+      <h1 className="visually-hidden">{t('title')}</h1>
+      <div className="post-state" aria-busy="true">
+        <Spinner />
+      </div>
+    </ShowcasePage>
   );
 }
 
@@ -103,53 +98,73 @@ function NotFound() {
   const {t: tCommon} = useT('common');
   return (
     <Page special>
-      <Bento>
-        <Card variant="hero">
-          <Shape shape="hexagon" tone="tertiary" icon="search_off" />
-          <h1>{t('notFound.title')}</h1>
-          <p>{t('notFound.body')}</p>
-          <CardActions>
-            <LinkButton to={paths.feed()} icon="arrow_back">
-              {tCommon('actions.backToFeed')}
-            </LinkButton>
-          </CardActions>
-        </Card>
-      </Bento>
+      <Card variant="hero">
+        <Shape shape="hexagon" tone="tertiary" icon="search_off" />
+        <h1>{t('notFound.title')}</h1>
+        <p>{t('notFound.body')}</p>
+        <CardActions>
+          <LinkButton to={paths.feed()} icon="arrow_back">
+            {tCommon('actions.backToFeed')}
+          </LinkButton>
+        </CardActions>
+      </Card>
     </Page>
   );
 }
 
 // ---------------------------------------------------------------------------
 
+/** Who posts: the server (kind `guild`) or the person (kind `user`), with what the page can tell of them. */
+function usePoster(post: PostDetail) {
+  const {t: tc} = useT('components');
+  const isGuild = post.kind === 'guild' && post.guild_id !== null;
+  const guild = useGuild(isGuild ? post.guild_id! : undefined);
+  const user = useUser(isGuild ? undefined : post.author_id);
+  const name = isGuild
+    ? (post.guild?.name ?? guild.data?.name ?? tc('post.unknownGuild'))
+    : (post.author.global_name ?? post.author.username ?? tc('post.unknownAuthor'));
+  return {
+    isGuild,
+    name,
+    badges: isGuild ? (post.guild?.badges ?? guild.data?.badges) : (post.author.badges ?? user.data?.badges),
+    to: isGuild ? paths.guild(post.guild_id!) : paths.user(post.author_id),
+    guild: guild.data,
+    user: user.data,
+  };
+}
+
 function PostView({post, onDeleted}: {post: PostDetail; onDeleted: () => void}) {
   const nsfw = isNsfw({theme: post.theme});
+  const poster = usePoster(post);
   return (
-    <Page>
+    <ShowcasePage className="post-page">
       <NsfwGate nsfw={nsfw} headingLevel={1}>
-        <Bento>
-          <Stack span={8}>
-            <Banners post={post} />
-            <PostMain post={post} />
-          </Stack>
-          <Stack span={4} sticky>
-            <OwnerCard post={post} onDeleted={onDeleted} />
-            <ApplyCard post={post} />
-            <AuthorCard post={post} />
-            <FeaturedExperience post={post} />
-            {!post.can_edit && <ReportCard post={post} />}
-          </Stack>
-        </Bento>
+        <Banners post={post} />
+        <PostHeader post={post} poster={poster} onDeleted={onDeleted} />
+        <div className="post-body">
+          <Summary post={post} />
+          <Card as="article" className="post-content">
+            <Description post={post} />
+            <Requirements post={post} />
+            <FeaturedExperience post={post} poster={poster} />
+          </Card>
+          <Poster post={post} poster={poster} />
+        </div>
       </NsfwGate>
-    </Page>
+    </ShowcasePage>
   );
 }
 
-function Banner({icon, tone, children}: {icon: string; tone: 'tertiary' | 'secondary' | 'primary'; children: ReactNode}) {
+// ---------------------------------------------------------------------------
+// Status lines
+// ---------------------------------------------------------------------------
+
+function Banner({icon, children}: {icon: string; children: ReactNode}) {
   return (
-    <Card className="post-banner" role="status">
-      <Shape shape="octagon" tone={tone} icon={icon} small />
-      <div className="post-banner-text">{children}</div>
-    </Card>
+    <p className="post-banner" role="status">
+      <Icon name={icon} filled />
+      <span>{children}</span>
+    </p>
   );
 }
 
@@ -158,33 +173,24 @@ function Banners({post}: {post: PostDetail}) {
   const expired = post.status === 'published' && post.is_expired;
   return (
     <>
-      {post.status === 'draft' && (
-        <Banner icon="edit_note" tone="secondary">
-          <strong>{t('banner.draft.title')}</strong>
-          <p>{t('banner.draft.body')}</p>
-        </Banner>
-      )}
-      {post.status === 'closed' && (
-        <Banner icon="lock" tone="secondary">
-          <strong>{t('banner.closed.title')}</strong>
-          <p>{t('banner.closed.body')}</p>
-        </Banner>
-      )}
+      {post.status === 'draft' && <Banner icon="edit_note">{t('banner.draft')}</Banner>}
+      {post.status === 'closed' && <Banner icon="lock">{t('banner.closed')}</Banner>}
       {post.status === 'hidden' && (
-        <Banner icon="visibility_off" tone="tertiary">
-          <strong>{t('banner.hidden.title')}</strong>
-          <p>{t('banner.hidden.body')}</p>
-          {post.hidden_reason && <p className="post-banner-reason">{t('banner.hidden.reason', {reason: post.hidden_reason})}</p>}
+        <Banner icon="visibility_off">
+          {t('banner.hidden')}
+          {post.hidden_reason && <> {t('banner.hiddenReason', {reason: post.hidden_reason})}</>}
         </Banner>
       )}
       {expired && (
-        <Banner icon="event_busy" tone="tertiary">
-          <strong>{t('banner.expired.title')}</strong>
-          <p>{post.can_edit ? t('banner.expired.editor') : t('banner.expired.body')}</p>
+        <Banner icon="event_busy">
+          {post.can_edit ? t('banner.expiredEditor') : t('banner.expired')}
           {post.can_edit && (
-            <Link to={`${paths.postEdit(post.id)}?focus=expiry`} className="post-banner-link">
-              {t('banner.expired.edit')}
-            </Link>
+            <>
+              {' '}
+              <Link to={`${paths.postEdit(post.id)}?focus=expiry`} className="post-link">
+                {t('banner.expiredEdit')}
+              </Link>
+            </>
           )}
         </Banner>
       )}
@@ -192,249 +198,13 @@ function Banners({post}: {post: PostDetail}) {
   );
 }
 
-function Author({post}: {post: PostDetail}) {
-  const {t: tc} = useT('components');
-  const isGuild = post.kind === 'guild';
-  const name = isGuild
-    ? (post.guild?.name ?? tc('post.unknownGuild'))
-    : (post.author.global_name ?? post.author.username ?? tc('post.unknownAuthor'));
-  const to = isGuild && post.guild_id ? paths.guild(post.guild_id) : paths.user(post.author_id);
-  return (
-    <Link to={to} className="post-author">
-      {isGuild && post.guild_id ? (
-        <GuildIcon id={post.guild_id} iconUrl={post.guild?.icon_url} />
-      ) : (
-        <UserAvatar id={post.author.id} src={post.author.avatar_url} />
-      )}
-      <strong>{name}</strong>
-    </Link>
-  );
-}
-
-function PostMain({post}: {post: PostDetail}) {
-  const {t} = useT('post');
-  const {t: tc} = useT('components');
-  const {label} = useCatalogLabel();
-  const {status: sessionStatus} = useSession();
-  const signedIn = sessionStatus === 'authenticated';
-  const profile = useMyProfile();
-  const experiences = useMyExperiences();
-
-  const viewer: RequirementViewer | undefined =
-    signedIn && profile.data && experiences.data
-      ? {
-          accountCreatedAt: profile.data.created_at,
-          hasVerifiedExperience: experiences.data.items.some((experience) => experience.verification.status === 'verified'),
-        }
-      : undefined;
-
-  const positions = positionItems(post.positions, post.positions_other, (id) => label('positions', id));
-  const hasCommitment =
-    post.commitment !== null &&
-    (post.commitment.compensation != null || post.commitment.hours_per_week != null || post.commitment.openings != null);
-  const hasDetails = post.languages.length > 0 || post.timezone !== null || post.theme !== null || post.tags.length > 0;
-
-  return (
-    <>
-      <Card as="article" className="post-main" aria-labelledby="post-title">
-        <div className="post-main-top">
-          <Author post={post} />
-          <div className="post-tags">
-            <Status variant={post.kind === 'guild' ? 'default' : 'strong'}>{tc(`post.kind.${post.kind}`)}</Status>
-            {post.status !== 'published' && <PostStatusBadge status={post.status} />}
-            {post.status === 'published' && post.is_expired && <PostStatusBadge status="published" isExpired />}
-          </div>
-        </div>
-        <h1 id="post-title" className="post-page-title">
-          {post.title}
-        </h1>
-        <p className="post-description">{post.description}</p>
-        <ul className="meta-list post-dates">
-          {post.published_at && (
-            <li className="meta-item">
-              <Icon name="event_available" />
-              <span>
-                {t('dates.published')} <RelativeTime value={post.published_at} />
-              </span>
-            </li>
-          )}
-          {post.updated_at !== (post.published_at ?? post.created_at) && (
-            <li className="meta-item">
-              <Icon name="edit_calendar" />
-              <span>
-                {t('dates.updated')} <RelativeTime value={post.updated_at} />
-              </span>
-            </li>
-          )}
-          <li className="meta-item">
-            <Icon name={post.is_expired ? 'event_busy' : 'hourglass_bottom'} />
-            <ExpiryLabel expiresAt={post.expires_at} isExpired={post.is_expired} mode="always" />
-          </li>
-        </ul>
-      </Card>
-
-      <Card as="section" aria-labelledby="post-positions">
-        <h2 id="post-positions">{t('sections.positions')}</h2>
-        {positions.length > 0 && (
-          <Chips aria-label={t('sections.positions')}>
-            {positions.map((position) => (
-              <Chip key={position.key} icon={position.icon}>
-                <span className="chip-label">{position.label}</span>
-              </Chip>
-            ))}
-          </Chips>
-        )}
-        {hasCommitment && (
-          <ul className="meta-list post-commitment">
-            <CommitmentSummary commitment={post.commitment} bare />
-          </ul>
-        )}
-      </Card>
-
-      {post.requirements.length > 0 && (
-        <Card as="section" aria-labelledby="post-requirements">
-          <h2 id="post-requirements">{t('sections.requirements')}</h2>
-          <RequirementList requirements={post.requirements} viewer={viewer} />
-        </Card>
-      )}
-
-      {hasDetails && (
-        <Card as="section" aria-labelledby="post-details">
-          <h2 id="post-details">{t('sections.details')}</h2>
-          <dl className="post-facts">
-            {post.languages.length > 0 && (
-              <div>
-                <dt>{t('facts.languages')}</dt>
-                <dd>
-                  <LanguageList codes={post.languages} />
-                </dd>
-              </div>
-            )}
-            {post.timezone && (
-              <div>
-                <dt>{t('facts.timezone')}</dt>
-                <dd>
-                  <TimezoneLabel timezone={post.timezone} />
-                </dd>
-              </div>
-            )}
-            {post.theme && (
-              <div>
-                <dt>{t('facts.theme')}</dt>
-                <dd>{label('themes', post.theme)}</dd>
-              </div>
-            )}
-            {post.tags.length > 0 && (
-              <div>
-                <dt>{t('facts.tags')}</dt>
-                <dd>
-                  <Chips aria-label={t('facts.tags')}>
-                    {post.tags.map((tag) => (
-                      <Chip key={tag} mono>
-                        {tag}
-                      </Chip>
-                    ))}
-                  </Chips>
-                </dd>
-              </div>
-            )}
-          </dl>
-        </Card>
-      )}
-    </>
-  );
-}
-
 // ---------------------------------------------------------------------------
-// Side column
+// Header: title, who and when, the main action and the menu
 // ---------------------------------------------------------------------------
 
-function ApplyCard({post}: {post: PostDetail}) {
-  const {t} = useT('post');
-  const {application} = post;
-  const open = post.status === 'published' && !post.is_expired;
-  if (!application || !open || application.type === 'lineup_form') return null;
-  return (
-    <Card as="section" aria-labelledby="post-apply">
-      <h2 id="post-apply">{t('apply.title')}</h2>
-      <p>{application.type === 'external_url' ? t('apply.external') : t('apply.dm')}</p>
-      <CardActions>
-        <ApplicationAction post={post} />
-      </CardActions>
-    </Card>
-  );
-}
+type Poster = ReturnType<typeof usePoster>;
 
-function AuthorCard({post}: {post: PostDetail}) {
-  const {t} = useT('post');
-  const {t: tc} = useT('components');
-  const isGuild = post.kind === 'guild' && post.guild_id;
-  const name = isGuild
-    ? (post.guild?.name ?? tc('post.unknownGuild'))
-    : (post.author.global_name ?? post.author.username ?? tc('post.unknownAuthor'));
-  return (
-    <Card as="section" aria-labelledby="post-author">
-      <h2 id="post-author">{isGuild ? t('author.guild') : t('author.user')}</h2>
-      <div className="post-author-card">
-        {isGuild && post.guild_id ? (
-          <GuildIcon id={post.guild_id} iconUrl={post.guild?.icon_url} size="large" />
-        ) : (
-          <UserAvatar id={post.author.id} src={post.author.avatar_url} size="large" />
-        )}
-        <div className="post-author-name">
-          <strong>{name}</strong>
-          {!isGuild && post.author.username && <Pill>@{post.author.username}</Pill>}
-        </div>
-      </div>
-      <CardActions>
-        <LinkButton
-          variant="outlined"
-          icon={isGuild ? 'groups' : 'person'}
-          to={isGuild && post.guild_id ? paths.guild(post.guild_id) : paths.user(post.author_id)}
-        >
-          {isGuild ? t('author.viewGuild') : t('author.viewUser')}
-        </LinkButton>
-      </CardActions>
-    </Card>
-  );
-}
-
-function FeaturedExperience({post}: {post: PostDetail}) {
-  const {t} = useT('post');
-  const wanted = post.kind === 'user' && post.featured_experience_id !== null;
-  const user = useUser(wanted ? post.author_id : undefined);
-  const experience = user.data?.experiences.find((item) => item.id === post.featured_experience_id);
-  if (!wanted || !experience) return null;
-  return (
-    <Card as="section" aria-labelledby="post-featured">
-      <h2 id="post-featured">{t('featured.title')}</h2>
-      <Rows as="ul">
-        <ExperienceRow
-          experience={experience}
-          href={experience.kind === 'guild' && experience.guild_id ? paths.guild(experience.guild_id) : undefined}
-        />
-      </Rows>
-    </Card>
-  );
-}
-
-function ReportCard({post}: {post: PostDetail}) {
-  const {t} = useT('post');
-  if (post.status !== 'published') return null;
-  return (
-    <Card as="section" className="post-report" aria-label={t('report.label')}>
-      <ReportButton target={{type: 'post', id: post.id}} />
-    </Card>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Owner actions
-// ---------------------------------------------------------------------------
-
-type Pending = 'publish' | 'reopen' | 'close';
-
-function OwnerCard({post, onDeleted}: {post: PostDetail; onDeleted: () => void}) {
+function PostHeader({post, poster, onDeleted}: {post: PostDetail; poster: Poster; onDeleted: () => void}) {
   const {t} = useT('post');
   const {t: tErrors} = useT('errors');
   const {t: tCommon} = useT('common');
@@ -449,11 +219,21 @@ function OwnerCard({post, onDeleted}: {post: PostDetail; onDeleted: () => void})
 
   const [error, setError] = useState<unknown>(null);
   const [confirming, setConfirming] = useState(false);
+  const [reporting, setReporting] = useState(false);
+  // The report dialog is mounted on first use, then kept so that it can animate out.
+  const [reportMounted, setReportMounted] = useState(false);
   const [last, setLast] = useState<(() => Promise<void>) | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const wait = useRetryAfter(error);
+  const menuButton = useRef<MdIconButton>(null);
+  const menu = useRef<MdMenu>(null);
+  useLayoutEffect(() => {
+    if (menu.current) menu.current.anchorElement = menuButton.current;
+  });
 
   const actions = ownerActions(post);
-  if (actions.length === 0) return null;
+  const editor = actions.length > 0;
+  const canReport = !post.can_edit && post.status === 'published';
   const busy = publish.isPending || close.isPending || remove.isPending;
   const disabled = busy || !canWrite || wait.active;
 
@@ -461,17 +241,15 @@ function OwnerCard({post, onDeleted}: {post: PostDetail; onDeleted: () => void})
   const run = (action: () => Promise<void>) => {
     setLast(() => action);
     setError(null);
-    return auth
-      .run(action)
-      .catch((failure: unknown) => {
-        setError(failure);
-        if (hasCode(failure, 'lineup_post_hidden', 'lineup_post_invalid_status', 'lineup_post_not_found')) {
-          void queryClient.invalidateQueries({queryKey: queryKeys.postDetail(post.id), exact: true});
-        }
-      });
+    return auth.run(action).catch((failure: unknown) => {
+      setError(failure);
+      if (hasCode(failure, 'lineup_post_hidden', 'lineup_post_invalid_status', 'lineup_post_not_found')) {
+        void queryClient.invalidateQueries({queryKey: queryKeys.postDetail(post.id), exact: true});
+      }
+    });
   };
 
-  const change = (kind: Pending) =>
+  const change = (kind: 'publish' | 'reopen' | 'close') =>
     run(async () => {
       if (kind === 'close') await close.mutateAsync(post.id);
       else await publish.mutateAsync(post.id);
@@ -487,55 +265,153 @@ function OwnerCard({post, onDeleted}: {post: PostDetail; onDeleted: () => void})
       void navigate(paths.myPosts());
     }).finally(() => setConfirming(false));
 
-  const message = error === null ? null : errorMessage(error, tErrors, wait.active || !hasCode(error, 'lineup_rate_limited') ? undefined : {seconds: 0});
+  const message =
+    error === null
+      ? null
+      : errorMessage(error, tErrors, wait.active || !hasCode(error, 'lineup_rate_limited') ? undefined : {seconds: 0});
   const quota = hasCode(error, 'lineup_quota_exceeded');
   const expired = hasCode(error, 'lineup_post_expired');
   const retryable = hasCode(error, 'discord_unavailable');
 
   const primary = actions[0];
-  const button = (action: (typeof actions)[number]) => {
-    switch (action) {
+  const menuActions = actions.slice(1);
+
+  const primaryButton = () => {
+    switch (primary) {
       case 'publish':
       case 'reopen':
         return (
-          <md-filled-button key={action} disabled={disabled || post.is_expired} onclick={() => void change(action)}>
+          <md-filled-button disabled={disabled || post.is_expired} onclick={() => void change(primary)}>
             <md-icon slot="icon" className="filled" aria-hidden="true">
-              {action === 'publish' ? 'publish' : 'replay'}
+              {primary === 'publish' ? 'publish' : 'replay'}
             </md-icon>
-            {t(`actions.${action}`)}
+            {t(`actions.${primary}`)}
           </md-filled-button>
         );
       case 'edit':
         return (
-          <LinkButton key="edit" to={paths.postEdit(post.id)} icon="edit" variant={primary === 'edit' ? 'filled' : 'outlined'} disabled={!canWrite}>
+          <LinkButton to={paths.postEdit(post.id)} icon="edit" disabled={!canWrite}>
             {t('actions.edit')}
           </LinkButton>
         );
+      default:
+        return null;
+    }
+  };
+
+  const menuItem = (action: OwnerAction) => {
+    switch (action) {
+      case 'edit':
+        return (
+          <md-menu-item key="edit" disabled={!canWrite} href={paths.postEdit(post.id)}>
+            <md-icon slot="start">edit</md-icon>
+            <div slot="headline">{t('actions.edit')}</div>
+          </md-menu-item>
+        );
+      case 'publish':
+      case 'reopen':
+        return (
+          <md-menu-item key={action} disabled={disabled || post.is_expired} onclick={() => void change(action)}>
+            <md-icon slot="start">{action === 'publish' ? 'publish' : 'replay'}</md-icon>
+            <div slot="headline">{t(`actions.${action}`)}</div>
+          </md-menu-item>
+        );
       case 'close':
         return (
-          <md-outlined-button key="close" disabled={disabled} onclick={() => void change('close')}>
-            <md-icon slot="icon" className="filled" aria-hidden="true">
-              lock
-            </md-icon>
-            {t('actions.close')}
-          </md-outlined-button>
+          <md-menu-item key="close" disabled={disabled} onclick={() => void change('close')}>
+            <md-icon slot="start">lock</md-icon>
+            <div slot="headline">{t('actions.close')}</div>
+          </md-menu-item>
         );
       case 'delete':
         return (
-          <md-text-button key="delete" disabled={disabled} onclick={() => setConfirming(true)}>
-            <md-icon slot="icon" className="filled" aria-hidden="true">
-              delete
-            </md-icon>
-            {tCommon('actions.delete')}
-          </md-text-button>
+          <md-menu-item key="delete" disabled={disabled} onclick={() => setConfirming(true)}>
+            <md-icon slot="start">delete</md-icon>
+            <div slot="headline">{tCommon('actions.delete')}</div>
+          </md-menu-item>
         );
     }
   };
 
+  const hasMenu = menuActions.length > 0 || canReport;
+
   return (
-    <Card as="section" aria-labelledby="post-manage">
-      <h2 id="post-manage">{t('manage.title')}</h2>
-      <p>{t('manage.body')}</p>
+    <>
+      <Card as="section" className="post-header-card" aria-labelledby="post-title">
+        <div className="post-header">
+          <div className="post-heading">
+            <h1 id="post-title" className="post-title">
+              {post.title}
+            </h1>
+            <p className="post-byline">
+              <Link to={poster.to} className="post-poster-link">
+                {poster.isGuild ? (
+                  <GuildIcon id={post.guild_id!} iconUrl={post.guild?.icon_url} size="small" />
+                ) : (
+                  <UserAvatar id={post.author.id} src={post.author.avatar_url} size="small" />
+                )}
+                <DisplayName
+                  name={poster.name}
+                  badges={poster.badges}
+                  entity={poster.isGuild ? 'guild' : 'user'}
+                  focusable={false}
+                />
+              </Link>
+              {post.published_at && (
+                <span className="post-dates">
+                  {t('dates.published')} <RelativeTime value={post.published_at} />
+                </span>
+              )}
+              {Date.parse(post.updated_at) - Date.parse(post.published_at ?? post.created_at) > 60_000 && (
+                <span className="post-dates">
+                  {t('dates.updated')} <RelativeTime value={post.updated_at} />
+                </span>
+              )}
+            </p>
+          </div>
+          <div className="post-actions">
+            {editor ? primaryButton() : <ApplicationAction post={post} />}
+            {hasMenu && (
+              <span className="post-menu">
+                <md-icon-button
+                  ref={menuButton}
+                  aria-label={t('menu.label')}
+                  title={t('menu.label')}
+                  aria-haspopup="menu"
+                  aria-expanded={menuOpen}
+                  onclick={() => setMenuOpen((previous) => !previous)}
+                >
+                  <md-icon>more_vert</md-icon>
+                </md-icon-button>
+                <md-menu
+                  ref={menu}
+                  open={menuOpen}
+                  onclose={() => setMenuOpen(false)}
+                  anchorCorner="end-end"
+                  menuCorner="start-end"
+                >
+                  {menuActions.map(menuItem)}
+                  {canReport && (
+                    <md-menu-item
+                      disabled={!canWrite}
+                      onclick={() =>
+                        void auth.run(() => {
+                          setReportMounted(true);
+                          setReporting(true);
+                        })
+                      }
+                    >
+                      <md-icon slot="start">flag</md-icon>
+                      <div slot="headline">{t('menu.report')}</div>
+                    </md-menu-item>
+                  )}
+                </md-menu>
+              </span>
+            )}
+          </div>
+        </div>
+      </Card>
+
       {message && (
         <div className="post-error" role="alert">
           <p>
@@ -543,21 +419,19 @@ function OwnerCard({post, onDeleted}: {post: PostDetail; onDeleted: () => void})
             {message}
           </p>
           {quota && (
-            <Link to={paths.myPosts()} className="post-banner-link">
+            <Link to={paths.myPosts()} className="post-link">
               {t('errorLinks.myPosts')}
             </Link>
           )}
           {expired && (
-            <Link to={`${paths.postEdit(post.id)}?focus=expiry`} className="post-banner-link">
+            <Link to={`${paths.postEdit(post.id)}?focus=expiry`} className="post-link">
               {t('errorLinks.editExpiry')}
             </Link>
           )}
-          {retryable && last && (
-            <RetryButton error={error} busy={busy} onRetry={() => void run(last)} />
-          )}
+          {retryable && last && <RetryButton error={error} busy={busy} onRetry={() => void run(last)} />}
         </div>
       )}
-      <CardActions>{actions.map(button)}</CardActions>
+
       <ConfirmDialog
         open={confirming}
         destructive
@@ -568,6 +442,180 @@ function OwnerCard({post, onDeleted}: {post: PostDetail; onDeleted: () => void})
         onCancel={() => setConfirming(false)}
         onConfirm={() => void doDelete()}
       />
+      {reportMounted && (
+        <ReportDialog open={reporting} onClose={() => setReporting(false)} target={{type: 'post', id: post.id}} />
+      )}
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Body
+// ---------------------------------------------------------------------------
+
+function Description({post}: {post: PostDetail}) {
+  return (
+    <section className="post-description" aria-label={post.title}>
+      <Markdown>{post.description}</Markdown>
+    </section>
+  );
+}
+
+function Requirements({post}: {post: PostDetail}) {
+  const {t} = useT('post');
+  const {status: sessionStatus} = useSession();
+  const profile = useMyProfile();
+  const experiences = useMyExperiences();
+  if (post.requirements.length === 0) return null;
+
+  const viewer: RequirementViewer | undefined =
+    sessionStatus === 'authenticated' && profile.data && experiences.data
+      ? {
+          accountCreatedAt: profile.data.created_at,
+          hasVerifiedExperience: experiences.data.items.some(
+            (experience) => experience.verification.status === 'verified',
+          ),
+        }
+      : undefined;
+
+  return (
+    <section className="post-section" aria-labelledby="post-requirements">
+      <h2 id="post-requirements">{t('sections.requirements')}</h2>
+      <RequirementList requirements={post.requirements} viewer={viewer} />
+    </section>
+  );
+}
+
+function FeaturedExperience({post, poster}: {post: PostDetail; poster: Poster}) {
+  const {t} = useT('post');
+  const experience = poster.user?.experiences.find((item) => item.id === post.featured_experience_id);
+  if (post.kind !== 'user' || post.featured_experience_id === null || !experience) return null;
+  return (
+    <section className="post-section" aria-labelledby="post-featured">
+      <h2 id="post-featured">{t('featured.title')}</h2>
+      <ExperienceList>
+        <ExperienceRow
+          experience={experience}
+          href={experience.kind === 'guild' && experience.guild_id ? paths.guild(experience.guild_id) : undefined}
+        />
+      </ExperienceList>
+    </section>
+  );
+}
+
+/** The facts of the post: one list, an icon then the value. The field name is the icon's tooltip. */
+function Summary({post}: {post: PostDetail}) {
+  const {t} = useT('post');
+  const {t: tc} = useT('components');
+  const {label} = useCatalogLabel();
+  const positions = positionItems(post.positions, post.positions_other, (id) => label('positions', id));
+  const commitment = post.commitment;
+
+  return (
+    <Card as="section" className="post-summary" aria-labelledby="post-summary-title">
+      <h2 id="post-summary-title">{t('sections.summary')}</h2>
+      <FactList>
+        {positions.length > 0 && (
+          <Fact icon="work" label={t('facts.positions')}>
+            <ul className="tag-labels">
+              {positions.map((position) => (
+                <li key={position.key}>
+                  <TagLabel icon={null}>{position.label}</TagLabel>
+                </li>
+              ))}
+            </ul>
+          </Fact>
+        )}
+        {commitment?.compensation && (
+          <Fact icon="payments" label={t('facts.commitment')}>
+            {label('compensations', commitment.compensation)}
+          </Fact>
+        )}
+        {commitment?.hours_per_week != null && (
+          <Fact icon="schedule" label={t('facts.commitment')}>
+            {tc('post.hoursPerWeek', {value: formatNumber(commitment.hours_per_week)})}
+          </Fact>
+        )}
+        {commitment?.openings != null && (
+          <Fact icon="group_add" label={t('facts.commitment')}>
+            {tc('post.openings', {count: commitment.openings, value: formatNumber(commitment.openings)})}
+          </Fact>
+        )}
+        {post.languages.length > 0 && (
+          <Fact icon="translate" label={t('facts.languages')}>
+            <LanguageFlags codes={post.languages} labelled="text" />
+          </Fact>
+        )}
+        {post.timezone && (
+          <Fact icon="public" label={t('facts.timezone')}>
+            <TimezoneLabel timezone={post.timezone} bare />
+          </Fact>
+        )}
+        {post.theme && (
+          <Fact icon="category" label={t('facts.theme')}>
+            {label('themes', post.theme)}
+          </Fact>
+        )}
+        {post.tags.length > 0 && (
+          <Fact icon="sell" label={t('facts.tags')}>
+            <ul className="tag-labels">
+              {post.tags.map((tag) => (
+                <li key={tag}>
+                  <TagLabel icon={null}>{tag}</TagLabel>
+                </li>
+              ))}
+            </ul>
+          </Fact>
+        )}
+        <Fact icon={post.is_expired ? 'event_busy' : 'hourglass_empty'} label={t('facts.expiry')}>
+          <ExpiryLabel expiresAt={post.expires_at} isExpired={post.is_expired} mode="always" />
+        </Fact>
+      </FactList>
+    </Card>
+  );
+}
+
+/** The server or the person behind the post: a small card that leads to their profile. */
+function Poster({post, poster}: {post: PostDetail; poster: Poster}) {
+  const {t} = useT('post');
+  const {guild} = poster;
+  const stats = poster.isGuild
+    ? [
+        {
+          icon: 'group',
+          value: guild?.member_count ?? null,
+          label: t('stats.members', {count: guild?.member_count ?? 0}),
+        },
+      ]
+    : [];
+
+  return (
+    <Card as="section" className="post-poster" aria-labelledby="post-poster-title">
+      <h2 id="post-poster-title" className="visually-hidden">
+        {poster.isGuild ? t('author.guild') : t('author.user')}
+      </h2>
+      <div className="post-poster-head">
+        {poster.isGuild ? (
+          <GuildIcon id={post.guild_id!} iconUrl={post.guild?.icon_url} />
+        ) : (
+          <UserAvatar id={post.author.id} src={post.author.avatar_url} />
+        )}
+        <div className="post-poster-text">
+          <DisplayName
+            as="strong"
+            name={poster.name}
+            badges={poster.badges}
+            entity={poster.isGuild ? 'guild' : 'user'}
+          />
+          {!poster.isGuild && post.author.username && <Pill>@{post.author.username}</Pill>}
+          <InlineStats items={stats} compact />
+        </div>
+      </div>
+      <CardActions>
+        <LinkButton variant="outlined" icon={poster.isGuild ? 'groups' : 'person'} to={poster.to}>
+          {poster.isGuild ? t('author.viewGuild') : t('author.viewUser')}
+        </LinkButton>
+      </CardActions>
     </Card>
   );
 }

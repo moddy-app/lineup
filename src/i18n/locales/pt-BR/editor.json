@@ -1,8 +1,6 @@
 {
   "titleNew": "Novo anúncio",
   "titleEdit": "Editar o anúncio",
-  "introNew": "Oito etapas, salvas neste dispositivo enquanto você escreve. No fim, você pode publicar ou guardar um rascunho.",
-  "introEdit": "Altere as etapas que precisar e salve na última. Só os campos alterados são enviados.",
   "count": "{{used}} / {{max}}",
   "restored": {
     "text": "Rascunho local restaurado, salvo",
@@ -10,29 +8,29 @@
   },
   "stepper": {
     "label": "Etapas do anúncio",
-    "count": "Etapa {{current}} de {{total}}",
     "state": {
       "current": "etapa atual",
       "done": "concluída",
       "error": "a corrigir",
       "todo": "ainda não vista"
-    }
+    },
+    "compact": "Etapa {{current}} de {{total}} · {{name}}"
   },
   "steps": {
     "type": {
       "short": "Tipo",
       "title": "Tipo de anúncio",
-      "intro": "Um anúncio de servidor recruta para um servidor que você gerencia. Um anúncio pessoal apresenta alguém que procura uma equipe."
+      "intro": "Escolha quem publica. Depois isso não muda."
     },
     "content": {
       "short": "Conteúdo",
       "title": "Título e descrição",
-      "intro": "Diga quem você é ou o que o servidor oferece, com dados concretos."
+      "intro": "Diga quem você é ou o que o servidor oferece."
     },
     "positions": {
       "short": "Cargos",
       "title": "Cargos",
-      "intro": "Os cargos procurados ou desejados. Escolha \"Outro\" para escrever seus próprios nomes."
+      "intro": "Escolha os cargos, ou \"Outro\" para escrever os seus."
     },
     "requirements": {
       "short": "Requisitos",
@@ -42,26 +40,26 @@
     "application": {
       "short": "Candidatura",
       "title": "Como se candidatar",
-      "intro": "Como as pessoas interessadas entram em contato. Opcional."
+      "intro": "Como entram em contato com você. Opcional."
     },
     "commitment": {
       "short": "Compromisso",
       "title": "Compromisso, idiomas e fuso horário",
-      "intro": "Todos os campos são opcionais."
+      "intro": "Tudo é opcional."
     },
     "extras": {
       "short": "Opções",
       "title": "Tema, tags e expiração",
-      "intro": "Ajuda a classificar e encontrar o anúncio. Tudo é opcional."
+      "intro": "Ajuda a organizar e encontrar o anúncio. Opcional."
     },
     "review": {
       "short": "Revisão",
       "title": "Revisar e enviar",
-      "intro": "Confira cada etapa. Um anúncio publicado aparece logo no feed."
+      "intro": "Confira antes de enviar. Um anúncio publicado aparece logo no feed."
     }
   },
   "actions": {
-    "next": "Continuar",
+    "next": "Próximo",
     "previous": "Anterior",
     "publish": "Publicar",
     "republish": "Publicar de novo",
@@ -92,8 +90,8 @@
         "hint": "Para um servidor que você gerencia e que tem perfil no Lineup."
       },
       "user": {
-        "title": "Procuro uma equipe",
-        "hint": "Um anúncio em seu nome, com suas experiências verificadas."
+        "title": "Oferecer meus serviços",
+        "hint": "Um anúncio em seu nome, para encontrar uma equipe."
       }
     },
     "guildLegend": "Servidor",
@@ -111,11 +109,10 @@
     "title": "Título",
     "titleHint": "{{min}} a {{max}} caracteres",
     "description": "Descrição",
-    "descriptionHint": "{{min}} a {{max}} caracteres"
+    "descriptionHint": "{{min}} a {{max}} caracteres. Markdown é aceito."
   },
   "positions": {
     "legend": "Cargos",
-    "hint": "Até {{max}} cargos.",
     "otherLegend": "Nomes de \"Outro\"",
     "otherHint": "Um nome por cargo, no máximo {{max}} caracteres.",
     "otherLabel": "Nome {{n}}",
@@ -123,7 +120,6 @@
     "addOther": "Adicionar um nome"
   },
   "requirements": {
-    "hint": "Até {{max}} requisitos.",
     "none": "Nenhum requisito por enquanto.",
     "add": "Adicionar um requisito",
     "item": "Requisito {{n}}",
@@ -139,7 +135,8 @@
     "languages": "Idiomas exigidos",
     "noValue": "Este requisito não tem valor a preencher.",
     "verified": "Verificação pelo Lineup prevista",
-    "verifiedHint": "O Lineup ainda não verifica nenhuma candidatura: o anúncio só mostra que a verificação está prevista."
+    "verifiedHint": "O Lineup ainda não verifica nada: o anúncio apenas indica que a verificação está prevista.",
+    "counter": "{{used}} de {{max}} requisitos"
   },
   "application": {
     "type": "Forma de candidatura",
@@ -158,7 +155,6 @@
     "compensation": "Remuneração",
     "compensationNone": "Não informada",
     "languages": "Idiomas",
-    "languagesHint": "Até {{max}} idiomas.",
     "timezone": "Fuso horário",
     "timezoneHint": "Nome IANA (Europe/Paris) ou deslocamento UTC+02:00",
     "useBrowserZone": "Usar {{zone}}"
@@ -178,7 +174,6 @@
     "expiryClear": "Nunca expira",
     "featured": "Experiência em destaque",
     "featuredNone": "Nenhuma",
-    "featuredHint": "Só suas experiências verificadas são oferecidas.",
     "featuredEmpty": "Você não tem nenhuma experiência verificada.",
     "featuredLink": "Gerenciar minhas experiências",
     "featuredLoading": "Carregando suas experiências.",
@@ -218,7 +213,6 @@
   },
   "preview": {
     "title": "Prévia",
-    "hint": "O cartão como aparece no feed.",
     "titlePlaceholder": "O título do seu anúncio",
     "descriptionPlaceholder": "A descrição aparecerá aqui."
   },

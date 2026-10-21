@@ -1,6 +1,5 @@
-/* My experiences: the sortable list, the verification block, the dialog. Tokens only. */
+/* My experiences: summary, sortable list in one card, compact verification, dialog. Tokens only. */
 
-.exp-intro,
 .exp-note {
   margin: 0;
   max-width: none;
@@ -14,10 +13,28 @@
   color: var(--md-sys-color-error);
 }
 
+.exp-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+  max-width: 20rem;
+}
+
+.exp-count {
+  margin: 0;
+  font-size: var(--text-body-small);
+  font-weight: 600;
+  color: var(--md-sys-color-on-surface);
+}
+
+.exp-summary md-linear-progress {
+  width: 100%;
+}
+
 .exp-list {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-m);
+  gap: var(--gap-s);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -25,35 +42,30 @@
 
 .exp-item {
   position: relative;
-  display: flex;
-  align-items: stretch;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
   gap: var(--gap-s);
   min-width: 0;
-}
-
-.exp-item > .row {
-  flex: 1 1 auto;
-  min-width: 0;
+  padding-inline-start: 8px;
 }
 
 .exp-item.is-dragging {
   z-index: 2;
-  opacity: 0.92;
   outline: 2px solid var(--md-sys-color-primary);
-  outline-offset: 2px;
-  border-radius: var(--radius-l);
+  outline-offset: -2px;
 }
 
 .exp-handle {
   display: inline-flex;
-  flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  width: 36px;
+  width: 28px;
+  height: 40px;
   padding: 0;
   border: 0;
-  border-radius: var(--radius-l);
-  background-color: var(--md-sys-color-surface-container);
+  border-radius: var(--radius-m);
+  background: none;
   color: var(--md-sys-color-on-surface-variant);
   cursor: grab;
   touch-action: none;
@@ -85,40 +97,81 @@
   }
 }
 
-/* The experience row's actions slot holds the verification block and the toolbar. */
-.exp-row .experience-actions {
+.exp-tools {
+  display: flex;
+  align-items: center;
+}
+
+.exp-menu {
+  position: relative;
+  display: inline-flex;
+}
+
+md-menu-item.exp-delete {
+  --md-menu-item-label-text-color: var(--md-sys-color-error);
+  --md-menu-item-leading-icon-color: var(--md-sys-color-error);
+}
+
+.exp-rules {
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.exp-rules summary {
+  width: fit-content;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--md-sys-color-primary);
+}
+
+.exp-rules summary:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+.exp-rules ul {
+  display: flex;
   flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-start;
   gap: var(--gap-m);
+  margin: var(--gap-l) 0 0;
+  padding: 0;
+  list-style: none;
 }
 
-.exp-toolbar {
+.exp-rules li {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--gap-s);
+  gap: var(--gap-m);
+  max-width: 640px;
 }
 
-.exp-toolbar-group {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--gap-s);
+.exp-rules li > span:last-child {
+  min-width: 0;
 }
 
-md-text-button.exp-delete {
-  --md-text-button-label-text-color: var(--md-sys-color-error);
-  --md-text-button-icon-color: var(--md-sys-color-error);
-  --md-text-button-hover-label-text-color: var(--md-sys-color-error);
-  --md-text-button-hover-icon-color: var(--md-sys-color-error);
-  --md-text-button-focus-label-text-color: var(--md-sys-color-error);
-  --md-text-button-focus-icon-color: var(--md-sys-color-error);
-  --md-text-button-pressed-label-text-color: var(--md-sys-color-error);
-  --md-text-button-pressed-icon-color: var(--md-sys-color-error);
-  --md-text-button-hover-state-layer-color: var(--md-sys-color-error);
-  --md-text-button-pressed-state-layer-color: var(--md-sys-color-error);
+@media (max-width: 600px) {
+  .exp-item {
+    gap: 4px;
+  }
+
+  .exp-handle {
+    width: 24px;
+  }
+
+  .exp-card {
+    padding-inline: var(--gap-m);
+  }
+
+  .exp-item {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .exp-tools {
+    grid-column: 2;
+    justify-content: flex-end;
+    margin-top: calc(var(--gap-s) * -1);
+  }
 }
 
 /* Verification block */
@@ -126,9 +179,12 @@ md-text-button.exp-delete {
 .exp-verification {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-m);
-  padding-top: var(--gap-m);
-  border-top: 1px solid var(--md-sys-color-outline-variant);
+  gap: var(--gap-s);
+}
+
+.exp-verification:empty,
+.exp-status-text:empty {
+  display: none;
 }
 
 .exp-status-text {
@@ -240,52 +296,6 @@ md-text-button.exp-delete {
   gap: var(--gap-s);
 }
 
-/* Aside */
-
-.exp-aside {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-l);
-}
-
-.exp-aside h2 {
-  margin: 0;
-  font-size: var(--text-subtitle);
-}
-
-.exp-count {
-  margin: 0;
-  font-size: var(--text-title);
-  font-weight: 600;
-  color: var(--md-sys-color-primary);
-}
-
-.exp-aside md-linear-progress {
-  width: 100%;
-}
-
-.exp-rules {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-l);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  font-size: var(--text-body-small);
-}
-
-.exp-rules li {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--gap-m);
-}
-
-.exp-rules li > span:last-child {
-  padding-top: 6px;
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-
 /* Dialog */
 
 md-dialog.experience-dialog {
@@ -296,7 +306,7 @@ md-dialog.experience-dialog {
   display: flex;
   flex-direction: column;
   gap: var(--gap-l);
-  min-width: min(520px, 100%);
+  width: min(520px, calc(100vw - 112px));
 }
 
 .experience-form p {
@@ -357,22 +367,4 @@ md-dialog.experience-dialog {
 
 .exp-verification p.exp-note {
   font-size: var(--text-body-small);
-}
-
-@media (max-width: 600px) {
-  .exp-item {
-    gap: 4px;
-  }
-
-  .exp-handle {
-    width: 24px;
-  }
-
-  .exp-item > .row {
-    padding-inline: 12px;
-  }
-
-  .exp-toolbar {
-    gap: 0;
-  }
 }

@@ -109,7 +109,7 @@ const FEED_TTL_MS = 60_000;
 
 export const routes: Route[] = [
   // ---- 6.1 Session -----------------------------------------------------------
-  {method: 'GET', path: '/lineup/me', auth: 'session', handler: (c) => ok(toMe(actorOf(c)))},
+  {method: 'GET', path: '/lineup/me', auth: 'session', handler: (c) => ok(toMe(c.env, actorOf(c)))},
   {method: 'GET', path: '/lineup/me/guilds', auth: 'session', handler: (c) => ok(listMyGuilds(c.env, actorOf(c)))},
   {
     method: 'POST',

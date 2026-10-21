@@ -5,13 +5,13 @@ import {Link} from 'react-router';
 
 import {hasCode} from '@/api/client';
 import {errorMessage, fieldErrors} from '@/api/errors';
-import {useUser} from '@/api/queries';
+import {useGuild, useUser} from '@/api/queries';
 import {formatCountdown, useRetryAfter} from '@/api/useRetryAfter';
 import type {InfiniteList} from '@/api/pagination';
 import {paths} from '@/app/paths';
 import {useSession} from '@/auth/session';
 import {useAuthAction} from '@/auth/useAuthAction';
-import {EmptyState, ErrorState, RetryButton, UserAvatar} from '@/components';
+import {DisplayName, EmptyState, ErrorState, RetryButton, UserAvatar} from '@/components';
 import {useT} from '@/i18n/useT';
 import {Dialog, Icon, Pill, Spinner, TextField, useSnackbar} from '@/ui';
 
@@ -73,34 +73,86 @@ export function ListBody<T>({list, emptyTitle, emptyText, emptyIcon, children}: 
 }
 
 // ---------------------------------------------------------------------------
-// A person
+// Section head, status chips, rules
 // ---------------------------------------------------------------------------
 
-/** Avatar, a link to the profile and the id in a mono pill. With `lookup`, the name is read from the profile. */
-export function PersonLink({id, lookup}: {id: string; lookup?: boolean}) {
-  const {t} = useT('staff');
-  return lookup ? (
-    <LookedUpPerson id={id} label={t('person.profile')} />
-  ) : (
-    <PersonRow id={id} label={t('person.profile')} />
+/** The head of a section: its title (h2) and, under it, the selectable status chips. */
+export function SectionHead({title, children}: {title: string; children?: ReactNode}) {
+  return (
+    <div className="staff-section-head">
+      <h2 className="staff-section-title">{title}</h2>
+      {children}
+    </div>
   );
 }
 
-function LookedUpPerson({id, label}: {id: string; label: string}) {
-  const {data} = useUser(id);
-  const name = data ? (data.display_name ?? data.global_name ?? data.username) : null;
-  return <PersonRow id={id} label={name ?? label} avatar={data?.avatar_url} />;
+interface StatusChipsProps<T extends string> {
+  label: string;
+  value: T;
+  options: ReadonlyArray<{value: T; label: string}>;
+  onChange: (value: T) => void;
 }
 
-function PersonRow({id, label, avatar}: {id: string; label: string; avatar?: string | null}) {
+/** Small selectable chips (one pressed at a time) for the status or entity filter. */
+export function StatusChips<T extends string>({label, value, options, onChange}: StatusChipsProps<T>) {
+  return (
+    <div className="staff-chips" role="group" aria-label={label}>
+      {options.map((option) => (
+        <button
+          key={option.value}
+          type="button"
+          className="staff-chip"
+          aria-pressed={option.value === value}
+          onClick={() => onChange(option.value)}
+        >
+          {option.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/** The rules of a section: folded, a few lines. */
+export function Rules({title, children}: {title: string; children: ReactNode}) {
+  return (
+    <details className="staff-rules">
+      <summary>{title}</summary>
+      <ul>{children}</ul>
+    </details>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// People and servers
+// ---------------------------------------------------------------------------
+
+/** Avatar and name (with its verification mark) linking to the profile. With `showId`, the id in a pill. */
+export function PersonLink({id, showId}: {id: string; showId?: boolean}) {
+  const {t} = useT('staff');
+  const {data} = useUser(id);
+  const name = data ? (data.display_name ?? data.global_name ?? data.username) : null;
   return (
     <span className="staff-person">
-      <UserAvatar id={id} src={avatar} size="small" />
+      <UserAvatar id={id} src={data?.avatar_url} size="small" />
       <Link to={paths.user(id)} className="staff-person-name">
-        {label}
+        <DisplayName name={name ?? t('person.profile')} badges={data?.badges} entity="user" focusable={false} />
       </Link>
-      <Pill>{id}</Pill>
+      {showId && <Pill>{id}</Pill>}
     </span>
+  );
+}
+
+/** The name of a server or a person read from its profile, linking to it; the id while it loads. */
+export function EntityName({type, id}: {type: 'user' | 'guild'; id: string}) {
+  return type === 'user' ? <PersonLink id={id} /> : <GuildLink id={id} />;
+}
+
+function GuildLink({id}: {id: string}) {
+  const {data} = useGuild(id);
+  return (
+    <Link to={paths.guild(id)} className="staff-person-name">
+      <DisplayName name={data?.name ?? id} badges={data?.badges} entity="guild" focusable={false} />
+    </Link>
   );
 }
 

@@ -1,38 +1,48 @@
 {
   "title": "Gestion du serveur",
   "pageTitle": "Gérer {{name}}",
-  "heading": "Gérer {{name}}",
+  "pageDescription": "Gestion du profil Lineup",
   "unknownName": "Serveur sans nom",
   "notFound": {
     "title": "Serveur introuvable",
-    "body": "Ce serveur n'a pas de profil Lineup. Revendiquez-le d'abord depuis la page de revendication.",
+    "body": "Ce serveur n'a pas de profil Lineup. Ajoutez-le d'abord depuis la page Serveurs.",
     "action": "Voir les serveurs"
   },
   "forbidden": {
     "title": "Vous ne gérez pas ce serveur",
-    "body": "Il faut être propriétaire du serveur, ou avoir la permission Administrateur ou Gérer le serveur. Si vous venez de recevoir ces droits, relisez vos serveurs depuis la page de revendication.",
+    "body": "Il faut être propriétaire du serveur, ou avoir la permission Administrateur ou Gérer le serveur. Si vous venez de recevoir ces droits, actualisez la liste depuis la page Serveurs.",
     "action": "Voir le profil"
   },
-  "status": {
-    "listed": "Dans l'annuaire",
-    "unlisted": "Non listé"
-  },
-  "viewProfile": "Voir le profil",
+  "viewProfile": "Voir le profil public",
   "saved": "Profil enregistré.",
-  "editor": {
+  "sections": {
+    "label": "Sections de la page",
+    "profile": "Profil public",
+    "invite": "Invitation",
+    "visibility": "Visibilité",
+    "posts": "Annonces",
+    "discord": "Données Discord",
+    "danger": "Zone de danger"
+  },
+  "profile": {
     "title": "Profil public",
+    "description": "Ce que voient les personnes qui consultent le serveur."
+  },
+  "bar": {
     "unsaved": "Modifications non enregistrées",
     "save": "Enregistrer",
     "saving": "Enregistrement...",
-    "reset": "Annuler les modifications"
+    "reset": "Annuler"
   },
   "description": {
     "title": "Description",
     "label": "Description du serveur",
-    "hint": "Laissez vide pour afficher la description Discord.",
-    "discordTitle": "Description Discord",
+    "hint": "Markdown accepté. Laissez vide pour afficher la description Discord.",
+    "discordTitle": "Description Discord :",
     "discordNone": "Ce serveur n'a pas de description sur Discord.",
-    "useDiscord": "Utiliser la description Discord"
+    "useDiscord": "Utiliser la description Discord",
+    "preview": "Aperçu",
+    "hidePreview": "Masquer l'aperçu"
   },
   "links": {
     "title": "Liens",
@@ -43,7 +53,7 @@
     "add": "Ajouter un lien"
   },
   "topics": {
-    "title": "Thème, étiquettes et langues"
+    "title": "Thème et étiquettes"
   },
   "theme": {
     "label": "Thème",
@@ -58,9 +68,11 @@
   },
   "invite": {
     "title": "Invitation",
-    "current": "Invitation actuelle :",
-    "valid": "Elle fonctionne.",
-    "lost": "Elle n'existe plus sur Discord : remplacez-la.",
+    "description": "Le lien du bouton Rejoindre du profil.",
+    "current": "Invitation actuelle",
+    "valid": "Valide",
+    "lost": "Introuvable sur Discord",
+    "lostHelp": "Elle n'existe plus sur Discord : remplacez-la.",
     "none": "Aucune invitation enregistrée.",
     "label": "Nouvelle invitation",
     "placeholder": "https://discord.gg/votre-code",
@@ -88,11 +100,6 @@
     "title": "Données Discord",
     "body": "Nom, icône et effectifs sont relus toutes les 6 heures. Vous pouvez forcer la relecture une fois par minute.",
     "members": "Membres",
-    "online": "En ligne",
-    "invite": "Invitation :",
-    "inviteValid": "valide",
-    "inviteLost": "introuvable sur Discord",
-    "noInvite": "aucune",
     "done": "Données Discord actualisées.",
     "staleDone": "Discord n'a pas répondu : les anciennes données sont conservées.",
     "refresh": "Actualiser maintenant",
@@ -100,8 +107,8 @@
     "waitIn": "Disponible dans {{seconds}} s"
   },
   "danger": {
-    "title": "Supprimer le profil",
-    "body": "Le profil quitte l'annuaire et les annonces du serveur sont fermées. Le serveur Discord n'est pas touché.",
+    "title": "Zone de danger",
+    "body": "Supprimer le profil le retire de l'annuaire et ferme les annonces du serveur. Le serveur Discord n'est pas touché.",
     "action": "Supprimer le profil",
     "confirmTitle": "Supprimer le profil de {{name}} ?",
     "confirmBody": "Ce qui se passe :",
@@ -114,14 +121,15 @@
   "posts": {
     "title": "Annonces du serveur",
     "create": "Nouvelle annonce",
-    "tabs": "Statut des annonces",
-    "tab": {
+    "filters": "Filtrer par statut",
+    "filter": {
       "all": "Toutes",
       "published": "Publiées",
       "draft": "Brouillons",
       "closed": "Fermées",
       "hidden": "Masquées"
     },
+    "menu": "Actions de l'annonce {{title}}",
     "emptyTitle": "Aucune annonce",
     "emptyAll": "Ce serveur n'a encore aucune annonce. Toutes les personnes qui gèrent le serveur peuvent les modifier.",
     "emptyTab": "Aucune annonce avec ce statut.",

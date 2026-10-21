@@ -1,14 +1,12 @@
 {
   "title": "Servidores",
-  "intro": "Los servidores de Discord que buscan staff en Lineup. Abra un perfil para ver el equipo y los anuncios abiertos.",
-  "claim": {
-    "action": "Reclamar un servidor"
-  },
+  "subtitle": "Los servidores de Discord que buscan staff. Abra un perfil para ver el equipo y los anuncios.",
+  "add": "Añadir mi servidor",
   "filters": {
     "search": "Buscar servidores",
     "theme": "Temática",
-    "themeAll": "Todas las temáticas",
-    "nsfw": "Incluir servidores +18",
+    "adult": "Contenido adulto",
+    "adultYes": "Incluir servidores +18",
     "clear": "Borrar filtros"
   },
   "list": {
@@ -16,10 +14,8 @@
   },
   "card": {
     "unknownName": "Servidor sin nombre",
-    "noCounts": "Miembros desconocidos",
-    "members_one": "{{value}} miembro",
-    "members_other": "{{value}} miembros",
-    "online": "{{value}} en línea"
+    "members_one": "miembro",
+    "members_other": "miembros"
   },
   "empty": {
     "title": "Aún no hay servidores",

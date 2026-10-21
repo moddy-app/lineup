@@ -1,7 +1,6 @@
 {
-  "title": "Meus anúncios",
-  "intro": "Todos os seus anúncios, incluindo rascunhos, fechados e ocultados pela equipe.",
-  "new": "Publicar um anúncio",
+  "title": "Anúncios",
+  "new": "Novo anúncio",
   "tabsLabel": "Status dos anúncios",
   "tabs": {
     "all": "Todos",
@@ -11,8 +10,6 @@
     "hidden": "Ocultos"
   },
   "quota": {
-    "title": "Anúncios pessoais",
-    "body": "Só contam seus anúncios \"Procuro uma equipe\" publicados e não expirados. Os anúncios de servidor têm seu próprio limite, de {{guildLimit}} por servidor.",
     "loading": "Calculando."
   },
   "empty": {
@@ -40,16 +37,17 @@
   "row": {
     "hiddenReason": "Ocultado pela equipe do Moddy. Motivo: {{reason}}",
     "hiddenNoReason": "Ocultado pela equipe do Moddy. Não pode mais ser editado.",
-    "expired": "Expirado: altere a data de expiração para publicá-lo de novo.",
-    "kind": "Tipo",
-    "actions": "Ações do anúncio {{title}}"
+    "actions": "Ações do anúncio {{title}}",
+    "forMe": "Para mim",
+    "unknownGuild": "Servidor sem nome",
+    "more": "Mais ações para {{title}}"
   },
   "actions": {
     "edit": "Editar",
     "close": "Fechar",
     "publish": "Publicar",
-    "republish": "Publicar de novo",
-    "delete": "Excluir"
+    "delete": "Excluir",
+    "reopen": "Reabrir"
   },
   "done": {
     "closed": "Anúncio fechado.",
@@ -59,6 +57,5 @@
   "delete": {
     "title": "Excluir este anúncio?",
     "body": "\"{{title}}\" será excluído definitivamente. Esta ação não pode ser desfeita."
-  },
-  "editFirst": "Editar"
+  }
 }

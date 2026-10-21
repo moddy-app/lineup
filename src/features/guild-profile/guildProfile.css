@@ -1,68 +1,178 @@
 /* A server's profile (/guilds/:guildId). Tokens only. */
 
-.card.guild-hero {
-  display: flex;
-  flex-direction: column;
+.guild-head {
   gap: var(--space);
 }
 
-.guild-hero-head {
-  display: flex;
-  align-items: center;
-  gap: var(--space);
-  min-width: 0;
+/* The banner runs edge to edge at the top of the header card (the card clips the corners). */
+.guild-banner {
+  display: block;
+  width: calc(100% + 2 * var(--card-padding));
+  max-width: none;
+  height: 180px;
+  margin: calc(-1 * var(--card-padding)) calc(-1 * var(--card-padding)) 0;
+  object-fit: cover;
+  background-color: var(--md-sys-color-surface-container-high);
 }
 
-.guild-hero-title {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-m);
-  min-width: 0;
+@media (max-width: 700px) {
+  .guild-banner {
+    height: 120px;
+  }
 }
 
-.guild-hero-title h1 {
-  margin: 0;
-  overflow-wrap: anywhere;
+/* Header: the name is the one big thing; the figures live in the "Details" card. */
+.guild-profile .page-header {
+  align-items: flex-start;
+}
+
+.guild-profile .page-header-title {
+  display: flex;
+  min-width: 0;
   font-size: var(--text-title);
+  letter-spacing: normal;
 }
 
-.guild-stats {
+.guild-profile .page-header-title .verified-badge {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+}
+
+.guild-menu {
+  position: relative;
+  display: inline-flex;
+}
+
+/* Notices for managers: one quiet line each. */
+.guild-notices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.guild-notices li {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--gap-l) var(--space);
-}
-
-.guild-note {
-  display: flex;
   align-items: center;
   gap: var(--gap-s);
-  margin: 0;
-  font-size: var(--text-small);
 }
 
-.guild-description {
-  max-width: 68ch;
-  margin: 0;
-  white-space: pre-line;
-  overflow-wrap: anywhere;
+.guild-notices .material-symbols-outlined {
+  font-size: 18px;
 }
 
-.guild-notice h2 {
-  display: flex;
-  align-items: center;
-  gap: var(--gap-s);
-  font-size: var(--text-subtitle);
-}
-
-.guild-notice h2 .material-symbols-outlined {
+.guild-notices a {
   color: var(--md-sys-color-primary);
 }
 
-.card.section .chips,
-.card.section .link-list {
-  margin: 0;
+/* Body: one column, two from 1100px. */
+.guild-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: var(--page-gap);
 }
 
-.guild-hero > .card-actions {
-  margin-top: 0;
+@media (min-width: 1100px) {
+  .guild-body {
+    grid-template-columns: minmax(0, 1fr) 22rem;
+  }
+}
+
+/* The side column: cards stacked. Under 1100px its cards join the body grid: "Details" first, the team last. */
+.guild-side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--page-gap);
+  min-width: 0;
+}
+
+@media (max-width: 1099px) {
+  .guild-side {
+    display: contents;
+  }
+
+  .guild-info {
+    order: -2;
+  }
+
+  .guild-links-card {
+    order: -1;
+  }
+}
+
+.guild-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--page-gap);
+  min-width: 0;
+}
+
+.card.guild-section {
+  gap: var(--gap-l);
+  min-width: 0;
+}
+
+.guild-profile .card h2 {
+  margin: 0;
+  font-size: var(--text-subtitle);
+}
+
+.guild-empty {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.guild-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-s);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Details: icon and text rows, like the team card. */
+.guild-info,
+.guild-links-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-l);
+}
+
+/* Team: a compact list in one card, no colored rows. */
+.guild-team {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-l);
+}
+
+.guild-member {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.guild-member-name {
+  font-weight: 600;
+}
+
+.guild-member-meta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+@media (max-width: 700px) {
+  .guild-profile .page-header-actions {
+    margin-inline-start: 0;
+  }
 }

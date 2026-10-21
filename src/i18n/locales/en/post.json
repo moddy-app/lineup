@@ -5,45 +5,30 @@
     "body": "This post does not exist, was removed, or is not visible with your account."
   },
   "banner": {
-    "draft": {
-      "title": "Draft",
-      "body": "Only people who can edit it see this post. Publish it to make it appear in the feed."
-    },
-    "closed": {
-      "title": "Post closed",
-      "body": "It no longer appears in the feed. Reopen it to publish it again."
-    },
-    "hidden": {
-      "title": "Post hidden",
-      "body": "The Moddy team hid this post. It can no longer be edited.",
-      "reason": "Reason: {{reason}}"
-    },
-    "expired": {
-      "title": "This post has expired",
-      "body": "It is no longer in the feed and no longer takes applications.",
-      "editor": "It is no longer in the feed. Choose a new expiry date to publish it again.",
-      "edit": "Edit the expiry date"
-    }
+    "draft": "Draft: only people who can edit it see this listing.",
+    "closed": "Closed listing: it no longer appears in the lists.",
+    "hidden": "Hidden by the Moddy team: it can no longer be edited.",
+    "hiddenReason": "Reason: {{reason}}",
+    "expired": "This listing has expired and no longer accepts applications.",
+    "expiredEditor": "This listing has expired. Pick a new date to publish it again.",
+    "expiredEdit": "Edit the expiry date"
   },
   "dates": {
     "published": "Published",
     "updated": "Updated"
   },
   "sections": {
-    "positions": "Positions wanted",
     "requirements": "Requirements",
-    "details": "Details"
+    "summary": "Summary"
   },
   "facts": {
+    "positions": "Positions",
+    "commitment": "Commitment",
     "languages": "Languages",
     "timezone": "Time zone",
     "theme": "Theme",
-    "tags": "Tags"
-  },
-  "apply": {
-    "title": "Apply",
-    "external": "Applications go through the recruiter's own site.",
-    "dm": "Applications go through a Discord direct message to the author of the post."
+    "tags": "Tags",
+    "expiry": "Expiry"
   },
   "author": {
     "guild": "Server",
@@ -53,13 +38,6 @@
   },
   "featured": {
     "title": "Featured experience"
-  },
-  "report": {
-    "label": "Report this post"
-  },
-  "manage": {
-    "title": "Manage the post",
-    "body": "You can edit this post."
   },
   "actions": {
     "edit": "Edit",
@@ -80,5 +58,13 @@
   "errorLinks": {
     "myPosts": "See my posts",
     "editExpiry": "Edit the expiry date"
+  },
+  "stats": {
+    "members_one": "member",
+    "members_other": "members"
+  },
+  "menu": {
+    "label": "More actions",
+    "report": "Report this listing"
   }
 }

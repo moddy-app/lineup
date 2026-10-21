@@ -1,7 +1,6 @@
 {
-  "title": "Meine Anzeigen",
-  "intro": "Alle Ihre Anzeigen, auch Entwürfe, geschlossene und vom Team ausgeblendete.",
-  "new": "Anzeige veröffentlichen",
+  "title": "Anzeigen",
+  "new": "Neue Anzeige",
   "tabsLabel": "Status der Anzeigen",
   "tabs": {
     "all": "Alle",
@@ -11,8 +10,6 @@
     "hidden": "Ausgeblendet"
   },
   "quota": {
-    "title": "Persönliche Anzeigen",
-    "body": "Es zählen nur Ihre veröffentlichten, nicht abgelaufenen Anzeigen „Ich suche ein Team“. Server-Anzeigen haben ein eigenes Limit von {{guildLimit}} pro Server.",
     "loading": "Wird gezählt."
   },
   "empty": {
@@ -40,16 +37,17 @@
   "row": {
     "hiddenReason": "Vom Moddy-Team ausgeblendet. Grund: {{reason}}",
     "hiddenNoReason": "Vom Moddy-Team ausgeblendet. Sie kann nicht mehr bearbeitet werden.",
-    "expired": "Abgelaufen: Ändern Sie das Ablaufdatum, um sie erneut zu veröffentlichen.",
-    "kind": "Art",
-    "actions": "Aktionen für {{title}}"
+    "actions": "Aktionen für {{title}}",
+    "forMe": "Für mich",
+    "unknownGuild": "Server ohne Namen",
+    "more": "Weitere Aktionen für {{title}}"
   },
   "actions": {
     "edit": "Bearbeiten",
     "close": "Schließen",
     "publish": "Veröffentlichen",
-    "republish": "Erneut veröffentlichen",
-    "delete": "Löschen"
+    "delete": "Löschen",
+    "reopen": "Wieder öffnen"
   },
   "done": {
     "closed": "Anzeige geschlossen.",
@@ -59,6 +57,5 @@
   "delete": {
     "title": "Diese Anzeige löschen?",
     "body": "„{{title}}“ wird endgültig gelöscht. Das lässt sich nicht rückgängig machen."
-  },
-  "editFirst": "Bearbeiten"
+  }
 }

@@ -11,7 +11,7 @@ import {EmptyState, ErrorState, GuildIcon} from '@/components';
 import {useLanguage} from '@/i18n/useLanguage';
 import {useT} from '@/i18n/useT';
 import {formatDate} from '@/lib/format';
-import {Checkbox, Chip, Icon, LinkButton, Panel, Select, type SelectOption, Switch, TextField} from '@/ui';
+import {Checkbox, Chip, Icon, LinkButton, Select, type SelectOption, Switch, TextField} from '@/ui';
 
 import {CheckGroup, type ErrorOf, FieldBox, FieldError, type SetForm} from './fields';
 import {
@@ -40,6 +40,8 @@ interface TypeStepProps extends StepProps {
   guilds: UseQueryResult<MyGuild[]>;
 }
 
+const KIND_ICON = {guild: 'groups', user: 'person_search'} as const;
+
 export function TypeStep({form, set, err, editing, guilds}: TypeStepProps) {
   const {t} = useT('editor');
   const kinds = ['guild', 'user'] as const;
@@ -48,14 +50,14 @@ export function TypeStep({form, set, err, editing, guilds}: TypeStepProps) {
   if (editing) {
     return (
       <div className="ed-fields">
-        <p className="ed-hint">{t('type.locked')}</p>
-        <Panel className="ed-locked">
-          <Icon name={form.kind === 'guild' ? 'groups' : 'person_search'} filled />
+        <p className="ed-locked">
+          <Icon name={KIND_ICON[form.kind === 'guild' ? 'guild' : 'user']} filled />
           <span>
             <strong>{t(`type.kind.${form.kind || 'user'}.title`)}</strong>
             {chosen?.name ? <span className="ed-sub">{chosen.name}</span> : null}
           </span>
-        </Panel>
+        </p>
+        <p className="ed-hint">{t('type.locked')}</p>
       </div>
     );
   }
@@ -63,10 +65,10 @@ export function TypeStep({form, set, err, editing, guilds}: TypeStepProps) {
   return (
     <div className="ed-fields">
       <FieldBox name="kind" error={err('kind')}>
-        <fieldset className="ed-choices">
-          <legend>{t('type.legend')}</legend>
+        <fieldset className="ed-choices ed-kinds">
+          <legend className="ed-sr-only">{t('type.legend')}</legend>
           {kinds.map((kind) => (
-            <label key={kind} className="ed-choice">
+            <label key={kind} className={`ed-kind${form.kind === kind ? ' is-selected' : ''}`}>
               <md-radio
                 name="kind"
                 value={kind}
@@ -74,6 +76,7 @@ export function TypeStep({form, set, err, editing, guilds}: TypeStepProps) {
                 aria-label={t(`type.kind.${kind}.title`)}
                 onchange={() => set({kind, guildId: kind === 'user' ? '' : form.guildId})}
               />
+              <Icon name={KIND_ICON[kind]} filled />
               <span className="ed-choice-text">
                 <span className="ed-choice-title">{t(`type.kind.${kind}.title`)}</span>
                 <span className="ed-choice-hint">{t(`type.kind.${kind}.hint`)}</span>
@@ -213,7 +216,6 @@ export function PositionsStep({form, set, err, catalog}: StepProps) {
       <CheckGroup
         name="positions"
         legend={t('positions.legend')}
-        hint={t('positions.hint', {max: limits.max_positions})}
         kind="positions"
         ids={catalog.positions.map((entry) => entry.id)}
         selected={form.positions}
@@ -230,7 +232,9 @@ export function PositionsStep({form, set, err, catalog}: StepProps) {
           <fieldset className="ed-group">
             <legend>
               {t('positions.otherLegend')}
-              <span className="ed-count numeric">{t('count', {used: labels.length, max: limits.max_positions_other})}</span>
+              <span className="ed-count numeric">
+                {t('count', {used: labels.length, max: limits.max_positions_other})}
+              </span>
             </legend>
             <p className="ed-hint">{t('positions.otherHint', {max: limits.position_other_max_len})}</p>
             <div className="ed-stack">
@@ -288,10 +292,7 @@ export function RequirementsStep({form, set, err, catalog}: StepProps) {
 
   return (
     <div className="ed-fields">
-      <p className="ed-hint">
-        {t('requirements.hint', {max: limits.max_requirements})}
-        <span className="ed-count numeric">{t('count', {used: list.length, max: limits.max_requirements})}</span>
-      </p>
+      <p className="ed-hint numeric">{t('requirements.counter', {used: list.length, max: limits.max_requirements})}</p>
       {err('requirements') && <FieldError>{err('requirements')}</FieldError>}
 
       {list.length === 0 ? (
@@ -303,7 +304,7 @@ export function RequirementsStep({form, set, err, catalog}: StepProps) {
             const base = `requirements.${index}`;
             return (
               <li key={draft.key}>
-                <Panel className="ed-requirement">
+                <div className="ed-requirement">
                   <div className="ed-requirement-head">
                     <strong>{t('requirements.item', {n: index + 1})}</strong>
                     <md-icon-button
@@ -318,7 +319,13 @@ export function RequirementsStep({form, set, err, catalog}: StepProps) {
                       label={t('requirements.type')}
                       value={draft.type}
                       options={typeOptions}
-                      onValueChange={(type) => set({requirements: list.map((d, at) => (at === index ? {...emptyRequirement(type), key: d.key} : d))})}
+                      onValueChange={(type) =>
+                        set({
+                          requirements: list.map((d, at) =>
+                            at === index ? {...emptyRequirement(type), key: d.key} : d,
+                          ),
+                        })
+                      }
                     />
                   </FieldBox>
 
@@ -396,7 +403,7 @@ export function RequirementsStep({form, set, err, catalog}: StepProps) {
                       <p className="ed-hint">{t('requirements.verifiedHint')}</p>
                     </div>
                   )}
-                </Panel>
+                </div>
               </li>
             );
           })}
@@ -407,7 +414,12 @@ export function RequirementsStep({form, set, err, catalog}: StepProps) {
         <md-outlined-button
           disabled={list.length >= limits.max_requirements}
           onclick={() =>
-            set({requirements: [...list, {...emptyRequirement(catalog.requirements[0]?.id ?? ''), key: newRequirementKey()}]})
+            set({
+              requirements: [
+                ...list,
+                {...emptyRequirement(catalog.requirements[0]?.id ?? ''), key: newRequirementKey()},
+              ],
+            })
           }
         >
           <md-icon slot="icon" className="filled" aria-hidden="true">
@@ -525,7 +537,6 @@ export function CommitmentStep({form, set, err, catalog}: StepProps) {
       <CheckGroup
         name="languages"
         legend={t('commitment.languages')}
-        hint={t('commitment.languagesHint', {max: catalog.limits.max_languages})}
         kind="languages"
         ids={catalog.languages.map((entry) => entry.id)}
         selected={form.languages}
@@ -646,7 +657,6 @@ export function ExtrasStep({form, set, err, catalog, experiences, now}: ExtrasSt
                 options={experienceOptions}
                 onValueChange={(featuredExperienceId) => set({featuredExperienceId})}
                 errorText={err('featuredExperienceId')}
-                supportingText={verified.length > 0 ? t('extras.featuredHint') : undefined}
               />
               {verified.length === 0 && (
                 <p className="ed-hint">
@@ -683,12 +693,15 @@ function TagsField({form, set, err, catalog}: Pick<StepProps, 'form' | 'set' | '
 
   return (
     <FieldBox name="tags" error={err('tags')}>
-      <div className="ed-inline ed-inline-end" onKeyDown={(event) => {
-        if (event.key === 'Enter') {
-          event.preventDefault();
-          add();
-        }
-      }}>
+      <div
+        className="ed-inline ed-inline-end"
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            add();
+          }
+        }}
+      >
         <TextField
           label={t('extras.tags')}
           value={draft}

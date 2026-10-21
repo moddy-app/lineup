@@ -4,9 +4,10 @@
   },
   "nav": {
     "label": "Hauptnavigation",
-    "feed": "Anzeigen",
+    "feed": "Rekrutierung",
     "guilds": "Server",
-    "staff": "Staff"
+    "staff": "Staff",
+    "people": "Kandidaten"
   },
   "auth": {
     "login": "Anmelden",
@@ -32,15 +33,11 @@
     }
   },
   "userMenu": {
-    "profile": "Mein Profil",
-    "editProfile": "Profil bearbeiten",
-    "experiences": "Meine Erfahrung",
+    "profile": "Mein öffentliches Profil ansehen",
+    "experiences": "Erfahrung",
     "posts": "Meine Anzeigen",
-    "guilds": "Meine Server"
-  },
-  "footer": {
-    "byline": "Lineup, ein Dienst von <moddy>Moddy</moddy>",
-    "language": "Sprache"
+    "guilds": "Meine Server",
+    "space": "Mein Bereich"
   },
   "actions": {
     "retry": "Erneut versuchen",
@@ -73,5 +70,8 @@
     "until": "Bis zum {{date}}",
     "noEnd": "Ohne Enddatum",
     "viewSanction": "Sanktion ansehen"
+  },
+  "language": {
+    "label": "Sprache"
   }
 }

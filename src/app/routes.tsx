@@ -3,7 +3,7 @@ import {Navigate, type RouteObject} from 'react-router';
 import {PageLoading} from '@/ui';
 
 import type {RouteHandle} from './handle';
-import {routePatterns as p} from './paths';
+import {paths, routePatterns as p} from './paths';
 import {RequireAuth} from './RequireAuth';
 import type {AuthPurpose} from './SignInPrompt';
 import {RouteError} from './RouteError';
@@ -38,6 +38,7 @@ export const routes: RouteObject[] = [
         ErrorBoundary: RouteError,
         children: [
           {path: p.feed, lazy: () => import('@/features/feed/FeedPage')},
+          {path: p.people, lazy: () => import('@/features/feed/PeoplePage')},
           {path: p.post, lazy: () => import('@/features/post/PostPage')},
           {path: p.guilds, lazy: () => import('@/features/guilds/GuildDirectoryPage')},
           {path: p.guild, lazy: () => import('@/features/guild-profile/GuildProfilePage')},
@@ -47,7 +48,9 @@ export const routes: RouteObject[] = [
             {path: p.postEdit, lazy: () => import('@/features/post-editor/PostEditorPage')},
           ]),
           protectedRoutes('posts', [{path: p.myPosts, lazy: () => import('@/features/my-posts/MyPostsPage')}]),
-          protectedRoutes('claim', [{path: p.guildClaim, lazy: () => import('@/features/claim/ClaimPage')}]),
+          // The old address of the claim page.
+          {path: p.guildClaim, element: <Navigate to={paths.myGuilds()} replace />},
+          protectedRoutes('claim', [{path: p.myGuilds, lazy: () => import('@/features/claim/ClaimPage')}]),
           protectedRoutes('manage', [
             {path: p.guildManage, lazy: () => import('@/features/guild-manage/GuildManagePage')},
           ]),

@@ -12,7 +12,7 @@ import {BadgeList} from './BadgeList';
 import {CommitmentSummary} from './CommitmentSummary';
 import {EmptyState} from './EmptyState';
 import {ErrorState} from './ErrorState';
-import {ExperienceRow} from './ExperienceRow';
+import {ExperienceList, ExperienceRow} from './ExperienceRow';
 import {GuildIcon} from './GuildIcon';
 import {LanguageList} from './LanguageList';
 import {LinkList} from './LinkList';
@@ -23,7 +23,7 @@ import {RequirementList} from './RequirementList';
 import {contentOf, renderWithCatalog} from './testUtils';
 import {TimezoneLabel} from './TimezoneLabel';
 import {UserAvatar} from './UserAvatar';
-import {Rows} from '@/ui';
+import {InnerCards, Rows} from '@/ui';
 
 beforeAll(useFrench);
 afterEach(() => {
@@ -198,11 +198,11 @@ describe('PostCard, feed variant', () => {
     ).toHaveLength(0);
   });
 
-  it('shows the server, the time, the kind, the title and a plain excerpt', () => {
+  it('shows the server, the time, the title and a plain excerpt, without a kind marker', () => {
     const {container} = renderWithCatalog(<PostCard post={guildPost} />);
     expect(screen.getByText('Cubelands FR')).toBeTruthy();
-    expect(screen.getByText('Recrute')).toBeTruthy();
-    expect(screen.getByRole('heading', {level: 2}).textContent).toBe('Cherche 2 modérateurs');
+    expect(screen.queryByText('Recrute')).toBeNull();
+    expect(screen.getByRole('heading', {level: 3}).textContent).toBe('Cherche 2 modérateurs');
     expect(container.querySelector('.post-excerpt')!.textContent).toBe('Une communauté de 4 000 membres. Soirée.');
     const time = container.querySelector('time') as HTMLTimeElement;
     expect(time.getAttribute('datetime')).toBe(new Date(guildPost.published_at!).toISOString());
@@ -210,32 +210,34 @@ describe('PostCard, feed variant', () => {
     expect(container.querySelector('.guild-icon')).not.toBeNull();
   });
 
-  it('lists positions as chips, the author words in place of "other"', () => {
+  it('lists positions as small pills, the author words in place of "other"', () => {
     const {container} = renderWithCatalog(<PostCard post={guildPost} />);
-    const chips = [...container.querySelectorAll('.chips .chip')].map((chip) => chip.textContent);
-    expect(chips).toEqual(['shield_personModérateur', 'workGestionnaire de bots']);
+    const pills = [...container.querySelectorAll('.post-position')].map((pill) => pill.textContent);
+    expect(pills).toEqual(['Modérateur', 'Gestionnaire de bots']);
   });
 
-  it('gives compensation, hours, openings, three languages and the near expiry on one line', () => {
+  it('gives compensation, hours, openings and the near expiry on one line, then the language flags', () => {
     const {container} = renderWithCatalog(<PostCard post={guildPost} />);
     const meta = [...container.querySelectorAll('.meta-list .meta-item')].map((item) => item.textContent);
     expect(meta).toEqual([
       'paymentsBénévole',
       'schedule5 h par semaine',
       'group_add2 postes ouverts',
-      'translateFrançais, Anglais, Espagnol +1',
       'hourglass_bottomExpire dans 5 jours',
     ]);
+    expect(container.querySelectorAll('.post-meta .language-flags li')).toHaveLength(4);
   });
 
   it('says nothing about a far expiry, and has no meta line when there is nothing to say', () => {
     const post = makePost({
+      positions: [],
+      positions_other: [],
       languages: [],
       commitment: null,
       expires_at: new Date(Date.now() + 60 * 86_400_000).toISOString(),
     });
     const {container} = renderWithCatalog(<PostCard post={post} />);
-    expect(container.querySelector('.meta-list')).toBeNull();
+    expect(container.querySelector('.post-meta')).toBeNull();
   });
 
   it('says expired for an expired post', () => {
@@ -245,7 +247,7 @@ describe('PostCard, feed variant', () => {
     expect(container.querySelector('.meta-item.expiry-near')!.textContent).toContain('Expirée');
   });
 
-  it('shows the person for a user post, with the other kind marker', () => {
+  it('shows the person for a user post', () => {
     const post = makePost({
       kind: 'user',
       guild_id: null,
@@ -259,7 +261,7 @@ describe('PostCard, feed variant', () => {
     });
     const {container} = renderWithCatalog(<PostCard post={post} />);
     expect(screen.getByText('Alex Martin')).toBeTruthy();
-    expect(screen.getByText('Cherche une équipe')).toBeTruthy();
+    expect(screen.queryByText('Cherche une équipe')).toBeNull();
     expect(container.querySelector('img.avatar')!.getAttribute('src')).toBe('https://cdn.test/a.png');
     expect(container.querySelector('.guild-icon')).toBeNull();
   });
@@ -279,11 +281,11 @@ describe('PostCard, row variant', () => {
   it('is a link row with the title, positions, date and status', () => {
     const post = makePost({id: 'p1', title: 'Cherche un admin', positions: ['admin'], status: 'closed'});
     const {container} = renderWithCatalog(
-      <Rows as="ul">
+      <InnerCards>
         <PostCard post={post} variant="row" showStatus />
-      </Rows>,
+      </InnerCards>,
     );
-    const link = container.querySelector('li > a.row') as HTMLAnchorElement;
+    const link = container.querySelector('li > a.inner-card') as HTMLAnchorElement;
     expect(link.getAttribute('href')).toBe('/posts/p1');
     expect(within(link).getByText('Cherche un admin')).toBeTruthy();
     expect(link.querySelector('.row-meta')!.textContent).toContain('Administrateur · ');
@@ -293,9 +295,9 @@ describe('PostCard, row variant', () => {
 
   it('shows "Expirée" in place of "Publiée" for an expired published post', () => {
     renderWithCatalog(
-      <Rows as="ul">
+      <InnerCards>
         <PostCard post={makePost({status: 'published', is_expired: true})} variant="row" showStatus />
-      </Rows>,
+      </InnerCards>,
     );
     expect(screen.getByText('Expirée')).toBeTruthy();
     expect(screen.queryByText('Publiée')).toBeNull();
@@ -323,13 +325,13 @@ describe('RequirementList', () => {
     const {container} = renderWithCatalog(<RequirementList requirements={requirements} />);
     const rows = [...container.querySelectorAll('li.requirement')];
     expect(rows).toHaveLength(4);
-    expect(rows[0]!.querySelector('.row-title')!.textContent).toBe('Âge minimum');
-    expect(rows[0]!.querySelector('.row-meta')!.textContent).toBe('16 ans minimum');
-    expect(rows[1]!.querySelector('.row-title')!.textContent).toBe('Ancienneté du compte Discord');
-    expect(rows[1]!.querySelector('.row-meta')!.textContent).toBe('180 jours, environ 6 mois');
-    expect(rows[2]!.querySelector('.row-title')!.textContent).toBe('Outils');
-    expect(rows[2]!.querySelector('.row-meta')!.textContent).toBe('Savoir utiliser Moddy');
-    expect(rows[3]!.querySelector('.row-title')!.textContent).toBe('Micro requis');
+    expect(rows[0]!.querySelector('.requirement-title')!.textContent).toBe('Âge minimum');
+    expect(rows[0]!.querySelector('.requirement-text')!.textContent).toBe('16 ans minimum');
+    expect(rows[1]!.querySelector('.requirement-title')!.textContent).toBe('Ancienneté du compte Discord');
+    expect(rows[1]!.querySelector('.requirement-text')!.textContent).toBe('180 jours, environ 6 mois');
+    expect(rows[2]!.querySelector('.requirement-title')!.textContent).toBe('Outils');
+    expect(rows[2]!.querySelector('.requirement-text')!.textContent).toBe('Savoir utiliser Moddy');
+    expect(rows[3]!.querySelector('.requirement-title')!.textContent).toBe('Micro requis');
   });
 
   it('promises a Lineup check, never says it was done', () => {
@@ -337,7 +339,7 @@ describe('RequirementList', () => {
     const notes = container.querySelectorAll('.requirement-note.promise');
     expect(notes).toHaveLength(1);
     const note = notes[0]!;
-    expect(note.textContent).toBe('scheduleVérification par Lineup prévue');
+    expect(note.textContent).toBe('Vérification par Lineup prévue');
     expect(note.getAttribute('data-tooltip')).toContain("à l'ouverture des candidatures");
     expect(note.getAttribute('data-tooltip')).toContain("Rien n'est vérifié pour le moment");
     expect(note.getAttribute('tabindex')).toBe('0');
@@ -395,12 +397,13 @@ describe('ExperienceRow', () => {
         <ExperienceRow experience={experience} />
       </Rows>,
     );
-    expect(container.querySelector('li.row .row-title')!.textContent).toBe('Modérateur, Cubelands FR');
-    expect(container.querySelector('.row-meta')!.textContent).toMatch(
-      /^mars 2024 à aujourd'hui · \d+ ans? \d+ mois$|^mars 2024 à aujourd'hui · \d+ (ans?|mois)$/,
+    expect(container.querySelector('li.experience-row .experience-position')!.textContent).toBe('Modérateur');
+    expect(container.querySelector('.experience-name')!.textContent).toBe('Cubelands FR');
+    expect(container.querySelector('.experience-period')!.textContent).toMatch(
+      /^mars 2024 \u2013 aujourd'hui · \d+ ans? \d+ mois$|^mars 2024 \u2013 aujourd'hui · \d+ (ans?|mois)$/,
     );
     const pill = screen.getByText('Vérifiée');
-    expect(pill.className).toContain('accent');
+    expect(pill.className).toContain('is-verified');
     expect(pill.getAttribute('data-tooltip')).toBe('Vérifiée via Discord le 20 octobre 2026');
     expect(pill.getAttribute('aria-describedby')).toBeTruthy();
   });
@@ -414,7 +417,7 @@ describe('ExperienceRow', () => {
         />
       </Rows>,
     );
-    const link = screen.getByRole('link', {name: 'Archiviste, Cubelands FR'});
+    const link = screen.getByRole('link', {name: 'Cubelands FR'});
     expect(link.getAttribute('href')).toBe('/guilds/812345678901234567');
   });
 
@@ -428,7 +431,8 @@ describe('ExperienceRow', () => {
       </Rows>,
     );
     expect(screen.queryByRole('link')).toBeNull();
-    expect(screen.getByText('Modérateur, Twitch')).toBeTruthy();
+    expect(screen.getByText('Modérateur')).toBeTruthy();
+    expect(screen.getByText('Twitch')).toBeTruthy();
   });
 
   it('shows each verification status', () => {
@@ -446,9 +450,21 @@ describe('ExperienceRow', () => {
         ))}
       </Rows>,
     );
-    expect(screen.getByText('Non vérifiée').className).toContain('neutral');
-    expect(screen.getByText('En attente').className).toContain('strong');
-    expect(screen.getByText('Refusée').className).toContain('error');
+    expect(screen.getByText('Non vérifiée').className).toContain('is-unverified');
+    expect(screen.getByText('En attente').className).toContain('is-pending');
+    expect(screen.getByText('Refusée').className).toContain('is-rejected');
+  });
+
+  it('shows only a verification on a public view', () => {
+    const publicView = {...makeExperience(), created_at: undefined, updated_at: undefined} as never;
+    delete (publicView as Record<string, unknown>).created_at;
+    delete (publicView as Record<string, unknown>).updated_at;
+    renderWithCatalog(
+      <ExperienceList>
+        <ExperienceRow experience={publicView} />
+      </ExperienceList>,
+    );
+    expect(screen.queryByText('Non vérifiée')).toBeNull();
   });
 
   it('collapses a long description and expands it on request', () => {
@@ -520,7 +536,7 @@ describe('CommitmentSummary and LanguageList', () => {
 });
 
 describe('LinkList', () => {
-  it('opens links in a new tab, safely, with the host in a pill and no external icon', () => {
+  it('opens links in a new tab, safely, with the host under the label and no external icon', () => {
     const {container} = renderWithCatalog(
       <LinkList
         links={[
@@ -535,7 +551,10 @@ describe('LinkList', () => {
     expect(link.getAttribute('href')).toBe('https://www.example.com/alex');
     expect(link.getAttribute('target')).toBe('_blank');
     expect(link.getAttribute('rel')).toBe('noopener noreferrer nofollow');
-    expect(link.querySelector('.pill')!.textContent).toBe('example.com');
+    expect(link.querySelector('.link-item-host')!.textContent).toBe('example.com');
+    expect(link.querySelector('.pill')).toBeNull();
+    expect(link.querySelector('.shape .material-symbols-outlined')!.textContent).toBe('public');
+    expect(link.querySelector('.link-item-label')!.textContent).toBe('Portfolio');
     expect(link.textContent).not.toContain('open_in_new');
     expect(link.textContent).toContain('Portfolio');
   });

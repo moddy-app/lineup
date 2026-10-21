@@ -214,3 +214,60 @@ describe('person badges (§10, §5)', () => {
     }
   });
 });
+
+describe('badges on summaries (post.guild, post.author, team, me)', () => {
+  type Item = {
+    kind: string;
+    guild: {id: string; badges?: Array<{id: string}>} | null;
+    author: {id: string; badges?: Array<{id: string}>};
+  };
+
+  async function feed(api: ReturnType<typeof createTestApi>): Promise<Item[]> {
+    const items: Item[] = [];
+    let cursor: string | null = null;
+    do {
+      const response: Awaited<ReturnType<typeof api.call>> = await api.call('GET', '/lineup/posts', {
+        query: cursor ? {cursor} : {},
+      });
+      items.push(...response.json.items);
+      cursor = response.json.next_cursor;
+    } while (cursor);
+    return items;
+  }
+
+  it('gives the verification badges of a server and of an author in the feed, never Discord’s', async () => {
+    const api = createTestApi();
+    const items = await feed(api);
+    const moddyPost = items.find((item) => item.guild?.id === G.moddy);
+    expect(ids(moddyPost?.guild?.badges ?? [])).toEqual(expect.arrayContaining(['moddy_server', 'lineup_verified']));
+    expect(ids(moddyPost?.author.badges ?? [])).toContain('moddy_staff');
+    const cubelands = items.find((item) => item.guild?.id === G.cubelands);
+    expect(ids(cubelands?.guild?.badges ?? [])).toContain('lineup_verified');
+    for (const item of items) {
+      for (const entry of [...(item.guild?.badges ?? []), ...(item.author.badges ?? [])]) {
+        expect(entry.id.startsWith('discord_')).toBe(false);
+      }
+    }
+  });
+
+  it('has a personal post by a verified account in the feed', async () => {
+    const items = await feed(createTestApi());
+    const verifiedPersonal = items.filter(
+      (item) => item.kind === 'user' && ids(item.author.badges ?? []).includes('lineup_verified'),
+    );
+    expect(verifiedPersonal.length).toBeGreaterThan(0);
+  });
+
+  it('gives badges to the team of a server and to the session', async () => {
+    const api = createTestApi('noe');
+    const me = await api.call('GET', '/lineup/me');
+    expect(ids(me.json.user.badges)).toContain('moddy_staff');
+    const camille = createTestApi('camille');
+    expect((await camille.call('GET', '/lineup/me')).json.user.badges).toEqual([]);
+    const team = (await api.call('GET', `/lineup/guilds/${G.cubelands}`)).json.team as Array<{
+      user: {id: string; badges?: Array<{id: string}>};
+    }>;
+    expect(team.length).toBeGreaterThan(0);
+    for (const member of team) expect(Array.isArray(member.user.badges)).toBe(true);
+  });
+});

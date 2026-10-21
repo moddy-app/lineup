@@ -34,7 +34,9 @@
   },
   "languages": {
     "label": "Languages",
-    "more": "+{{count}}"
+    "more": "+{{count}}",
+    "line_one": "Language:",
+    "line_other": "Languages:"
   },
   "timezone": {
     "label": "Time zone",
@@ -74,7 +76,6 @@
   },
   "experience": {
     "title": "{{position}}, {{name}}",
-    "range": "{{start}} to {{end}}",
     "present": "present",
     "duration": {
       "lessThanMonth": "less than a month",
@@ -177,5 +178,27 @@
     "apply": "Apply",
     "dm": "Contact by DM",
     "dmHint": "Opens the author's profile. Contact happens in a Discord direct message."
+  },
+  "verification": {
+    "moddy_staff": "Moddy team",
+    "moddy_server": "Official Moddy server",
+    "lineup_verified_guild": "Verified server",
+    "lineup_verified_user": "Verified account"
+  },
+  "settings": {
+    "title": "My space",
+    "managed": "Managed servers",
+    "nav": {
+      "profile": "Profile",
+      "experiences": "Experience",
+      "posts": "Posts",
+      "guilds": "Servers"
+    }
+  },
+  "filters": {
+    "open": "Filters",
+    "add": "Add a filter",
+    "allUsed": "All filters are in use",
+    "remove": "Remove"
   }
 }

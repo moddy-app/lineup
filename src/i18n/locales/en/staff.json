@@ -41,7 +41,7 @@
       "verify": "Verify keeps the existing proof and adds your note.",
       "reject": "Reject needs a reason, which the person can read."
     },
-    "loaded": "{{n}} loaded in this list.",
+    "evidence": "Evidence",
     "updated": "Changed",
     "facts": {
       "requestedAt": "Review requested",
@@ -114,7 +114,6 @@
       "target": "Open the target first. Resolving or dismissing does not change the target: hide the post separately.",
       "once": "A decided report cannot be decided again."
     },
-    "loaded": "{{n}} loaded in this list.",
     "resolve": {
       "action": "Resolve",
       "title": "Mark as resolved",
@@ -147,7 +146,6 @@
       "text": "No badge has been granted for this filter."
     },
     "grantedBy": "Granted by",
-    "openEntity": "Open profile ({{badge}}, {{id}})",
     "revoke": {
       "action": "Revoke",
       "title": "Revoke this badge",
@@ -176,10 +174,9 @@
       "label": "Post id or link",
       "hint": "Paste the UUID or the address of the post.",
       "invalid": "No post id found.",
-      "submit": "Look up"
+      "submit": "Load"
     },
     "empty": {
-      "title": "No post selected",
       "text": "Paste an id or a link to see its status and hide it."
     },
     "reason": "Reason:",

@@ -41,7 +41,7 @@
       "verify": "Verifizieren behält den vorhandenen Nachweis und fügt Ihre Notiz hinzu.",
       "reject": "Ablehnen braucht eine Begründung, die die Person lesen kann."
     },
-    "loaded": "{{n}} in dieser Liste geladen.",
+    "evidence": "Nachweis",
     "updated": "Geändert",
     "facts": {
       "requestedAt": "Prüfung angefragt",
@@ -114,7 +114,6 @@
       "target": "Öffnen Sie zuerst das Ziel. Bearbeiten oder Abweisen ändert das Ziel nicht: blenden Sie die Anzeige separat aus.",
       "once": "Eine entschiedene Meldung kann nicht erneut entschieden werden."
     },
-    "loaded": "{{n}} in dieser Liste geladen.",
     "resolve": {
       "action": "Bearbeiten",
       "title": "Als bearbeitet markieren",
@@ -147,7 +146,6 @@
       "text": "Für diesen Filter wurde kein Abzeichen vergeben."
     },
     "grantedBy": "Vergeben von",
-    "openEntity": "Profil öffnen ({{badge}}, {{id}})",
     "revoke": {
       "action": "Entziehen",
       "title": "Dieses Abzeichen entziehen",
@@ -176,10 +174,9 @@
       "label": "ID oder Link der Anzeige",
       "hint": "Füge die UUID oder die Adresse der Anzeige ein.",
       "invalid": "Keine Anzeigen-ID erkannt.",
-      "submit": "Suchen"
+      "submit": "Laden"
     },
     "empty": {
-      "title": "Keine Anzeige ausgewählt",
       "text": "Füge eine ID oder einen Link ein, um den Status zu sehen und sie auszublenden."
     },
     "reason": "Begründung:",

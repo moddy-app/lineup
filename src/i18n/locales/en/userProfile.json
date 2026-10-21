@@ -6,21 +6,14 @@
     "action": "Browse posts"
   },
   "header": {
-    "created": "Discord account created on {{date}}",
-    "openToWork": "Open to work"
-  },
-  "about": {
-    "title": "About",
-    "timezone": "Time zone",
-    "languages": "Languages",
-    "links": "Links"
-  },
-  "self": {
+    "created": "Discord account created in {{date}}",
+    "openToWork": "Open to work",
     "edit": "Edit my profile",
-    "experiences": "My experiences"
+    "more": "More actions"
   },
   "bio": {
-    "title": "Bio"
+    "title": "About",
+    "emptySelf": "You have not written an introduction yet."
   },
   "experiences": {
     "title": "Experience",
@@ -30,9 +23,21 @@
   },
   "posts": {
     "title": "Posts",
-    "count_one": "{{value}} published post",
-    "count_other": "{{value}} published posts",
     "empty": "No published post at the moment.",
     "emptySelf": "You have no published post."
+  },
+  "links": {
+    "title": "Links",
+    "emptySelf": "You have not added any link yet."
+  },
+  "about": {
+    "title": "Details"
+  },
+  "menu": {
+    "copyId": "Copy the ID",
+    "copyLink": "Copy the profile link",
+    "idCopied": "ID copied.",
+    "linkCopied": "Link copied.",
+    "copyFailed": "Could not copy."
   }
 }

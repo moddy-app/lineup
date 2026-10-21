@@ -1,26 +1,26 @@
 {
-  "title": "My experiences",
+  "title": "Experience",
   "list": {
     "intro": "Drag an experience by its handle, or use the arrows, to change the order shown on your profile.",
     "add": "Add an experience",
     "edit": "Edit",
-    "delete": "Delete",
     "drag": "Move {{title}}",
     "moveUp": "Move {{title}} up",
     "moveDown": "Move {{title}} down",
     "moved": "{{title}}: position {{position}} of {{total}}",
     "reordered": "Order saved",
     "orderOutdated": "The list had changed elsewhere. It was reloaded, move it again.",
-    "title": "{{position}}, {{name}}"
+    "title": "{{position}}, {{name}}",
+    "more": "More actions",
+    "up": "Move up",
+    "down": "Move down"
   },
   "empty": {
     "title": "No experience",
     "body": "Add the servers or services you worked for. A verified experience can be featured in a post."
   },
   "aside": {
-    "countTitle": "Experiences",
     "count": "{{used}} / {{max}}",
-    "profile": "Edit my profile",
     "verifyTitle": "Verification",
     "auto": "Automatic: for a server where you currently work, Lineup reads your permissions on that server through Discord.",
     "manual": "Manual review: for a past role or a service, the Moddy team looks at your request.",
@@ -110,12 +110,7 @@
     "pending": "Review request sent, waiting for the Moddy team.",
     "rejected": "Rejected.",
     "rejectedNoReason": "No reason was given.",
-    "rejectedHelp": "Fix the experience if needed, then ask for a verification again.",
-    "unverified": {
-      "service": "Not verified. A service is verified by a manual review.",
-      "current": "Not verified. Only a verified experience can be featured in a post.",
-      "ended": "Not verified. A past role is verified by a manual review."
-    }
+    "rejectedHelp": "Fix the experience if needed, then ask for a verification again."
   },
   "evidence": {
     "summary": "See what was checked",

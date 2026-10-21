@@ -1,6 +1,5 @@
 {
-  "title": "Mein Profil bearbeiten",
-  "intro": "Dieses Profil ist öffentlich. Nur geänderte Felder werden gespeichert.",
+  "title": "Profil",
   "saved": "Profil gespeichert",
   "saving": "Speichern",
   "save": "Speichern",
@@ -9,7 +8,7 @@
     "headline": "Titel",
     "headlineHelp": "Eine Zeile unter Ihrem Namen, zum Beispiel „Moderatorin seit 4 Jahren“.",
     "bio": "Über mich",
-    "bioHelp": "Nur Text. Zeilenumbrüche bleiben erhalten.",
+    "bioHelp": "Markdown wird unterstützt: fett, Listen, Links.",
     "openToWork": "Offen für Angebote",
     "openToWorkHelp": "Auf Ihrem Profil erscheint die Markierung „Offen für Angebote“."
   },
@@ -33,18 +32,6 @@
     "suggestion": "Zeitzone Ihres Browsers:",
     "use": "Übernehmen"
   },
-  "summary": {
-    "title": "Vorschau",
-    "noHeadline": "Kein Titel",
-    "languages_one": "{{count}} Sprache: {{list}}",
-    "languages_other": "{{count}} Sprachen: {{list}}",
-    "noLanguages": "Keine Sprache",
-    "links_one": "{{count}} Link",
-    "links_other": "{{count}} Links",
-    "open": "Offen für Angebote",
-    "closed": "Nicht auf der Suche",
-    "view": "Mein öffentliches Profil ansehen"
-  },
   "problems": {
     "linkLabelRequired": "Geben Sie dem Link einen Namen.",
     "linkLabelTooLong": "Der Name hat höchstens {{count}} Zeichen.",
@@ -54,5 +41,27 @@
     "timezoneInvalid": "Unbekannte Zeitzone. Beispiele: Europe/Paris, UTC+02:00.",
     "tooLong": "Höchstens {{count}} Zeichen.",
     "tooMany": "Höchstens {{count}} Einträge."
+  },
+  "description": "Was andere in Ihrem öffentlichen Profil sehen.",
+  "viewPublic": "Mein öffentliches Profil ansehen",
+  "unsaved": "Nicht gespeicherte Änderungen",
+  "panels": {
+    "presentation": {
+      "title": "Vorstellung",
+      "description": "Ihr Titel und Ihr Vorstellungstext."
+    },
+    "availability": {
+      "title": "Verfügbarkeit",
+      "description": "Geben Sie an, ob Sie offen für Angebote sind."
+    },
+    "locale": {
+      "title": "Sprachen und Zeitzone",
+      "description": "Die Sprachen, die Sie sprechen, und Ihre Ortszeit."
+    }
+  },
+  "preview": {
+    "show": "Vorschau anzeigen",
+    "hide": "Vorschau ausblenden",
+    "empty": "Nichts anzuzeigen."
   }
 }

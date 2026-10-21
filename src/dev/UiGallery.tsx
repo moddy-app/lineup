@@ -8,6 +8,7 @@
 import {useState} from 'react';
 
 import {DomainGallery} from './DomainGallery';
+import {FoundationGallery} from './FoundationGallery';
 
 import {
   Avatar,
@@ -45,6 +46,8 @@ import {
   TextField,
   Tooltip,
   useSnackbar,
+  InnerCard,
+  InnerCards,
 } from '@/ui';
 
 const SHAPES: Array<[ShapeName, ShapeTone, string]> = [
@@ -110,6 +113,19 @@ export function Component() {
             </CardVisual>
           </Card>
         ))}
+
+        <Card span={4}>
+          <h2>InnerCard</h2>
+          <InnerCards>
+            <InnerCard as="li">
+              <RowBody title="An inner card" meta="surface-container, no edge caps" />
+            </InnerCard>
+            <InnerCard as="li" to="/__ui">
+              <Shape small shape="hexagon" tone="secondary" icon="link" />
+              <RowBody title="An inner card, as a link" meta="quiet hover" />
+            </InnerCard>
+          </InnerCards>
+        </Card>
 
         <Stack span={8}>
           <Card as="article">
@@ -324,6 +340,7 @@ export function Component() {
           onConfirm={() => setDestructive(false)}
         />
         <DomainGallery />
+        <FoundationGallery />
       </Bento>
     </Page>
   );
