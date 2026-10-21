@@ -12,18 +12,18 @@ Tout passe par `src/api/client.ts`. Les URL sont toujours absolues (`config.apiB
 
 ## `ApiError`
 
-| Champ | Contenu |
-| --- | --- |
-| `status` | Statut HTTP, `0` si aucune réponse |
-| `kind` | `lineup`, `sanction`, `text`, `validation`, `network`, `unknown` |
-| `code` | Code stable (LINEUP.md §12) ou un des nôtres : `unauthenticated`, `staff_only`, `origin_not_allowed`, `route_not_found`, `validation_error`, `network_error`. `null` si absent |
-| `context` | Champs à côté du code (`limit`, `scope`, `reason`, `login_url`, `retry_after`, `guild_id`, `field`, `current_status`, `can_request_review`...) |
-| `sanction` | Détail pour `user_suspended` et `guild_suspended` |
-| `validation` | Le `detail[]` d'un 422 |
-| `retryAfter` | Secondes à attendre (429, 503) |
-| `serverMessage` | Message français de l'API, dernier recours d'affichage, jamais pour brancher du code |
-| `expired` | Pour `unauthenticated` : la session existait et a expiré (`Session expiree`) |
-| `receivedAt` | Instant de création, point de départ du décompte |
+| Champ           | Contenu                                                                                                                                                                        |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `status`        | Statut HTTP, `0` si aucune réponse                                                                                                                                             |
+| `kind`          | `lineup`, `sanction`, `text`, `validation`, `network`, `unknown`                                                                                                               |
+| `code`          | Code stable (LINEUP.md §12) ou un des nôtres : `unauthenticated`, `staff_only`, `origin_not_allowed`, `route_not_found`, `validation_error`, `network_error`. `null` si absent |
+| `context`       | Champs à côté du code (`limit`, `scope`, `reason`, `login_url`, `retry_after`, `guild_id`, `field`, `current_status`, `can_request_review`...)                                 |
+| `sanction`      | Détail pour `user_suspended` et `guild_suspended`                                                                                                                              |
+| `validation`    | Le `detail[]` d'un 422                                                                                                                                                         |
+| `retryAfter`    | Secondes à attendre (429, 503)                                                                                                                                                 |
+| `serverMessage` | Message français de l'API, dernier recours d'affichage, jamais pour brancher du code                                                                                           |
+| `expired`       | Pour `unauthenticated` : la session existait et a expiré (`Session expiree`)                                                                                                   |
+| `receivedAt`    | Instant de création, point de départ du décompte                                                                                                                               |
 
 Helpers : `isApiError`, `hasCode(error, ...codes)`, `fieldPath`, `issuesByField`.
 

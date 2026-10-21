@@ -18,6 +18,7 @@ npm run dev        # against the real API (see .env.example)
 
 | Script              | Does                                        |
 | ------------------- | ------------------------------------------- |
+| `npm run dev:mock`  | dev server with the mock API                |
 | `npm run build`     | typecheck, then production build in `dist/` |
 | `npm run preview`   | serves `dist/`                              |
 | `npm run typecheck` | `tsc -b` (app, design kit, build scripts)   |
@@ -40,7 +41,11 @@ src/ui/       React primitives on the kit's classes and Material Web
 src/styles/   lineup.css: the app's additions to the kit, tokens only
 ```
 
-Project documentation will live in `docs/`.
+## Documentation
+
+- [`docs/`](docs/README.md) : démarrage, architecture, client API, authentification, i18n, design, pages, API simulée, tests, déploiement, couverture des routes, notes pour le backend (en français).
+- [`CLAUDE.md`](CLAUDE.md) : règles pour les agents de code.
+- [`LINEUP.md`](LINEUP.md) : référence de l'API.
 
 ## Design kit
 

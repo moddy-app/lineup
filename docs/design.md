@@ -21,18 +21,18 @@ Référence : `design-kit/DESIGN-SYSTEM.md` (à lire avant de toucher à l'inter
 
 Tous importés une fois dans `src/ui/material.ts` (types JSX dans `src/types/custom-elements.d.ts`) :
 
-| Élément | Où |
-| --- | --- |
-| `md-dialog` | `ui/Dialog.tsx` (`Dialog`, `ConfirmDialog`) : confirmations, expériences, signalement, confirmation NSFW |
-| `md-outlined-select` + `md-select-option` | `ui/Select.tsx` |
-| `md-outlined-text-field` | `ui/TextField.tsx` (compteur et texte d'aide inclus) |
-| `md-switch`, `md-checkbox` | `ui/Toggles.tsx` (`Switch`, `Checkbox`) |
-| `md-radio` | Éditeur d'annonce (`steps.tsx`), signalement (`ReportDialog.tsx`) |
-| `md-tabs` + `md-primary-tab` | Mes annonces (onglets par statut) |
-| `md-circular-progress`, `md-linear-progress` | Chargement (`ui/Loading.tsx`) et jauges |
-| `md-menu-item` | Menu utilisateur de la coque (`AppShell.tsx`) |
-| Boutons `md-filled-button`, `md-filled-tonal-button`, `md-outlined-button`, `md-text-button`, `md-icon-button` | Partout |
-| `md-icon`, `md-focus-ring`, `md-ripple`, `md-divider`, `md-menu` | Dépendances des précédents ou icônes |
+| Élément                                                                                                        | Où                                                                                                       |
+| -------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `md-dialog`                                                                                                    | `ui/Dialog.tsx` (`Dialog`, `ConfirmDialog`) : confirmations, expériences, signalement, confirmation NSFW |
+| `md-outlined-select` + `md-select-option`                                                                      | `ui/Select.tsx`                                                                                          |
+| `md-outlined-text-field`                                                                                       | `ui/TextField.tsx` (compteur et texte d'aide inclus)                                                     |
+| `md-switch`, `md-checkbox`                                                                                     | `ui/Toggles.tsx` (`Switch`, `Checkbox`)                                                                  |
+| `md-radio`                                                                                                     | Éditeur d'annonce (`steps.tsx`), signalement (`ReportDialog.tsx`)                                        |
+| `md-tabs` + `md-primary-tab`                                                                                   | Mes annonces (onglets par statut)                                                                        |
+| `md-circular-progress`, `md-linear-progress`                                                                   | Chargement (`ui/Loading.tsx`) et jauges                                                                  |
+| `md-menu-item`                                                                                                 | Menu utilisateur de la coque (`AppShell.tsx`)                                                            |
+| Boutons `md-filled-button`, `md-filled-tonal-button`, `md-outlined-button`, `md-text-button`, `md-icon-button` | Partout                                                                                                  |
+| `md-icon`, `md-focus-ring`, `md-ripple`, `md-divider`, `md-menu`                                               | Dépendances des précédents ou icônes                                                                     |
 
 `md-filter-chip`, `md-chip-set` et `md-secondary-tab` sont importés mais non utilisés dans le JSX au moment de l'écriture ; les puces de l'app (`Chip`, `Chips` dans `ui/Chips.tsx`) reposent sur les classes `.chips` et `.chip` du kit. Le glisser-déposer des expériences utilise `@dnd-kit`.
 

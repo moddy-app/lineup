@@ -19,28 +19,28 @@ Le port 5173 est imposé (`strictPort`). En développement, `/__ui` affiche tout
 
 Toutes ont une valeur par défaut dans `src/config.ts` : l'app tourne sans fichier `.env`. Pour les changer, copiez `.env.example` vers `.env.local`.
 
-| Variable | Défaut | Rôle |
-| --- | --- | --- |
-| `VITE_API_BASE` | `https://api.moddy.app` | URL de base de l'API Moddy (les routes Lineup sont sous `/lineup`) |
-| `VITE_SITE_URL` | `https://lineup.moddy.app` | URL publique du site (liens canoniques, redirections de connexion) |
-| `VITE_MOCK_API` | vide | `1` : utilise l'API simulée. Actif seulement en `dev` ou en `--mode mock`, jamais dans un build de production |
+| Variable        | Défaut                     | Rôle                                                                                                          |
+| --------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `VITE_API_BASE` | `https://api.moddy.app`    | URL de base de l'API Moddy (les routes Lineup sont sous `/lineup`)                                            |
+| `VITE_SITE_URL` | `https://lineup.moddy.app` | URL publique du site (liens canoniques, redirections de connexion)                                            |
+| `VITE_MOCK_API` | vide                       | `1` : utilise l'API simulée. Actif seulement en `dev` ou en `--mode mock`, jamais dans un build de production |
 
 `.env.mock` ne contient que `VITE_MOCK_API=1` et est chargé par `vite --mode mock`.
 
 ## Scripts npm
 
-| Script | Action |
-| --- | --- |
-| `npm run dev` | Serveur de développement Vite |
-| `npm run dev:mock` | Idem avec l'API simulée (`vite --mode mock`) |
-| `npm run build` | `tsc -b` puis build de production dans `dist/` |
-| `npm run build:mock` | `tsc -b` puis build avec l'API simulée dans `dist-mock/` |
-| `npm run preview` | Sert `dist/` |
-| `npm run preview:mock` | Sert `dist-mock/` |
-| `npm run typecheck` | `tsc -b` (app, kit, scripts de build) |
-| `npm run lint` | ESLint |
-| `npm run format` | Prettier en écriture |
-| `npm test` | `vitest run` |
+| Script                 | Action                                                   |
+| ---------------------- | -------------------------------------------------------- |
+| `npm run dev`          | Serveur de développement Vite                            |
+| `npm run dev:mock`     | Idem avec l'API simulée (`vite --mode mock`)             |
+| `npm run build`        | `tsc -b` puis build de production dans `dist/`           |
+| `npm run build:mock`   | `tsc -b` puis build avec l'API simulée dans `dist-mock/` |
+| `npm run preview`      | Sert `dist/`                                             |
+| `npm run preview:mock` | Sert `dist-mock/`                                        |
+| `npm run typecheck`    | `tsc -b` (app, kit, scripts de build)                    |
+| `npm run lint`         | ESLint                                                   |
+| `npm run format`       | Prettier en écriture                                     |
+| `npm test`             | `vitest run`                                             |
 
 ## CORS en développement local
 

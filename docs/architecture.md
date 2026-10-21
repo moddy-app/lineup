@@ -23,12 +23,12 @@ src/
   types/          déclarations des éléments personnalisés
 ```
 
-| Dossier | Rôle |
-| --- | --- |
-| `app/` | `App.tsx`, `Root.tsx`, `AppShell.tsx` (barre du haut, pied de page), `routes.tsx`, `paths.ts`, `RequireAuth.tsx`, `SuspendedScreen.tsx`, `SuspendedNotice.tsx`, `queryClient.ts` |
-| `api/` | `client.ts` (`apiFetch`, `ApiError`), `errors.ts` (message par code), `endpoints/` (une fonction par route), `queries.ts` et `mutations.ts` (hooks), `queryKeys.ts`, `cacheSync.ts` et `cacheUpdates.ts` (mises à jour du cache), `pagination.ts`, `retry.ts`, `useRetryAfter.ts`, `catalog.ts`, `limits.ts` (limites de champs) |
-| `auth/` | `session.tsx`, `status.ts`, `authError.ts`, `beforeLogin.ts`, `reauth.ts`, `useAuthAction.ts` |
-| `features/` | `feed`, `post`, `post-editor`, `my-posts`, `guilds`, `guild-profile`, `guild-manage`, `claim`, `user-profile`, `me-profile`, `experiences`, `staff` |
+| Dossier     | Rôle                                                                                                                                                                                                                                                                                                                             |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `app/`      | `App.tsx`, `Root.tsx`, `AppShell.tsx` (barre du haut, pied de page), `routes.tsx`, `paths.ts`, `RequireAuth.tsx`, `SuspendedScreen.tsx`, `SuspendedNotice.tsx`, `queryClient.ts`                                                                                                                                                 |
+| `api/`      | `client.ts` (`apiFetch`, `ApiError`), `errors.ts` (message par code), `endpoints/` (une fonction par route), `queries.ts` et `mutations.ts` (hooks), `queryKeys.ts`, `cacheSync.ts` et `cacheUpdates.ts` (mises à jour du cache), `pagination.ts`, `retry.ts`, `useRetryAfter.ts`, `catalog.ts`, `limits.ts` (limites de champs) |
+| `auth/`     | `session.tsx`, `status.ts`, `authError.ts`, `beforeLogin.ts`, `reauth.ts`, `useAuthAction.ts`                                                                                                                                                                                                                                    |
+| `features/` | `feed`, `post`, `post-editor`, `my-posts`, `guilds`, `guild-profile`, `guild-manage`, `claim`, `user-profile`, `me-profile`, `experiences`, `staff`                                                                                                                                                                              |
 
 Chaque feature contient sa page (export `Component`), ses sous-composants, sa logique de formulaire testable (`form.ts`, `*Form.ts`) et son CSS.
 
