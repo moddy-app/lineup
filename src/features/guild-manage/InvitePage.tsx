@@ -6,6 +6,7 @@ import {InviteHelp} from '@/components';
 import {useT} from '@/i18n/useT';
 import {Pill, SettingsPanel, Status, TextField} from '@/ui';
 
+import {RegenerateInvite} from './RegenerateInvite';
 import {SaveBar} from './SaveBar';
 import {useGuildForm} from './useGuildForm';
 import {useManagedGuild} from './useManagedGuild';
@@ -35,7 +36,7 @@ export function Component() {
     >
       <SettingsPanel className="manage-panel" title={t('invite.title')} description={t('invite.description')}>
         <p className="manage-current">
-          {guild.invite ? (
+          {guild.invite && guild.invite.url !== null ? (
             <>
               <span>{t('invite.current')}</span>
               <Pill>{guild.invite.code}</Pill>
@@ -47,6 +48,7 @@ export function Component() {
             t('invite.none')
           )}
         </p>
+        {guild.has_moddy && <RegenerateInvite guild={guild} />}
         {guild.invite && !guild.invite.valid && <p className="manage-help">{t('invite.lostHelp')}</p>}
         <TextField
           label={t('invite.label')}

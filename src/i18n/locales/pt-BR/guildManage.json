@@ -63,11 +63,17 @@
     "valid": "Válido",
     "lost": "Não encontrado no Discord",
     "lostHelp": "Ele não existe mais no Discord: substitua-o.",
-    "none": "Nenhum convite salvo.",
+    "none": "Nenhum convite ativo.",
     "label": "Novo convite",
     "placeholder": "https://discord.gg/seu-codigo",
     "hint": "Opcional. Não pode expirar e deve levar a este mesmo servidor.",
-    "how": "Como criar um convite permanente"
+    "how": "Como criar um convite permanente",
+    "regenerate": "Gerar um novo convite",
+    "regenerating": "Gerando...",
+    "regenerated": "Novo convite gerado.",
+    "regenerateHelp": "O Moddy cria um convite permanente no servidor.",
+    "manualFallback": "Cole um convite permanente no campo abaixo.",
+    "waitIn": "Disponível em {{seconds}} s"
   },
   "visibility": {
     "title": "Visibilidade",
@@ -94,7 +100,8 @@
     "staleDone": "O Discord não respondeu: os dados antigos foram mantidos.",
     "refresh": "Atualizar agora",
     "refreshing": "Lendo...",
-    "waitIn": "Disponível em {{seconds}} s"
+    "waitIn": "Disponível em {{seconds}} s",
+    "updated": "Atualizado {{relative}}"
   },
   "danger": {
     "title": "Zona de perigo",

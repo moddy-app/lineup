@@ -92,7 +92,7 @@ Une section par route de `src/app/paths.ts`. Toutes les pages sont chargées à 
 
 ### `/guilds/:guildId/manage/invite` Invitation
 
-- Formulaire « Invitation » (scope `invite`) : code actuel en `Pill` avec « Valide » ou « Introuvable sur Discord », champ de nouvelle invitation, aide repliée (`InviteHelp`). Un `invite_expiring` ouvre l'aide ; les autres `invite_*` s'affichent sur le champ. C'est la cible du lien « Remplacer l'invitation » du profil public.
+- Formulaire « Invitation » (scope `invite`) : code actuel en `Pill` avec « Valide » ou « Introuvable sur Discord » (« Aucune invitation active » si l'invitation manque ou si `invite.url` est nul), puis, si `has_moddy`, `RegenerateInvite` : « Générer une nouvelle invitation » (outlined) envoie `PUT` avec `invite: null`, met le cache à jour avec la réponse (le nouveau code apparaît dans le `Pill`), snackbar ; désactivé pendant l'envoi et pendant le décompte de `lineup_rate_limited` / `discord_unavailable` (`useRetryAfter`) ; `invite_required` est affiché avec l'invite à coller une invitation ci-dessous. Le champ de nouvelle invitation reste disponible dans tous les cas, puis l'aide repliée (`InviteHelp`). Un `invite_expiring` ouvre l'aide ; les autres `invite_*` s'affichent sur le champ. C'est la cible du lien « Remplacer l'invitation » du profil public.
 - API : `PUT /lineup/guilds/{id}`.
 
 ### `/guilds/:guildId/manage/posts` Annonces
@@ -102,7 +102,7 @@ Une section par route de `src/app/paths.ts`. Toutes les pages sont chargées à 
 
 ### `/guilds/:guildId/manage/discord` Données Discord
 
-- `SnapshotCard` : membres, `StaleNotice`, « Actualiser maintenant » (une fois par minute, décompte `lineup_rate_limited`). L'API ne donne pas la date de dernière lecture : elle n'est pas affichée.
+- `SnapshotCard` : membres, `StaleNotice`, « Actualiser maintenant » (une fois par minute, décompte `lineup_rate_limited`). À côté des membres, « Mis à jour il y a… » d'après `snapshot_at` (`RelativeTime`, absent si nul) ; après « Actualiser maintenant », la valeur vient de la réponse (cache mis à jour).
 - API : `POST /lineup/guilds/{id}/refresh`.
 
 ### `/guilds/:guildId/manage/settings` Paramètres

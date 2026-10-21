@@ -63,11 +63,17 @@
     "valid": "Valid",
     "lost": "Not found on Discord",
     "lostHelp": "It no longer exists on Discord: replace it.",
-    "none": "No invitation saved.",
+    "none": "No active invitation.",
     "label": "New invitation",
     "placeholder": "https://discord.gg/your-code",
     "hint": "Optional. It must never expire and lead to this same server.",
-    "how": "How to create a permanent invitation"
+    "how": "How to create a permanent invitation",
+    "regenerate": "Generate a new invitation",
+    "regenerating": "Generating...",
+    "regenerated": "New invitation generated.",
+    "regenerateHelp": "Moddy creates a permanent invitation on the server.",
+    "manualFallback": "Paste a permanent invitation in the field below.",
+    "waitIn": "Available in {{seconds}} s"
   },
   "visibility": {
     "title": "Visibility",
@@ -94,7 +100,8 @@
     "staleDone": "Discord did not answer: the old data is kept.",
     "refresh": "Refresh now",
     "refreshing": "Reading...",
-    "waitIn": "Available in {{seconds}} s"
+    "waitIn": "Available in {{seconds}} s",
+    "updated": "Updated {{relative}}"
   },
   "danger": {
     "title": "Danger zone",

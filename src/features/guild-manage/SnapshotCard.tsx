@@ -7,7 +7,7 @@ import type {GuildProfile} from '@/api/types';
 import {useRetryAfter} from '@/api/useRetryAfter';
 import {useSession} from '@/auth/session';
 import {useAuthAction} from '@/auth/useAuthAction';
-import {InlineStats, RetryButton, StaleNotice} from '@/components';
+import {InlineStats, RelativeTime, RetryButton, StaleNotice} from '@/components';
 import {useT} from '@/i18n/useT';
 import {SettingsPanel, useSnackbar} from '@/ui';
 
@@ -51,7 +51,16 @@ export function SnapshotCard({guild}: {guild: GuildProfile}) {
         </md-outlined-button>
       }
     >
-      <InlineStats items={[{icon: 'group', value: guild.member_count, label: t('snapshot.members')}]} />
+      <div className="manage-snapshot">
+        <InlineStats items={[{icon: 'group', value: guild.member_count, label: t('snapshot.members')}]} />
+        {guild.snapshot_at && (
+          <RelativeTime
+            className="manage-snapshot-date"
+            value={guild.snapshot_at}
+            format={(relative) => t('snapshot.updated', {relative})}
+          />
+        )}
+      </div>
       {guild.stale && <StaleNotice />}
       {error !== null && !rateLimited && (
         <div className="manage-error" role="alert">
