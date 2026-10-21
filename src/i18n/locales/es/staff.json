@@ -1,11 +1,11 @@
 {
   "title": "Consola del staff",
   "header": {
-    "text": "Cola de revisión de experiencias, denuncias, insignias manuales y anuncios ocultos."
+    "text": "Cola de verificaciones de experiencias, denuncias, insignias manuales y anuncios ocultos."
   },
   "nav": {
     "label": "Secciones de la consola",
-    "reviews": "Revisión",
+    "reviews": "Verificaciones",
     "reports": "Denuncias",
     "badges": "Insignias",
     "posts": "Anuncios"

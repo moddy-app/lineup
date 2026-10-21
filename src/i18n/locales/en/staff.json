@@ -1,11 +1,11 @@
 {
   "title": "Staff console",
   "header": {
-    "text": "Experience review queue, reports, manual badges and hidden posts."
+    "text": "Experience verification queue, reports, manual badges and hidden posts."
   },
   "nav": {
     "label": "Console sections",
-    "reviews": "Reviews",
+    "reviews": "Verifications",
     "reports": "Reports",
     "badges": "Badges",
     "posts": "Posts"

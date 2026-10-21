@@ -1,11 +1,11 @@
 {
   "title": "Staff-Konsole",
   "header": {
-    "text": "Prüfwarteschlange für Erfahrungen, Meldungen, manuelle Abzeichen und ausgeblendete Anzeigen."
+    "text": "Warteschlange der Verifizierungen für Erfahrungen, Meldungen, manuelle Abzeichen und ausgeblendete Anzeigen."
   },
   "nav": {
     "label": "Bereiche der Konsole",
-    "reviews": "Prüfung",
+    "reviews": "Verifizierungen",
     "reports": "Meldungen",
     "badges": "Abzeichen",
     "posts": "Anzeigen"

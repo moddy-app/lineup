@@ -1,11 +1,11 @@
 {
   "title": "Console da equipe",
   "header": {
-    "text": "Fila de revisão de experiências, denúncias, selos manuais e anúncios ocultos."
+    "text": "Fila de verificações de experiências, denúncias, selos manuais e anúncios ocultos."
   },
   "nav": {
     "label": "Seções do console",
-    "reviews": "Revisão",
+    "reviews": "Verificações",
     "reports": "Denúncias",
     "badges": "Selos",
     "posts": "Anúncios"

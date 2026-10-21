@@ -1,11 +1,11 @@
 {
   "title": "Console staff",
   "header": {
-    "text": "File de revue des expériences, signalements, badges manuels et annonces masquées."
+    "text": "File des vérifications des expériences, signalements, badges manuels et annonces masquées."
   },
   "nav": {
     "label": "Sections de la console",
-    "reviews": "Revue",
+    "reviews": "Vérifications",
     "reports": "Signalements",
     "badges": "Badges",
     "posts": "Annonces"
