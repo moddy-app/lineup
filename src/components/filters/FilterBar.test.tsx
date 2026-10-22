@@ -55,13 +55,11 @@ function Harness({
 }
 
 const chip = (name: RegExp | string) => screen.queryByRole('button', {name});
+/** Opens the add menu from the funnel and picks a filter. */
+const openFunnel = () => fireEvent.click(document.querySelector('md-icon-button.filter-toggle') as Element);
 const pick = (label: string) => {
-  // The add menu items (md-menu-item), once for the funnel and once for the "+" chip when it shows.
-  const item = screen
-    .getAllByText(label)
-    .map((node) => node.closest('md-menu-item'))
-    .find(Boolean);
-  fireEvent.click(item as Element);
+  openFunnel();
+  fireEvent.click(screen.getByRole('menuitem', {name: new RegExp(label)}));
 };
 const advance = (ms: number) => act(() => void vi.advanceTimersByTime(ms));
 
@@ -148,15 +146,14 @@ describe('FilterBar', () => {
     renderWithCatalog(<Harness initial={{position: ['developer']}} />);
     expect(chip(/Ajouter un filtre/)).not.toBeNull();
     // Only the unused filter is in the menu.
-    const menus = document.querySelectorAll('md-menu');
-    expect([...(menus[1]?.querySelectorAll('md-menu-item') ?? [])].map((item) => item.textContent)).toEqual([
-      'translateLangue',
-    ]);
-    pick('Langue');
+    fireEvent.click(chip(/Ajouter un filtre/) as Element);
+    expect(screen.getAllByRole('menuitem').map((item) => item.textContent)).toEqual(['translateLangue']);
+    fireEvent.click(screen.getByRole('menuitem', {name: /Langue/}));
     advance(160);
     fireEvent.click(within(screen.getByRole('group', {name: 'Langue'})).getByRole('button', {name: 'Français'}));
     expect(chip(/Ajouter un filtre/)).toBeNull();
-    expect(document.querySelector('md-menu')?.textContent).toContain('Tous les filtres sont utilisés');
+    openFunnel();
+    expect(screen.getByRole('menu').textContent).toContain('Tous les filtres sont utilisés');
   });
 
   it('orders chips by addition', () => {

@@ -235,9 +235,10 @@ interface SettingsLayoutProps {
 }
 
 /**
- * A management page: the context selector and the navigation on the left (a
- * selector and a compact list above the content under 900 px), then the
- * page's title and its content, usually `SettingsPanel`s.
+ * A management page, in two cards: the context selector and the navigation on
+ * the left (a selector and a compact list above the content under 900 px),
+ * then the page's title and its content, usually `SettingsPanel`s (they
+ * become sections of that card).
  */
 export function SettingsLayout({title, description, actions, children, className, context}: SettingsLayoutProps) {
   const {pathname, search} = useLocation();
@@ -254,8 +255,10 @@ export function SettingsLayout({title, description, actions, children, className
   return (
     <Page className={cx('settings-page', className)}>
       <div className="settings-layout">
-        <SettingsNav context={current} />
-        <div className="settings-main">
+        <Card as="div" className="settings-side">
+          <SettingsNav context={current} />
+        </Card>
+        <Card as="div" className="settings-main">
           <header className="settings-head">
             <div className="settings-head-text">
               <h1 className="settings-title">{title}</h1>
@@ -264,7 +267,7 @@ export function SettingsLayout({title, description, actions, children, className
             {actions && <div className="settings-head-actions">{actions}</div>}
           </header>
           {children}
-        </div>
+        </Card>
       </div>
       {asked && (
         <Suspense fallback={null}>
@@ -285,7 +288,7 @@ interface SettingsPanelProps extends Omit<HTMLAttributes<HTMLElement>, 'classNam
   className?: string;
 }
 
-/** A form panel: a card (edge caps) with a title, a short description, the fields, and the actions at the bottom right. */
+/** A form panel: a card with a title, a short description, the fields, and the actions at the bottom right; a section of the card around it on a dashboard page. */
 export function SettingsPanel({title, description, actions, children, className, ...props}: SettingsPanelProps) {
   const titleId = useId();
   return (

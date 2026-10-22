@@ -1,6 +1,6 @@
 /**
- * The conditions of a post, one inner card each: an icon (a check, or an
- * info mark when Lineup's check is planned), the condition's name and its value
+ * The conditions of a post, one inner card each: the icon of its type
+ * (`requirementIcon`), the condition's name and its value
  * ("16 ans minimum", "180 jours, environ 6 mois", "Français, Anglais").
  *
  * `verified_by_lineup` is a promise, never a verification (LINEUP.md §8): the
@@ -19,6 +19,7 @@ import {useLanguage} from '@/i18n/useLanguage';
 import {useT} from '@/i18n/useT';
 import {Icon, InnerCard, InnerCards, VisuallyHidden} from '@/ui';
 
+import {requirementIcon} from './requirementIcons';
 import {tooltipSideProps} from './tooltipSide';
 import {useNow} from './useNow';
 import {type RequirementViewer, requirementView, viewerMeets} from './requirements';
@@ -75,7 +76,7 @@ export function RequirementList({requirements, viewer}: RequirementListProps) {
         const meets = viewer ? viewerMeets(requirement, viewer, now) : null;
         return (
           <InnerCard as="li" key={`${requirement.type}:${index}`} className="requirement">
-            <Icon name={view.promise ? 'info' : 'check'} className="requirement-icon" />
+            <Icon name={requirementIcon(requirement.type)} filled className="requirement-icon" />
             <div className="requirement-body">
               <span className="requirement-title">{view.title}</span>
               {view.text && <span className="requirement-text">{view.text}</span>}

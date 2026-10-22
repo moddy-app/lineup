@@ -46,7 +46,7 @@ export function Component() {
         void form.save();
       }}
     >
-      <SettingsPanel className="manage-panel" title={t('invite.title')}>
+      <SettingsPanel className="manage-panel" title={t('invite.title')} description={t('invite.description')}>
         <div className="invite-current">
           <div className="invite-code">
             {invite ? (

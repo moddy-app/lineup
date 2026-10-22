@@ -43,7 +43,8 @@
     "add": "Añadir un enlace"
   },
   "topics": {
-    "title": "Temática y etiquetas"
+    "title": "Temática y etiquetas",
+    "description": "Ayudan a las personas a encontrar el servidor en los anuncios."
   },
   "theme": {
     "label": "Temática",
@@ -54,7 +55,9 @@
     "hint": "Separadas por comas. Minúsculas, números y guiones, de 2 a 24 caracteres. {{count}} de {{max}}."
   },
   "languages": {
-    "label": "Idiomas del servidor ({{count}} de {{max}})"
+    "label": "Idiomas del servidor ({{count}} de {{max}})",
+    "title": "Idiomas",
+    "description": "Los idiomas que se hablan en el servidor. {{count}} de {{max}}."
   },
   "invite": {
     "title": "Invitación",
@@ -71,13 +74,15 @@
     "paste": "Pegar otra invitación",
     "copy": "Copiar enlace",
     "copied": "Invitación copiada.",
-    "copyFailed": "No se pudo copiar."
+    "copyFailed": "No se pudo copiar.",
+    "description": "El enlace que usa el botón Unirse. Debe llevar a este servidor y no caducar nunca."
   },
   "visibility": {
     "title": "Visibilidad",
     "label": "Hacer visible el servidor en Lineup",
     "on": "El perfil y los anuncios del servidor son visibles para todos.",
-    "off": "El perfil y sus anuncios desaparecen para todos, salvo para los gestores y el staff de Moddy."
+    "off": "El perfil y sus anuncios desaparecen para todos, salvo para los gestores y el staff de Moddy.",
+    "description": "Quién puede ver el perfil y los anuncios del servidor."
   },
   "errors": {
     "fixFields": "Corrija los campos marcados y guarda de nuevo.",

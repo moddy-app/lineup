@@ -15,24 +15,6 @@
   border: 0;
 }
 
-.manage-group + .manage-group {
-  padding-top: var(--gap-l);
-}
-
-.manage-group > legend {
-  float: left;
-  width: 100%;
-  margin-bottom: var(--gap-m);
-  padding: 0;
-  font-size: var(--text-label);
-  font-weight: 600;
-  color: var(--md-sys-color-on-surface);
-}
-
-.manage-group > legend + * {
-  clear: both;
-}
-
 .manage-help {
   margin: 0;
   max-width: none;
@@ -73,19 +55,6 @@
 }
 
 /* ---- Theme, tags ---------------------------------------------------------- */
-
-.manage-pair {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--gap-l);
-  align-items: start;
-}
-
-@media (max-width: 700px) {
-  .manage-pair {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
 
 /* ---- Languages: compact checkboxes with a flag ---------------------------- */
 
@@ -201,8 +170,8 @@
 
 .manage-savebar {
   position: sticky;
-  bottom: var(--gap-l);
-  z-index: 2;
+  bottom: var(--page-gap);
+  z-index: 4;
   display: flex;
   flex-direction: column;
   gap: var(--gap-m);
@@ -210,7 +179,7 @@
   padding: var(--gap-m) var(--gap-l);
   overflow-y: auto;
   border: 1px solid var(--md-sys-color-outline-variant);
-  border-radius: var(--radius-l);
+  border-radius: var(--radius-xl);
   background-color: var(--md-sys-color-surface-container-lowest);
 }
 
@@ -261,7 +230,7 @@
 
 /* ---- Danger zone ---------------------------------------------------------- */
 
-.card.manage-danger h2 {
+.manage-danger h2 {
   color: var(--md-sys-color-error);
 }
 

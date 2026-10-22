@@ -8,6 +8,17 @@ import {RequireAuth} from './RequireAuth';
 import type {AuthPurpose} from './SignInPrompt';
 import {RouteError} from './RouteError';
 import {Root} from './Root';
+import {onNewPath} from './preload';
+import {
+  editorLoader,
+  feedLoader,
+  guildLoader,
+  myExperiencesLoader,
+  myPostsLoader,
+  myProfileLoader,
+  postLoader,
+  userLoader,
+} from './routeLoaders';
 
 /** The pages that need a session go under this layout route: sign-in prompt, suspension screen, staff check. */
 const protectedRoutes = (
@@ -25,7 +36,9 @@ const protectedRoutes = (
  * lazy, in its feature folder, and exports a `Component`.
  *
  * The pathless "content" route carries the loading and error states, so both
- * appear inside the shell: the app bar never disappears.
+ * appear inside the shell: the app bar never disappears. The loaders read a
+ * page's data before it shows (preload.ts, routeLoaders.ts): the current page
+ * stays, dimmed, until then.
  */
 export const routes: RouteObject[] = [
   {
@@ -37,37 +50,98 @@ export const routes: RouteObject[] = [
         HydrateFallback: PageLoading,
         ErrorBoundary: RouteError,
         children: [
-          {path: p.feed, lazy: () => import('@/features/feed/FeedPage')},
-          {path: p.people, lazy: () => import('@/features/feed/PeoplePage')},
-          {path: p.post, lazy: () => import('@/features/post/PostPage')},
+          {
+            path: p.feed,
+            loader: feedLoader('guild'),
+            shouldRevalidate: onNewPath,
+            lazy: () => import('@/features/feed/FeedPage'),
+          },
+          {
+            path: p.people,
+            loader: feedLoader('user'),
+            shouldRevalidate: onNewPath,
+            lazy: () => import('@/features/feed/PeoplePage'),
+          },
+          {
+            path: p.post,
+            loader: postLoader,
+            shouldRevalidate: onNewPath,
+            lazy: () => import('@/features/post/PostPage'),
+          },
           // The old address of the servers directory, which no longer exists.
           {path: p.guilds, element: <Navigate to={paths.feed()} replace />},
-          {path: p.guild, lazy: () => import('@/features/guild-profile/GuildProfilePage')},
-          {path: p.user, lazy: () => import('@/features/user-profile/UserProfilePage')},
+          {
+            path: p.guild,
+            loader: guildLoader,
+            shouldRevalidate: onNewPath,
+            lazy: () => import('@/features/guild-profile/GuildProfilePage'),
+          },
+          {
+            path: p.user,
+            loader: userLoader,
+            shouldRevalidate: onNewPath,
+            lazy: () => import('@/features/user-profile/UserProfilePage'),
+          },
           protectedRoutes('editor', [
-            {path: p.postNew, lazy: () => import('@/features/post-editor/PostEditorPage')},
-            {path: p.postEdit, lazy: () => import('@/features/post-editor/PostEditorPage')},
+            {
+              path: p.postNew,
+              loader: editorLoader,
+              shouldRevalidate: onNewPath,
+              lazy: () => import('@/features/post-editor/PostEditorPage'),
+            },
+            {
+              path: p.postEdit,
+              loader: editorLoader,
+              shouldRevalidate: onNewPath,
+              lazy: () => import('@/features/post-editor/PostEditorPage'),
+            },
           ]),
-          protectedRoutes('posts', [{path: p.myPosts, lazy: () => import('@/features/my-posts/MyPostsPage')}]),
+          protectedRoutes('posts', [
+            {
+              path: p.myPosts,
+              loader: myPostsLoader,
+              shouldRevalidate: onNewPath,
+              lazy: () => import('@/features/my-posts/MyPostsPage'),
+            },
+          ]),
           // The old addresses of the claim page: its two dialogs now open on the dashboard.
           {path: p.guildClaim, element: <Navigate to={paths.guildClaim()} replace />},
           {path: p.myGuilds, element: <Navigate to={paths.myGuilds()} replace />},
           protectedRoutes('manage', [
             {
               path: p.guildManage,
+              loader: guildLoader,
+              shouldRevalidate: onNewPath,
               lazy: () => import('@/features/guild-manage/GuildManageLayout'),
               children: [
                 {index: true, lazy: () => import('@/features/guild-manage/ProfilePage')},
                 {path: 'invite', lazy: () => import('@/features/guild-manage/InvitePage')},
-                {path: 'posts', lazy: () => import('@/features/guild-manage/PostsPage')},
+                {
+                  path: 'posts',
+                  loader: myPostsLoader,
+                  shouldRevalidate: onNewPath,
+                  lazy: () => import('@/features/guild-manage/PostsPage'),
+                },
                 {path: 'discord', lazy: () => import('@/features/guild-manage/DiscordPage')},
                 {path: 'settings', lazy: () => import('@/features/guild-manage/SettingsPage')},
               ],
             },
           ]),
-          protectedRoutes('profile', [{path: p.me, lazy: () => import('@/features/me-profile/MeProfilePage')}]),
+          protectedRoutes('profile', [
+            {
+              path: p.me,
+              loader: myProfileLoader,
+              shouldRevalidate: onNewPath,
+              lazy: () => import('@/features/me-profile/MeProfilePage'),
+            },
+          ]),
           protectedRoutes('experiences', [
-            {path: p.myExperiences, lazy: () => import('@/features/experiences/ExperiencesPage')},
+            {
+              path: p.myExperiences,
+              loader: myExperiencesLoader,
+              shouldRevalidate: onNewPath,
+              lazy: () => import('@/features/experiences/ExperiencesPage'),
+            },
           ]),
           protectedRoutes(
             'default',

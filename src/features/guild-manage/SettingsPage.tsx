@@ -23,9 +23,13 @@ export function Component() {
           void form.save();
         }}
       >
-        <SettingsPanel className="manage-panel" title={t('visibility.title')}>
-          <Switch checked={values.listed} onCheckedChange={(listed) => set({listed})} label={t('visibility.label')} />
-          <p className="manage-help">{values.listed ? t('visibility.on') : t('visibility.off')}</p>
+        <SettingsPanel className="manage-panel" title={t('visibility.title')} description={t('visibility.description')}>
+          <Switch
+            checked={values.listed}
+            onCheckedChange={(listed) => set({listed})}
+            label={t('visibility.label')}
+            description={values.listed ? t('visibility.on') : t('visibility.off')}
+          />
         </SettingsPanel>
         <SaveBar {...form.bar} />
       </form>

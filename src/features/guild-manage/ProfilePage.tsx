@@ -48,9 +48,8 @@ export function Component() {
         void form.save();
       }}
     >
-      <SettingsPanel className="manage-panel" title={t('profile.title')} description={t('profile.description')}>
-        <fieldset className="manage-group">
-          <legend>{t('description.title')}</legend>
+      <SettingsPanel className="manage-panel" title={t('description.title')} description={t('profile.description')}>
+        <div className="manage-group">
           <TextField
             label={t('description.label')}
             value={values.description}
@@ -88,31 +87,33 @@ export function Component() {
               {discordText ? discordText : t('description.discordNone')}
             </p>
           )}
-        </fieldset>
+        </div>
+      </SettingsPanel>
 
-        <fieldset className="manage-group">
-          <legend>{t('topics.title')}</legend>
-          <div className="manage-pair">
-            <Select
-              label={t('theme.label')}
-              value={values.theme}
-              options={themeOptions}
-              onValueChange={(theme) => set({theme})}
-              errorText={fieldError('theme')}
-            />
-            <TextField
-              label={t('tags.label')}
-              value={values.tags}
-              onValueChange={(tags) => set({tags})}
-              supportingText={t('tags.hint', {count: tagList.length, max: limits?.max_tags ?? 10})}
-              errorText={fieldError('tags')}
-              autocomplete="off"
-            />
-          </div>
-        </fieldset>
+      <SettingsPanel className="manage-panel" title={t('topics.title')} description={t('topics.description')}>
+        <Select
+          label={t('theme.label')}
+          value={values.theme}
+          options={themeOptions}
+          onValueChange={(theme) => set({theme})}
+          errorText={fieldError('theme')}
+        />
+        <TextField
+          label={t('tags.label')}
+          value={values.tags}
+          onValueChange={(tags) => set({tags})}
+          supportingText={t('tags.hint', {count: tagList.length, max: limits?.max_tags ?? 10})}
+          errorText={fieldError('tags')}
+          autocomplete="off"
+        />
+      </SettingsPanel>
 
-        <fieldset className="manage-group">
-          <legend>{t('languages.label', {count: values.languages.length, max: languageMax})}</legend>
+      <SettingsPanel
+        className="manage-panel"
+        title={t('languages.title')}
+        description={t('languages.description', {count: values.languages.length, max: languageMax})}
+      >
+        <div className="manage-group" role="group" aria-label={t('languages.title')}>
           <div className="manage-checks">
             {(catalog.data?.languages ?? []).map((language) => {
               const checked = values.languages.includes(language.id);
@@ -137,11 +138,27 @@ export function Component() {
             })}
           </div>
           {fieldError('languages') && <p className="manage-field-error">{fieldError('languages')}</p>}
-        </fieldset>
+        </div>
+      </SettingsPanel>
 
-        <fieldset className="manage-group">
-          <legend>{t('links.title')}</legend>
-          <p className="manage-help">{t('links.hint', {count: linkSlots})}</p>
+      <SettingsPanel
+        className="manage-panel"
+        title={t('links.title')}
+        description={t('links.hint', {count: linkSlots})}
+        actions={
+          <md-outlined-button
+            type="button"
+            disabled={values.links.length >= linkSlots}
+            onclick={() => set({links: [...values.links, {label: '', url: ''}]})}
+          >
+            <md-icon slot="icon" className="filled" aria-hidden="true">
+              add_link
+            </md-icon>
+            {t('links.add')}
+          </md-outlined-button>
+        }
+      >
+        <div className="manage-group">
           {values.links.map((link, index) => (
             <div className="manage-link" key={index}>
               <TextField
@@ -166,24 +183,12 @@ export function Component() {
                 aria-label={t('links.remove', {n: index + 1})}
                 onclick={() => set({links: values.links.filter((_, at) => at !== index)})}
               >
-                <Icon name="close" />
+                <Icon name="delete" />
               </md-icon-button>
             </div>
           ))}
           {fieldError('links') && <p className="manage-field-error">{fieldError('links')}</p>}
-          <div>
-            <md-outlined-button
-              type="button"
-              disabled={values.links.length >= linkSlots}
-              onclick={() => set({links: [...values.links, {label: '', url: ''}]})}
-            >
-              <md-icon slot="icon" className="filled" aria-hidden="true">
-                add
-              </md-icon>
-              {t('links.add')}
-            </md-outlined-button>
-          </div>
-        </fieldset>
+        </div>
       </SettingsPanel>
 
       <SaveBar {...form.bar} />

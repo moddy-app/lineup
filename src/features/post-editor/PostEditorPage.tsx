@@ -23,6 +23,7 @@ import {defaultAvatarUrl} from '@/lib/discord';
 import {
   Avatar,
   type DashboardContext,
+  Dropdown,
   Icon,
   LinkButton,
   ME_CONTEXT,
@@ -157,6 +158,18 @@ const FIELD_BY_CODE: Record<string, {field: string; step: StepId}> = {
 };
 const CLAIM_CODES = ['lineup_guild_profile_missing', 'guild_suspended', 'lineup_guild_forbidden'];
 
+/** Editing: the sections of a post, each with its icon (no steps, no review). */
+const SECTION_ICONS: Record<StepId, string> = {
+  type: 'person',
+  content: 'description',
+  positions: 'groups',
+  requirements: 'checklist',
+  application: 'send',
+  commitment: 'schedule',
+  extras: 'tune',
+  review: 'fact_check',
+};
+
 type SubmitMode = 'publish' | 'draft';
 
 function focusField(name: string) {
@@ -181,6 +194,7 @@ function EditorForm({
 }) {
   const {t} = useT('editor');
   const {t: tErrors} = useT('errors');
+  const {t: tCommon} = useT('common');
   const {label} = useCatalogLabel();
   const language = useLanguage();
   const navigate = useNavigate();
@@ -206,7 +220,8 @@ function EditorForm({
   const presetGuild = !editing && fixedGuildId === null && searchParams.get('kind') === 'guild';
   // Something fixes the author (the post, a server's dashboard, the personal one): no type step.
   const typeFixed = editing || presetUser || fixedGuildId !== null;
-  const steps = useMemo(() => stepsFor(typeFixed), [typeFixed]);
+  // Editing shows sections to jump between, without the review: every section can be saved.
+  const steps = useMemo(() => stepsFor(typeFixed).filter((id) => !editing || id !== 'review'), [typeFixed, editing]);
   const pristine = useMemo(
     () =>
       base
@@ -484,22 +499,23 @@ function EditorForm({
   const stepName = t(`steps.${step}.short`);
   const canPublish = !editing || status !== 'published';
 
-  const actions =
-    step === 'review' ? (
-      <>
-        <md-outlined-button disabled={busy} onclick={previous}>
-          {t('actions.previous')}
-        </md-outlined-button>
-        {canPublish && (
-          <md-outlined-button disabled={busy || !canWrite} onclick={() => void submit('draft')}>
-            {busy && lastMode === 'draft'
-              ? t('actions.sending')
-              : editing
-                ? t('actions.saveEdit')
-                : t('actions.saveDraft')}
+  const unchanged = formsEqual(form, pristine);
+  const cancelEdit = () => {
+    finished.current = true;
+    removeItem(key);
+    if (base) void navigate(paths.post(base.id));
+  };
+
+  const actions = editing ? (
+    <>
+      <md-outlined-button disabled={busy} onclick={cancelEdit}>
+        {tCommon('actions.cancel')}
+      </md-outlined-button>
+      {canPublish ? (
+        <>
+          <md-outlined-button disabled={busy || !canWrite || unchanged} onclick={() => void submit('draft')}>
+            {busy && lastMode === 'draft' ? t('actions.sending') : t('actions.saveEdit')}
           </md-outlined-button>
-        )}
-        {canPublish ? (
           <md-filled-button disabled={busy || !canWrite} onclick={() => void submit('publish')}>
             {busy && lastMode === 'publish'
               ? t('actions.sending')
@@ -507,18 +523,47 @@ function EditorForm({
                 ? t('actions.republish')
                 : t('actions.publish')}
           </md-filled-button>
-        ) : (
-          <md-filled-button disabled={busy || !canWrite} onclick={() => void submit('draft')}>
-            {busy ? t('actions.sending') : t('actions.saveChanges')}
-          </md-filled-button>
-        )}
-      </>
-    ) : (
-      <>
-        {index > 0 && <md-outlined-button onclick={previous}>{t('actions.previous')}</md-outlined-button>}
-        <md-filled-button onclick={next}>{t('actions.next')}</md-filled-button>
-      </>
-    );
+        </>
+      ) : (
+        <md-filled-button disabled={busy || !canWrite || unchanged} onclick={() => void submit('draft')}>
+          {busy ? t('actions.sending') : t('actions.saveChanges')}
+        </md-filled-button>
+      )}
+    </>
+  ) : step === 'review' ? (
+    <>
+      <md-outlined-button disabled={busy} onclick={previous}>
+        {t('actions.previous')}
+      </md-outlined-button>
+      {canPublish && (
+        <md-outlined-button disabled={busy || !canWrite} onclick={() => void submit('draft')}>
+          {busy && lastMode === 'draft'
+            ? t('actions.sending')
+            : editing
+              ? t('actions.saveEdit')
+              : t('actions.saveDraft')}
+        </md-outlined-button>
+      )}
+      {canPublish ? (
+        <md-filled-button disabled={busy || !canWrite} onclick={() => void submit('publish')}>
+          {busy && lastMode === 'publish'
+            ? t('actions.sending')
+            : status === 'closed'
+              ? t('actions.republish')
+              : t('actions.publish')}
+        </md-filled-button>
+      ) : (
+        <md-filled-button disabled={busy || !canWrite} onclick={() => void submit('draft')}>
+          {busy ? t('actions.sending') : t('actions.saveChanges')}
+        </md-filled-button>
+      )}
+    </>
+  ) : (
+    <>
+      {index > 0 && <md-outlined-button onclick={previous}>{t('actions.previous')}</md-outlined-button>}
+      <md-filled-button onclick={next}>{t('actions.next')}</md-filled-button>
+    </>
+  );
 
   return (
     <SettingsLayout title={editing ? t('titleEdit') : t('titleNew')} className="ed-page" context={context}>
@@ -538,32 +583,65 @@ function EditorForm({
         </div>
       )}
 
-      <div className="ed-progress">
-        <p className="ed-progress-text numeric">
-          {t('stepper.compact', {current: position, total: visibleSteps.length, name: stepName})}
-        </p>
-        <md-linear-progress value={position} max={visibleSteps.length} aria-hidden="true" />
-      </div>
+      {editing ? (
+        <div className="ed-sections-compact">
+          <Dropdown
+            label={t('sections.label')}
+            matchTrigger
+            items={visibleSteps.map((id) => ({
+              key: id,
+              label: t(`steps.${id}.short`),
+              icon: stateOf(id) === 'error' ? 'error' : SECTION_ICONS[id],
+              selected: id === step,
+              onSelect: () => go(id),
+            }))}
+            trigger={({ref, onActivate, ...aria}) => (
+              <md-outlined-button {...aria} ref={ref} trailing-icon onclick={onActivate}>
+                <Icon name={SECTION_ICONS[step]} />
+                <span className="settings-compact-label">{stepName}</span>
+                <md-icon slot="icon">expand_more</md-icon>
+              </md-outlined-button>
+            )}
+          />
+        </div>
+      ) : (
+        <div className="ed-progress">
+          <p className="ed-progress-text numeric">
+            {t('stepper.compact', {current: position, total: visibleSteps.length, name: stepName})}
+          </p>
+          <md-linear-progress value={position} max={visibleSteps.length} aria-hidden="true" />
+        </div>
+      )}
 
       <div className="ed-body">
-        <nav className="ed-stepper-nav" aria-label={t('stepper.label')}>
-          <ol className="ed-stepper">
+        <nav className="ed-stepper-nav" aria-label={editing ? t('sections.label') : t('stepper.label')}>
+          <ol className={editing ? 'ed-stepper is-sections' : 'ed-stepper'}>
             {visibleSteps.map((id) => {
               const state = stateOf(id);
               const current = id === step;
-              const icon = current
-                ? 'edit'
-                : state === 'error'
+              const icon = editing
+                ? state === 'error'
                   ? 'error'
-                  : state === 'done'
-                    ? 'check_circle'
-                    : 'radio_button_unchecked';
+                  : SECTION_ICONS[id]
+                : current
+                  ? 'edit'
+                  : state === 'error'
+                    ? 'error'
+                    : state === 'done'
+                      ? 'check_circle'
+                      : 'radio_button_unchecked';
+              // Editing: no progress to tell, only a section to fix.
+              const hidden = editing ? (state === 'error' ? 'error' : null) : current ? 'current' : state;
               return (
                 <li key={id} className={`ed-step is-${current ? 'current' : state}`}>
-                  <button type="button" aria-current={current ? 'step' : undefined} onClick={() => go(id)}>
+                  <button
+                    type="button"
+                    aria-current={current ? (editing ? 'true' : 'step') : undefined}
+                    onClick={() => go(id)}
+                  >
                     <Icon name={icon} filled />
                     <span className="ed-step-label">{t(`steps.${id}.short`)}</span>
-                    <VisuallyHidden> {t(`stepper.state.${current ? 'current' : state}`)}</VisuallyHidden>
+                    {hidden && <VisuallyHidden> {t(`stepper.state.${hidden}`)}</VisuallyHidden>}
                   </button>
                 </li>
               );

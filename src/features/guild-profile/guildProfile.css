@@ -21,18 +21,6 @@
   }
 }
 
-/* Header: the name is the one big thing; the figures live in the "Details" card. */
-.guild-profile .page-header {
-  align-items: flex-start;
-}
-
-.guild-profile .page-header-title {
-  display: flex;
-  min-width: 0;
-  font-size: var(--text-title);
-  letter-spacing: normal;
-}
-
 .guild-menu {
   position: relative;
   display: inline-flex;

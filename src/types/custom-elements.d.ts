@@ -18,6 +18,7 @@ import type {MdChipSet} from '@material/web/chips/chip-set.js';
 import type {MdFilterChip} from '@material/web/chips/filter-chip.js';
 import type {MdDialog} from '@material/web/dialog/dialog.js';
 import type {MdDivider} from '@material/web/divider/divider.js';
+import type {MdElevation} from '@material/web/elevation/elevation.js';
 import type {MdFocusRing} from '@material/web/focus/md-focus-ring.js';
 import type {MdIcon} from '@material/web/icon/icon.js';
 import type {MdIconButton} from '@material/web/iconbutton/icon-button.js';
@@ -87,6 +88,7 @@ declare module 'react' {
       // Icons, dividers, effects
       'md-icon': Props<MdIcon>;
       'md-divider': Props<MdDivider, 'inset' | 'insetStart' | 'insetEnd'>;
+      'md-elevation': Props<MdElevation>;
       'md-ripple': Props<MdRipple, 'disabled'>;
       'md-focus-ring': Props<MdFocusRing, 'visible' | 'inward'>;
 

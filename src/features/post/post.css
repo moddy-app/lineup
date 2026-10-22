@@ -88,6 +88,13 @@ h1.post-title {
   font-variant-numeric: tabular-nums;
 }
 
+/* The author's item is flex, centered: its separator sits mid-height beside the icon. (Not the dates: flex would drop the space between "Publiée" and the date.) */
+.post-byline-item:has(> .post-poster-link) {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+}
+
 /* The separator closes the item before it, so it ends a line and never starts one. */
 .post-byline-item:not(:last-child)::after {
   content: '·';
@@ -186,7 +193,14 @@ h1.post-title {
 /* The server or the person */
 
 .post-poster {
+  align-self: start;
   gap: var(--gap-m);
+}
+
+/* The button follows the name: no push to the bottom of the card, no --space above. */
+.post-poster .card-actions {
+  margin-top: 0;
+  padding-top: var(--gap-s);
 }
 
 .post-poster-head {
@@ -200,6 +214,7 @@ h1.post-title {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 6px;
+  gap: 2px;
   min-width: 0;
+  line-height: 1.3;
 }

@@ -96,9 +96,14 @@ function GuildView({guild}: {guild: GuildProfile}) {
       <Card as="section" className="guild-head">
         {banner && <img className="guild-banner" src={banner} alt="" decoding="async" />}
         <PageHeader
+          className="profile-header"
           leading={<GuildIcon id={guild.id} iconUrl={guild.icon_url} size="xl" />}
           title={<DisplayName name={name} badges={guild.badges} entity="guild" />}
-          meta={<BadgeStrip badges={guild.badges} />}
+          meta={
+            <div className="profile-meta-line">
+              <BadgeStrip badges={guild.badges} />
+            </div>
+          }
           actions={
             <>
               {inviteUrl && (

@@ -10,9 +10,18 @@
  *    session is gone (routeApiError), without redirecting anywhere.
  *  - The catalog is loaded once per visit and kept for good: the browser caches it
  *    for an hour (`Cache-Control`) and it only changes with a deploy.
+ *  - The `…Query` options are shared with the route loaders (app/preload.ts),
+ *    which read a page's data before showing it: same key, same request.
  */
 
-import {type InfiniteData, keepPreviousData, useInfiniteQuery, useQuery} from '@tanstack/react-query';
+import {
+  type InfiniteData,
+  infiniteQueryOptions,
+  keepPreviousData,
+  queryOptions,
+  useInfiniteQuery,
+  useQuery,
+} from '@tanstack/react-query';
 
 import type {ApiError} from './client';
 import {
@@ -100,8 +109,8 @@ export function useIsStaff(): boolean {
 }
 
 /** The catalog (LINEUP.md §4): the closed lists and the limits. Never hardcode these. */
-export function useCatalog() {
-  return useQuery({
+export const catalogQuery = () =>
+  queryOptions({
     queryKey: queryKeys.catalog(),
     queryFn: ({signal}) => getCatalog({signal}),
     staleTime: Infinity,
@@ -109,6 +118,9 @@ export function useCatalog() {
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });
+
+export function useCatalog() {
+  return useQuery(catalogQuery());
 }
 
 // ---------------------------------------------------------------------------
@@ -120,42 +132,47 @@ export function useCatalog() {
  * data is fresh for 60 s here too, and the previous filters' results stay on
  * screen while new ones load (`isPlaceholderData`).
  */
-export function useFeed(filters: FeedFilters = {}) {
+export const feedQuery = (filters: FeedFilters = {}) => {
   const normalized = normalizeFeedFilters(filters);
-  return useInfiniteQuery({
+  return infiniteQueryOptions({
     queryKey: queryKeys.feed(normalized),
     queryFn: ({pageParam, signal}) => getFeed(normalized, {cursor: pageParam, signal}),
     initialPageParam: FIRST_PAGE,
     getNextPageParam: nextCursor,
     staleTime: 60_000,
-    placeholderData: keepPreviousData,
   });
+};
+
+export function useFeed(filters: FeedFilters = {}) {
+  return useInfiniteQuery({...feedQuery(filters), placeholderData: keepPreviousData});
 }
 
 /** A post's detail. Visible to everyone if published; drafts, closed and hidden posts only to their editors. */
+export const postQuery = (postId: Uuid) =>
+  queryOptions({queryKey: queryKeys.postDetail(postId), queryFn: ({signal}) => getPost(postId, {signal})});
+
 export function usePost(postId: Uuid | undefined) {
-  return useQuery({
-    queryKey: queryKeys.postDetail(postId ?? ''),
-    queryFn: ({signal}) => getPost(postId!, {signal}),
-    enabled: !!postId,
-  });
+  return useQuery({...postQuery(postId ?? ''), enabled: !!postId});
 }
 
 /**
  * The person's own posts, every status, newest created first. With a `guildId`,
  * every post of that server whoever wrote it (managers only).
  */
-export function useMyPosts(params: MyPostsParams = {}) {
+export const myPostsQuery = (params: MyPostsParams = {}) => {
   const normalized = normalizeMyPostsParams(params);
-  const signedIn = useIsSignedIn();
-  return useInfiniteQuery({
+  return infiniteQueryOptions({
     queryKey: queryKeys.myPosts(normalized),
     queryFn: ({pageParam, signal}) => getMyPosts(normalized, {cursor: pageParam, signal}),
     initialPageParam: FIRST_PAGE,
     getNextPageParam: nextCursor,
-    enabled: signedIn,
     meta: {requiresAuth: true},
   });
+};
+
+export function useMyPosts(params: MyPostsParams = {}) {
+  const signedIn = useIsSignedIn();
+  return useInfiniteQuery({...myPostsQuery(params), enabled: signedIn});
 }
 
 // ---------------------------------------------------------------------------
@@ -163,23 +180,24 @@ export function useMyPosts(params: MyPostsParams = {}) {
 // ---------------------------------------------------------------------------
 
 /** A server's profile. */
+export const guildQuery = (guildId: Snowflake) =>
+  queryOptions({queryKey: queryKeys.guildDetail(guildId), queryFn: ({signal}) => getGuild(guildId, {signal})});
+
 export function useGuild(guildId: Snowflake | undefined) {
-  return useQuery({
-    queryKey: queryKeys.guildDetail(guildId ?? ''),
-    queryFn: ({signal}) => getGuild(guildId!, {signal}),
-    enabled: !!guildId,
-  });
+  return useQuery({...guildQuery(guildId ?? ''), enabled: !!guildId});
 }
 
 /** The servers the person can manage, claimed or not. */
-export function useMyGuilds() {
-  const signedIn = useIsSignedIn();
-  return useQuery({
+export const myGuildsQuery = () =>
+  queryOptions({
     queryKey: queryKeys.myGuilds(),
     queryFn: ({signal}) => getMyGuilds({signal}),
-    enabled: signedIn,
     meta: {requiresAuth: true},
   });
+
+export function useMyGuilds() {
+  const signedIn = useIsSignedIn();
+  return useQuery({...myGuildsQuery(), enabled: signedIn});
 }
 
 // ---------------------------------------------------------------------------
@@ -187,33 +205,36 @@ export function useMyGuilds() {
 // ---------------------------------------------------------------------------
 
 /** A person's public profile (the private view of experiences for oneself and the staff). */
+export const userQuery = (userId: Snowflake) =>
+  queryOptions({queryKey: queryKeys.userDetail(userId), queryFn: ({signal}) => getUser(userId, {signal})});
+
 export function useUser(userId: Snowflake | undefined) {
-  return useQuery({
-    queryKey: queryKeys.userDetail(userId ?? ''),
-    queryFn: ({signal}) => getUser(userId!, {signal}),
-    enabled: !!userId,
-  });
+  return useQuery({...userQuery(userId ?? ''), enabled: !!userId});
 }
+
+export const myProfileQuery = () =>
+  queryOptions({
+    queryKey: queryKeys.myProfile(),
+    queryFn: ({signal}) => getMyProfile({signal}),
+    meta: {requiresAuth: true},
+  });
 
 export function useMyProfile() {
   const signedIn = useIsSignedIn();
-  return useQuery({
-    queryKey: queryKeys.myProfile(),
-    queryFn: ({signal}) => getMyProfile({signal}),
-    enabled: signedIn,
-    meta: {requiresAuth: true},
-  });
+  return useQuery({...myProfileQuery(), enabled: signedIn});
 }
 
 /** The person's experiences, in their order. */
-export function useMyExperiences() {
-  const signedIn = useIsSignedIn();
-  return useQuery({
+export const myExperiencesQuery = () =>
+  queryOptions({
     queryKey: queryKeys.myExperiences(),
     queryFn: ({signal}) => getMyExperiences({signal}),
-    enabled: signedIn,
     meta: {requiresAuth: true},
   });
+
+export function useMyExperiences() {
+  const signedIn = useIsSignedIn();
+  return useQuery({...myExperiencesQuery(), enabled: signedIn});
 }
 
 // ---------------------------------------------------------------------------

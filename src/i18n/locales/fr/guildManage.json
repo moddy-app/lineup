@@ -43,7 +43,8 @@
     "add": "Ajouter un lien"
   },
   "topics": {
-    "title": "Thème et étiquettes"
+    "title": "Thème et étiquettes",
+    "description": "Ils aident les personnes à trouver le serveur dans les annonces."
   },
   "theme": {
     "label": "Thème",
@@ -54,7 +55,9 @@
     "hint": "Séparés par des virgules. Lettres minuscules, chiffres et tirets, de 2 à 24 caractères. {{count}} sur {{max}}."
   },
   "languages": {
-    "label": "Langues du serveur ({{count}} sur {{max}})"
+    "label": "Langues du serveur ({{count}} sur {{max}})",
+    "title": "Langues",
+    "description": "Les langues parlées sur le serveur. {{count}} sur {{max}}."
   },
   "invite": {
     "title": "Invitation",
@@ -71,13 +74,15 @@
     "paste": "Coller une autre invitation",
     "copy": "Copier le lien",
     "copied": "Invitation copiée.",
-    "copyFailed": "Copie impossible."
+    "copyFailed": "Copie impossible.",
+    "description": "Le lien utilisé par le bouton Rejoindre. Il doit mener à ce serveur et ne jamais expirer."
   },
   "visibility": {
     "title": "Visibilité",
     "label": "Rendre le serveur visible sur Lineup",
     "on": "Le profil et les annonces du serveur sont visibles par tout le monde.",
-    "off": "Le profil et ses annonces disparaissent pour tout le monde, sauf pour les gestionnaires et le staff Moddy."
+    "off": "Le profil et ses annonces disparaissent pour tout le monde, sauf pour les gestionnaires et le staff Moddy.",
+    "description": "Qui peut voir le profil et les annonces du serveur."
   },
   "errors": {
     "fixFields": "Corrigez les champs signalés, puis enregistrez de nouveau.",

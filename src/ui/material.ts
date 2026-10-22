@@ -15,6 +15,7 @@ import '@material/web/chips/chip-set.js';
 import '@material/web/chips/filter-chip.js';
 import '@material/web/dialog/dialog.js';
 import '@material/web/divider/divider.js';
+import '@material/web/elevation/elevation.js';
 import '@material/web/focus/md-focus-ring.js';
 import '@material/web/icon/icon.js';
 import '@material/web/iconbutton/icon-button.js';

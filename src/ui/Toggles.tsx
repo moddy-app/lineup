@@ -1,6 +1,6 @@
 import type {MdCheckbox} from '@material/web/checkbox/checkbox.js';
 import type {MdSwitch} from '@material/web/switch/switch.js';
-import type {ReactNode} from 'react';
+import {type ReactNode, useId} from 'react';
 
 import {cx} from '@/lib/cx';
 
@@ -18,8 +18,21 @@ interface ToggleProps {
   className?: string;
 }
 
-/** A switch with its label (the whole row toggles it). */
-export function Switch({checked, onCheckedChange, label, ariaLabel, className, ...props}: ToggleProps) {
+/**
+ * A switch with its label (the whole row toggles it). With a `description`
+ * it is a setting row: the label and the description on the left, the switch
+ * on the right, across the width (every switch of the dashboard).
+ */
+export function Switch({
+  checked,
+  onCheckedChange,
+  label,
+  description,
+  ariaLabel,
+  className,
+  ...props
+}: ToggleProps & {description?: ReactNode}) {
+  const descriptionId = useId();
   const {ref, handleChange} = useControlledElement<MdSwitch, boolean>(
     checked,
     (element) => element.selected,
@@ -28,15 +41,32 @@ export function Switch({checked, onCheckedChange, label, ariaLabel, className, .
     },
     onCheckedChange,
   );
+  const control = (
+    <md-switch
+      {...props}
+      ref={ref}
+      selected={checked}
+      aria-label={ariaLabel ?? (typeof label === 'string' ? label : undefined)}
+      aria-describedby={description ? descriptionId : undefined}
+      onchange={handleChange}
+    />
+  );
+  if (description) {
+    return (
+      <label className={cx('toggle', 'toggle-row', className)}>
+        <span className="toggle-text">
+          <span className="toggle-label">{label}</span>
+          <span className="toggle-description" id={descriptionId}>
+            {description}
+          </span>
+        </span>
+        {control}
+      </label>
+    );
+  }
   return (
     <label className={cx('toggle', className)}>
-      <md-switch
-        {...props}
-        ref={ref}
-        selected={checked}
-        aria-label={ariaLabel ?? (typeof label === 'string' ? label : undefined)}
-        onchange={handleChange}
-      />
+      {control}
       <span>{label}</span>
     </label>
   );
