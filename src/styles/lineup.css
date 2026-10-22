@@ -2206,10 +2206,13 @@ md-dialog {
 }
 
 /* A form panel: a card with a small title, fields, actions at the bottom right. */
+/* The panel's title stands above its fields: 18px / 600, bigger than a field's label (16px). */
 .card .settings-panel h2,
 .card.settings-panel h2 {
   margin: 0;
-  font-size: var(--text-subtitle);
+  font-size: var(--text-hero);
+  font-weight: 600;
+  line-height: 1.3;
   color: var(--md-sys-color-on-surface);
 }
 

@@ -1,5 +1,6 @@
 {
   "title": "Annonces",
+  "description": "Les annonces que vous publiez pour vous-même.",
   "new": "Nouvelle annonce",
   "tabsLabel": "Statut des annonces",
   "tabs": {
@@ -38,8 +39,6 @@
     "hiddenReason": "Masquée par l'équipe Moddy. Motif : {{reason}}",
     "hiddenNoReason": "Masquée par l'équipe Moddy. Elle ne peut plus être modifiée.",
     "actions": "Actions de l'annonce {{title}}",
-    "forMe": "Pour moi",
-    "unknownGuild": "Serveur sans nom",
     "more": "Plus d'actions pour {{title}}"
   },
   "actions": {

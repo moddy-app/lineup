@@ -52,6 +52,7 @@ import type {
   StaffExperienceStatus,
   StaffReportStatus,
   Uuid,
+  PrivatePost,
 } from './types';
 
 /** `getNextPageParam` of every cursor-paginated list. `undefined` ends the list. */
@@ -170,9 +171,26 @@ export const myPostsQuery = (params: MyPostsParams = {}) => {
   });
 };
 
-export function useMyPosts(params: MyPostsParams = {}) {
+/**
+ * `personal`: only the person's posts for themselves (`kind: user`), the posts
+ * of "my space". The API has no such filter (without `guild_id` it sends every
+ * post the person wrote, for themselves and for their servers): each page is
+ * filtered here, and `useInfiniteList` follows a page the filter emptied.
+ */
+export function useMyPosts(params: MyPostsParams = {}, options: {personal?: boolean} = {}) {
   const signedIn = useIsSignedIn();
-  return useInfiniteQuery({...myPostsQuery(params), enabled: signedIn});
+  return useInfiniteQuery({
+    ...myPostsQuery(params),
+    enabled: signedIn,
+    select: options.personal ? onlyPersonal : undefined,
+  });
+}
+
+function onlyPersonal(data: InfiniteData<Paginated<PrivatePost>, string | null>) {
+  return {
+    ...data,
+    pages: data.pages.map((page) => ({...page, items: page.items.filter((post) => post.kind === 'user')})),
+  };
 }
 
 // ---------------------------------------------------------------------------

@@ -1,5 +1,6 @@
 {
   "title": "Anzeigen",
+  "description": "Die Anzeigen, die Sie für sich selbst veröffentlichen.",
   "new": "Neue Anzeige",
   "tabsLabel": "Status der Anzeigen",
   "tabs": {
@@ -38,8 +39,6 @@
     "hiddenReason": "Vom Moddy-Team ausgeblendet. Grund: {{reason}}",
     "hiddenNoReason": "Vom Moddy-Team ausgeblendet. Sie kann nicht mehr bearbeitet werden.",
     "actions": "Aktionen für {{title}}",
-    "forMe": "Für mich",
-    "unknownGuild": "Server ohne Namen",
     "more": "Weitere Aktionen für {{title}}"
   },
   "actions": {
