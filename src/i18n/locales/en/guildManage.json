@@ -43,7 +43,8 @@
     "add": "Add a link"
   },
   "topics": {
-    "title": "Theme and tags"
+    "title": "Theme and tags",
+    "description": "They help people find the server in posts."
   },
   "theme": {
     "label": "Theme",
@@ -54,7 +55,9 @@
     "hint": "Separated by commas. Lowercase letters, digits and hyphens, 2 to 24 characters. {{count}} of {{max}}."
   },
   "languages": {
-    "label": "Server languages ({{count}} of {{max}})"
+    "label": "Server languages ({{count}} of {{max}})",
+    "title": "Languages",
+    "description": "The languages spoken on the server. {{count}} of {{max}}."
   },
   "invite": {
     "title": "Invitation",
@@ -71,13 +74,15 @@
     "paste": "Paste another invitation",
     "copy": "Copy link",
     "copied": "Invitation copied.",
-    "copyFailed": "Could not copy."
+    "copyFailed": "Could not copy.",
+    "description": "The link used by the Join button. It must lead to this server and never expire."
   },
   "visibility": {
     "title": "Visibility",
     "label": "Make the server visible on Lineup",
     "on": "The server's profile and posts are visible to everyone.",
-    "off": "The profile and its posts disappear for everyone except managers and the Moddy staff."
+    "off": "The profile and its posts disappear for everyone except managers and the Moddy staff.",
+    "description": "Who can see the server's profile and posts."
   },
   "errors": {
     "fixFields": "Fix the highlighted fields, then save again.",

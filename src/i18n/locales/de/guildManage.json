@@ -43,7 +43,8 @@
     "add": "Link hinzufügen"
   },
   "topics": {
-    "title": "Thema und Tags"
+    "title": "Thema und Tags",
+    "description": "Sie helfen dabei, den Server in den Anzeigen zu finden."
   },
   "theme": {
     "label": "Thema",
@@ -54,7 +55,9 @@
     "hint": "Durch Kommas getrennt. Kleinbuchstaben, Ziffern und Bindestriche, 2 bis 24 Zeichen. {{count}} von {{max}}."
   },
   "languages": {
-    "label": "Sprachen des Servers ({{count}} von {{max}})"
+    "label": "Sprachen des Servers ({{count}} von {{max}})",
+    "title": "Sprachen",
+    "description": "Die auf dem Server gesprochenen Sprachen. {{count}} von {{max}}."
   },
   "invite": {
     "title": "Einladung",
@@ -71,13 +74,15 @@
     "paste": "Andere Einladung einfügen",
     "copy": "Link kopieren",
     "copied": "Einladung kopiert.",
-    "copyFailed": "Kopieren nicht möglich."
+    "copyFailed": "Kopieren nicht möglich.",
+    "description": "Der Link der Schaltfläche Beitreten. Er muss zu diesem Server führen und darf nie ablaufen."
   },
   "visibility": {
     "title": "Sichtbarkeit",
     "label": "Server auf Lineup sichtbar machen",
     "on": "Profil und Anzeigen des Servers sind für alle sichtbar.",
-    "off": "Profil und Anzeigen verschwinden für alle, außer für Verwalter und das Moddy-Staff."
+    "off": "Profil und Anzeigen verschwinden für alle, außer für Verwalter und das Moddy-Staff.",
+    "description": "Wer das Profil und die Anzeigen des Servers sehen kann."
   },
   "errors": {
     "fixFields": "Korrigieren Sie die markierten Felder und speichern Sie erneut.",

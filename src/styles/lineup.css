@@ -59,6 +59,37 @@
   color: var(--md-sys-color-on-surface);
 }
 
+/* A setting row (Switch with a description): the text on the left, the switch on the right. */
+.toggle.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-l);
+  width: 100%;
+}
+
+.toggle-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.toggle-label {
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface);
+}
+
+.toggle-description {
+  font-size: var(--text-body-small);
+  line-height: 1.4;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.toggle-row md-switch {
+  flex-shrink: 0;
+}
+
 /* A destructive confirmation (delete): the filled button in the error colors. */
 md-filled-button.destructive {
   --md-filled-button-container-color: var(--md-sys-color-error);
@@ -126,6 +157,26 @@ md-filled-button.destructive {
   .page-loading {
     opacity: 0;
     animation: loading-in 300ms var(--ease) 250ms forwards;
+  }
+}
+
+/*
+ * The next page loads (its code and its data, app/preload.ts): the current one
+ * stays, dims a little and takes no clicks; the bar at the top shows. The dim
+ * waits 100ms, so a quick navigation never flickers.
+ */
+.app-content.is-navigating {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .app-content {
+    transition: opacity 150ms var(--ease);
+  }
+
+  .app-content.is-navigating {
+    transition: opacity 250ms var(--ease) 100ms;
   }
 }
 
@@ -1874,23 +1925,40 @@ md-dialog {
 }
 
 /* ---------------------------------------------------------------------------
- * Management pages, in two cards: the navigation on the left (`.settings-side`),
- * the page on the right (`.settings-main`), its panels as sections of that
- * card (`.card-section`, see ui/Card.tsx). Under 900px the navigation card is
- * a selector and a compact list above the content.
+ * Management pages, in two cards the height of the window at least: the
+ * navigation on the left (`.settings-side`, its content sticky), the page on
+ * the right (`.settings-main`), its panels as sub-cards (`.card-section`, see
+ * ui/Card.tsx). Inner corners follow the outer ones: radius of the card minus
+ * its padding. Under 900px the navigation card is a selector and a compact
+ * list above the content.
  * ------------------------------------------------------------------------- */
 
 .settings-layout {
+  --settings-side-padding: var(--gap-m);
+  /* Concentric with the card: its radius minus its padding. */
+  --settings-side-inner-radius: calc(var(--card-radius) - var(--settings-side-padding));
   display: grid;
   grid-template-columns: 16rem minmax(0, 1fr);
-  align-items: start;
+  align-items: stretch;
   gap: var(--page-gap);
+  min-height: calc(100dvh - var(--app-bar-height) - 2 * var(--page-gap));
 }
 
 .card.settings-side {
+  padding: var(--settings-side-padding);
+}
+
+.settings-side .settings-nav {
   position: sticky;
-  top: calc(var(--app-bar-height) + var(--page-gap));
-  padding: var(--gap-m);
+  top: calc(var(--app-bar-height) + var(--page-gap) + var(--settings-side-padding));
+}
+
+.settings-side .settings-context-button,
+.settings-side .settings-nav a,
+.settings-side .settings-compact-nav > md-outlined-button {
+  border-radius: var(--settings-side-inner-radius);
+  --md-outlined-button-container-shape: var(--settings-side-inner-radius);
+  --md-focus-ring-shape: var(--settings-side-inner-radius);
 }
 
 .settings-nav {
@@ -1952,26 +2020,59 @@ md-dialog {
 }
 
 .card.settings-main {
-  gap: var(--space);
+  gap: var(--page-gap);
   min-width: 0;
 }
 
-/* A card inside a card: a plain section, a thin line between two of them. */
+/*
+ * A card inside a card: a sub-card, in the color of the kit's inner panels
+ * (`surface-container`), 24px corners. The rows inside it (`InnerCard`) take
+ * the card's color, so they still stand out, with their 16px corners.
+ */
 .card-section {
+  --card-section-padding: calc(var(--gap-l) + var(--gap-s));
   position: relative;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   min-width: 0;
+  padding: var(--card-section-padding);
+  border-radius: var(--radius-xl);
+  background-color: var(--md-sys-color-surface-container);
 }
 
 .card-section[hidden] {
   display: none;
 }
 
+.card-section .inner-card {
+  background-color: var(--md-sys-color-surface-container-lowest);
+}
+
+/*
+ * Sub-cards that follow each other form one group: 4px apart, the gap acting
+ * as the separator; the group keeps the 24px corners outside, and only 4px
+ * corners where two sub-cards meet. (Their containers space children by
+ * `--page-gap`, hence the negative margin.)
+ */
 .card-section + .card-section {
-  padding-top: var(--space);
-  border-top: 1px solid var(--md-sys-color-outline-variant);
+  margin-top: calc(4px - var(--page-gap));
+}
+
+.card-section:has(+ .card-section) {
+  border-end-start-radius: var(--radius-xs);
+  border-end-end-radius: var(--radius-xs);
+}
+
+.card-section + .card-section {
+  border-start-start-radius: var(--radius-xs);
+  border-start-end-radius: var(--radius-xs);
+}
+
+@media (max-width: 600px) {
+  .card-section {
+    --card-section-padding: var(--gap-l);
+  }
 }
 
 .settings-head {
@@ -2018,7 +2119,11 @@ md-dialog {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .card.settings-side {
+  .settings-layout {
+    align-items: start;
+  }
+
+  .settings-side .settings-nav {
     position: static;
   }
 

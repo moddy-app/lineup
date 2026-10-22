@@ -217,8 +217,8 @@ function Editor({profile}: {profile: UserProfile}) {
             checked={form.open_to_work}
             onCheckedChange={(on) => set('open_to_work', on)}
             label={t('fields.openToWork')}
+            description={t('fields.openToWorkHelp')}
           />
-          <p className="me-help">{t('fields.openToWorkHelp')}</p>
         </SettingsPanel>
 
         <SettingsPanel title={t('panels.locale.title')} description={t('panels.locale.description')}>

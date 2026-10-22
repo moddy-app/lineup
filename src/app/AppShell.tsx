@@ -1,5 +1,5 @@
 import {useEffect, useMemo, useRef} from 'react';
-import {Outlet, useLocation, useMatches, useNavigate, useNavigationType} from 'react-router';
+import {Outlet, useLocation, useMatches, useNavigate, useNavigation, useNavigationType} from 'react-router';
 
 import {useSession} from '@/auth/session';
 import {kitLabels} from '@/i18n/kitLabels';
@@ -32,6 +32,7 @@ export function AppShell() {
   const labels = kitLabels(language);
   const session = useSession();
   const navigate = useNavigate();
+  const navigation = useNavigation();
   const navigationType = useNavigationType();
   const {pathname} = useLocation();
   const matches = useMatches();
@@ -86,7 +87,13 @@ export function AppShell() {
         )}
       </moddy-app-bar>
 
-      <main ref={main} className="app-content" id="main-content" tabIndex={-1}>
+      <main
+        ref={main}
+        className={navigation.state === 'loading' ? 'app-content is-navigating' : 'app-content'}
+        id="main-content"
+        tabIndex={-1}
+        aria-busy={navigation.state === 'loading' || undefined}
+      >
         {showSuspendedNotice && <SuspendedNotice />}
         <Outlet />
       </main>
