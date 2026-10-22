@@ -1,10 +1,9 @@
-import {useLayoutEffect, useRef} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router';
-import {moddyLogo} from '@moddy/design-kit';
-import {render} from 'lit';
 
 import {useT} from '@/i18n/useT';
 import {Dropdown, Icon} from '@/ui';
+
+import {LineupLogo} from './LineupLogo';
 
 /** Whether a nav destination covers the current page. */
 type Match = (pathname: string) => boolean;
@@ -18,19 +17,17 @@ export interface NavDestination {
 }
 
 /**
- * The logo of the app bar, in the bar's `logo` slot: the whole wordmark at
+ * The logo of the app bar, in the bar's `logo` slot: the whole Lineup logo at
  * every width (the kit's own logo falls back to the mark alone under 600 px).
- * The SVG is the kit's, drawn through lit; the link is the kit's too: same
- * label, client-side navigation (the app bar's click listener), visible focus.
+ * The link is the kit's: same label, client-side navigation (the app bar's
+ * click listener), visible focus.
  */
 export function AppLogo({href, label}: {href: string; label: string}) {
-  const holder = useRef<HTMLSpanElement>(null);
-  useLayoutEffect(() => {
-    if (holder.current) render(moddyLogo, holder.current);
-  }, []);
   return (
     <a slot="logo" className="app-logo" href={href} title={label} aria-label={label}>
-      <span ref={holder} className="app-logo-art" />
+      <span className="app-logo-art">
+        <LineupLogo />
+      </span>
     </a>
   );
 }
