@@ -118,12 +118,6 @@
   color: var(--md-sys-color-on-surface-variant);
 }
 
-.mp-owner {
-  max-width: 100%;
-  color: var(--md-sys-color-on-surface);
-  font-weight: 500;
-}
-
 .mp-actions {
   display: flex;
   flex-shrink: 0;

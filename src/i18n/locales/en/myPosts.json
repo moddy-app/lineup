@@ -1,5 +1,6 @@
 {
   "title": "Posts",
+  "description": "The posts you publish for yourself.",
   "new": "New post",
   "tabsLabel": "Post status",
   "tabs": {
@@ -38,8 +39,6 @@
     "hiddenReason": "Hidden by the Moddy team. Reason: {{reason}}",
     "hiddenNoReason": "Hidden by the Moddy team. It can no longer be edited.",
     "actions": "Actions for {{title}}",
-    "forMe": "For me",
-    "unknownGuild": "Unnamed server",
     "more": "More actions for {{title}}"
   },
   "actions": {

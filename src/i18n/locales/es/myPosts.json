@@ -1,5 +1,6 @@
 {
   "title": "Anuncios",
+  "description": "Los anuncios que publica para usted.",
   "new": "Nuevo anuncio",
   "tabsLabel": "Estado de los anuncios",
   "tabs": {
@@ -38,8 +39,6 @@
     "hiddenReason": "Ocultado por el equipo de Moddy. Motivo: {{reason}}",
     "hiddenNoReason": "Ocultado por el equipo de Moddy. Ya no se puede editar.",
     "actions": "Acciones del anuncio {{title}}",
-    "forMe": "Para mí",
-    "unknownGuild": "Servidor sin nombre",
     "more": "Más acciones para {{title}}"
   },
   "actions": {

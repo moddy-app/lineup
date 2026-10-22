@@ -1925,9 +1925,9 @@ md-dialog {
 }
 
 /* ---------------------------------------------------------------------------
- * Management pages, in two cards the height of the window at least: the
- * navigation on the left (`.settings-side`, its content sticky), the page on
- * the right (`.settings-main`), its panels as sub-cards (`.card-section`, see
+ * Management pages, in two cards: the navigation on the left
+ * (`.settings-side`, sticky), the page on the right (`.settings-main`), its
+ * panels as sub-cards (`.card-section`, see
  * ui/Card.tsx). Inner corners follow the outer ones: radius of the card minus
  * its padding. Under 900px the navigation card is a selector and a compact
  * list above the content.
@@ -1939,18 +1939,14 @@ md-dialog {
   --settings-side-inner-radius: calc(var(--card-radius) - var(--settings-side-padding));
   display: grid;
   grid-template-columns: 16rem minmax(0, 1fr);
-  align-items: stretch;
+  align-items: start;
   gap: var(--page-gap);
-  min-height: calc(100dvh - var(--app-bar-height) - 2 * var(--page-gap));
 }
 
 .card.settings-side {
-  padding: var(--settings-side-padding);
-}
-
-.settings-side .settings-nav {
   position: sticky;
-  top: calc(var(--app-bar-height) + var(--page-gap) + var(--settings-side-padding));
+  top: calc(var(--app-bar-height) + var(--page-gap));
+  padding: var(--settings-side-padding);
 }
 
 .settings-side .settings-context-button,
@@ -2119,11 +2115,7 @@ md-dialog {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .settings-layout {
-    align-items: start;
-  }
-
-  .settings-side .settings-nav {
+  .card.settings-side {
     position: static;
   }
 
@@ -2214,10 +2206,13 @@ md-dialog {
 }
 
 /* A form panel: a card with a small title, fields, actions at the bottom right. */
+/* The panel's title stands above its fields: 18px / 600, bigger than a field's label (16px). */
 .card .settings-panel h2,
 .card.settings-panel h2 {
   margin: 0;
-  font-size: var(--text-subtitle);
+  font-size: var(--text-hero);
+  font-weight: 600;
+  line-height: 1.3;
   color: var(--md-sys-color-on-surface);
 }
 
@@ -2516,6 +2511,42 @@ md-dialog {
   outline: none;
   --md-elevation-level: 2;
   --md-elevation-shadow-color: var(--md-sys-color-shadow);
+}
+
+/*
+ * Menus and dialogs on a dark page. In light mode they are the lightest
+ * surface with a shadow. In dark mode the lightest surface is the darkest one,
+ * and a shadow does not show on black: they take a raised surface
+ * (`surface-container-high`, as Material 3 does for raised elements) and a
+ * thin `outline-variant` line. `light-dark()` follows the page's
+ * `color-scheme`, set by the kit's theme; browsers without it keep the light
+ * look.
+ */
+@supports (color: light-dark(red, blue)) {
+  :root {
+    --md-menu-container-color: light-dark(
+      var(--md-sys-color-surface-container-lowest),
+      var(--md-sys-color-surface-container-high)
+    );
+  }
+
+  .filter-popover {
+    background-color: light-dark(
+      var(--md-sys-color-surface-container-lowest),
+      var(--md-sys-color-surface-container-high)
+    );
+  }
+
+  .dropdown-popover {
+    outline: 1px solid light-dark(transparent, var(--md-sys-color-outline-variant));
+  }
+
+  md-dialog {
+    --md-dialog-container-color: light-dark(
+      var(--md-sys-color-surface-container-lowest),
+      var(--md-sys-color-surface-container-high)
+    );
+  }
 }
 
 @media (forced-colors: active) {

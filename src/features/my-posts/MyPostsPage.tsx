@@ -11,7 +11,6 @@ import {usePageTitle} from '@/app/usePageTitle';
 import {useAuthAction} from '@/auth/useAuthAction';
 import {useSession} from '@/auth/session';
 import {
-  DisplayName,
   EmptyState,
   ErrorState,
   ExpiryLabel,
@@ -43,6 +42,7 @@ export function Component() {
   return (
     <SettingsLayout
       title={t('title')}
+      description={t('description')}
       actions={
         <LinkButton to={paths.postNew({kind: 'user'})} icon="add">
           {t('new')}
@@ -65,7 +65,10 @@ export function PostsManager({guild}: {guild?: GuildProfile}) {
   const tab: Tab = isTab(requested) ? requested : 'all';
   const status: PostStatus | undefined = tab === 'all' ? undefined : tab;
 
-  const list = useInfiniteList<PrivatePost, Paginated<PrivatePost>>(useMyPosts({status, guildId: guild?.id}));
+  // My space: only my posts for myself; a server's dashboard: every post of the server.
+  const list = useInfiniteList<PrivatePost, Paginated<PrivatePost>>(
+    useMyPosts({status, guildId: guild?.id}, {personal: !guild}),
+  );
 
   return (
     <>
@@ -144,7 +147,7 @@ function GuildQuota({guildId}: {guildId: string}) {
 function PostList({list, tab, guild}: {list: InfiniteList<PrivatePost>; tab: Tab; guild?: GuildProfile}) {
   const {t} = useT('myPosts');
   const {t: tCommon} = useT('common');
-  const {canWrite, me} = useSession();
+  const {canWrite} = useSession();
   const auth = useAuthAction();
   const snackbar = useSnackbar();
   const {t: tErrors} = useT('errors');
@@ -262,7 +265,6 @@ function PostList({list, tab, guild}: {list: InfiniteList<PrivatePost>; tab: Tab
               });
             }
 
-            const isGuild = post.kind === 'guild';
             return (
               <li key={post.id} className="mp-item inner-card">
                 <div className="mp-line">
@@ -270,22 +272,8 @@ function PostList({list, tab, guild}: {list: InfiniteList<PrivatePost>; tab: Tab
                     <p className="mp-title">
                       <Link to={paths.post(post.id)}>{post.title}</Link>
                     </p>
+                    {/* Every row has the same owner (me, or the server of the dashboard): no name on the rows. */}
                     <p className="mp-meta">
-                      {guild ? null : isGuild ? (
-                        <DisplayName
-                          name={post.guild?.name ?? t('row.unknownGuild')}
-                          badges={post.guild?.badges}
-                          entity="guild"
-                          className="mp-owner"
-                        />
-                      ) : (
-                        <DisplayName
-                          name={t('row.forMe')}
-                          badges={me?.user.badges}
-                          entity="user"
-                          className="mp-owner"
-                        />
-                      )}
                       <PostStatusBadge status={post.status} isExpired={post.is_expired} />
                       <RelativeTime
                         value={post.status === 'published' ? (post.published_at ?? post.created_at) : post.updated_at}
