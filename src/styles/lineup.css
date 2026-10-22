@@ -2518,6 +2518,42 @@ md-dialog {
   --md-elevation-shadow-color: var(--md-sys-color-shadow);
 }
 
+/*
+ * Menus and dialogs on a dark page. In light mode they are the lightest
+ * surface with a shadow. In dark mode the lightest surface is the darkest one,
+ * and a shadow does not show on black: they take a raised surface
+ * (`surface-container-high`, as Material 3 does for raised elements) and a
+ * thin `outline-variant` line. `light-dark()` follows the page's
+ * `color-scheme`, set by the kit's theme; browsers without it keep the light
+ * look.
+ */
+@supports (color: light-dark(red, blue)) {
+  :root {
+    --md-menu-container-color: light-dark(
+      var(--md-sys-color-surface-container-lowest),
+      var(--md-sys-color-surface-container-high)
+    );
+  }
+
+  .filter-popover {
+    background-color: light-dark(
+      var(--md-sys-color-surface-container-lowest),
+      var(--md-sys-color-surface-container-high)
+    );
+  }
+
+  .dropdown-popover {
+    outline: 1px solid light-dark(transparent, var(--md-sys-color-outline-variant));
+  }
+
+  md-dialog {
+    --md-dialog-container-color: light-dark(
+      var(--md-sys-color-surface-container-lowest),
+      var(--md-sys-color-surface-container-high)
+    );
+  }
+}
+
 @media (forced-colors: active) {
   .dropdown-popover {
     outline: 1px solid CanvasText;
