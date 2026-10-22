@@ -16,6 +16,9 @@
     },
     "compact": "Etapa {{current}} de {{total}} · {{name}}"
   },
+  "sections": {
+    "label": "Seções do anúncio"
+  },
   "steps": {
     "type": {
       "short": "Tipo",

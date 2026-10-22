@@ -16,6 +16,9 @@
     },
     "compact": "Étape {{current}} sur {{total}} · {{name}}"
   },
+  "sections": {
+    "label": "Sections de l'annonce"
+  },
   "steps": {
     "type": {
       "short": "Type",

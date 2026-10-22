@@ -9,7 +9,8 @@ import {allowsMotion} from './motion';
 
 /** The scrim of md-dialog at rest (Material). */
 const SCRIM = 0.32;
-const EASE_OUT = 'cubic-bezier(0.16, 1, 0.3, 1)';
+/** The kit's `--ease`. */
+const EASE = 'cubic-bezier(0.2, 0, 0, 1)';
 
 /** A quiet entrance: the dialog fades in from 96% and 4px lower, the scrim fades in. */
 const OPEN: DialogAnimation = {
@@ -19,13 +20,13 @@ const OPEN: DialogAnimation = {
         {opacity: 0, transform: 'translateY(4px) scale(0.96)'},
         {opacity: 1, transform: 'none'},
       ],
-      {duration: 180, easing: EASE_OUT},
+      {duration: 200, easing: EASE},
     ],
   ],
   scrim: [[[{opacity: 0}, {opacity: SCRIM}], {duration: 150, easing: 'linear'}]],
 };
 
-/** The same, backwards and quicker. */
+/** The same, backwards and quicker (the kit's motion: 150 to 400 ms). */
 const CLOSE: DialogAnimation = {
   dialog: [
     [
@@ -33,10 +34,10 @@ const CLOSE: DialogAnimation = {
         {opacity: 1, transform: 'none'},
         {opacity: 0, transform: 'scale(0.96)'},
       ],
-      {duration: 120, easing: 'ease-in', fill: 'forwards'},
+      {duration: 150, easing: EASE, fill: 'forwards'},
     ],
   ],
-  scrim: [[[{opacity: SCRIM}, {opacity: 0}], {duration: 120, easing: 'linear', fill: 'forwards'}]],
+  scrim: [[[{opacity: SCRIM}, {opacity: 0}], {duration: 150, easing: 'linear', fill: 'forwards'}]],
 };
 
 /** Replaces Material's slide and grow; nothing moves under `prefers-reduced-motion: reduce`. */

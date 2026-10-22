@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 
-/** The exit of a popover (lineup.css `popover-out`): short, so a closed menu never lingers. */
-export const EXIT_MS = 100;
+/** The exit of a popover (lineup.css `popover-out`): the kit's shortest UI motion. */
+export const EXIT_MS = 150;
 
 /** False under `prefers-reduced-motion: reduce`, and where the media query is not known (tests). */
 export function allowsMotion(): boolean {

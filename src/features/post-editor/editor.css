@@ -60,13 +60,31 @@
   display: none;
 }
 
+/* Editing, under 1100px: one button with the current section, a menu with the others (as the dashboard). */
+.ed-sections-compact {
+  position: relative;
+}
+
+.ed-sections-compact > md-outlined-button {
+  width: 100%;
+  --md-outlined-button-label-text-color: var(--md-sys-color-on-surface);
+  --md-outlined-button-icon-color: var(--md-sys-color-on-surface-variant);
+}
+
+.ed-sections-compact > md-outlined-button .material-symbols-outlined {
+  margin-inline-end: var(--gap-s);
+  vertical-align: middle;
+  font-size: 20px;
+}
+
 .ed-panel-title:focus {
   outline: none;
 }
 
 /* From 1100px: the steps are a vertical list at the left of the form. */
 @media (min-width: 1100px) {
-  .ed-progress {
+  .ed-progress,
+  .ed-sections-compact {
     display: none;
   }
 
@@ -125,6 +143,11 @@
 
 .ed-step.is-done button .material-symbols-outlined {
   color: var(--md-sys-color-primary);
+}
+
+/* Editing: the sections' own icons, in the text's color (no progress to show). */
+.ed-stepper.is-sections .ed-step.is-done button .material-symbols-outlined {
+  color: inherit;
 }
 
 .ed-step.is-error button {

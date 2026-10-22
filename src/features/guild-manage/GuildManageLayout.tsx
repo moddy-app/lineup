@@ -4,7 +4,7 @@ import {hasCode} from '@/api/client';
 import {useGuild} from '@/api/queries';
 import {paths} from '@/app/paths';
 import {usePageTitle} from '@/app/usePageTitle';
-import {DisplayName, EmptyState, ErrorState} from '@/components';
+import {EmptyState, ErrorState} from '@/components';
 import {useT} from '@/i18n/useT';
 import {LinkButton, PageLoading, SettingsLayout} from '@/ui';
 
@@ -24,13 +24,14 @@ function sectionOf(pathname: string, guildId: string): Section {
 /**
  * Parent of the management pages of a server. Reads the server once, handles
  * loading, not found and refused access, then shows the dashboard layout
- * (title, short description of the page, link to the public profile) around the
- * page (`<Outlet context={guild}>`).
+ * (the section's name, a short description, the link to the public profile on
+ * the profile section) around the page (`<Outlet context={guild}>`).
  */
 export function Component() {
   const {guildId} = useParams();
   const {pathname} = useLocation();
   const {t} = useT('guildManage');
+  const {t: tNav} = useT('components');
   const query = useGuild(guildId);
   const guild = query.data;
   usePageTitle(guild?.name ? t('pageTitle', {name: guild.name}) : t('title'));
@@ -81,23 +82,23 @@ export function Component() {
     );
   }
 
+  // The server is already named in the selector: the title is the section, as in the navigation.
   const section = sectionOf(pathname, guild.id);
   return (
     <SettingsLayout
       className="manage-page"
-      title={<DisplayName name={guild.name ?? t('unknownName')} badges={guild.badges} entity="guild" />}
+      title={tNav(`settings.guildNav.${section}`)}
       description={t(`pages.${section}`)}
       actions={
-        <>
+        section === 'profile' ? (
           <LinkButton to={paths.guild(guild.id)} variant="outlined" icon="visibility">
             {t('viewProfile')}
           </LinkButton>
-          {section === 'posts' && (
-            <LinkButton to={paths.postNew({guildId: guild.id})} icon="add">
-              {t('newPost')}
-            </LinkButton>
-          )}
-        </>
+        ) : section === 'posts' ? (
+          <LinkButton to={paths.postNew({guildId: guild.id})} icon="add">
+            {t('newPost')}
+          </LinkButton>
+        ) : undefined
       }
     >
       <Outlet key={guild.id} context={guild} />

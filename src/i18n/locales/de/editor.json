@@ -16,6 +16,9 @@
     },
     "compact": "Schritt {{current}} von {{total}} · {{name}}"
   },
+  "sections": {
+    "label": "Abschnitte der Anzeige"
+  },
   "steps": {
     "type": {
       "short": "Art",

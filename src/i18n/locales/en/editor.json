@@ -16,6 +16,9 @@
     },
     "compact": "Step {{current}} of {{total}} · {{name}}"
   },
+  "sections": {
+    "label": "Sections of the post"
+  },
   "steps": {
     "type": {
       "short": "Type",

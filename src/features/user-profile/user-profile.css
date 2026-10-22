@@ -14,51 +14,6 @@
   object-fit: cover;
 }
 
-.profile-header {
-  align-items: flex-start;
-  gap: var(--gap-l) var(--card-padding);
-}
-
-.profile-header .page-header-leading {
-  padding: 4px;
-}
-
-.profile-header .page-header-title {
-  font-size: var(--text-title);
-}
-
-.profile-header .page-header-text {
-  gap: 0;
-}
-
-.profile-header .page-header-title {
-  line-height: 1.15;
-}
-
-/* Name, then the handle right under it, then the headline. */
-.profile-header .page-header-subtitle {
-  margin: 2px 0 0;
-  font-size: var(--text-body-small);
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-.profile-headline {
-  margin: var(--gap-s) 0 0;
-}
-
-.profile-meta-line:empty {
-  display: none;
-}
-
-.profile-meta-line {
-  margin-top: var(--gap-s);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--gap-s) var(--gap-l);
-  min-width: 0;
-}
-
 .profile-menu {
   position: relative;
   display: inline-flex;

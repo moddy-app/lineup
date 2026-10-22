@@ -261,7 +261,7 @@
 
 /* ---- Danger zone ---------------------------------------------------------- */
 
-.card.manage-danger h2 {
+.manage-danger h2 {
   color: var(--md-sys-color-error);
 }
 

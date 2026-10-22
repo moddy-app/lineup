@@ -178,12 +178,14 @@ describe('SettingsLayout', () => {
 });
 
 describe('SettingsPanel', () => {
-  it('is a card with edge caps, a titled region and its actions last', async () => {
+  it('is a section of the page card (never a card in a card), a titled region with its actions last', async () => {
     mockApi({'GET /lineup/me': () => json(200, makeMe()), 'GET /lineup/me/guilds': guilds});
     renderApp([settingsRoute('me')], {path: '/me'});
     const region = await screen.findByRole('region', {name: 'Panneau'});
-    expect(region.classList.contains('card')).toBe(true);
-    expect(region.firstElementChild?.classList.contains('edge-caps')).toBe(true);
+    expect(region.classList.contains('card-section')).toBe(true);
+    expect(region.classList.contains('card')).toBe(false);
+    expect(region.querySelector('.edge-caps')).toBeNull();
+    expect(region.closest('.card.settings-main')).not.toBeNull();
     expect(region.lastElementChild?.classList.contains('settings-panel-actions')).toBe(true);
   });
 });
