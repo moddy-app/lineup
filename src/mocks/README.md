@@ -137,6 +137,28 @@ invitation of the Lumen Study profile was deleted: `invite.valid` is `false` the
 `atelier` are second permanent codes of Cubelands and Atelier du Phénix, to change a profile's invitation;
 `PUT` with a code of another server answers 422 `invite_guild_mismatch`.
 
+## Test bot ids
+
+Application IDs of the mock's App Directory (`seed/bots.ts`), for the "Add a bot" dialog and bot experiences.
+"Camille" is the `member` persona.
+
+| Application ID        | Bot          | Case                                                        | Lookup / claim for Camille                              |
+| --------------------- | ------------ | ----------------------------------------------------------- | ------------------------------------------------------- |
+| `994573526499328311`  | Atelier Bot  | support server Atelier du Phénix (she owns it), no profile  | `can_claim: true`, claim 201                            |
+| `1213818185187328312` | Studio Beats | support server Studio Nocturne (she has Manage Server only) | `can_claim: false`, claim 403 `lineup_bot_forbidden`    |
+| `827512720457728302`  | Pixel Helper | claimed by her, listed                                      | `claimed: true`, claim 409 `lineup_bot_already_claimed` |
+| `815916308758528303`  | Cube Guard   | claimed by Alex, verified app; her verified bot experience  | `claimed: true`                                         |
+| `1176492235030528301` | Moddy        | claimed by Noé (staff), verified app, posts                 | `claimed: true`                                         |
+| `697777864572928304`  | Nox          | NSFW theme                                                  | `claimed: true`                                         |
+| `942752061718528305`  | Dev Helper   | unlisted (Léo's): 404 for her                               | `claimed: true`                                         |
+| `1113799134281728306` | Marché Bot   | support server suspended: invisible                         | claim 403 `guild_suspended`                             |
+| `1017766349897728313` | Ghost        | not discoverable                                            | 422 `bot_not_discoverable`                              |
+| `1070674978275328314` | Lonely       | no support server                                           | 422 `bot_support_guild_missing`                         |
+| any other snowflake   |              | unknown                                                     | 404 `bot_not_found`                                     |
+
+Lookup is limited to 20 calls per minute and person, refresh to 1 per minute and bot. With "Discord unavailable"
+on, lookup, claim and bot experiences answer 503 and "my bots" answers `stale: true`.
+
 ## Notable seed cases
 
 - Claiming with `guild_id` alone: Café des Mods (Moddy installed) goes through with no invitation field; Studio
