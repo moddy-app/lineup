@@ -51,6 +51,32 @@ describe('Dropdown', () => {
     dialog.remove();
   });
 
+  it('stays open on a keepOpen choice and focuses the new choices (a submenu)', () => {
+    function Sub() {
+      const [sub, setSub] = useState(false);
+      return (
+        <Dropdown
+          label="Menu"
+          items={
+            sub
+              ? [{key: 'x', label: 'Choix', onSelect: () => {}}]
+              : [{key: 'open', label: 'Sous-menu', keepOpen: true, onSelect: () => setSub(true)}]
+          }
+          trigger={({ref, onActivate, ...aria}) => (
+            <button type="button" {...aria} ref={ref} onClick={onActivate}>
+              Ouvrir
+            </button>
+          )}
+        />
+      );
+    }
+    render(<Sub />);
+    fireEvent.click(screen.getByRole('button', {name: 'Ouvrir'}));
+    fireEvent.click(screen.getByRole('menuitem', {name: 'Sous-menu'}));
+    expect(screen.getByRole('menu')).not.toBeNull();
+    expect(document.activeElement?.textContent).toBe('Choix');
+  });
+
   it('chooses with a click and closes', () => {
     const onPick = vi.fn();
     render(<Menu onPick={onPick} />);

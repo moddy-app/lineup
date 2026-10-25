@@ -1437,8 +1437,8 @@ md-dialog {
 }
 
 @media (max-width: 700px) {
+  /* Same size as on a computer (36 px): only the nudge up goes. */
   .app-logo {
-    height: 28px;
     margin-top: 0;
   }
 
@@ -1449,6 +1449,18 @@ md-dialog {
   .top-nav-menu {
     display: inline-flex;
   }
+
+  /* Language and theme are in the menu (TopNav). */
+  moddy-app-bar > .language-menu,
+  moddy-app-bar > moddy-theme-menu {
+    display: none;
+  }
+}
+
+/* The kit's theme panel under the narrow menu's "Back". */
+.top-nav-theme {
+  display: block;
+  margin-top: var(--gap-s);
 }
 
 /* Account menu (app bar): a round 32px button, and a card with the person on top of the menu. */

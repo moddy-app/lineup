@@ -32,6 +32,8 @@ export interface DropdownItem {
   separated?: boolean;
   /** The language of the label, when it is not the page's (a language's own name). */
   lang?: string;
+  /** The popover stays open (the choice shows other items: a submenu); focus goes to its first choice. */
+  keepOpen?: boolean;
   onSelect: () => void;
 }
 
@@ -61,6 +63,8 @@ interface DropdownProps {
   header?: {icon?: string; label: string};
   /** Free content above the choices (the account card of the user menu). */
   top?: ReactNode;
+  /** Free content under the choices (the theme panel of the narrow app bar's menu). */
+  bottom?: ReactNode;
   className?: string;
 }
 
@@ -68,6 +72,14 @@ const GAP = 6;
 const MARGIN = 8;
 const CHOICES =
   '[role="menuitem"]:not(:disabled), [role="menuitemradio"]:not(:disabled), [role="option"]:not(:disabled)';
+
+/** Focus the current choice, or the first. */
+function focusChoice(element: HTMLElement) {
+  const target =
+    element.querySelector<HTMLElement>('[aria-checked="true"]:not(:disabled), [aria-selected="true"]:not(:disabled)') ??
+    element.querySelector<HTMLElement>(CHOICES);
+  target?.focus({preventScroll: true});
+}
 
 /**
  * The popover of the filters (`.filter-popover`, `.filter-option`) as a
@@ -94,12 +106,14 @@ export function Dropdown({
   matchTrigger = false,
   header,
   top,
+  bottom,
   className,
 }: DropdownProps) {
   const [open, setOpen] = useState(false);
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
   const popover = useRef<HTMLDivElement>(null);
   const popoverId = useId();
+  const kept = useRef(false);
   const {mounted, closing} = usePresence(open);
 
   const close = useCallback(
@@ -147,12 +161,16 @@ export function Dropdown({
       }
     }
     place();
-    const target =
-      element.querySelector<HTMLElement>(
-        '[aria-checked="true"]:not(:disabled), [aria-selected="true"]:not(:disabled)',
-      ) ?? element.querySelector<HTMLElement>(CHOICES);
-    target?.focus({preventScroll: true});
+    focusChoice(element);
   }, [open, place]);
+
+  // After a `keepOpen` choice, the items have changed: place again, focus the new choices.
+  useLayoutEffect(() => {
+    if (!kept.current || !popover.current) return;
+    kept.current = false;
+    place();
+    focusChoice(popover.current);
+  });
 
   useEffect(() => {
     if (!open) return;
@@ -254,7 +272,8 @@ export function Dropdown({
                     disabled={item.disabled}
                     lang={item.lang}
                     onClick={() => {
-                      close(true);
+                      if (item.keepOpen) kept.current = true;
+                      else close(true);
                       item.onSelect();
                     }}
                   >
@@ -265,6 +284,7 @@ export function Dropdown({
                 );
               })}
             </div>
+            {bottom}
           </div>,
           host,
         )}
