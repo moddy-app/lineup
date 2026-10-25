@@ -1,11 +1,16 @@
 import {useSearchParams} from 'react-router';
 
-/** `?servers=add` or `?servers=manage` on a dashboard page opens the matching dialog. */
+/**
+ * `?servers=add` or `?servers=manage` (servers), `?servers=add-bot` or
+ * `?servers=manage-bots` (bots) on a dashboard page opens the matching dialog.
+ */
 export const SERVERS_PARAM = 'servers';
-export type ServersMode = 'add' | 'manage';
+export type ServersMode = 'add' | 'manage' | 'add-bot' | 'manage-bots';
+
+const MODES: readonly ServersMode[] = ['add', 'manage', 'add-bot', 'manage-bots'];
 
 export const parseServersMode = (value: string | null): ServersMode | null =>
-  value === 'add' || value === 'manage' ? value : null;
+  MODES.find((mode) => mode === value) ?? null;
 
 /** The servers dialog the address asks for, and how to open, switch or close it (other parameters are kept). */
 export function useServersDialog() {

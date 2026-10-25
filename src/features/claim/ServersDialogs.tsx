@@ -2,11 +2,13 @@ import {useState} from 'react';
 
 import {type ServersMode} from '@/ui';
 
+import {AddBotDialog} from './AddBotDialog';
 import {AddServerDialog} from './AddServerDialog';
+import {ManageBotsDialog} from './ManageBotsDialog';
 import {ManageServersDialog} from './ManageServersDialog';
 
 /**
- * The two server dialogs of the dashboard, driven by `?servers=` (see
+ * The server and bot dialogs of the dashboard, driven by `?servers=` (see
  * `useServersDialog`). Both stay mounted once the first one is asked for so the
  * closing animation plays; each starts afresh (state, draft) at every opening.
  */
@@ -31,6 +33,13 @@ export default function ServersDialogs({
         open={mode === 'manage'}
         onClose={() => show(null)}
         onAdd={() => show('add')}
+      />
+      <AddBotDialog key={`add-bot${run}`} open={mode === 'add-bot'} onClose={() => show(null)} />
+      <ManageBotsDialog
+        key={`manage-bots${run}`}
+        open={mode === 'manage-bots'}
+        onClose={() => show(null)}
+        onAdd={() => show('add-bot')}
       />
     </>
   );

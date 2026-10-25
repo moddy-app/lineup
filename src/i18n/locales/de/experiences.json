@@ -39,14 +39,16 @@
     "saveAndReset": "Speichern und Verifizierung entfernen",
     "created": "Erfahrung hinzugefügt",
     "updated": "Erfahrung geändert",
-    "limit": "Sie haben {{count}} / {{max}} Erfahrungen. Löschen Sie eine, um eine neue hinzuzufügen."
+    "limit": "Sie haben {{count}} / {{max}} Erfahrungen. Löschen Sie eine, um eine neue hinzuzufügen.",
+    "botRefreshed": "Bot von Discord aktualisiert"
   },
   "fields": {
     "kind": {
       "label": "Art",
       "guild": "Discord-Server",
       "service": "Anderer Dienst",
-      "locked": "Die Art lässt sich nicht ändern."
+      "locked": "Die Art lässt sich nicht ändern.",
+      "bot": "Discord-Bot"
     },
     "currentServer": "Aktueller Server:",
     "invite": "Dauerhafte Einladung",
@@ -65,7 +67,13 @@
     "endDate": "Ende",
     "current": "Aktuelle Rolle, kein Enddatum",
     "image": "Bild (https-URL)",
-    "imageHelp": "Optional. Ein Logo oder ein Bild des Dienstes."
+    "imageHelp": "Optional. Ein Logo oder ein Bild des Dienstes.",
+    "currentBot": "Aktueller Bot:",
+    "botId": "Application ID des Bots",
+    "botIdHelp": "Im Discord Developer Portal unter General Information, Application ID. Name und Avatar kommen von Discord.",
+    "botIdEditHelp": "Eine andere ID wechselt den Bot und entfernt die Verifizierung.",
+    "botPreview": "Bot anzeigen",
+    "botRefresh": "Von Discord aktualisieren"
   },
   "warning": {
     "before": {
@@ -94,7 +102,9 @@
     "endFuture": "Das Enddatum darf nicht in der Zukunft liegen.",
     "endBeforeStart": "Das Ende darf nicht vor dem Beginn liegen.",
     "imageTooLong": "Höchstens {{count}} Zeichen.",
-    "imageNotHttps": "Geben Sie eine Adresse ein, die mit https:// beginnt."
+    "imageNotHttps": "Geben Sie eine Adresse ein, die mit https:// beginnt.",
+    "botIdRequired": "Geben Sie die Application ID des Bots ein.",
+    "botIdInvalid": "Eine Application ID besteht nur aus Ziffern (17 bis 20)."
   },
   "delete": {
     "title": "{{title}} löschen?",
@@ -133,7 +143,8 @@
       "MODERATE_MEMBERS": "Mitglieder stummschalten",
       "MANAGE_NICKNAMES": "Spitznamen verwalten",
       "MANAGE_EVENTS": "Events verwalten"
-    }
+    },
+    "supportGuild": "Geprüfter Support-Server"
   },
   "verify": {
     "action": "Automatisch verifizieren",

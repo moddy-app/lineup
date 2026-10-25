@@ -12,7 +12,7 @@ describe('listing and creating', () => {
     const response = await api.call('GET', BASE);
     expect(response.status).toBe(200);
     const items = response.json.items as Array<{id: string; sort_index: number; verification: Record<string, unknown>}>;
-    expect(items.map((item) => item.sort_index)).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8]);
+    expect(items.map((item) => item.sort_index)).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     expect(new Set(items.map((item) => status(item as never)))).toEqual(
       new Set(['verified', 'unverified', 'pending', 'rejected']),
     );
@@ -63,7 +63,7 @@ describe('listing and creating', () => {
       member_count: 4120,
       image_url: null,
       guild: {id: G.cubelands, name: 'Cubelands FR'},
-      sort_index: 9,
+      sort_index: 11,
       end_date: null,
       is_current: true,
       verification: {status: 'unverified', method: null, verified_at: null, evidence: null, rejection_reason: null},

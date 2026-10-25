@@ -23,6 +23,7 @@ import {newUuid} from '../ids';
 import type {DbExperience} from '../model';
 import {calendarDate, iso, MINUTE} from '../time';
 import {membershipOf} from './access';
+import {resolveBot} from './bots';
 import {requireDiscord, resolveInvite} from './discord';
 import {limits, type CreateExperienceInput} from './schemas';
 import {experiencesOf, toPrivateExperience, toStaffExperience} from './views';
@@ -84,6 +85,16 @@ export function createExperience(env: Env, actor: Actor, input: CreateExperience
   // A server: the icon and the member count come from the invitation. A service: the image is the person's.
   let imageUrl: string | null = input.kind === 'service' ? (input.image_url ?? null) : null;
   let memberCount: number | null = null;
+  let botId: Snowflake | null = null;
+  let guildCount: number | null = null;
+  if (input.kind === 'bot' && input.bot_id) {
+    // `name` and `image_url` are ignored: they come from Discord.
+    const bot = resolveBot(env, input.bot_id);
+    botId = bot.id;
+    name = bot.name;
+    imageUrl = bot.avatar_url;
+    guildCount = bot.guild_count;
+  }
   if (input.kind === 'guild' && input.invite) {
     const {invite, guild} = resolveInvite(env, input.invite);
     guildId = guild.id;
@@ -98,10 +109,12 @@ export function createExperience(env: Env, actor: Actor, input: CreateExperience
     user_id: actor.id,
     kind: input.kind,
     guild_id: guildId,
+    bot_id: botId,
     invite_code: inviteCode,
     name,
     image_url: imageUrl,
     member_count: memberCount,
+    guild_count: guildCount,
     position: input.position,
     position_other: input.position === 'other' ? (input.position_other ?? null) : null,
     description: input.description ? input.description : null,
@@ -123,6 +136,7 @@ export function createExperience(env: Env, actor: Actor, input: CreateExperience
 
 export interface ExperienceUpdate {
   invite?: string;
+  bot_id?: Snowflake;
   name?: string;
   image_url?: string | null;
   position?: string;
@@ -147,8 +161,11 @@ export function updateExperience(env: Env, actor: Actor, id: Uuid, patch: Experi
   const today = calendarDate(env.now);
 
   // --- the merged state ----------------------------------------------------
-  if (patch.invite !== undefined && row.kind === 'service') {
-    throw invalid("Une expérience de type service n'a pas d'invitation.");
+  if (patch.invite !== undefined && row.kind !== 'guild') {
+    throw invalid('Seule une expérience de serveur a une invitation.');
+  }
+  if (patch.bot_id !== undefined && row.kind !== 'bot') {
+    throw invalid("bot_id n'est modifiable que pour une expérience de bot.");
   }
   const position = patch.position ?? row.position;
   // A catalog position (not `other`) empties position_other by itself.
@@ -182,6 +199,17 @@ export function updateExperience(env: Env, actor: Actor, id: Uuid, patch: Experi
     nextImage = guild.icon_url;
     nextMembers = guild.member_count;
   }
+  // A bot: the same id refreshes the name, avatar and server count without touching the verification; another resets it.
+  let nextBotId = row.bot_id ?? null;
+  let nextGuildCount = row.guild_count ?? null;
+  if (patch.bot_id !== undefined) {
+    const bot = resolveBot(env, patch.bot_id);
+    serverChanged = bot.id !== row.bot_id;
+    nextBotId = bot.id;
+    nextName = bot.name;
+    nextImage = bot.avatar_url;
+    nextGuildCount = bot.guild_count;
+  }
   // A service's image is the person's (null clears it); for a server `image_url` is ignored.
   if (row.kind === 'service' && patch.image_url !== undefined) nextImage = patch.image_url;
   // `name` is the person's for a service and ignored for a server.
@@ -204,6 +232,8 @@ export function updateExperience(env: Env, actor: Actor, id: Uuid, patch: Experi
 
   row.invite_code = nextInvite;
   row.guild_id = nextGuildId;
+  row.bot_id = nextBotId;
+  row.guild_count = nextGuildCount;
   row.name = nextName;
   // Changing the image does not reset a verification (it is not in `otherSensitive`).
   row.image_url = nextImage;
@@ -272,7 +302,19 @@ function verificationFailed(reason: 'not_member' | 'no_staff_permission') {
  */
 export function verifyExperience(env: Env, actor: Actor, id: Uuid): PrivateExperience {
   const row = loadOwnExperience(env, actor, id);
-  if (row.kind !== 'guild' || !row.guild_id) {
+  // A bot is checked on its CURRENT support server.
+  let checkedGuildId = row.guild_id;
+  if (row.kind === 'bot' && row.bot_id) {
+    const bot = env.db.bots[row.bot_id];
+    if (!bot?.discoverable || !bot.support_guild_id) {
+      throw unprocessable(
+        'lineup_verification_not_applicable',
+        "Ce bot n'est plus découvrable ou n'a plus de serveur support.",
+        {reason: 'bot_unavailable', can_request_review: true},
+      );
+    }
+    checkedGuildId = bot.support_guild_id;
+  } else if (row.kind !== 'guild' || !row.guild_id) {
     throw unprocessable(
       'lineup_verification_not_applicable',
       'La vérification automatique ne concerne que les serveurs Discord.',
@@ -312,7 +354,7 @@ export function verifyExperience(env: Env, actor: Actor, id: Uuid): PrivateExper
     case 'no_staff_permission':
       throw verificationFailed('no_staff_permission');
     case 'auto': {
-      const member = membershipOf(env, actor.id, row.guild_id);
+      const member = checkedGuildId ? membershipOf(env, actor.id, checkedGuildId) : undefined;
       if (!member) throw verificationFailed('not_member');
       owner = member.owner;
       roleCount = member.role_count;
@@ -327,7 +369,13 @@ export function verifyExperience(env: Env, actor: Actor, id: Uuid): PrivateExper
   row.verified_at = now;
   row.verified_by = null;
   row.rejection_reason = null;
-  row.evidence = {permissions, owner, role_count: roleCount, checked_at: now};
+  row.evidence = {
+    permissions,
+    owner,
+    role_count: roleCount,
+    checked_at: now,
+    ...(row.kind === 'bot' && checkedGuildId ? {support_guild_id: checkedGuildId} : {}),
+  };
   row.updated_at = now;
   return toPrivateExperience(env, row);
 }

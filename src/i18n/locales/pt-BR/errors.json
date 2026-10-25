@@ -50,7 +50,14 @@
     "validation_error": "Alguns campos não são válidos.",
     "lineup_rate_limited": "Muitas tentativas. Tente de novo daqui a pouco.",
     "discord_unavailable": "O Discord não está respondendo no momento. Tente de novo daqui a pouco.",
-    "network_error": "Não foi possível conectar. Verifique sua rede."
+    "network_error": "Não foi possível conectar. Verifique sua rede.",
+    "lineup_bot_forbidden": "Você precisa ser dono ou administrador do servidor de suporte deste bot.",
+    "lineup_bot_not_found": "Este bot não foi encontrado ou não tem perfil no Lineup.",
+    "bot_not_found": "Nenhum bot com este id. Use o Application ID.",
+    "lineup_bot_already_claimed": "Este bot já tem um perfil no Lineup.",
+    "bot_not_discoverable": "Este bot não é descobrível. Ative a descoberta no portal do desenvolvedor (App Directory).",
+    "bot_support_guild_missing": "Este bot não declara um servidor de suporte no portal do desenvolvedor.",
+    "lineup_bot_profile_missing": "Este bot não tem perfil no Lineup. Reivindique-o primeiro."
   },
   "sessionExpired": "Sua sessão expirou. Entre na sua conta de novo.",
   "generic": "Ocorreu um erro. Tente de novo.",
@@ -70,7 +77,9 @@
     "guild_one": "Você já tem {{count}} anúncio publicado neste servidor. Feche um ou salve este como rascunho.",
     "guild_other": "Você já tem {{count}} anúncios publicados neste servidor. Feche um ou salve este como rascunho.",
     "user_one": "Você já tem {{count}} anúncio publicado. Feche um ou salve este como rascunho.",
-    "user_other": "Você já tem {{count}} anúncios publicados. Feche um ou salve este como rascunho."
+    "user_other": "Você já tem {{count}} anúncios publicados. Feche um ou salve este como rascunho.",
+    "bot_one": "Este bot já tem {{count}} anúncio publicado. Feche um ou salve este como rascunho.",
+    "bot_other": "Este bot já tem {{count}} anúncios publicados. Feche um ou salve este como rascunho."
   },
   "forbidden": {
     "claim": "É preciso ser dono do servidor ou ter a permissão Administrador ou Gerenciar servidor.",
@@ -86,7 +95,8 @@
     "kind": "O tipo de anúncio não é válido.",
     "compensation": "A remuneração não é válida.",
     "positions": "Um dos cargos não é válido.",
-    "status": "O status não é válido."
+    "status": "O status não é válido.",
+    "bot_id": "Filtre por servidor ou por bot, não pelos dois."
   },
   "verificationFailed": {
     "not_member": "Você não é membro deste servidor. Peça uma revisão manual.",
@@ -94,7 +104,8 @@
   },
   "verificationNotApplicable": {
     "not_guild": "A verificação automática só vale para servidores do Discord. Peça uma revisão manual.",
-    "ended": "A verificação automática só vale para experiências em andamento. Peça uma revisão manual."
+    "ended": "A verificação automática só vale para experiências em andamento. Peça uma revisão manual.",
+    "bot_unavailable": "Este bot não é mais descobrível ou não tem servidor de suporte. Peça uma revisão manual."
   },
   "validation": {
     "required": "Este campo é obrigatório.",
@@ -124,5 +135,9 @@
     "identifier": "Este identificador não é válido.",
     "notAccepted": "Este campo não é aceito.",
     "invalid": "Este valor não é válido."
+  },
+  "verificationFailedBot": {
+    "not_member": "Você não é membro do servidor de suporte deste bot. Peça uma revisão manual.",
+    "no_staff_permission": "Você é membro do servidor de suporte deste bot, mas sem permissão de staff. Peça uma revisão manual."
   }
 }

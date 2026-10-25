@@ -26,9 +26,12 @@ import {
 import type {ApiError} from './client';
 import {
   getAccount,
+  getBot,
+  getBots,
   getCatalog,
   getFeed,
   getGuild,
+  getMyBots,
   getMyExperiences,
   getMyGuilds,
   getMyPosts,
@@ -38,12 +41,14 @@ import {
   getStaffExperiences,
   getStaffReports,
   getUser,
+  lookupBot,
 } from './endpoints';
-import {normalizeFeedFilters, normalizeMyPostsParams, queryKeys} from './queryKeys';
+import {normalizeBotFilters, normalizeFeedFilters, normalizeMyPostsParams, queryKeys} from './queryKeys';
 import {shouldRetry} from './retry';
 import {fetchSession} from './sessionSnapshot';
 import type {
   BadgeEntityType,
+  BotDirectoryFilters,
   FeedFilters,
   MyPostsParams,
   Paginated,
@@ -52,6 +57,7 @@ import type {
   StaffExperienceStatus,
   StaffReportStatus,
   Uuid,
+  Post,
   PrivatePost,
 } from './types';
 
@@ -144,8 +150,25 @@ export const feedQuery = (filters: FeedFilters = {}) => {
   });
 };
 
-export function useFeed(filters: FeedFilters = {}) {
-  return useInfiniteQuery({...feedQuery(filters), placeholderData: keepPreviousData});
+/**
+ * `projects`: the posts of servers AND bots, without the people's (the
+ * "Projets" page with no type filter). The API takes one `kind` only: the
+ * request goes without a kind and each page is filtered here;
+ * `useInfiniteList` follows a page the filter emptied.
+ */
+export function useFeed(filters: FeedFilters = {}, options: {projects?: boolean} = {}) {
+  return useInfiniteQuery({
+    ...feedQuery(filters),
+    placeholderData: keepPreviousData,
+    select: options.projects ? onlyProjects : undefined,
+  });
+}
+
+function onlyProjects(data: InfiniteData<Paginated<Post>, string | null>) {
+  return {
+    ...data,
+    pages: data.pages.map((page) => ({...page, items: page.items.filter((post) => post.kind !== 'user')})),
+  };
 }
 
 /** A post's detail. Visible to everyone if published; drafts, closed and hidden posts only to their editors. */
@@ -216,6 +239,65 @@ export const myGuildsQuery = () =>
 export function useMyGuilds() {
   const signedIn = useIsSignedIn();
   return useQuery({...myGuildsQuery(), enabled: signedIn});
+}
+
+// ---------------------------------------------------------------------------
+// Bots
+// ---------------------------------------------------------------------------
+
+/** The bot directory, 60 s of server cache like the feed. */
+export const botsQuery = (filters: BotDirectoryFilters = {}) => {
+  const normalized = normalizeBotFilters(filters);
+  return infiniteQueryOptions({
+    queryKey: queryKeys.botDirectory(normalized),
+    queryFn: ({pageParam, signal}) => getBots(normalized, {cursor: pageParam, signal}),
+    initialPageParam: FIRST_PAGE,
+    getNextPageParam: nextCursor,
+    staleTime: 60_000,
+  });
+};
+
+export function useBots(filters: BotDirectoryFilters = {}) {
+  return useInfiniteQuery({...botsQuery(filters), placeholderData: keepPreviousData});
+}
+
+/** A bot's profile. */
+export const botQuery = (botId: Snowflake) =>
+  queryOptions({queryKey: queryKeys.botDetail(botId), queryFn: ({signal}) => getBot(botId, {signal})});
+
+export function useBot(botId: Snowflake | undefined) {
+  return useQuery({...botQuery(botId ?? ''), enabled: !!botId});
+}
+
+/** The bots the person manages (owner or administrator of the support server), listed or not. */
+export const myBotsQuery = () =>
+  queryOptions({
+    queryKey: queryKeys.myBots(),
+    queryFn: ({signal}) => getMyBots({signal}),
+    meta: {requiresAuth: true},
+  });
+
+export function useMyBots() {
+  const signedIn = useIsSignedIn();
+  return useQuery({...myBotsQuery(), enabled: signedIn});
+}
+
+/**
+ * The preview of a bot before a claim or an experience. 20 per minute per
+ * person: pass an id only once the person submitted it. Never retried on its
+ * own, and kept a minute (the same id is not asked twice).
+ */
+export function useBotLookup(botId: Snowflake | null) {
+  const signedIn = useIsSignedIn();
+  return useQuery({
+    queryKey: queryKeys.botLookup(botId ?? ''),
+    queryFn: ({signal}) => lookupBot(botId!, {signal}),
+    enabled: signedIn && !!botId,
+    staleTime: 60_000,
+    retry: false,
+    refetchOnWindowFocus: false,
+    meta: {requiresAuth: true},
+  });
 }
 
 // ---------------------------------------------------------------------------

@@ -9,7 +9,7 @@ import type {Badge} from '@/api/types';
 import type {ComponentsT} from './componentsT';
 
 export type Verification = 'moddy_staff' | 'moddy_server' | 'lineup_verified';
-export type VerificationEntity = 'user' | 'guild';
+export type VerificationEntity = 'user' | 'guild' | 'bot';
 
 /** The badge ids that mean a verification, by priority. */
 export const VERIFICATION_BADGE_IDS: readonly Verification[] = ['moddy_staff', 'moddy_server', 'lineup_verified'];
@@ -18,6 +18,7 @@ export const VERIFICATION_BADGE_IDS: readonly Verification[] = ['moddy_staff', '
 const PRIORITY: Readonly<Record<VerificationEntity, readonly Verification[]>> = {
   user: ['moddy_staff', 'lineup_verified'],
   guild: ['moddy_server', 'lineup_verified'],
+  bot: ['lineup_verified'],
 };
 
 /**

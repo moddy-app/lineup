@@ -9,8 +9,10 @@ export const NOTE_MAX = 500;
 export const IMAGE_URL_MAX = 500;
 
 export interface ExperienceFormState {
-  kind: 'guild' | 'service';
+  kind: 'guild' | 'service' | 'bot';
   invite: string;
+  /** A bot only: its Application ID. */
+  bot_id: string;
   name: string;
   /** A service only: an https URL, or empty. */
   image_url: string;
@@ -25,6 +27,8 @@ export interface ExperienceFormState {
 
 export type ExperienceProblemKey =
   | 'inviteRequired'
+  | 'botIdRequired'
+  | 'botIdInvalid'
   | 'nameRequired'
   | 'nameTooLong'
   | 'imageTooLong'
@@ -56,6 +60,7 @@ export function emptyForm(): ExperienceFormState {
   return {
     kind: 'guild',
     invite: '',
+    bot_id: '',
     name: '',
     image_url: '',
     position: '',
@@ -71,6 +76,7 @@ export function formFromExperience(experience: PrivateExperience): ExperienceFor
   return {
     kind: experience.kind,
     invite: '',
+    bot_id: experience.bot_id ?? '',
     name: experience.name,
     image_url: experience.kind === 'service' ? (experience.image_url ?? '') : '',
     position: experience.position,
@@ -106,6 +112,10 @@ export function validateExperience(
   const problems: ExperienceProblems = {};
   if (state.kind === 'guild') {
     if (!options.editing && state.invite.trim().length === 0) problems.invite = {key: 'inviteRequired'};
+  } else if (state.kind === 'bot') {
+    const id = state.bot_id.trim();
+    if (id.length === 0) problems.bot_id = {key: 'botIdRequired'};
+    else if (!/^\d{17,20}$/.test(id)) problems.bot_id = {key: 'botIdInvalid'};
   } else {
     const name = state.name.trim();
     if (name.length === 0) problems.name = {key: 'nameRequired'};
@@ -144,16 +154,20 @@ function common(state: ExperienceFormState) {
 }
 
 export function createBody(state: ExperienceFormState): CreateExperienceBody {
-  return state.kind === 'guild'
-    ? {kind: 'guild', invite: state.invite.trim(), ...common(state)}
-    : {kind: 'service', name: state.name.trim(), image_url: state.image_url.trim() || null, ...common(state)};
+  if (state.kind === 'guild') return {kind: 'guild', invite: state.invite.trim(), ...common(state)};
+  // A bot's name and picture come from Discord: only its id is sent.
+  if (state.kind === 'bot') return {kind: 'bot', bot_id: state.bot_id.trim(), ...common(state)};
+  return {kind: 'service', name: state.name.trim(), image_url: state.image_url.trim() || null, ...common(state)};
 }
 
-/** Only what changed. A new invitation is sent when one was typed. */
+/** Only what changed. A new invitation is sent when one was typed; another bot when its id changed. */
 export function updateBody(experience: PrivateExperience, state: ExperienceFormState): UpdateExperienceBody {
   const body: UpdateExperienceBody = {};
   if (experience.kind === 'guild') {
     if (state.invite.trim()) body.invite = state.invite.trim();
+  } else if (experience.kind === 'bot') {
+    const id = state.bot_id.trim();
+    if (id && id !== experience.bot_id) body.bot_id = id;
   } else if (state.name.trim() !== experience.name) {
     body.name = state.name.trim();
   }
@@ -179,14 +193,15 @@ export type ResetEffect = 'none' | 'resets' | 'keeps';
 
 /**
  * What saving does to the verification. Sensitive: the server (a new invitation),
- * a service's name, the position, the dates. The description never matters.
+ * another bot, a service's name, the position, the dates. The description never
+ * matters, nor does the same bot sent again (a refresh from Discord).
  * Exception (§7): only an end date added to a verified, current experience keeps it.
  */
 export function verificationEffect(experience: PrivateExperience, body: UpdateExperienceBody): ResetEffect {
   if (experience.verification.status === 'unverified') return 'none';
-  const sensitive = (['invite', 'name', 'position', 'position_other', 'start_date', 'end_date'] as const).filter(
-    (key) => body[key] !== undefined && (key === 'invite' || body[key] !== (experience[key] ?? null)),
-  );
+  const sensitive = (
+    ['invite', 'bot_id', 'name', 'position', 'position_other', 'start_date', 'end_date'] as const
+  ).filter((key) => body[key] !== undefined && (key === 'invite' || body[key] !== (experience[key] ?? null)));
   if (sensitive.length === 0) return 'none';
   if (
     experience.verification.status === 'verified' &&
@@ -210,7 +225,8 @@ export function verificationOffer(experience: PrivateExperience): {
   const {status} = experience.verification;
   const open = status === 'unverified' || status === 'rejected';
   return {
-    auto: open && experience.kind === 'guild' && experience.is_current,
+    // A bot is checked on its support server, like a server.
+    auto: open && (experience.kind === 'guild' || experience.kind === 'bot') && experience.is_current,
     review: open,
     pending: status === 'pending',
     verified: status === 'verified',

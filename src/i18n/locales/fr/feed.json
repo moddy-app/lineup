@@ -1,10 +1,10 @@
 {
   "guild": {
     "title": "Projets",
-    "subtitle": "Des serveurs Discord cherchent du staff.",
+    "subtitle": "Des serveurs et des bots Discord cherchent du staff.",
     "action": "Publier une annonce",
     "emptyTitle": "Aucun projet pour le moment",
-    "emptyBody": "Les annonces de serveurs apparaissent ici dès qu'elles sont publiées."
+    "emptyBody": "Les annonces de serveurs et de bots apparaissent ici dès qu'elles sont publiées."
   },
   "user": {
     "title": "Profils",
@@ -26,7 +26,10 @@
     "nsfw": "Contenu adulte",
     "nsfwHide": "Masquer",
     "nsfwShow": "Afficher",
-    "reset": "Réinitialiser les filtres"
+    "reset": "Réinitialiser les filtres",
+    "recruiter": "Type",
+    "recruiterGuild": "Serveurs",
+    "recruiterBot": "Bots"
   },
   "empty": {
     "filteredTitle": "Aucune annonce pour ces filtres",
@@ -35,5 +38,8 @@
   "invalid": {
     "title": "Cette recherche n'a pas pu être appliquée",
     "restart": "Recommencer depuis le début"
+  },
+  "bots": {
+    "directory": "Annuaire des bots"
   }
 }

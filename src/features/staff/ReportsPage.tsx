@@ -17,7 +17,12 @@ import {Card, Chip, Icon, LinkButton, Status} from '@/ui';
 import {ActionDialog, EntityName, ListBody, PersonLink, Rules, SectionHead, StatusChips} from './parts';
 import {parseReportStatus, REPORT_STATUSES} from './staffLogic';
 
-const TARGET_ICON: Record<ReportTargetType, string> = {post: 'campaign', user: 'person', guild: 'groups'};
+const TARGET_ICON: Record<ReportTargetType, string> = {
+  post: 'campaign',
+  user: 'person',
+  guild: 'groups',
+  bot: 'smart_toy',
+};
 
 function targetPath(report: Report): string {
   switch (report.target_type) {
@@ -27,6 +32,8 @@ function targetPath(report: Report): string {
       return paths.user(report.target_id);
     case 'guild':
       return paths.guild(report.target_id);
+    case 'bot':
+      return paths.bot(report.target_id);
   }
 }
 

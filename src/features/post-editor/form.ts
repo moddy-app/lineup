@@ -35,7 +35,7 @@ export type StepId = (typeof STEP_IDS)[number];
 
 /**
  * The steps shown. The type step is left out when something already fixes the
- * author: editing, the dashboard of a server (`?guild=`), the personal
+ * author: editing, the dashboard of a server (`?guild=`) or a bot (`?bot=`), the personal
  * dashboard (`?kind=user`).
  */
 export function stepsFor(typeFixed: boolean): StepId[] {
@@ -60,6 +60,8 @@ export interface RequirementDraft {
 export interface FormState {
   kind: PostKind | '';
   guildId: string;
+  /** A bot post: the bot that recruits. */
+  botId: string;
   title: string;
   description: string;
   positions: string[];
@@ -83,6 +85,7 @@ export interface FormState {
 export const EMPTY_FORM: FormState = {
   kind: '',
   guildId: '',
+  botId: '',
   title: '',
   description: '',
   positions: [],
@@ -217,6 +220,8 @@ export interface Rules {
   unchangedExpiry?: string;
   /** Claimed servers of the person. */
   claimedGuildIds?: readonly string[];
+  /** The bots the person manages (`GET /lineup/me/bots`). */
+  myBotIds?: readonly string[];
   /** The ids of the person's verified experiences. */
   verifiedExperienceIds?: readonly string[];
 }
@@ -227,6 +232,7 @@ const intOf = (text: string): number | null => (/^-?\d+$/.test(text.trim()) ? Nu
 const FIELD_STEPS: Array<[prefix: string, step: StepId]> = [
   ['kind', 'type'],
   ['guildId', 'type'],
+  ['botId', 'type'],
   ['title', 'content'],
   ['description', 'content'],
   ['positions', 'positions'],
@@ -263,6 +269,9 @@ export function validateStep(step: StepId, form: FormState, rules: Rules, editin
         else if (rules.claimedGuildIds && !rules.claimedGuildIds.includes(form.guildId)) {
           fail('guildId', 'guildNotClaimed');
         }
+      } else if (form.kind === 'bot') {
+        if (form.botId === '') fail('botId', 'botRequired');
+        else if (rules.myBotIds && !rules.myBotIds.includes(form.botId)) fail('botId', 'botNotManaged');
       }
       break;
     }
@@ -389,7 +398,7 @@ export function validateStep(step: StepId, form: FormState, rules: Rules, editin
         else if (form.expiresOn > max) fail('expiresOn', 'expiryMax', {count: limits.post_max_expiry_days});
       }
       if (form.featuredExperienceId !== '') {
-        if (form.kind === 'guild') fail('featuredExperienceId', 'featuredUserOnly');
+        if (form.kind !== 'user') fail('featuredExperienceId', 'featuredUserOnly');
         else if (rules.verifiedExperienceIds && !rules.verifiedExperienceIds.includes(form.featuredExperienceId)) {
           fail('featuredExperienceId', 'featuredNotVerified');
         }
@@ -497,7 +506,9 @@ export function toCreateBody(
 ): CreatePostBody {
   const payload = toPayload(form, catalog, now);
   const common = {...payload, status};
-  return form.kind === 'guild' ? {...common, kind: 'guild', guild_id: form.guildId} : {...common, kind: 'user'};
+  if (form.kind === 'guild') return {...common, kind: 'guild', guild_id: form.guildId};
+  if (form.kind === 'bot') return {...common, kind: 'bot', bot_id: form.botId};
+  return {...common, kind: 'user'};
 }
 
 /** Only what differs between the form and the post as it was loaded; an explicit null clears. */
@@ -521,6 +532,7 @@ export function formFromPost(post: Post): FormState {
   return {
     kind: post.kind,
     guildId: post.guild_id ?? '',
+    botId: post.bot_id ?? '',
     title: post.title,
     description: post.description,
     positions: post.positions,
@@ -560,6 +572,8 @@ export function formFieldOfServerPath(path: string): string {
   switch (head) {
     case 'guild_id':
       return 'guildId';
+    case 'bot_id':
+      return 'botId';
     case 'positions_other':
       return `positionsOther${tail}`;
     case 'featured_experience_id':

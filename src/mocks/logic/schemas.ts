@@ -373,8 +373,9 @@ function postContentFields(now: Date) {
 
 export function createPostBody(now: Date): Parser<CreatePostInput> {
   const shape = model({
-    kind: req(literal(['guild', 'user'] as const)),
+    kind: req(literal(['guild', 'user', 'bot'] as const)),
     guild_id: opt(snowflakeString),
+    bot_id: opt(snowflakeString),
     ...postContentFields(now),
     status: opt(literal(['draft', 'published'] as const)),
   });
@@ -389,11 +390,19 @@ export function createPostBody(now: Date): Parser<CreatePostInput> {
       rule('guild_id', 'guild_id est obligatoire pour une annonce de serveur.', null);
       bad = true;
     }
-    if (parsed.kind === 'user' && parsed.guild_id !== undefined) {
-      rule('guild_id', 'guild_id est interdit pour une annonce personnelle.', parsed.guild_id);
+    if (parsed.kind !== 'guild' && parsed.guild_id !== undefined) {
+      rule('guild_id', 'guild_id est interdit hors annonce de serveur.', parsed.guild_id);
       bad = true;
     }
-    if (parsed.kind === 'guild' && parsed.featured_experience_id) {
+    if (parsed.kind === 'bot' && parsed.bot_id === undefined) {
+      rule('bot_id', 'bot_id est obligatoire pour une annonce de bot.', null);
+      bad = true;
+    }
+    if (parsed.kind !== 'bot' && parsed.bot_id !== undefined) {
+      rule('bot_id', 'bot_id est interdit hors annonce de bot.', parsed.bot_id);
+      bad = true;
+    }
+    if (parsed.kind !== 'user' && parsed.featured_experience_id) {
       rule(
         'featured_experience_id',
         'Une annonce de serveur ne peut pas mettre en avant une expérience.',
@@ -424,8 +433,9 @@ export function createPostBody(now: Date): Parser<CreatePostInput> {
 }
 
 export type CreatePostInput = {
-  kind: 'guild' | 'user';
+  kind: 'guild' | 'user' | 'bot';
   guild_id?: string;
+  bot_id?: string;
   title: string;
   description: string;
   positions: string[];
@@ -493,6 +503,18 @@ export const guildUpdateBody = model({
   listed: opt(bool),
 });
 
+export const botClaimBody = model({bot_id: req(snowflakeString)});
+
+/** Name, avatar, support server and server count come from Discord: sending them is a 422 (`extra_forbidden`). */
+export const botUpdateBody = model({
+  description: opt(nullable(str({max: 2000}))),
+  links: opt(links),
+  theme: opt(nullable(themeId)),
+  tags: opt(tags),
+  languages: opt(languages),
+  listed: opt(bool),
+});
+
 export const profileUpdateBody = model({
   headline: opt(nullable(str({max: 120}))),
   bio: opt(nullable(str({max: 2000}))),
@@ -510,8 +532,9 @@ const positionOther = str({min: 1, max: limits.position_other_max_len});
 const experienceDescription = nullable(str({max: 1000}));
 
 export type CreateExperienceInput = {
-  kind: 'guild' | 'service';
+  kind: 'guild' | 'service' | 'bot';
   invite?: string;
+  bot_id?: string;
   name?: string;
   image_url?: string | null;
   position: string;
@@ -526,8 +549,9 @@ export function createExperienceBody(today: string): Parser<CreateExperienceInpu
     value > today ? 'La date ne peut pas être dans le futur.' : null,
   );
   const shape = model({
-    kind: req(literal(['guild', 'service'] as const)),
+    kind: req(literal(['guild', 'service', 'bot'] as const)),
     invite: opt(str({min: 2, max: 200})),
+    bot_id: opt(snowflakeString),
     name: opt(experienceName),
     image_url: opt(nullable(urlString)),
     position: req(experiencePosition),
@@ -557,6 +581,19 @@ export function createExperienceBody(today: string): Parser<CreateExperienceInpu
         bad = true;
       }
     }
+    if (parsed.kind === 'bot') {
+      if (parsed.bot_id === undefined) {
+        issues.add('missing', [...loc, 'bot_id'], 'Field required', value);
+        bad = true;
+      }
+      if (parsed.invite !== undefined) {
+        rule('invite', 'invite est interdit pour une expérience de bot.', parsed.invite);
+        bad = true;
+      }
+    } else if (parsed.bot_id !== undefined) {
+      rule('bot_id', "bot_id n'est autorisé que pour une expérience de bot.", parsed.bot_id);
+      bad = true;
+    }
     if (parsed.position === 'other' && !parsed.position_other) {
       rule('position_other', 'position_other est obligatoire quand le poste est « other ».', null);
       bad = true;
@@ -575,6 +612,7 @@ export function createExperienceBody(today: string): Parser<CreateExperienceInpu
 /** The merged state is checked by the logic (422 `lineup_experience_invalid`); here only the shapes. */
 export const updateExperienceBody = model({
   invite: opt(str({min: 2, max: 200})),
+  bot_id: opt(snowflakeString),
   name: opt(experienceName),
   image_url: opt(nullable(urlString)),
   position: opt(experiencePosition),
@@ -589,7 +627,7 @@ export const orderBody = model({ids: req(list(uuidString))});
 export const noteBody = (max: number) => model({note: opt(str({max}))});
 
 export const reportBody = model({
-  target_type: req(literal(['post', 'user', 'guild'] as const)),
+  target_type: req(literal(['post', 'user', 'guild', 'bot'] as const)),
   target_id: req(str({min: 1, max: 64})),
   reason: req(literal(['spam', 'scam', 'inappropriate', 'impersonation', 'other'] as const)),
   details: opt(str({max: 1000})),

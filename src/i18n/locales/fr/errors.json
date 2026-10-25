@@ -50,7 +50,14 @@
     "validation_error": "Certains champs ne sont pas valides.",
     "lineup_rate_limited": "Trop de tentatives. Réessayez dans un instant.",
     "discord_unavailable": "Discord ne répond pas pour le moment. Réessayez dans un instant.",
-    "network_error": "Connexion impossible. Vérifiez votre réseau."
+    "network_error": "Connexion impossible. Vérifiez votre réseau.",
+    "lineup_bot_forbidden": "Il faut être propriétaire ou administrateur du serveur support de ce bot.",
+    "lineup_bot_not_found": "Ce bot est introuvable ou n'a pas de profil Lineup.",
+    "bot_not_found": "Aucun bot avec cet id. Utilisez l'Application ID.",
+    "lineup_bot_already_claimed": "Ce bot a déjà un profil Lineup.",
+    "bot_not_discoverable": "Ce bot n'est pas découvrable. Activez la découvrabilité dans le portail développeur (App Directory).",
+    "bot_support_guild_missing": "Ce bot ne déclare pas de serveur support sur le portail développeur.",
+    "lineup_bot_profile_missing": "Ce bot n'a pas de profil Lineup. Revendiquez-le d'abord."
   },
   "sessionExpired": "Votre session a expiré. Connectez-vous de nouveau.",
   "generic": "Une erreur est survenue. Réessayez.",
@@ -70,7 +77,9 @@
     "guild_one": "Vous avez déjà {{count}} annonce publiée sur ce serveur. Fermez-en une ou enregistrez celle-ci en brouillon.",
     "guild_other": "Vous avez déjà {{count}} annonces publiées sur ce serveur. Fermez-en une ou enregistrez celle-ci en brouillon.",
     "user_one": "Vous avez déjà {{count}} annonce publiée. Fermez-en une ou enregistrez celle-ci en brouillon.",
-    "user_other": "Vous avez déjà {{count}} annonces publiées. Fermez-en une ou enregistrez celle-ci en brouillon."
+    "user_other": "Vous avez déjà {{count}} annonces publiées. Fermez-en une ou enregistrez celle-ci en brouillon.",
+    "bot_one": "Ce bot a déjà {{count}} annonce publiée. Fermez-en une ou enregistrez celle-ci en brouillon.",
+    "bot_other": "Ce bot a déjà {{count}} annonces publiées. Fermez-en une ou enregistrez celle-ci en brouillon."
   },
   "forbidden": {
     "claim": "Il faut être propriétaire du serveur, ou avoir la permission Administrateur ou Gérer le serveur.",
@@ -86,7 +95,8 @@
     "kind": "Le type d'annonce n'est pas valide.",
     "compensation": "La rémunération n'est pas valide.",
     "positions": "Un des postes n'est pas valide.",
-    "status": "Le statut n'est pas valide."
+    "status": "Le statut n'est pas valide.",
+    "bot_id": "Filtrez par serveur ou par bot, pas les deux."
   },
   "verificationFailed": {
     "not_member": "Vous n'êtes pas membre de ce serveur. Demandez une revue manuelle.",
@@ -94,7 +104,8 @@
   },
   "verificationNotApplicable": {
     "not_guild": "La vérification automatique ne concerne que les serveurs Discord. Demandez une revue manuelle.",
-    "ended": "La vérification automatique ne concerne que les expériences en cours. Demandez une revue manuelle."
+    "ended": "La vérification automatique ne concerne que les expériences en cours. Demandez une revue manuelle.",
+    "bot_unavailable": "Ce bot n'est plus découvrable ou n'a plus de serveur support. Demandez une revue manuelle."
   },
   "validation": {
     "required": "Ce champ est obligatoire.",
@@ -124,5 +135,9 @@
     "identifier": "Cet identifiant n'est pas valide.",
     "notAccepted": "Ce champ n'est pas accepté.",
     "invalid": "Cette valeur n'est pas valide."
+  },
+  "verificationFailedBot": {
+    "not_member": "Vous n'êtes pas membre du serveur support de ce bot. Demandez une revue manuelle.",
+    "no_staff_permission": "Vous êtes membre du serveur support de ce bot, mais sans permission de staff. Demandez une revue manuelle."
   }
 }

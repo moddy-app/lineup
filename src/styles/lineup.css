@@ -476,6 +476,11 @@ img.guild-icon.is-xl {
   border-radius: var(--radius-l);
 }
 
+/* A bot's picture is round, like its Discord account (after the size rules, which come first). */
+img.guild-icon.bot-avatar {
+  border-radius: var(--radius-full);
+}
+
 /* A service's image, whatever its size: coins --radius-m (after the size rules, which come first). */
 img.guild-icon.is-image {
   border-radius: var(--radius-m);
@@ -2856,4 +2861,97 @@ md-dialog {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * Bots (components/BotCard.tsx, BotLookupPreview.tsx): the directory tile, the
+ * row of a list inside a card, the preview before a claim.
+ * ------------------------------------------------------------------------- */
+
+.bot-tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+  min-width: 0;
+}
+
+.bot-tile-head {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-m);
+  min-width: 0;
+}
+
+.bot-tile-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.bot-tile-name {
+  max-width: 100%;
+  margin: 0;
+  font-size: var(--text-subtitle);
+}
+
+.bot-tile-description {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-on-surface-variant);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+.bot-tile-tags {
+  margin-top: auto;
+}
+
+.bot-row-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.bot-row-name {
+  max-width: 100%;
+  font-weight: 600;
+}
+
+.bot-preview {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-l);
+}
+
+.bot-preview-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+}
+
+.bot-preview-name {
+  font-size: var(--text-subtitle);
+  overflow-wrap: anywhere;
+}
+
+.bot-preview-verified,
+.bot-preview-support {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.bot-preview-verified .material-symbols-outlined {
+  font-size: 18px;
+  color: var(--md-sys-color-primary);
 }

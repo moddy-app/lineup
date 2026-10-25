@@ -1,0 +1,104 @@
+{
+  "unknownName": "Unnamed bot",
+  "directory": {
+    "title": "Bots",
+    "subtitle": "The Discord bots on Lineup, their teams and their posts.",
+    "add": "Add a bot",
+    "search": "Search for a bot",
+    "emptyTitle": "No bots yet",
+    "emptyBody": "Bots show up here as soon as their team adds them to Lineup.",
+    "list": "Bots",
+    "end": "End of the list, {{count}} bots shown."
+  },
+  "notFound": {
+    "title": "Bot not found",
+    "body": "This bot has no Lineup profile, or its profile is not public.",
+    "action": "See the bots"
+  },
+  "profile": {
+    "add": "Add the bot",
+    "manage": "Manage"
+  },
+  "notices": {
+    "notDiscoverable": "Your bot is no longer discoverable on Discord: the data shown is the last known.",
+    "unlisted": "This profile is hidden: only managers and the Moddy staff see it, and its posts.",
+    "unlistedAction": "Change the visibility"
+  },
+  "about": {
+    "title": "About",
+    "none": "This bot has no description yet.",
+    "tags": "Tags"
+  },
+  "posts": {
+    "title_one": "{{count}} open post",
+    "title_other": "{{count}} open posts",
+    "titleEmpty": "Open posts",
+    "label": "Posts of the bot",
+    "empty": "This bot is not recruiting right now."
+  },
+  "info": {
+    "title": "Details",
+    "created": "Created on Discord in",
+    "theme": "Theme",
+    "discordTopics": "App Directory categories",
+    "snapshot": "Discord data",
+    "updated": "Updated {{relative}}"
+  },
+  "support": {
+    "title": "Support server",
+    "members_one": "{{value}} member",
+    "members_other": "{{value}} members"
+  },
+  "links": {
+    "title": "Links"
+  },
+  "team": {
+    "title": "Team",
+    "label": "Team of the bot",
+    "empty": "Only people with a verified experience on this bot show up here."
+  },
+  "menu": {
+    "label": "More actions",
+    "report": "Report this bot",
+    "copyLink": "Copy the link",
+    "copied": "Link copied.",
+    "copyFailed": "Could not copy.",
+    "copyId": "Copy the bot's id",
+    "idCopied": "Id copied."
+  },
+  "claim": {
+    "title": "Add a bot",
+    "close": "Close",
+    "search": "Search",
+    "searching": "Searching...",
+    "searchIn": "Search in {{wait}}",
+    "submit": "Claim this bot",
+    "claiming": "Claiming...",
+    "intro": "Type the bot's Application ID. Three conditions:",
+    "conditionDiscoverable": "the bot is discoverable: the developer turns it on in the Developer Portal, App Directory section;",
+    "conditionSupport": "it has a support server (the Support Server field of the portal);",
+    "conditionAdmin": "you own or administer that support server. \"Manage Server\" is not enough.",
+    "idLabel": "Application ID",
+    "idHint": "The id is in the Discord Developer Portal, General Information, Application ID.",
+    "idInvalid": "An Application ID is made of digits only (17 to 20).",
+    "claimed": "This bot already has a profile.",
+    "openProfile": "See the bot's profile",
+    "notAdmin": "You must be an administrator of {{name}} to claim this bot.",
+    "notAdminHelp": "If you just got these rights, wait a few minutes: the list of your servers is kept for 5 minutes.",
+    "success": "{{name}} is on Lineup."
+  },
+  "mine": {
+    "title": "Manage bots",
+    "label": "My bots",
+    "listed": "Visible",
+    "unlisted": "Not listed",
+    "profile": "See the profile",
+    "manage": "Manage",
+    "add": "Add a bot",
+    "emptyTitle": "No bots",
+    "emptyBody": "The bots whose support server you administer show up here once added.",
+    "staleTitle": "Could not check your servers",
+    "staleBody": "Discord did not answer. Try again in a moment.",
+    "retry": "Try again"
+  }
+}

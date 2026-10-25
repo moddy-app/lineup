@@ -15,6 +15,10 @@
  *  claim / PUT /      guilds.detail set; guilds.mine patched (`claimed: true`,
  *  refresh a server   name, icon); the directory card updated, or removed when
  *                     the server is unlisted.
+ *  claim / PUT /      bots.detail set; bots.mine patched (card added or
+ *  refresh a bot      replaced); the directory marked stale.
+ *  DELETE a bot       bots.detail removed; out of bots.mine; its draft and
+ *                     published posts become `closed` in every cache.
  *  DELETE a server    guilds.detail removed; guilds.mine `claimed: false`;
  *                     removed from the directory and the feed; its draft and
  *                     published posts become `closed` in every cache.
@@ -37,6 +41,7 @@ import type {InfiniteData, QueryClient, QueryKey} from '@tanstack/react-query';
 
 import {
   belongsToMyPosts,
+  closedWithBot,
   closedWithGuild,
   comparePostsCreatedDesc,
   compareByCreatedDesc,
@@ -44,9 +49,11 @@ import {
   isPubliclyListed,
   mapItems,
   removeItems,
+  removeMyBot,
   toPublicPost,
   unclaimMyGuild,
   upsertItem,
+  upsertMyBot,
   upsertMyGuild,
   withBadgeGrant,
   withExperience,
@@ -56,8 +63,10 @@ import {
   withoutBadgeGrant,
   withoutExperience,
   withoutFeaturedExperience,
+  withoutPostInBotProfile,
   withoutPostInGuildProfile,
   withoutPostInUserProfile,
+  withPostInBotProfile,
   withPostInGuildProfile,
   withPostInUserProfile,
   withReplacedExperience,
@@ -66,11 +75,13 @@ import {queryKeys} from './queryKeys';
 import {cachedMyId, type SessionSnapshot} from './sessionSnapshot';
 import type {
   BadgeEntityType,
+  BotProfile,
   Catalog,
   ExperienceList,
   GuildProfile,
   ManualBadgeGrant,
   Me,
+  MyBotsResponse,
   MyGuild,
   MyPostsParams,
   Paginated,
@@ -150,6 +161,7 @@ function removeFromPublicLists(queryClient: QueryClient, postId: Uuid): void {
     withoutPostInUserProfile(profile, postId),
   );
   patchQuery<UserProfile>(queryClient, queryKeys.myProfile(), (profile) => withoutPostInUserProfile(profile, postId));
+  patchQueries<BotProfile>(queryClient, queryKeys.botDetails(), (profile) => withoutPostInBotProfile(profile, postId));
 }
 
 /**
@@ -171,7 +183,11 @@ export function syncPostWritten(queryClient: QueryClient, post: PostWriteResult)
     removeFromFeeds(queryClient, (item) => item.id === post.id);
   }
 
-  if (post.guild_id) {
+  if (post.kind === 'bot' && post.bot_id) {
+    patchQuery<BotProfile>(queryClient, queryKeys.botDetail(post.bot_id), (profile) =>
+      withPostInBotProfile(profile, post),
+    );
+  } else if (post.guild_id) {
     patchQuery<GuildProfile>(queryClient, queryKeys.guildDetail(post.guild_id), (profile) =>
       withPostInGuildProfile(profile, post),
     );
@@ -269,6 +285,54 @@ export function syncMyGuildsRefreshed(queryClient: QueryClient, response: Refres
 }
 
 // ---------------------------------------------------------------------------
+// Bots
+// ---------------------------------------------------------------------------
+
+/**
+ * A bot profile came back whole (claim, PUT, refresh): it is the detail, "my
+ * bots" is patched, the directory and the support server's `bots` are marked
+ * stale (their cards cannot be placed from here).
+ */
+export function syncBotProfile(queryClient: QueryClient, profile: BotProfile): void {
+  queryClient.setQueryData<BotProfile>(queryKeys.botDetail(profile.id), profile);
+  patchQuery<MyBotsResponse>(queryClient, queryKeys.myBots(), (data) => {
+    const items = upsertMyBot(data.items, profile);
+    return items === data.items ? data : {...data, items};
+  });
+  markStale(queryClient, queryKeys.botDirectories());
+  if (profile.support_guild) markStale(queryClient, queryKeys.guildDetail(profile.support_guild.id));
+}
+
+/** A bot profile was deleted. Its draft and published posts were closed by the API: the caches say so too. */
+export function syncBotDeleted(queryClient: QueryClient, botId: Snowflake): void {
+  const supportGuildId = queryClient.getQueryData<BotProfile>(queryKeys.botDetail(botId))?.support_guild?.id;
+  queryClient.removeQueries({queryKey: queryKeys.botDetail(botId), exact: true});
+  patchQuery<MyBotsResponse>(queryClient, queryKeys.myBots(), (data) => {
+    const items = removeMyBot(data.items, botId);
+    return items === data.items ? data : {...data, items};
+  });
+  markStale(queryClient, queryKeys.botDirectories());
+  if (supportGuildId) markStale(queryClient, queryKeys.guildDetail(supportGuildId));
+  removeFromFeeds(queryClient, (post) => post.kind === 'bot' && post.bot_id === botId);
+
+  const closed = new Map<Uuid, PrivatePost>();
+  const collect = (post: PrivatePost) => {
+    const next = closedWithBot(post, botId);
+    if (next !== post) closed.set(post.id, next);
+  };
+  for (const [, data] of queryClient.getQueriesData<MinePages>({queryKey: queryKeys.myPostsLists()})) {
+    data?.pages.forEach((page) => page.items.forEach(collect));
+  }
+  for (const [, detail] of queryClient.getQueriesData<PostDetail>({queryKey: queryKeys.postDetails()})) {
+    if (detail) collect(detail as PrivatePost);
+  }
+  for (const post of closed.values()) {
+    patchQuery<PostDetail>(queryClient, queryKeys.postDetail(post.id), (detail) => closedWithBot(detail, botId));
+    patchMyPosts(queryClient, post);
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Profile and experiences
 // ---------------------------------------------------------------------------
 
@@ -300,9 +364,13 @@ function patchMyProfiles(queryClient: QueryClient, patch: (profile: UserProfile)
   if (myId) patchQuery<UserProfile>(queryClient, queryKeys.userDetail(myId), patch);
 }
 
-/** A server's team is computed by the API from verified, current experiences. */
-function markTeamStale(queryClient: QueryClient, guildId: Snowflake | null): void {
-  if (guildId) markStale(queryClient, queryKeys.guildDetail(guildId));
+/** A server's (or a bot's) team is computed by the API from verified, current experiences. */
+function markTeamStale(
+  queryClient: QueryClient,
+  experience: {guild_id: Snowflake | null; bot_id?: Snowflake | null},
+): void {
+  if (experience.guild_id) markStale(queryClient, queryKeys.guildDetail(experience.guild_id));
+  if (experience.bot_id) markStale(queryClient, queryKeys.botDetail(experience.bot_id));
 }
 
 /** An experience was created, edited, verified or sent to review (the response is the whole experience). */
@@ -312,7 +380,7 @@ export function syncExperienceWritten(queryClient: QueryClient, experience: Priv
     items: withExperience({experiences: list.items}, experience).experiences as PrivateExperience[],
   }));
   patchMyProfiles(queryClient, (profile) => withExperience(profile, experience));
-  markTeamStale(queryClient, experience.guild_id);
+  markTeamStale(queryClient, experience);
 }
 
 /** `PUT /lineup/me/experiences/order`: the answer is the whole list in its new order. */
@@ -323,16 +391,16 @@ export function syncExperiencesReordered(queryClient: QueryClient, list: Experie
 
 /** An experience was deleted: out of the lists, and no post features it any more. */
 export function syncExperienceDeleted(queryClient: QueryClient, experienceId: Uuid): void {
-  const guildId =
-    queryClient.getQueryData<ExperienceList>(queryKeys.myExperiences())?.items.find((item) => item.id === experienceId)
-      ?.guild_id ?? null;
+  const removed = queryClient
+    .getQueryData<ExperienceList>(queryKeys.myExperiences())
+    ?.items.find((item) => item.id === experienceId);
 
   patchQuery<ExperienceList>(queryClient, queryKeys.myExperiences(), (list) => {
     const items = list.items.filter((item) => item.id !== experienceId);
     return items.length === list.items.length ? list : {...list, items};
   });
   patchMyProfiles(queryClient, (profile) => withoutExperience(profile, experienceId));
-  markTeamStale(queryClient, guildId);
+  if (removed) markTeamStale(queryClient, removed);
 
   patchQueries<MinePages>(queryClient, queryKeys.myPostsLists(), (data) =>
     mapItems(data, (post: PrivatePost) => withoutFeaturedExperience(post, experienceId)),
@@ -375,7 +443,7 @@ export function syncStaffExperience(queryClient: QueryClient, experience: StaffE
       items: withReplacedExperience({experiences: list.items}, experience).experiences as PrivateExperience[],
     }));
   }
-  markTeamStale(queryClient, experience.guild_id);
+  markTeamStale(queryClient, experience);
 }
 
 const REPORT_STATUSES: StaffReportStatus[] = ['open', 'resolved', 'dismissed', 'all'];
@@ -425,6 +493,13 @@ function patchEntityBadges(
   present: boolean,
 ): void {
   const catalog = queryClient.getQueryData<Catalog>(queryKeys.catalog());
+  if (entityType === 'bot') {
+    patchQuery<BotProfile>(queryClient, queryKeys.botDetail(entityId), (profile) => {
+      const badges = withManualBadge(profile.badges, badge, present, catalog);
+      return badges === profile.badges ? profile : {...profile, badges};
+    });
+    return;
+  }
   if (entityType === 'guild') {
     patchQuery<GuildProfile>(queryClient, queryKeys.guildDetail(entityId), (profile) => {
       const badges = withManualBadge(profile.badges, badge, present, catalog);

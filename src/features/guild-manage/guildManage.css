@@ -266,3 +266,32 @@
   color: var(--md-sys-color-on-surface-variant);
   font-size: var(--text-small);
 }
+
+/* A bot's management: a notice on every page when it is no longer discoverable on Discord. */
+.manage-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-s);
+  margin: 0 0 var(--gap-l);
+  padding: var(--gap-m) var(--gap-l);
+  border-radius: var(--radius-l);
+  background-color: var(--md-sys-color-surface-container);
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-on-surface);
+}
+
+.manage-notice .material-symbols-outlined {
+  flex-shrink: 0;
+  font-size: 20px;
+  color: var(--md-sys-color-tertiary);
+}
+
+/* The support server in a bot's Discord data. */
+.manage-support {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-s);
+  margin: 0;
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-on-surface-variant);
+}

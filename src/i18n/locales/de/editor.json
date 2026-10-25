@@ -95,6 +95,10 @@
       "user": {
         "title": "Meine Dienste anbieten",
         "hint": "Eine Anzeige in Ihrem Namen, um ein Team zu finden."
+      },
+      "bot": {
+        "title": "Ein Bot sucht Verstärkung",
+        "hint": "Für einen Bot, dessen Support-Server Sie administrieren und der ein Lineup-Profil hat."
       }
     },
     "guildLegend": "Server",
@@ -106,7 +110,20 @@
       "title": "Kein verwalteter Server",
       "body": "Sie müssen einen Discord-Server verwalten und bei Lineup beanspruchen, um in seinem Namen zu veröffentlichen. Sie können auch eine persönliche Anzeige veröffentlichen."
     },
-    "locked": "Art und Server lassen sich nach dem Erstellen nicht mehr ändern."
+    "locked": "Typ und Absender lassen sich nach dem Erstellen der Anzeige nicht mehr ändern.",
+    "botLegend": "Bot",
+    "loadingBots": "Ihre Bots werden geladen.",
+    "unnamedBot": "Bot ohne Namen",
+    "addBot": "Bot hinzufügen",
+    "noBots": {
+      "title": "Keine verwalteten Bots",
+      "body": "Fügen Sie Lineup einen Bot hinzu, dessen Support-Server Sie administrieren, um in seinem Namen zu veröffentlichen."
+    },
+    "botsStale": {
+      "title": "Ihre Server konnten nicht geprüft werden",
+      "body": "Discord hat nicht geantwortet. Versuchen Sie es gleich noch einmal.",
+      "retry": "Erneut versuchen"
+    }
   },
   "content": {
     "title": "Titel",
@@ -204,7 +221,8 @@
       "tags_other": "{{count}} Tags",
       "expires": "Läuft am {{date}} ab",
       "never": "Läuft nie ab",
-      "featured": "Hervorgehobene Erfahrung"
+      "featured": "Hervorgehobene Erfahrung",
+      "bot": "Bot: {{name}}"
     }
   },
   "banner": {
@@ -212,7 +230,8 @@
     "myPosts": "Meine Anzeigen",
     "claim": "Server beanspruchen",
     "quotaNew": "Ein Entwurf zählt nicht zum Limit. Sie können ihn veröffentlichen, sobald ein Platz frei wird.",
-    "quotaEdit": "Ihre Änderungen sind gespeichert, die Anzeige ist aber nicht veröffentlicht. Schließen Sie eine Anzeige und veröffentlichen Sie sie unter Meine Anzeigen."
+    "quotaEdit": "Ihre Änderungen sind gespeichert, die Anzeige ist aber nicht veröffentlicht. Schließen Sie eine Anzeige und veröffentlichen Sie sie unter Meine Anzeigen.",
+    "claimBot": "Bot hinzufügen"
   },
   "preview": {
     "title": "Vorschau",
@@ -243,10 +262,13 @@
     "expiryMin": "Wählen Sie ein Datum ab morgen.",
     "expiryMax": "Höchstens {{count}} Tage ab heute.",
     "featuredUserOnly": "Nur eine persönliche Anzeige kann eine Erfahrung hervorheben.",
-    "featuredNotVerified": "Diese Erfahrung ist nicht verifiziert."
+    "featuredNotVerified": "Diese Erfahrung ist nicht verifiziert.",
+    "botRequired": "Wählen Sie einen Bot.",
+    "botNotManaged": "Sie verwalten diesen Bot nicht."
   },
   "author": {
     "guild": "Anzeige für den Server",
-    "user": "Anzeige in Ihrem Namen"
+    "user": "Anzeige in Ihrem Namen",
+    "bot": "Anzeige für den Bot"
   }
 }

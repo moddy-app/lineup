@@ -5,9 +5,9 @@ import {useState} from 'react';
 
 import {useCatalogLabel} from '@/api/catalog';
 import {FIELD_LIMITS} from '@/api/limits';
-import type {Catalog, ExperienceList, MyGuild} from '@/api/types';
+import type {Catalog, ExperienceList, MyBotsResponse, MyGuild} from '@/api/types';
 import {paths} from '@/app/paths';
-import {EmptyState, ErrorState, GuildIcon} from '@/components';
+import {BotAvatar, EmptyState, ErrorState, GuildIcon} from '@/components';
 import {useLanguage} from '@/i18n/useLanguage';
 import {useT} from '@/i18n/useT';
 import {formatDate} from '@/lib/format';
@@ -38,23 +38,29 @@ export interface StepProps {
 
 interface TypeStepProps extends StepProps {
   guilds: UseQueryResult<MyGuild[]>;
+  bots: UseQueryResult<MyBotsResponse>;
 }
 
-const KIND_ICON = {guild: 'groups', user: 'badge'} as const;
+const KIND_ICON = {guild: 'groups', bot: 'smart_toy', user: 'badge'} as const;
 
-export function TypeStep({form, set, err, editing, guilds}: TypeStepProps) {
+/** "Who publishes": me, one of my servers, one of my bots. */
+export function TypeStep({form, set, err, editing, guilds, bots}: TypeStepProps) {
   const {t} = useT('editor');
-  const kinds = ['guild', 'user'] as const;
-  const chosen = guilds.data?.find((guild) => guild.id === form.guildId);
+  const kinds = ['guild', 'bot', 'user'] as const;
+  const chosenName =
+    form.kind === 'bot'
+      ? bots.data?.items.find((bot) => bot.id === form.botId)?.name
+      : guilds.data?.find((guild) => guild.id === form.guildId)?.name;
 
   if (editing) {
+    const kind = form.kind || 'user';
     return (
       <div className="ed-fields">
         <p className="ed-locked">
-          <Icon name={KIND_ICON[form.kind === 'guild' ? 'guild' : 'user']} filled />
+          <Icon name={KIND_ICON[kind]} filled />
           <span>
-            <strong>{t(`type.kind.${form.kind || 'user'}.title`)}</strong>
-            {chosen?.name ? <span className="ed-sub">{chosen.name}</span> : null}
+            <strong>{t(`type.kind.${kind}.title`)}</strong>
+            {chosenName ? <span className="ed-sub">{chosenName}</span> : null}
           </span>
         </p>
         <p className="ed-hint">{t('type.locked')}</p>
@@ -74,7 +80,9 @@ export function TypeStep({form, set, err, editing, guilds}: TypeStepProps) {
                 value={kind}
                 checked={form.kind === kind}
                 aria-label={t(`type.kind.${kind}.title`)}
-                onchange={() => set({kind, guildId: kind === 'user' ? '' : form.guildId})}
+                onchange={() =>
+                  set({kind, guildId: kind === 'guild' ? form.guildId : '', botId: kind === 'bot' ? form.botId : ''})
+                }
               />
               <Icon name={KIND_ICON[kind]} filled />
               <span className="ed-choice-text">
@@ -94,7 +102,84 @@ export function TypeStep({form, set, err, editing, guilds}: TypeStepProps) {
           </fieldset>
         </FieldBox>
       )}
+      {form.kind === 'bot' && (
+        <FieldBox name="botId" error={err('botId')}>
+          <fieldset className="ed-choices">
+            <legend>{t('type.botLegend')}</legend>
+            <BotChoices bots={bots} value={form.botId} onChange={(botId) => set({botId})} />
+          </fieldset>
+        </FieldBox>
+      )}
     </div>
+  );
+}
+
+/** The bots the person manages; `stale` (Discord silent) is "could not check", never "none". */
+function BotChoices({
+  bots,
+  value,
+  onChange,
+}: {
+  bots: UseQueryResult<MyBotsResponse>;
+  value: string;
+  onChange: (id: string) => void;
+}) {
+  const {t} = useT('editor');
+  if (bots.isPending) return <p className="ed-hint">{t('type.loadingBots')}</p>;
+  if (bots.isError) return <ErrorState compact error={bots.error} onRetry={() => void bots.refetch()} />;
+  if (bots.data.stale) {
+    return (
+      <EmptyState
+        compact
+        icon="cloud_off"
+        title={t('type.botsStale.title')}
+        action={
+          <md-outlined-button disabled={bots.isFetching} onclick={() => void bots.refetch()}>
+            {t('type.botsStale.retry')}
+          </md-outlined-button>
+        }
+      >
+        {t('type.botsStale.body')}
+      </EmptyState>
+    );
+  }
+  if (bots.data.items.length === 0) {
+    return (
+      <EmptyState
+        compact
+        icon="smart_toy"
+        title={t('type.noBots.title')}
+        action={
+          <LinkButton to={paths.botClaim()} variant="outlined">
+            {t('type.addBot')}
+          </LinkButton>
+        }
+      >
+        {t('type.noBots.body')}
+      </EmptyState>
+    );
+  }
+  return (
+    <ul className="ed-guilds">
+      {bots.data.items.map((bot) => {
+        const name = bot.name ?? t('type.unnamedBot');
+        return (
+          <li key={bot.id}>
+            <label className="ed-choice">
+              <md-radio
+                name="bot"
+                value={bot.id}
+                checked={value === bot.id}
+                aria-label={name}
+                onchange={() => onChange(bot.id)}
+              />
+              <BotAvatar id={bot.id} src={bot.avatar_url} size="small" />
+              <span className="ed-choice-title">{name}</span>
+            </label>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 

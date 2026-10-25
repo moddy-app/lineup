@@ -9,7 +9,7 @@ import {resources} from '@/i18n/resources';
 import lineupDoc from '../../LINEUP.md?raw';
 
 import {CATALOG_KINDS, catalogLookup, pickCatalogLabel, useCatalogLabel} from './catalog';
-import {catalogFixture} from './catalog.fixture';
+import {catalogFixture, lineupDocCatalog} from './catalog.fixture';
 import {queryKeys} from './queryKeys';
 import type {Catalog} from './types';
 
@@ -17,7 +17,7 @@ describe('the catalog fixture', () => {
   it('is the catalog of LINEUP.md §4, verbatim', () => {
     const start = lineupDoc.indexOf('### Réponse (valeurs réelles)');
     const block = lineupDoc.slice(lineupDoc.indexOf('```json', start) + 7, lineupDoc.indexOf('```', start + 60));
-    expect(JSON.parse(block)).toEqual(catalogFixture);
+    expect(JSON.parse(block)).toEqual(lineupDocCatalog);
   });
 });
 

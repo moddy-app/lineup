@@ -5,7 +5,7 @@ import {Link} from 'react-router';
 
 import {hasCode} from '@/api/client';
 import {errorMessage, fieldErrors} from '@/api/errors';
-import {useGuild, useUser} from '@/api/queries';
+import {useBot, useGuild, useUser} from '@/api/queries';
 import {formatCountdown, useRetryAfter} from '@/api/useRetryAfter';
 import type {InfiniteList} from '@/api/pagination';
 import {paths} from '@/app/paths';
@@ -143,8 +143,18 @@ export function PersonLink({id, showId}: {id: string; showId?: boolean}) {
 }
 
 /** The name of a server or a person read from its profile, linking to it; the id while it loads. */
-export function EntityName({type, id}: {type: 'user' | 'guild'; id: string}) {
+export function EntityName({type, id}: {type: 'user' | 'guild' | 'bot'; id: string}) {
+  if (type === 'bot') return <BotLink id={id} />;
   return type === 'user' ? <PersonLink id={id} /> : <GuildLink id={id} />;
+}
+
+function BotLink({id}: {id: string}) {
+  const {data} = useBot(id);
+  return (
+    <Link to={paths.bot(id)} className="staff-person-name">
+      <DisplayName name={data?.name ?? id} badges={data?.badges} entity="bot" focusable={false} />
+    </Link>
+  );
 }
 
 function GuildLink({id}: {id: string}) {

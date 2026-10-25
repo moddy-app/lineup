@@ -64,6 +64,8 @@ export function ReviewStep({rows, onGo, quota, preview}: ReviewStepProps) {
 
 const QUOTA_CODES = ['lineup_quota_exceeded'];
 const CLAIM_CODES = ['lineup_guild_profile_missing', 'guild_suspended', 'lineup_guild_forbidden'];
+/** A bot that has no profile, or that the person no longer administers: the bot dialogs. */
+const BOT_CODES = ['lineup_bot_profile_missing', 'lineup_bot_forbidden'];
 const LEAVE_CODES = [
   'lineup_post_hidden',
   'lineup_post_forbidden',
@@ -88,6 +90,7 @@ export function SubmitBanner({error, editing, onSaveDraft, onRetry, busy}: Submi
   const message = useMemo(() => errorMessage(error, tErrors), [error, tErrors]);
   const quota = code !== null && QUOTA_CODES.includes(code);
   const claim = code !== null && CLAIM_CODES.includes(code);
+  const botClaim = code !== null && BOT_CODES.includes(code);
   const leave = code !== null && LEAVE_CODES.includes(code);
 
   return (
@@ -112,7 +115,12 @@ export function SubmitBanner({error, editing, onSaveDraft, onRetry, busy}: Submi
               {t('banner.claim')}
             </LinkButton>
           )}
-          {!quota && !leave && !claim && isRetryable(error) && (
+          {botClaim && (
+            <LinkButton to={paths.botClaim()} variant="outlined">
+              {t('banner.claimBot')}
+            </LinkButton>
+          )}
+          {!quota && !leave && !claim && !botClaim && isRetryable(error) && (
             <RetryButton onRetry={onRetry} error={error} busy={busy} />
           )}
         </div>

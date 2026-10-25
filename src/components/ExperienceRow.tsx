@@ -1,8 +1,10 @@
 /**
- * One experience as an inner card: the server's icon or the service's image
- * (a shape without either), the server or service name in 600 (with its
- * verification mark when the server has a listed profile: `experience.guild`),
- * the position under it, the member count of a server, the period and its
+ * One experience as an inner card: the server's icon, the bot's avatar or the
+ * service's image (a shape without either), the name in 600 (with its
+ * verification mark when the server or bot has a listed profile:
+ * `experience.guild`, `experience.bot`, the bot's name then links to it), the
+ * position under it, the member count of a server or the server count of a
+ * bot, the period and its
  * duration, a short description and the verification. `actions` is a slot under the text
  * for the owner's controls; `href` makes the name a link to the server.
  *
@@ -14,11 +16,13 @@ import {type ReactNode, useState} from 'react';
 import {Link} from 'react-router';
 
 import {useCatalogLabel} from '@/api/catalog';
+import {paths} from '@/app/paths';
 import {isPrivateExperience, type ProfileExperience} from '@/api/types';
 import {useLanguage} from '@/i18n/useLanguage';
 import {useT} from '@/i18n/useT';
 import {cx} from '@/lib/cx';
 
+import {BotAvatar} from './BotAvatar';
 import {DisplayName} from './DisplayName';
 import {formatDuration, formatRange, monthsBetween} from './experienceFormat';
 import {GuildIcon} from './GuildIcon';
@@ -59,35 +63,62 @@ export function ExperienceRow({experience, href, showStatus, actions, as: Tag = 
   useNow();
   const [expanded, setExpanded] = useState(false);
   const isGuild = experience.kind === 'guild' && experience.guild_id !== null;
+  const botId = experience.kind === 'bot' ? (experience.bot_id ?? null) : null;
   const guild = experience.guild;
+  const bot = experience.bot ?? null;
   // A NSFW server keeps its placeholder, as everywhere else.
   const adult = guild?.badges.some((badge) => badge.id === 'nsfw') ?? false;
-  const image = adult ? null : isGuild ? (guild?.icon_url ?? experience.image_url) : experience.image_url;
-  const displayName = isGuild ? (guild?.name ?? experience.name) : experience.name;
+  const image = adult
+    ? null
+    : isGuild
+      ? (guild?.icon_url ?? experience.image_url)
+      : botId
+        ? (bot?.avatar_url ?? experience.image_url)
+        : experience.image_url;
+  const displayName = isGuild ? (guild?.name ?? experience.name) : (bot?.name ?? experience.name);
 
   const position =
     experience.position === 'other' && experience.position_other
       ? experience.position_other
       : label('positions', experience.position);
-  const memberStats = [
-    {
-      icon: 'group',
-      value: experience.member_count,
-      label: t('experience.members', {count: experience.member_count ?? 0}),
-    },
-  ];
+  // A bot counts servers, not members.
+  const memberStats = botId
+    ? [
+        {
+          icon: 'dns',
+          value: experience.guild_count ?? null,
+          label: t('experience.servers', {count: experience.guild_count ?? 0}),
+        },
+      ]
+    : [
+        {
+          icon: 'group',
+          value: experience.member_count,
+          label: t('experience.members', {count: experience.member_count ?? 0}),
+        },
+      ];
   const months = monthsBetween(experience.start_date, experience.end_date);
   const period = formatRange(experience.start_date, experience.end_date, t);
   const duration = formatDuration(months, t);
   const description = experience.description?.trim() || null;
   const collapsible = description !== null && description.length > LONG_DESCRIPTION;
-  const name = href && isGuild ? <Link to={href}>{displayName}</Link> : displayName;
+  // A bot links to its Lineup profile when it has a listed one (`experience.bot`), else name and picture alone.
+  const name =
+    href && isGuild ? (
+      <Link to={href}>{displayName}</Link>
+    ) : botId && bot ? (
+      <Link to={paths.bot(botId)}>{displayName}</Link>
+    ) : (
+      displayName
+    );
 
   return (
     <Tag className={cx('experience-row', Tag === 'li' && 'inner-card', className)}>
       <div className="experience-marker">
         {isGuild && experience.guild_id ? (
           <GuildIcon id={experience.guild_id} iconUrl={image} noReferrer />
+        ) : botId ? (
+          <BotAvatar id={botId} src={image} />
         ) : (
           <ServiceImage url={image} />
         )}
@@ -95,7 +126,13 @@ export function ExperienceRow({experience, href, showStatus, actions, as: Tag = 
       <div className="experience-body">
         <div className="experience-head">
           <p className="experience-name">
-            {isGuild ? <DisplayName name={name} badges={guild?.badges} entity="guild" /> : name}
+            {isGuild ? (
+              <DisplayName name={name} badges={guild?.badges} entity="guild" />
+            ) : botId ? (
+              <DisplayName name={name} badges={bot?.badges} entity="bot" />
+            ) : (
+              name
+            )}
           </p>
           <VerificationPill
             verification={experience.verification}
@@ -103,7 +140,7 @@ export function ExperienceRow({experience, href, showStatus, actions, as: Tag = 
           />
         </div>
         <p className="experience-position">{position}</p>
-        {isGuild && <InlineStats compact items={memberStats} />}
+        {(isGuild || botId) && <InlineStats compact items={memberStats} />}
         <p className="experience-period numeric">
           {period} · {duration}
         </p>

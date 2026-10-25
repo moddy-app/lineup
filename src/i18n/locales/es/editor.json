@@ -95,6 +95,10 @@
       "user": {
         "title": "Ofrecer mis servicios",
         "hint": "Un anuncio a su nombre, para encontrar un equipo."
+      },
+      "bot": {
+        "title": "Un bot recluta",
+        "hint": "Para un bot cuyo servidor de soporte usted administra y que tiene perfil en Lineup."
       }
     },
     "guildLegend": "Servidor",
@@ -106,7 +110,20 @@
       "title": "Ningún servidor gestionado",
       "body": "Debe gestionar un servidor de Discord y reclamarlo en Lineup para publicar en su nombre. También puede publicar un anuncio personal."
     },
-    "locked": "El tipo y el servidor no cambian una vez creado el anuncio."
+    "locked": "El tipo y el autor no cambian una vez creado el anuncio.",
+    "botLegend": "Bot",
+    "loadingBots": "Cargando sus bots.",
+    "unnamedBot": "Bot sin nombre",
+    "addBot": "Añadir un bot",
+    "noBots": {
+      "title": "Ningún bot gestionado",
+      "body": "Añada a Lineup un bot cuyo servidor de soporte usted administre para publicar en su nombre."
+    },
+    "botsStale": {
+      "title": "No se pudieron comprobar sus servidores",
+      "body": "Discord no respondió. Vuelva a intentarlo en un momento.",
+      "retry": "Reintentar"
+    }
   },
   "content": {
     "title": "Título",
@@ -204,7 +221,8 @@
       "tags_other": "{{count}} etiquetas",
       "expires": "Caduca el {{date}}",
       "never": "No caduca nunca",
-      "featured": "Experiencia destacada"
+      "featured": "Experiencia destacada",
+      "bot": "Bot: {{name}}"
     }
   },
   "banner": {
@@ -212,7 +230,8 @@
     "myPosts": "Mis anuncios",
     "claim": "Reclamar un servidor",
     "quotaNew": "Un borrador no cuenta para el límite. Podrá publicarlo cuando se libere un hueco.",
-    "quotaEdit": "Sus cambios están guardados, pero el anuncio no está publicado. Cierre un anuncio y publíquelo desde Mis anuncios."
+    "quotaEdit": "Sus cambios están guardados, pero el anuncio no está publicado. Cierre un anuncio y publíquelo desde Mis anuncios.",
+    "claimBot": "Añadir un bot"
   },
   "preview": {
     "title": "Vista previa",
@@ -243,10 +262,13 @@
     "expiryMin": "Elija una fecha a partir de mañana.",
     "expiryMax": "Como máximo {{count}} días desde hoy.",
     "featuredUserOnly": "Solo un anuncio personal puede destacar una experiencia.",
-    "featuredNotVerified": "Esta experiencia no está verificada."
+    "featuredNotVerified": "Esta experiencia no está verificada.",
+    "botRequired": "Elija un bot.",
+    "botNotManaged": "Usted no gestiona este bot."
   },
   "author": {
     "guild": "Anuncio para el servidor",
-    "user": "Anuncio a su nombre"
+    "user": "Anuncio a su nombre",
+    "bot": "Anuncio para el bot"
   }
 }

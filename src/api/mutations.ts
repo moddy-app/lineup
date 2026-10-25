@@ -15,6 +15,8 @@ import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {
   syncBadgeGrant,
   syncBadgeRevoked,
+  syncBotDeleted,
+  syncBotProfile,
   syncExperienceDeleted,
   syncExperiencesReordered,
   syncExperienceWritten,
@@ -29,11 +31,13 @@ import {
   syncStaffExperience,
 } from './cacheSync';
 import {
+  claimBot,
   claimGuild,
   closePost,
   createExperience,
   createPost,
   createReport,
+  deleteBot,
   deleteExperience,
   deleteGuild,
   deletePost,
@@ -41,6 +45,7 @@ import {
   grantBadge,
   hidePost,
   publishPost,
+  refreshBot,
   refreshGuild,
   refreshMyGuilds,
   reorderExperiences,
@@ -50,6 +55,7 @@ import {
   staffRejectExperience,
   staffVerifyExperience,
   unhidePost,
+  updateBot,
   updateExperience,
   updateGuild,
   updateMyProfile,
@@ -63,6 +69,7 @@ import type {
   CreatePostBody,
   CreateReportBody,
   Snowflake,
+  UpdateBotBody,
   UpdateExperienceBody,
   UpdateGuildBody,
   UpdatePostBody,
@@ -121,7 +128,7 @@ export function useDeletePost() {
 // Reports
 // ---------------------------------------------------------------------------
 
-/** Reports a post, a profile or a server. `created: false` in the result means "already reported". Nothing to cache. */
+/** Reports a post, a profile, a server or a bot. `created: false` in the result means "already reported". Nothing to cache. */
 export function useCreateReport() {
   return useMutation({mutationFn: (body: CreateReportBody) => createReport(body)});
 }
@@ -170,6 +177,45 @@ export function useRefreshMyGuilds() {
   return useMutation({
     mutationFn: () => refreshMyGuilds(),
     onSuccess: (response) => syncMyGuildsRefreshed(queryClient, response),
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Bots
+// ---------------------------------------------------------------------------
+
+/** Claims a bot (owner or administrator of its support server). 201 with the full profile. */
+export function useClaimBot() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (botId: Snowflake) => claimBot(botId),
+    onSuccess: (profile) => syncBotProfile(queryClient, profile),
+  });
+}
+
+export function useUpdateBot() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({botId, body}: {botId: Snowflake; body: UpdateBotBody}) => updateBot(botId, body),
+    onSuccess: (profile) => syncBotProfile(queryClient, profile),
+  });
+}
+
+/** Removes the profile; the API closes the bot's draft and published posts first. Confirm in the UI. */
+export function useDeleteBot() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (botId: Snowflake) => deleteBot(botId),
+    onSuccess: (_void, botId) => syncBotDeleted(queryClient, botId),
+  });
+}
+
+/** Reads Discord again (once per minute per bot: 429 with `retry_after`). */
+export function useRefreshBot() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (botId: Snowflake) => refreshBot(botId),
+    onSuccess: (profile) => syncBotProfile(queryClient, profile),
   });
 }
 

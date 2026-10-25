@@ -7,7 +7,11 @@ import {Icon} from '@/ui';
 
 import {SanctionNotice} from '@/components/SanctionNotice';
 
+/** The words of a server's management, or of a bot's (the same keys). */
+export type ManageNamespace = 'guildManage' | 'botManage';
+
 export interface SaveBarProps {
+  ns?: ManageNamespace;
   dirty: boolean;
   error: unknown;
   validation: boolean;
@@ -20,8 +24,18 @@ export interface SaveBarProps {
 }
 
 /** The sticky bar of a management form: shown while there are changes or an error. Cancel (outlined), Save (filled). */
-export function SaveBar({dirty, error, validation, unmapped, inviteCode, pending, onReset, onRetry}: SaveBarProps) {
-  const {t} = useT('guildManage');
+export function SaveBar({
+  ns = 'guildManage',
+  dirty,
+  error,
+  validation,
+  unmapped,
+  inviteCode,
+  pending,
+  onReset,
+  onRetry,
+}: SaveBarProps) {
+  const {t} = useT(ns as 'guildManage');
   const {t: tErrors} = useT('errors');
   const {canWrite} = useSession();
   if (!dirty && error === null) return null;

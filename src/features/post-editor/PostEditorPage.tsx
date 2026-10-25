@@ -5,7 +5,7 @@ import {useCatalogLabel} from '@/api/catalog';
 import {isApiError} from '@/api/client';
 import {errorMessage, issueMessage} from '@/api/errors';
 import {useCreatePost, usePublishPost, useUpdatePost} from '@/api/mutations';
-import {useCatalog, useMyExperiences, useMyGuilds, usePost} from '@/api/queries';
+import {useCatalog, useMyBots, useMyExperiences, useMyGuilds, usePost} from '@/api/queries';
 import type {Catalog, Post} from '@/api/types';
 import {paths} from '@/app/paths';
 import {usePageTitle} from '@/app/usePageTitle';
@@ -17,6 +17,7 @@ import {useUserQuota} from '@/features/my-posts/useUserQuota';
 import {useLanguage} from '@/i18n/useLanguage';
 import {useT} from '@/i18n/useT';
 import {getItem, removeItem, setItem} from '@/lib/storage';
+import {BotAvatar} from '@/components/BotAvatar';
 import {GuildIcon} from '@/components/GuildIcon';
 import {DisplayName} from '@/components';
 import {defaultAvatarUrl} from '@/lib/discord';
@@ -76,10 +77,17 @@ export function Component() {
   const post = usePost(postId);
   const [searchParams] = useSearchParams();
   const guilds = useMyGuilds();
+  const bots = useMyBots();
   const guildParam = searchParams.get('guild');
+  const botParam = searchParams.get('bot');
 
-  // `?guild=` fixes the author: know whether it is one of my servers before showing the form.
-  if (catalog.isPending || (postId && post.isPending) || (!postId && guildParam && guilds.isPending))
+  // `?guild=` (`?bot=`) fixes the author: know whether it is one of my servers (bots) before showing the form.
+  if (
+    catalog.isPending ||
+    (postId && post.isPending) ||
+    (!postId && guildParam && guilds.isPending) ||
+    (!postId && botParam && bots.isPending)
+  )
     return <PageLoading />;
   if (catalog.isError)
     return (
@@ -127,12 +135,15 @@ export function Component() {
   }
   const fixedGuildId =
     !postId && guildParam && guilds.data?.some((entry) => entry.claimed && entry.id === guildParam) ? guildParam : null;
+  const fixedBotId =
+    !postId && !fixedGuildId && botParam && bots.data?.items.some((entry) => entry.id === botParam) ? botParam : null;
   return (
     <EditorForm
       key={postId ?? 'new'}
       catalog={catalog.data}
       initialPost={postId ? data : undefined}
       fixedGuildId={fixedGuildId}
+      fixedBotId={fixedBotId}
     />
   );
 }
@@ -156,7 +167,13 @@ const FIELD_BY_CODE: Record<string, {field: string; step: StepId}> = {
   lineup_featured_experience_user_only: {field: 'featuredExperienceId', step: 'extras'},
   lineup_post_expired: {field: 'expiresOn', step: 'extras'},
 };
-const CLAIM_CODES = ['lineup_guild_profile_missing', 'guild_suspended', 'lineup_guild_forbidden'];
+const CLAIM_CODES = [
+  'lineup_guild_profile_missing',
+  'guild_suspended',
+  'lineup_guild_forbidden',
+  'lineup_bot_profile_missing',
+  'lineup_bot_forbidden',
+];
 
 /** Editing: the sections of a post, each with its icon (no steps, no review). */
 const SECTION_ICONS: Record<StepId, string> = {
@@ -186,11 +203,14 @@ function EditorForm({
   catalog,
   initialPost,
   fixedGuildId,
+  fixedBotId,
 }: {
   catalog: Catalog;
   initialPost: Post | undefined;
   /** The server the dashboard context fixes as the author of a new post. */
   fixedGuildId: string | null;
+  /** The bot the dashboard context fixes as the author of a new post. */
+  fixedBotId: string | null;
 }) {
   const {t} = useT('editor');
   const {t: tErrors} = useT('errors');
@@ -205,6 +225,7 @@ function EditorForm({
   const issueText = useIssueText();
 
   const guilds = useMyGuilds();
+  const bots = useMyBots();
   const experiences = useMyExperiences();
   const create = useCreatePost();
   const update = useUpdatePost();
@@ -215,11 +236,12 @@ function EditorForm({
   const key = draftKey(initialPost?.id);
   const [base, setBase] = useState<Post | undefined>(initialPost);
   // `?kind=user` (from the candidates page) starts a personal post: the type step is skipped.
-  const presetUser = !editing && fixedGuildId === null && searchParams.get('kind') === 'user';
+  const fixedAuthor = fixedGuildId !== null || fixedBotId !== null;
+  const presetUser = !editing && !fixedAuthor && searchParams.get('kind') === 'user';
   // `?kind=guild` (from the projects page) preselects a server post; the type step stays to pick the server.
-  const presetGuild = !editing && fixedGuildId === null && searchParams.get('kind') === 'guild';
-  // Something fixes the author (the post, a server's dashboard, the personal one): no type step.
-  const typeFixed = editing || presetUser || fixedGuildId !== null;
+  const presetGuild = !editing && !fixedAuthor && searchParams.get('kind') === 'guild';
+  // Something fixes the author (the post, a server's or a bot's dashboard, the personal one): no type step.
+  const typeFixed = editing || presetUser || fixedAuthor;
   // Editing shows sections to jump between, without the review: every section can be saved.
   const steps = useMemo(() => stepsFor(typeFixed).filter((id) => !editing || id !== 'review'), [typeFixed, editing]);
   const pristine = useMemo(
@@ -228,12 +250,14 @@ function EditorForm({
         ? formFromPost(base)
         : fixedGuildId
           ? {...EMPTY_FORM, kind: 'guild' as const, guildId: fixedGuildId}
-          : presetUser
-            ? {...EMPTY_FORM, kind: 'user' as const}
-            : presetGuild
-              ? {...EMPTY_FORM, kind: 'guild' as const}
-              : EMPTY_FORM,
-    [base, presetUser, presetGuild, fixedGuildId],
+          : fixedBotId
+            ? {...EMPTY_FORM, kind: 'bot' as const, botId: fixedBotId}
+            : presetUser
+              ? {...EMPTY_FORM, kind: 'user' as const}
+              : presetGuild
+                ? {...EMPTY_FORM, kind: 'guild' as const}
+                : EMPTY_FORM,
+    [base, presetUser, presetGuild, fixedGuildId, fixedBotId],
   );
   const focusExpiry = editing && searchParams.get('focus') === 'expiry';
   const firstStep: StepId = focusExpiry ? 'extras' : steps[0]!;
@@ -286,11 +310,13 @@ function EditorForm({
       now,
       unchangedExpiry: base ? pristine.expiresOn : undefined,
       claimedGuildIds: guilds.data?.filter((guild) => guild.claimed).map((guild) => guild.id),
+      // A list Discord could not confirm (`stale`) is not a refusal: the API checks again.
+      myBotIds: bots.data && !bots.data.stale ? bots.data.items.map((bot) => bot.id) : undefined,
       verifiedExperienceIds: experiences.data?.items
         .filter((experience) => experience.verification.status === 'verified')
         .map((experience) => experience.id),
     }),
-    [catalog, now, base, pristine.expiresOn, guilds.data, experiences.data],
+    [catalog, now, base, pristine.expiresOn, guilds.data, bots.data, experiences.data],
   );
   const issues = useMemo(() => validateAll(form, rules, editing), [form, rules, editing]);
 
@@ -426,13 +452,16 @@ function EditorForm({
   // -- Rows of the review -----------------------------------------------------
 
   const guild = guilds.data?.find((entry) => entry.id === form.guildId);
+  const bot = bots.data?.items.find((entry) => entry.id === form.botId);
   const summaries: Record<Exclude<StepId, 'review'>, string> = {
     type:
       form.kind === 'guild'
         ? t('review.summary.guild', {name: guild?.name ?? base?.guild?.name ?? t('type.unnamedGuild')})
-        : form.kind === 'user'
-          ? t('review.summary.user')
-          : t('review.empty'),
+        : form.kind === 'bot'
+          ? t('review.summary.bot', {name: bot?.name ?? base?.bot?.name ?? t('type.unnamedBot')})
+          : form.kind === 'user'
+            ? t('review.summary.user')
+            : t('review.empty'),
     content: form.title.trim() || t('review.empty'),
     positions:
       form.positions
@@ -492,9 +521,15 @@ function EditorForm({
   const stepProps: StepProps = {form, set, err, catalog, editing};
 
   const visibleSteps = steps;
-  // Whose dashboard this is: the server of the post (or of `?guild=`), else the person.
+  // Whose dashboard this is: the server or the bot of the post (or of `?guild=`, `?bot=`), else the person.
   const authorGuildId = form.kind === 'guild' && form.guildId !== '' ? form.guildId : null;
-  const context: DashboardContext = typeFixed && authorGuildId ? {kind: 'guild', guildId: authorGuildId} : ME_CONTEXT;
+  const authorBotId = form.kind === 'bot' && form.botId !== '' ? form.botId : null;
+  const context: DashboardContext =
+    typeFixed && authorGuildId
+      ? {kind: 'guild', guildId: authorGuildId}
+      : typeFixed && authorBotId
+        ? {kind: 'bot', botId: authorBotId}
+        : ME_CONTEXT;
   const position = visibleSteps.indexOf(step) + 1;
   const stepName = t(`steps.${step}.short`);
   const canPublish = !editing || status !== 'published';
@@ -569,8 +604,9 @@ function EditorForm({
     <SettingsLayout title={editing ? t('titleEdit') : t('titleNew')} className="ed-page" context={context}>
       <EditorAuthor
         guildId={authorGuildId}
-        fallbackName={base?.guild?.name ?? null}
-        fallbackIcon={base?.guild?.icon_url ?? null}
+        botId={authorBotId}
+        fallbackName={(authorBotId ? base?.bot?.name : base?.guild?.name) ?? null}
+        fallbackIcon={(authorBotId ? base?.bot?.avatar_url : base?.guild?.icon_url) ?? null}
       />
 
       {restoredAt !== null && (
@@ -669,7 +705,7 @@ function EditorForm({
             />
           )}
 
-          {step === 'type' && <TypeStep {...stepProps} guilds={guilds} />}
+          {step === 'type' && <TypeStep {...stepProps} guilds={guilds} bots={bots} />}
           {step === 'content' && <ContentStep {...stepProps} />}
           {step === 'positions' && <PositionsStep {...stepProps} />}
           {step === 'requirements' && <RequirementsStep {...stepProps} />}
@@ -693,19 +729,32 @@ function EditorForm({
   );
 }
 
-/** A discreet reminder of who the post is for: the server (icon and name) or you (avatar and name). */
+/** A discreet reminder of who the post is for: the server or the bot (picture and name), or you. */
 function EditorAuthor({
   guildId,
+  botId,
   fallbackName,
   fallbackIcon,
 }: {
   guildId: string | null;
+  botId: string | null;
   fallbackName: string | null;
   fallbackIcon: string | null;
 }) {
   const {t} = useT('editor');
   const guilds = useMyGuilds();
+  const bots = useMyBots();
   const {me} = useSession();
+  if (botId) {
+    const entry = bots.data?.items.find((bot) => bot.id === botId);
+    return (
+      <p className="ed-author">
+        <BotAvatar id={botId} src={entry?.avatar_url ?? fallbackIcon} size="small" />
+        <span>{t('author.bot')}</span>
+        <DisplayName name={entry?.name ?? fallbackName ?? t('type.unnamedBot')} badges={entry?.badges} entity="bot" />
+      </p>
+    );
+  }
   if (guildId) {
     const entry = guilds.data?.find((guild) => guild.id === guildId);
     return (

@@ -81,10 +81,13 @@ export interface CatalogApplicationType extends CatalogEntry {
 }
 
 export type BadgeSource = 'computed' | 'manual' | 'discord';
-export type BadgeEntity = 'guild' | 'user' | 'both';
+export type BadgeEntity = 'guild' | 'user' | 'both' | 'bot';
 
 export interface CatalogBadge extends CatalogEntry {
+  /** Kept for compatibility (`both` for user + guild). Read `entities`. */
   entity: BadgeEntity;
+  /** Every kind of entity the badge applies to (`['user', 'guild', 'bot']`). Absent from older deployments. */
+  entities?: BadgeEntityType[];
   source: BadgeSource;
 }
 
@@ -100,6 +103,8 @@ export interface CatalogLimits {
   max_links: number;
   max_published_posts_per_guild: number;
   max_published_posts_per_user: number;
+  /** Published, unexpired posts per bot. */
+  max_published_posts_per_bot: number;
   max_experiences: number;
   post_max_expiry_days: number;
   title: {min: number; max: number};
@@ -170,7 +175,7 @@ export interface UserSummary {
 
 // ---- Posts ------------------------------------------------------------------
 
-export type PostKind = 'guild' | 'user';
+export type PostKind = 'guild' | 'user' | 'bot';
 export type PostStatus = 'draft' | 'published' | 'closed' | 'hidden';
 
 /** A condition of a post. `value` follows the catalog's `value_type`; `null` for `none`. */
@@ -223,6 +228,16 @@ export interface PostGuild {
   badges: Badge[];
 }
 
+/** The bot a `bot` post belongs to. */
+export interface PostBot {
+  id: Snowflake;
+  name: string | null;
+  avatar_url: string | null;
+  /** The bot's theme is `nsfw`: the age gate follows it. */
+  nsfw: boolean;
+  badges: Badge[];
+}
+
 /** From the stored snapshots, never from Discord: fields are null when unknown. */
 export interface PostAuthor {
   id: Snowflake;
@@ -238,6 +253,8 @@ export interface Post {
   id: Uuid;
   kind: PostKind;
   guild_id: Snowflake | null;
+  /** A `bot` post only. */
+  bot_id?: Snowflake | null;
   author_id: Snowflake;
   title: string;
   description: string;
@@ -260,7 +277,10 @@ export interface Post {
   updated_at: IsoDateTime;
   /** Computed on every read. An expired post is still readable by its link. */
   is_expired: boolean;
-  guild: PostGuild | null;
+  /** Present for a `guild` post only (the key is absent otherwise). */
+  guild?: PostGuild | null;
+  /** Present for a `bot` post only. */
+  bot?: PostBot | null;
   author: PostAuthor;
 }
 
@@ -292,7 +312,7 @@ export interface PostModeration {
 
 // ---- Experiences ------------------------------------------------------------
 
-export type ExperienceKind = 'guild' | 'service';
+export type ExperienceKind = 'guild' | 'service' | 'bot';
 export type VerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected';
 /** `moddy_staff_system` is reserved: nothing produces it yet. */
 export type VerificationMethod = 'discord_oauth' | 'moddy_staff' | 'moddy_staff_system';
@@ -310,6 +330,8 @@ export interface VerificationEvidence {
   /** A staff validation. */
   staff_note?: string;
   verified_at_by_staff?: IsoDateTime;
+  /** A bot: the support server the check was made on. */
+  support_guild_id?: Snowflake;
 }
 
 export interface PublicVerification {
@@ -332,21 +354,35 @@ export interface ExperienceGuild {
   badges: Badge[];
 }
 
+/** The bot of a bot experience, when it has a listed Lineup profile. */
+export interface ExperienceBot {
+  id: Snowflake;
+  name: string | null;
+  avatar_url: string | null;
+  badges: Badge[];
+}
+
 /** The public view of an experience (someone else's profile): never any proof. */
 export interface Experience {
   id: Uuid;
   kind: ExperienceKind;
-  /** Null for a `service`. */
+  /** Null for a `service` and a `bot`. */
   guild_id: Snowflake | null;
+  /** A `bot` only. Absent from older deployments. */
+  bot_id?: Snowflake | null;
   name: string;
   /** Null for a `service`. */
   invite_url: string | null;
   /** A server: its image or icon, from the invitation. A service: an https URL typed by the person, or null. */
   image_url: string | null;
-  /** A server only, read from the invitation; null for a service. */
+  /** A server only, read from the invitation; null for a service and a bot. */
   member_count: number | null;
+  /** A bot only: its number of servers (rounded by Discord); null otherwise. */
+  guild_count?: number | null;
   /** The server's Lineup profile when it has one that is listed; null otherwise, and for a service. */
   guild: ExperienceGuild | null;
+  /** The bot's Lineup profile when it has one that is listed; null otherwise. */
+  bot?: ExperienceBot | null;
   /** A catalog position id. */
   position: string;
   position_other: string | null;
@@ -447,6 +483,116 @@ export interface GuildProfile {
   snapshot_at: IsoDateTime | null;
   /** For showing edit buttons only; the API checks again on every write. */
   can_manage: boolean;
+  /** The visible bots whose support server this is (often empty). Absent from older deployments. */
+  bots?: BotCard[];
+}
+
+// ---- Bots -------------------------------------------------------------------
+
+/** A bot in the directory, in "my bots" and in a server profile's `bots`. */
+export interface BotCard {
+  id: Snowflake;
+  name: string | null;
+  avatar_url: string | null;
+  /** Rounded by Discord; null when unknown. */
+  guild_count: number | null;
+  /** The Lineup description, else the App Directory's, cut at 160 characters with "…". */
+  description: string | null;
+  theme: string | null;
+  tags: string[];
+  nsfw: boolean;
+  badges: Badge[];
+  support_guild_id: Snowflake | null;
+  listed: boolean;
+}
+
+/** The support server of a bot. Name, icon and member count can be null right after a change on Discord. */
+export interface BotSupportGuild {
+  id: Snowflake;
+  name: string | null;
+  icon_url: string | null;
+  member_count: number | null;
+  /** The server's Lineup profile, when it has one: link to it. */
+  profile: {id: Snowflake; name: string | null; icon_url: string | null; badges: Badge[]} | null;
+}
+
+/** A bot's full profile. `GET /lineup/bots/{id}`, claim, update and refresh answer with it. */
+export interface BotProfile {
+  id: Snowflake;
+  name: string | null;
+  avatar_url: string | null;
+  banner_url: string | null;
+  /** The Lineup description, falling back to `app_description`. */
+  description: string | null;
+  /** The App Directory's description alone (to prefill the editor). */
+  app_description: string | null;
+  guild_count: number | null;
+  /** Discord verified the application. */
+  is_verified: boolean;
+  /** Tags of the App Directory (read only, not Lineup's `tags`). */
+  discord_tags: string[];
+  /** Categories of the App Directory (read only). */
+  categories: string[];
+  /** Adds the bot to a server, with the permissions the developer declared. */
+  add_url: string | null;
+  /** False: no longer discoverable, or no support server; the data is the last known. */
+  discoverable: boolean;
+  support_guild: BotSupportGuild | null;
+  links: Link[];
+  theme: string | null;
+  tags: string[];
+  languages: string[];
+  /** When the BOT was created on Discord. */
+  created_at: IsoDateTime;
+  badges: Badge[];
+  listed: boolean;
+  /** Public posts of the bot, 20 at most, NSFW included. */
+  posts: Post[];
+  team: TeamMember[];
+  stale: boolean;
+  /** For showing edit buttons only; the API checks again on every write. */
+  can_manage: boolean;
+  /** Managers only. */
+  snapshot_at: IsoDateTime | null;
+}
+
+/** `GET /lineup/bots/lookup/{bot_id}`: the preview before a claim. */
+export interface BotLookup {
+  id: Snowflake;
+  name: string | null;
+  avatar_url: string | null;
+  description: string | null;
+  guild_count: number | null;
+  is_verified: boolean;
+  support_guild: Omit<BotSupportGuild, 'profile'> | null;
+  /** A profile exists already. */
+  claimed: boolean;
+  /** The person administers the support server and the bot has no profile yet. */
+  can_claim: boolean;
+}
+
+/** `GET /lineup/me/bots`. `stale`: Discord did not answer (`items` is then empty: not "no bot"). */
+export interface MyBotsResponse {
+  items: BotCard[];
+  stale: boolean;
+}
+
+export interface UpdateBotBody {
+  /** 2000 characters at most; null goes back to the Discord description. */
+  description?: string | null;
+  links?: Link[];
+  theme?: string | null;
+  tags?: string[];
+  languages?: string[];
+  listed?: boolean;
+}
+
+/** The bot directory's filters (`GET /lineup/bots`). */
+export interface BotDirectoryFilters {
+  theme?: string;
+  /** 100 characters at most. */
+  q?: string;
+  include_nsfw?: boolean;
 }
 
 // ---- Users ------------------------------------------------------------------
@@ -567,7 +713,7 @@ export interface RefreshGuildsResponse {
 // ---- Reports ----------------------------------------------------------------
 
 export type ReportReason = 'spam' | 'scam' | 'inappropriate' | 'impersonation' | 'other';
-export type ReportTargetType = 'post' | 'user' | 'guild';
+export type ReportTargetType = 'post' | 'user' | 'guild' | 'bot';
 export type ReportStatus = 'open' | 'resolved' | 'dismissed';
 
 /** A line of the staff's report queue. `target_id` is a post UUID or a snowflake. */
@@ -595,7 +741,7 @@ export interface CreateReportResponse {
 
 // ---- Staff ------------------------------------------------------------------
 
-export type BadgeEntityType = 'user' | 'guild';
+export type BadgeEntityType = 'user' | 'guild' | 'bot';
 
 /** A manual badge granted by the staff. */
 export interface ManualBadgeGrant {
@@ -655,9 +801,11 @@ export interface RequirementInput {
   verified_by_lineup?: boolean;
 }
 
-/** `guild_id` is required for a server post and forbidden for a personal one. */
+/** `guild_id` is required for a server post, `bot_id` for a bot post; each is forbidden elsewhere. */
 export type CreatePostBody =
-  (CreatePostBodyBase & {kind: 'guild'; guild_id: Snowflake}) | (CreatePostBodyBase & {kind: 'user'; guild_id?: never});
+  | (CreatePostBodyBase & {kind: 'guild'; guild_id: Snowflake; bot_id?: never})
+  | (CreatePostBodyBase & {kind: 'bot'; bot_id: Snowflake; guild_id?: never})
+  | (CreatePostBodyBase & {kind: 'user'; guild_id?: never; bot_id?: never});
 
 /**
  * `PATCH /lineup/posts/{id}`: every field is optional and only sent fields
@@ -730,7 +878,8 @@ interface ExperienceBodyBase {
 
 export type CreateExperienceBody =
   | (ExperienceBodyBase & {kind: 'guild'; invite: string; name?: never})
-  | (ExperienceBodyBase & {kind: 'service'; name: string; invite?: never; image_url?: string | null});
+  | (ExperienceBodyBase & {kind: 'service'; name: string; invite?: never; image_url?: string | null})
+  | (ExperienceBodyBase & {kind: 'bot'; bot_id: Snowflake; invite?: never; name?: never});
 
 /**
  * `PATCH /lineup/me/experiences/{id}`. `kind` cannot change. `position` and
@@ -739,6 +888,8 @@ export type CreateExperienceBody =
 export interface UpdateExperienceBody {
   /** A server experience only. */
   invite?: string;
+  /** A bot only, not nullable. The same id refreshes the name, avatar and server count; another one resets the verification. */
+  bot_id?: Snowflake;
   /** A service only. */
   name?: string;
   /** A service only: an https URL, 500 characters at most; null clears it. Ignored for a server. */
@@ -805,6 +956,7 @@ export interface FeedFilters {
   /** 100 characters at most. */
   q?: string;
   guild_id?: Snowflake;
+  bot_id?: Snowflake;
   author_id?: Snowflake;
   /** Only on the person's explicit choice. Default false. */
   include_nsfw?: boolean;
@@ -818,9 +970,13 @@ export interface DirectoryFilters {
   include_nsfw?: boolean;
 }
 
-/** `GET /lineup/me/posts`. With a `guildId`: every post of that server, whoever wrote it (managers only). */
+/**
+ * `GET /lineup/me/posts`. With a `guildId` (or a `botId`): every post of that
+ * server (or bot), whoever wrote it (managers only). Never both.
+ */
 export interface MyPostsParams {
   guildId?: Snowflake;
+  botId?: Snowflake;
   status?: PostStatus;
 }
 

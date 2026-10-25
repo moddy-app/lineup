@@ -89,7 +89,8 @@
     "targets": {
       "post": "Annonce",
       "user": "Profil",
-      "guild": "Serveur"
+      "guild": "Serveur",
+      "bot": "Bot"
     },
     "open": "Ouvrir : {{target}}",
     "reasons": {
@@ -135,11 +136,13 @@
     "filters": {
       "all": "Toutes",
       "user": "Personnes",
-      "guild": "Serveurs"
+      "guild": "Serveurs",
+      "bot": "Bots"
     },
     "entities": {
       "user": "Personne",
-      "guild": "Serveur"
+      "guild": "Serveur",
+      "bot": "Bot"
     },
     "empty": {
       "title": "Aucun badge manuel",

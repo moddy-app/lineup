@@ -1,0 +1,57 @@
+/* The bot directory (/bots) and a bot's profile (/bots/:botId), over the server profile's classes. Tokens only. */
+
+.bot-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--gap-m);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bot-grid > li {
+  display: flex;
+  min-width: 0;
+}
+
+.bot-grid > li > .bot-tile {
+  flex: 1;
+}
+
+@media (min-width: 601px) {
+  .bot-grid {
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+  }
+}
+
+.bot-grid[aria-busy='true'] {
+  opacity: 0.6;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .bot-grid {
+    transition: opacity 200ms var(--ease);
+  }
+}
+
+/* The line under the name: Discord's verification, the server count, the badges. */
+.bot-verified-app,
+.bot-guild-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-body-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.bot-verified-app .material-symbols-outlined {
+  font-size: 18px;
+  color: var(--md-sys-color-primary);
+}
+
+/* The support server without a Lineup profile: the same row, not a link. */
+.bot-support-plain {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}

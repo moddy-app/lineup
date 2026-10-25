@@ -113,3 +113,31 @@ export function manageableGuilds(env: Env, actor: Actor, skipCache = false): {gu
   }
   return {guilds: [...ids], stale};
 }
+
+// ---------------------------------------------------------------------------
+// Bots
+// ---------------------------------------------------------------------------
+
+/**
+ * Who manages a bot (the bot guide): the staff, or the owner or an
+ * ADMINISTRATOR of its support server (as of the last refresh), read from the
+ * person's server list (5-minute cache). "Manage server" is NOT enough. Throws
+ * 503 when Discord is needed and silent.
+ */
+export function canManageBot(env: Env, actor: Actor, supportGuildId: Snowflake | null): boolean {
+  if (actor.is_staff) return true;
+  if (!supportGuildId) return false;
+  const entry = discordGuildList(env, actor.id).guilds.find((guild) => guild.id === supportGuildId);
+  return entry !== undefined && (entry.owner || entry.permissions.includes('ADMINISTRATOR'));
+}
+
+/** For `can_manage` / `can_edit` on reads: a Discord doubt is `false`. */
+export function canManageBotQuietly(env: Env, actor: Actor | null, supportGuildId: Snowflake | null): boolean {
+  if (!actor) return false;
+  try {
+    return canManageBot(env, actor, supportGuildId);
+  } catch (error) {
+    if (error instanceof ApiFailure && error.status === 503) return false;
+    throw error;
+  }
+}

@@ -50,7 +50,14 @@
     "validation_error": "Some fields are not valid.",
     "lineup_rate_limited": "Too many attempts. Try again in a moment.",
     "discord_unavailable": "Discord is not responding right now. Try again in a moment.",
-    "network_error": "Connection failed. Check your network."
+    "network_error": "Connection failed. Check your network.",
+    "lineup_bot_forbidden": "You must own or administer this bot's support server.",
+    "lineup_bot_not_found": "This bot cannot be found or has no Lineup profile.",
+    "bot_not_found": "No bot with this id. Use the Application ID.",
+    "lineup_bot_already_claimed": "This bot already has a Lineup profile.",
+    "bot_not_discoverable": "This bot is not discoverable. Turn on discoverability in the Developer Portal (App Directory).",
+    "bot_support_guild_missing": "This bot has no support server set in the Developer Portal.",
+    "lineup_bot_profile_missing": "This bot has no Lineup profile. Claim it first."
   },
   "sessionExpired": "Your session has expired. Sign in again.",
   "generic": "Something went wrong. Try again.",
@@ -70,7 +77,9 @@
     "guild_one": "You already have {{count}} published post on this server. Close one or save this one as a draft.",
     "guild_other": "You already have {{count}} published posts on this server. Close one or save this one as a draft.",
     "user_one": "You already have {{count}} published post. Close one or save this one as a draft.",
-    "user_other": "You already have {{count}} published posts. Close one or save this one as a draft."
+    "user_other": "You already have {{count}} published posts. Close one or save this one as a draft.",
+    "bot_one": "This bot already has {{count}} published post. Close one or save this one as a draft.",
+    "bot_other": "This bot already has {{count}} published posts. Close one or save this one as a draft."
   },
   "forbidden": {
     "claim": "You must own the server, or have the Administrator or Manage Server permission.",
@@ -86,7 +95,8 @@
     "kind": "The post type is not valid.",
     "compensation": "The compensation is not valid.",
     "positions": "One of the positions is not valid.",
-    "status": "The status is not valid."
+    "status": "The status is not valid.",
+    "bot_id": "Filter by server or by bot, not both."
   },
   "verificationFailed": {
     "not_member": "You are not a member of this server. Request a manual review.",
@@ -94,7 +104,8 @@
   },
   "verificationNotApplicable": {
     "not_guild": "Automatic verification only applies to Discord servers. Request a manual review.",
-    "ended": "Automatic verification only applies to ongoing experiences. Request a manual review."
+    "ended": "Automatic verification only applies to ongoing experiences. Request a manual review.",
+    "bot_unavailable": "This bot is no longer discoverable or has no support server. Ask for a manual review."
   },
   "validation": {
     "required": "This field is required.",
@@ -124,5 +135,9 @@
     "identifier": "This identifier is not valid.",
     "notAccepted": "This field is not accepted.",
     "invalid": "This value is not valid."
+  },
+  "verificationFailedBot": {
+    "not_member": "You are not a member of this bot's support server. Ask for a manual review.",
+    "no_staff_permission": "You are a member of this bot's support server, but without a staff permission. Ask for a manual review."
   }
 }

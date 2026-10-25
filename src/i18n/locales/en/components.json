@@ -7,7 +7,8 @@
   "post": {
     "kind": {
       "guild": "Hiring",
-      "user": "Looking for a team"
+      "user": "Looking for a team",
+      "bot": "Bot recruiting"
     },
     "status": {
       "draft": "Draft",
@@ -21,7 +22,8 @@
     "positions": "Positions",
     "hoursPerWeek": "{{value}} h per week",
     "openings_one": "{{value}} opening",
-    "openings_other": "{{value}} openings"
+    "openings_other": "{{value}} openings",
+    "unknownBot": "Unnamed bot"
   },
   "expiry": {
     "inHours_one": "Expires in {{value}} hour",
@@ -100,14 +102,17 @@
       }
     },
     "members_one": "member",
-    "members_other": "members"
+    "members_other": "members",
+    "servers_one": "server",
+    "servers_other": "servers"
   },
   "report": {
     "button": "Report",
     "title": {
       "post": "Report this post",
       "user": "Report this profile",
-      "guild": "Report this server"
+      "guild": "Report this server",
+      "bot": "Report this bot"
     },
     "intro": "Your report goes to the Moddy team. You will not receive a reply.",
     "reason": "Reason",
@@ -161,7 +166,9 @@
     "guild_other": "{{used}} / {{limit}} published posts on this server",
     "user_one": "{{used}} / {{limit}} published post",
     "user_other": "{{used}} / {{limit}} published posts",
-    "full": "Limit reached"
+    "full": "Limit reached",
+    "bot_one": "{{used}} / {{limit}} published post for this bot",
+    "bot_other": "{{used}} / {{limit}} published posts for this bot"
   },
   "stale": {
     "text": "Discord data may be out of date"
@@ -203,7 +210,15 @@
     "context": {
       "label": "Manage",
       "me": "Me",
-      "manage": "Manage my servers"
+      "manage": "Manage my servers",
+      "addBot": "Add a bot",
+      "manageBots": "Manage bots"
+    },
+    "botNav": {
+      "profile": "Profile",
+      "posts": "Posts",
+      "discord": "Discord data",
+      "settings": "Settings"
     }
   },
   "filters": {
@@ -211,5 +226,14 @@
     "add": "Add a filter",
     "allUsed": "All filters are in use",
     "remove": "Remove"
+  },
+  "bot": {
+    "unknownName": "Unnamed bot",
+    "servers_one": "server",
+    "servers_other": "servers",
+    "tags": "Tags",
+    "unlisted": "Not listed",
+    "verifiedApp": "Discord verified app",
+    "supportGuild": "Support server: {{name}}"
   }
 }

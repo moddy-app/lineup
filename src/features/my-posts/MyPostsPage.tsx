@@ -5,7 +5,7 @@ import {errorMessage} from '@/api/errors';
 import {useClosePost, useDeletePost, usePublishPost} from '@/api/mutations';
 import {type InfiniteList, useInfiniteList} from '@/api/pagination';
 import {useCatalog, useMyPosts} from '@/api/queries';
-import type {GuildProfile, Paginated, PostStatus, PrivatePost} from '@/api/types';
+import type {BotProfile, GuildProfile, Paginated, PostStatus, PrivatePost} from '@/api/types';
 import {paths} from '@/app/paths';
 import {usePageTitle} from '@/app/usePageTitle';
 import {useAuthAction} from '@/auth/useAuthAction';
@@ -55,24 +55,32 @@ export function Component() {
 }
 
 /**
- * The posts of the person (`/me/posts`) or of a server (`/guilds/:id/manage/posts`): a compact quota line,
- * status chips (`?status=`), then a card with one `InnerCard` per post.
+ * The posts of the person (`/me/posts`), of a server (`/guilds/:id/manage/posts`) or of a bot
+ * (`/bots/:id/manage/posts`): a compact quota line, status chips (`?status=`), then a card with
+ * one `InnerCard` per post.
  */
-export function PostsManager({guild}: {guild?: GuildProfile}) {
+export function PostsManager({guild, bot}: {guild?: GuildProfile; bot?: BotProfile}) {
   const {t} = useT('myPosts');
   const [params, setParams] = useSearchParams();
   const requested = params.get('status');
   const tab: Tab = isTab(requested) ? requested : 'all';
   const status: PostStatus | undefined = tab === 'all' ? undefined : tab;
 
-  // My space: only my posts for myself; a server's dashboard: every post of the server.
+  // My space: only my posts for myself; a server's (a bot's) dashboard: every post of the server (the bot).
   const list = useInfiniteList<PrivatePost, Paginated<PrivatePost>>(
-    useMyPosts({status, guildId: guild?.id}, {personal: !guild}),
+    useMyPosts({status, guildId: guild?.id, botId: bot?.id}, {personal: !guild && !bot}),
   );
+  const newPost = guild ? paths.postNew({guildId: guild.id}) : bot ? paths.postNew({botId: bot.id}) : undefined;
 
   return (
     <>
-      {guild ? <GuildQuota guildId={guild.id} /> : <UserQuota />}
+      {guild ? (
+        <EntityQuota params={{guildId: guild.id}} />
+      ) : bot ? (
+        <EntityQuota params={{botId: bot.id}} />
+      ) : (
+        <UserQuota />
+      )}
 
       <div className="mp-filters" role="group" aria-label={t('tabsLabel')}>
         {TABS.map((value) => (
@@ -89,7 +97,7 @@ export function PostsManager({guild}: {guild?: GuildProfile}) {
         ))}
       </div>
 
-      <PostList list={list} tab={tab} guild={guild} />
+      <PostList list={list} tab={tab} newPost={newPost} />
     </>
   );
 }
@@ -113,13 +121,15 @@ function UserQuota() {
 }
 
 /**
- * Published, unexpired posts of the server out of the catalog's limit. Nothing
- * while it loads or if it cannot be read (the editor enforces the quota).
+ * Published, unexpired posts of the server (or the bot) out of the catalog's
+ * limit. Nothing while it loads or if it cannot be read (the editor enforces
+ * the quota).
  */
-function GuildQuota({guildId}: {guildId: string}) {
+function EntityQuota({params}: {params: {guildId: string} | {botId: string}}) {
   const {t} = useT('myPosts');
   const {data: catalog} = useCatalog();
-  const published = useMyPosts({guildId, status: 'published'});
+  const published = useMyPosts({...params, status: 'published'});
+  const isBot = 'botId' in params;
   const list = useInfiniteList<PrivatePost, Paginated<PrivatePost>>(published);
 
   // Expired posts stay "published" in the list: follow the pages until every one is read.
@@ -136,15 +146,15 @@ function GuildQuota({guildId}: {guildId: string}) {
       ) : (
         <QuotaMeter
           used={countLivePosts(list.items)}
-          limit={catalog.limits.max_published_posts_per_guild}
-          scope="guild"
+          limit={isBot ? catalog.limits.max_published_posts_per_bot : catalog.limits.max_published_posts_per_guild}
+          scope={isBot ? 'bot' : 'guild'}
         />
       )}
     </div>
   );
 }
 
-function PostList({list, tab, guild}: {list: InfiniteList<PrivatePost>; tab: Tab; guild?: GuildProfile}) {
+function PostList({list, tab, newPost}: {list: InfiniteList<PrivatePost>; tab: Tab; newPost?: string}) {
   const {t} = useT('myPosts');
   const {t: tCommon} = useT('common');
   const {canWrite} = useSession();
@@ -211,7 +221,7 @@ function PostList({list, tab, guild}: {list: InfiniteList<PrivatePost>; tab: Tab
           }
           title={t(`empty.${tab}.title`)}
           action={
-            <LinkButton to={paths.postNew(guild ? {guildId: guild.id} : {kind: 'user'})} icon="add">
+            <LinkButton to={newPost ?? paths.postNew({kind: 'user'})} icon="add">
               {t('new')}
             </LinkButton>
           }

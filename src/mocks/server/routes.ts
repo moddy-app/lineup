@@ -1,5 +1,5 @@
 /**
- * Every route of LINEUP.md §6 (the 41 under /lineup, plus the dashboard's
+ * Every route of LINEUP.md §6 and of the bot guide (the 49 under /lineup, plus the dashboard's
  * `GET /auth/me` and `POST /auth/logout`), as a thin adapter: parse the path and the body, call
  * the logic, choose the status code. The rules live in ../logic.
  *
@@ -11,6 +11,16 @@ import {mockCatalog} from '../logic/badges';
 import type {BadgeEntityType} from '@/api/types';
 
 import {unauthenticated} from '../errors';
+import {
+  claimBot,
+  deleteBot,
+  getBotProfile,
+  listBots,
+  listMyBots,
+  lookupBot,
+  refreshBot,
+  updateBot,
+} from '../logic/bots';
 import {
   claimGuild,
   deleteGuild,
@@ -44,6 +54,8 @@ import {
 } from '../logic/posts';
 import {createReport} from '../logic/reports';
 import {
+  botClaimBody,
+  botUpdateBody,
   claimBody,
   createExperienceBody,
   createPostBody,
@@ -170,6 +182,56 @@ export const routes: Route[] = [
     path: '/lineup/guilds/:guild_id/refresh',
     auth: 'session',
     handler: (c) => ok(refreshGuild(c.env, actorOf(c), pathSnowflake(c, 'guild_id'))),
+  },
+
+  // ---- Bots ------------------------------------------------------------------
+  {method: 'GET', path: '/lineup/bots', auth: 'public', handler: (c) => ok(listBots(c.env, c.query), CACHE_MINUTE)},
+  {method: 'GET', path: '/lineup/me/bots', auth: 'session', handler: (c) => ok(listMyBots(c.env, actorOf(c)))},
+  {
+    method: 'GET',
+    path: '/lineup/bots/lookup/:bot_id',
+    auth: 'session',
+    handler: (c) => ok(lookupBot(c.env, actorOf(c), pathSnowflake(c, 'bot_id'))),
+  },
+  {
+    method: 'POST',
+    path: '/lineup/bots/claim',
+    auth: 'session',
+    handler: (c) => created(claimBot(c.env, actorOf(c), parseBody(c.rawBody, botClaimBody, {required: true}).bot_id)),
+  },
+  {
+    method: 'GET',
+    path: '/lineup/bots/:bot_id',
+    auth: 'optional',
+    handler: (c) => ok(getBotProfile(c.env, c.viewer, pathSnowflake(c, 'bot_id'))),
+  },
+  {
+    method: 'PUT',
+    path: '/lineup/bots/:bot_id',
+    auth: 'session',
+    validateFirst: (c) => {
+      pathSnowflake(c, 'bot_id');
+      parseBody(c.rawBody, botUpdateBody);
+    },
+    handler: (c) => {
+      const botId = pathSnowflake(c, 'bot_id');
+      return ok(updateBot(c.env, actorOf(c), botId, parseBody(c.rawBody, botUpdateBody)));
+    },
+  },
+  {
+    method: 'DELETE',
+    path: '/lineup/bots/:bot_id',
+    auth: 'session',
+    handler: (c) => {
+      deleteBot(c.env, actorOf(c), pathSnowflake(c, 'bot_id'));
+      return noContent();
+    },
+  },
+  {
+    method: 'POST',
+    path: '/lineup/bots/:bot_id/refresh',
+    auth: 'session',
+    handler: (c) => ok(refreshBot(c.env, actorOf(c), pathSnowflake(c, 'bot_id'))),
   },
 
   // ---- 6.3 People ------------------------------------------------------------

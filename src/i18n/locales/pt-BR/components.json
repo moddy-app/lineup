@@ -7,7 +7,8 @@
   "post": {
     "kind": {
       "guild": "Recruta",
-      "user": "Procura uma equipe"
+      "user": "Procura uma equipe",
+      "bot": "Bot recrutando"
     },
     "status": {
       "draft": "Rascunho",
@@ -21,7 +22,8 @@
     "positions": "Cargos",
     "hoursPerWeek": "{{value}} h por semana",
     "openings_one": "{{value}} vaga",
-    "openings_other": "{{value}} vagas"
+    "openings_other": "{{value}} vagas",
+    "unknownBot": "Bot sem nome"
   },
   "expiry": {
     "inHours_one": "Expira em {{value}} hora",
@@ -100,14 +102,17 @@
       }
     },
     "members_one": "membro",
-    "members_other": "membros"
+    "members_other": "membros",
+    "servers_one": "servidor",
+    "servers_other": "servidores"
   },
   "report": {
     "button": "Denunciar",
     "title": {
       "post": "Denunciar este anúncio",
       "user": "Denunciar este perfil",
-      "guild": "Denunciar este servidor"
+      "guild": "Denunciar este servidor",
+      "bot": "Denunciar este bot"
     },
     "intro": "Sua denúncia vai para a equipe do Moddy. Você não receberá resposta.",
     "reason": "Motivo",
@@ -161,7 +166,9 @@
     "guild_other": "{{used}} / {{limit}} anúncios publicados neste servidor",
     "user_one": "{{used}} / {{limit}} anúncio publicado",
     "user_other": "{{used}} / {{limit}} anúncios publicados",
-    "full": "Limite atingido"
+    "full": "Limite atingido",
+    "bot_one": "{{used}} / {{limit}} anúncio publicado para este bot",
+    "bot_other": "{{used}} / {{limit}} anúncios publicados para este bot"
   },
   "stale": {
     "text": "Os dados do Discord podem estar desatualizados"
@@ -203,7 +210,15 @@
     "context": {
       "label": "Gerenciar",
       "me": "Eu",
-      "manage": "Gerenciar meus servidores"
+      "manage": "Gerenciar meus servidores",
+      "addBot": "Adicionar um bot",
+      "manageBots": "Gerenciar bots"
+    },
+    "botNav": {
+      "profile": "Perfil",
+      "posts": "Anúncios",
+      "discord": "Dados do Discord",
+      "settings": "Configurações"
     }
   },
   "filters": {
@@ -211,5 +226,14 @@
     "add": "Adicionar um filtro",
     "allUsed": "Todos os filtros estão em uso",
     "remove": "Remover"
+  },
+  "bot": {
+    "unknownName": "Bot sem nome",
+    "servers_one": "servidor",
+    "servers_other": "servidores",
+    "tags": "Etiquetas",
+    "unlisted": "Não listado",
+    "verifiedApp": "Aplicativo verificado pelo Discord",
+    "supportGuild": "Servidor de suporte: {{name}}"
   }
 }

@@ -9,7 +9,7 @@ import {FIELD_LIMITS} from '@/api/limits';
 import {useInfiniteList} from '@/api/pagination';
 import {useCatalog, useFeed} from '@/api/queries';
 import {queryKeys} from '@/api/queryKeys';
-import type {Catalog, Post, PostKind} from '@/api/types';
+import type {Catalog, Post} from '@/api/types';
 import {paths} from '@/app/paths';
 import {usePageTitle} from '@/app/usePageTitle';
 import {useSession} from '@/auth/session';
@@ -28,6 +28,7 @@ import {Icon, LinkButton, PageHeader, ShowcasePage, Spinner} from '@/ui';
 import {
   activeFilterCount,
   effectiveFilters,
+  type FeedPageKind,
   filterableThemes,
   legacyKindRedirect,
   parseFeedParams,
@@ -38,14 +39,15 @@ import {
 import {useDebouncedField} from './useDebouncedField';
 import './feed.css';
 
-const pathOf = (kind: PostKind) => (kind === 'guild' ? paths.feed() : paths.people());
+const pathOf = (kind: FeedPageKind) => (kind === 'guild' ? paths.feed() : paths.people());
 
 /**
- * The two lists of posts, one component: `guild` is "Projets" (servers
- * that recruit, `/`), `user` is "Profils" (people who offer their services,
- * `/people`). The route fixes the kind; the other filters live in the URL.
+ * The two lists of posts, one component: `guild` is "Projets" (servers and
+ * bots that recruit, `/`, with a "Type" filter for one or the other), `user`
+ * is "Profils" (people who offer their services, `/people`). The route fixes
+ * the kind; the other filters live in the URL.
  */
-export function FeedView({kind}: {kind: PostKind}) {
+export function FeedView({kind}: {kind: FeedPageKind}) {
   const {t} = useT('feed');
   const [params] = useSearchParams();
   const catalog = useCatalog();
@@ -73,16 +75,29 @@ export function FeedView({kind}: {kind: PostKind}) {
   );
 }
 
-/** The title, one line, and the main action. */
-function FeedHeader({kind}: {kind: PostKind}) {
+/** The title, one line, and the main action; on "Projets" filtered on bots, a link to the bot directory. */
+function FeedHeader({kind, bots}: {kind: FeedPageKind; bots?: boolean}) {
   const {t} = useT('feed');
   return (
-    <PageHeader title={t(`${kind}.title`)} subtitle={t(`${kind}.subtitle`)} actions={<PublishButton kind={kind} />} />
+    <PageHeader
+      title={t(`${kind}.title`)}
+      subtitle={t(`${kind}.subtitle`)}
+      actions={
+        <>
+          {bots && (
+            <LinkButton to={paths.bots()} variant="outlined" icon="smart_toy">
+              {t('bots.directory')}
+            </LinkButton>
+          )}
+          <PublishButton kind={kind} />
+        </>
+      }
+    />
   );
 }
 
 /** The primary action. Signed out, it goes through Discord and lands on the editor. */
-function PublishButton({kind}: {kind: PostKind}) {
+function PublishButton({kind}: {kind: FeedPageKind}) {
   const {t} = useT('feed');
   const {status, login} = useSession();
   const label = t(`${kind}.action`);
@@ -107,9 +122,9 @@ function PublishButton({kind}: {kind: PostKind}) {
   );
 }
 
-type FilterKey = 'positions' | 'languages' | 'theme' | 'compensation' | 'nsfw';
+type FilterKey = 'recruiter' | 'positions' | 'languages' | 'theme' | 'compensation' | 'nsfw';
 
-function FeedContent({kind, catalog}: {kind: PostKind; catalog: Catalog}) {
+function FeedContent({kind, catalog}: {kind: FeedPageKind; catalog: Catalog}) {
   const {t} = useT('feed');
   const {label} = useCatalogLabel();
   const {confirmed} = useNsfwConfirmed();
@@ -144,7 +159,18 @@ function FeedContent({kind, catalog}: {kind: PostKind; catalog: Catalog}) {
   const options = (ids: readonly string[], type: 'positions' | 'languages' | 'themes' | 'compensations') =>
     ids.map((id) => ({value: id, label: label(type, id)}));
 
-  const definitions: Record<FilterKey, FilterDefinition> = {
+  const recruiter: FilterDefinition = {
+    icon: 'category',
+    label: t('filters.recruiter'),
+    kind: 'single',
+    options: [
+      {value: 'guild', label: t('filters.recruiterGuild'), icon: 'groups'},
+      {value: 'bot', label: t('filters.recruiterBot'), icon: 'smart_toy'},
+    ],
+    value: filters.recruiter ? [filters.recruiter] : [],
+    onChange: (values) => update({recruiter: values[0] === 'guild' || values[0] === 'bot' ? values[0] : undefined}),
+  };
+  const shared: Record<Exclude<FilterKey, 'recruiter'>, FilterDefinition> = {
     positions: {
       icon: 'work',
       label: t('filters.positions'),
@@ -206,11 +232,17 @@ function FeedContent({kind, catalog}: {kind: PostKind; catalog: Catalog}) {
       },
     },
   };
+  const search = {value: q, onChange: setQ, placeholder: t('filters.search')};
 
   return (
     <ShowcasePage className="feed-page">
-      <FeedHeader kind={kind} />
-      <FilterBar search={{value: q, onChange: setQ, placeholder: t('filters.search')}} filters={definitions} />
+      <FeedHeader kind={kind} bots={kind === 'guild' && filters.recruiter === 'bot'} />
+      {/* "Projets" can narrow to servers or bots; "Profils" only lists people. */}
+      {kind === 'guild' ? (
+        <FilterBar search={search} filters={{recruiter, ...shared}} />
+      ) : (
+        <FilterBar search={search} filters={shared} />
+      )}
       <FeedList kind={kind} filters={filters} active={active} onReset={reset} />
       <NsfwConfirmDialog
         open={confirming}
@@ -230,7 +262,7 @@ function FeedList({
   active,
   onReset,
 }: {
-  kind: PostKind;
+  kind: FeedPageKind;
   filters: UiFilters;
   active: number;
   onReset: () => void;
@@ -240,7 +272,8 @@ function FeedList({
   const {t: tErrors} = useT('errors');
   const {confirmed} = useNsfwConfirmed();
   const queryClient = useQueryClient();
-  const query = useFeed(effectiveFilters(filters, kind, confirmed));
+  // "Projets" without a type: servers and bots, the people's posts left out page by page.
+  const query = useFeed(effectiveFilters(filters, kind, confirmed), {projects: kind === 'guild' && !filters.recruiter});
   const list = useInfiniteList<Post, NonNullable<typeof query.data>['pages'][number]>(query);
 
   // The sentinel: load the next page when it comes near the screen.

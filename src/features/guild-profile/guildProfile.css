@@ -158,3 +158,10 @@
     margin-inline-start: 0;
   }
 }
+
+/* The bots of the server: one inner card link each. */
+.guild-bots {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-l);
+}

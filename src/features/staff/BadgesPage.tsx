@@ -16,7 +16,7 @@ import {useSession} from '@/auth/session';
 import {registerBeforeLogin} from '@/auth/beforeLogin';
 import {useAuthAction} from '@/auth/useAuthAction';
 import {badgeIcon} from '@/components/badgeIcons';
-import {DisplayName, GuildIcon, RelativeTime, UserAvatar} from '@/components';
+import {BotAvatar, DisplayName, GuildIcon, RelativeTime, UserAvatar} from '@/components';
 import {useT} from '@/i18n/useT';
 import {getItem, removeItem, setItem} from '@/lib/storage';
 import {Card, Icon, Pill, SettingsPanel, Select, TextField, useSnackbar} from '@/ui';
@@ -25,9 +25,10 @@ import {ActionDialog, ListBody, PersonLink, SectionHead, StatusChips} from './pa
 import {BADGE_NOTE_MAX, ENTITY_FILTERS, isEntityId, manualBadgesFor, parseEntityFilter} from './staffLogic';
 
 const DRAFT_KEY = 'lineup-staff-grant';
+const asEntityType = (value: unknown): BadgeEntityType => (value === 'guild' || value === 'bot' ? value : 'user');
 const byNewest = (a: ManualBadgeGrant, b: ManualBadgeGrant) => +new Date(b.granted_at) - +new Date(a.granted_at);
 
-/** The grants of one entity type, or of both merged (newest first) when the filter is "all". */
+/** The grants of one entity type, or of all three merged (newest first) when the filter is "all". */
 function mergeLists(lists: Array<InfiniteList<ManualBadgeGrant>>): InfiniteList<ManualBadgeGrant> {
   if (lists.length === 1) return lists[0]!;
   const failed = lists.find((list) => list.isError);
@@ -55,7 +56,10 @@ export function Component() {
   const filter = parseEntityFilter(params.get('entity'));
   const users = useInfiniteList<ManualBadgeGrant, StaffBadgesPage>(useStaffBadges('user'));
   const guilds = useInfiniteList<ManualBadgeGrant, StaffBadgesPage>(useStaffBadges('guild'));
-  const list = mergeLists(filter === 'all' ? [users, guilds] : filter === 'user' ? [users] : [guilds]);
+  const bots = useInfiniteList<ManualBadgeGrant, StaffBadgesPage>(useStaffBadges('bot'));
+  const list = mergeLists(
+    filter === 'all' ? [users, guilds, bots] : filter === 'user' ? [users] : filter === 'guild' ? [guilds] : [bots],
+  );
   const revoke = useRevokeBadge();
   const queryClient = useQueryClient();
   const [revoking, setRevoking] = useState<ManualBadgeGrant | null>(null);
@@ -136,7 +140,7 @@ function GrantForm() {
   const snackbar = useSnackbar();
   const grant = useGrantBadge();
   const saved = useMemo(() => getItem<Partial<Draft>>(DRAFT_KEY, {}, 'session'), []);
-  const [entityType, setEntityType] = useState<BadgeEntityType>(saved.entityType === 'guild' ? 'guild' : 'user');
+  const [entityType, setEntityType] = useState<BadgeEntityType>(asEntityType(saved.entityType));
   const [entityId, setEntityId] = useState(typeof saved.entityId === 'string' ? saved.entityId : '');
   const [badge, setBadge] = useState(typeof saved.badge === 'string' ? saved.badge : '');
   const [note, setNote] = useState(typeof saved.note === 'string' ? saved.note : '');
@@ -194,10 +198,11 @@ function GrantForm() {
           <Select
             label={t('badges.form.entityType')}
             value={entityType}
-            onValueChange={(value) => setEntityType(value === 'guild' ? 'guild' : 'user')}
+            onValueChange={(value) => setEntityType(asEntityType(value))}
             options={[
               {value: 'user', label: t('badges.entities.user')},
               {value: 'guild', label: t('badges.entities.guild')},
+              {value: 'bot', label: t('badges.entities.bot')},
             ]}
           />
           <TextField
@@ -217,7 +222,7 @@ function GrantForm() {
             onValueChange={setBadge}
             required
             options={options.map((option) => ({value: option.id, label: label('badges', option.id, option.label)}))}
-            supportingText={entityType === 'user' && serverOnly ? t('badges.form.serverOnly') : undefined}
+            supportingText={entityType !== 'guild' && serverOnly ? t('badges.form.serverOnly') : undefined}
             errorText={badgeError}
           />
         </div>
@@ -247,14 +252,17 @@ function GrantEntity({grant}: {grant: ManualBadgeGrant}) {
   const picture =
     type === 'user' ? (
       <UserAvatar id={id} src={icon} size="small" />
+    ) : type === 'bot' ? (
+      <BotAvatar id={id} src={icon} size="small" />
     ) : (
       <GuildIcon id={id} iconUrl={icon} size="small" />
     );
   if (name === null) return null;
+  const to = type === 'user' ? paths.user(id) : type === 'bot' ? paths.bot(id) : paths.guild(id);
   return (
     <span className="staff-person">
       {picture}
-      <Link to={type === 'user' ? paths.user(id) : paths.guild(id)} className="staff-person-name">
+      <Link to={to} className="staff-person-name">
         <DisplayName name={name} entity={type} focusable={false} />
       </Link>
     </span>

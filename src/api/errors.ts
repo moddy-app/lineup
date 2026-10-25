@@ -71,6 +71,13 @@ export const ERROR_CODES = [
   'lineup_rate_limited',
   'discord_unavailable',
   'network_error',
+  'lineup_bot_forbidden',
+  'lineup_bot_not_found',
+  'bot_not_found',
+  'lineup_bot_already_claimed',
+  'bot_not_discoverable',
+  'bot_support_guild_missing',
+  'lineup_bot_profile_missing',
 ] as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[number];
@@ -89,6 +96,9 @@ export type ErrorsT = TFunction<'errors'>;
  */
 export type ErrorUseContext = 'claim' | 'manage';
 
+/** The subject of an experience whose automatic check failed: a bot is checked on its support server. */
+export type VerificationSubject = 'guild' | 'bot';
+
 export interface ErrorMessageOptions {
   context?: ErrorUseContext;
   /**
@@ -96,6 +106,8 @@ export interface ErrorMessageOptions {
    * Defaults to the error's own `retryAfter`; 0 or less says "you can try again".
    */
   seconds?: number;
+  /** `bot`: a failed verification is about the bot's support server. */
+  subject?: VerificationSubject;
 }
 
 /** "45 seconds", "3 minutes", "1 hour": the wait, rounded up to the unit that reads best. */
@@ -107,9 +119,9 @@ export function formatWait(seconds: number, t: ErrorsT): string {
 }
 
 const POST_STATUSES = ['draft', 'published', 'closed', 'hidden'] as const;
-const FILTER_FIELDS = ['kind', 'compensation', 'positions', 'status'] as const;
+const FILTER_FIELDS = ['kind', 'compensation', 'positions', 'status', 'bot_id'] as const;
 const VERIFICATION_REASONS = ['not_member', 'no_staff_permission'] as const;
-const NOT_APPLICABLE_REASONS = ['not_guild', 'ended'] as const;
+const NOT_APPLICABLE_REASONS = ['not_guild', 'ended', 'bot_unavailable'] as const;
 
 function oneOf<T extends string>(values: readonly T[], value: unknown): T | null {
   return typeof value === 'string' && (values as readonly string[]).includes(value) ? (value as T) : null;
@@ -131,7 +143,7 @@ export function errorMessage(error: unknown, t: ErrorsT, options: ErrorMessageOp
       return options.context ? t(`forbidden.${options.context}`) : t('codes.lineup_guild_forbidden');
 
     case 'lineup_quota_exceeded': {
-      const scope = oneOf(['guild', 'user'], context.scope);
+      const scope = oneOf(['guild', 'user', 'bot'], context.scope);
       return scope && typeof context.limit === 'number'
         ? t(`quota.${scope}`, {count: context.limit})
         : t('codes.lineup_quota_exceeded');
@@ -149,7 +161,8 @@ export function errorMessage(error: unknown, t: ErrorsT, options: ErrorMessageOp
 
     case 'lineup_verification_failed': {
       const reason = oneOf(VERIFICATION_REASONS, context.reason);
-      return reason ? t(`verificationFailed.${reason}`) : t('codes.lineup_verification_failed');
+      if (!reason) return t('codes.lineup_verification_failed');
+      return options.subject === 'bot' ? t(`verificationFailedBot.${reason}`) : t(`verificationFailed.${reason}`);
     }
 
     case 'lineup_verification_not_applicable': {

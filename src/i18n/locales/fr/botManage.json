@@ -1,0 +1,110 @@
+{
+  "bar": {
+    "unsaved": "Modifications non enregistrées",
+    "save": "Enregistrer",
+    "saving": "Enregistrement...",
+    "reset": "Annuler"
+  },
+  "links": {
+    "title": "Liens",
+    "hint": "{{count}} liens au plus, en https. Le nom fait 40 caractères au plus.",
+    "label": "Nom du lien {{n}}",
+    "url": "Adresse du lien {{n}}",
+    "remove": "Retirer le lien {{n}}",
+    "add": "Ajouter un lien"
+  },
+  "theme": {
+    "label": "Thème",
+    "none": "Aucun thème"
+  },
+  "tags": {
+    "label": "Étiquettes",
+    "hint": "Séparés par des virgules. Lettres minuscules, chiffres et tirets, de 2 à 24 caractères. {{count}} sur {{max}}."
+  },
+  "errors": {
+    "fixFields": "Corrigez les champs signalés, puis enregistrez de nouveau.",
+    "descriptionMax": "{{count}} caractères au plus.",
+    "linkLabel": "Un nom de 1 à {{max}} caractères est requis.",
+    "linkUrl": "Saisissez une adresse en https.",
+    "linksMax": "{{count}} liens au plus.",
+    "tagsMax": "{{count}} étiquettes au plus.",
+    "tagPattern": "« {{tag}} » n'est pas valide : 2 à 24 lettres minuscules, chiffres ou tirets.",
+    "languagesMax": "{{count}} langues au plus.",
+    "inviteLength": "Saisissez un code ou un lien de 2 à 200 caractères."
+  },
+  "description": {
+    "title": "Description",
+    "label": "Description du bot",
+    "hint": "Markdown accepté. Laissez vide pour afficher la description de l'App Directory.",
+    "discordTitle": "Description de l'App Directory :",
+    "discordNone": "Ce bot n'a pas de description sur l'App Directory.",
+    "useDiscord": "Reprendre la description Discord",
+    "preview": "Aperçu",
+    "hidePreview": "Masquer l'aperçu"
+  },
+  "topics": {
+    "title": "Thème et étiquettes",
+    "description": "Ils aident les personnes à trouver le bot dans l'annuaire et les annonces."
+  },
+  "languages": {
+    "label": "Langues du bot ({{count}} sur {{max}})",
+    "title": "Langues",
+    "description": "Les langues du bot et de son équipe. {{count}} sur {{max}}."
+  },
+  "title": "Gestion du bot",
+  "pageTitle": "Gérer {{name}}",
+  "unknownName": "Bot sans nom",
+  "notFound": {
+    "title": "Bot introuvable",
+    "body": "Ce bot n'a pas de profil Lineup. Ajoutez-le d'abord depuis le tableau de bord.",
+    "action": "Voir les bots"
+  },
+  "forbidden": {
+    "title": "Vous ne gérez pas ce bot",
+    "body": "Il faut être propriétaire ou administrateur du serveur support du bot. « Gérer le serveur » ne suffit pas. Si le développeur vient de changer de serveur support, les droits suivent le nouveau au prochain rafraîchissement.",
+    "action": "Voir le profil"
+  },
+  "viewProfile": "Voir le profil public",
+  "saved": "Profil enregistré.",
+  "newPost": "Nouvelle annonce",
+  "profile": {
+    "description": "Ce que voient les personnes qui consultent le bot."
+  },
+  "visibility": {
+    "title": "Visibilité",
+    "label": "Afficher le bot dans l'annuaire",
+    "on": "Le profil et les annonces du bot sont visibles par tout le monde.",
+    "off": "Le profil et ses annonces sont masqués, sauf pour les gestionnaires et le staff Moddy.",
+    "description": "Qui peut voir le profil et les annonces du bot."
+  },
+  "snapshot": {
+    "title": "Données Discord",
+    "body": "Nom, avatar, nombre de serveurs et serveur support viennent de Discord. Ils sont relus toutes les 6 heures ; vous pouvez forcer la relecture une fois par minute, par exemple après un changement dans le portail développeur.",
+    "done": "Données Discord actualisées.",
+    "staleDone": "Discord n'a pas répondu : les anciennes données sont conservées.",
+    "refresh": "Actualiser maintenant",
+    "refreshing": "Lecture...",
+    "waitIn": "Disponible dans {{seconds}} s",
+    "updated": "Mis à jour {{relative}}",
+    "rights": "Les gestionnaires sont les administrateurs du serveur support. S'il change, les droits suivent le nouveau après la relecture."
+  },
+  "danger": {
+    "title": "Zone de danger",
+    "body": "Supprimer le profil le rend invisible et ferme les annonces du bot. Le bot n'est pas touché sur Discord.",
+    "action": "Supprimer le profil",
+    "confirmTitle": "Supprimer le profil de {{name}} ?",
+    "confirmBody": "Ce qui se passe :",
+    "effectPosts": "Vos annonces seront fermées : les brouillons et les annonces publiées passent en « fermée ».",
+    "effectHidden": "Les annonces masquées par l'équipe Moddy restent masquées.",
+    "effectReclaim": "La description, les liens, les étiquettes et la visibilité sont perdus.",
+    "confirm": "Supprimer",
+    "done": "Le profil de {{name}} est supprimé."
+  },
+  "pages": {
+    "profile": "Description, thème, étiquettes, langues et liens.",
+    "posts": "Les annonces de ce bot, quel que soit leur auteur.",
+    "discord": "Ce que Lineup lit sur Discord.",
+    "settings": "Visibilité et suppression."
+  },
+  "notDiscoverable": "Votre bot n'est plus découvrable sur Discord, ou ne déclare plus de serveur support. Les données affichées sont les dernières connues. Activez la découvrabilité dans le portail développeur (App Directory)."
+}

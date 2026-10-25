@@ -1,10 +1,10 @@
 {
   "guild": {
     "title": "Projects",
-    "subtitle": "Discord servers are looking for staff.",
+    "subtitle": "Discord servers and bots are looking for staff.",
     "action": "Post a listing",
     "emptyTitle": "No project right now",
-    "emptyBody": "Server listings appear here as soon as they are published."
+    "emptyBody": "Server and bot listings appear here as soon as they are published."
   },
   "user": {
     "title": "Profiles",
@@ -26,7 +26,10 @@
     "nsfw": "Adult content",
     "nsfwHide": "Hide",
     "nsfwShow": "Show",
-    "reset": "Reset filters"
+    "reset": "Reset filters",
+    "recruiter": "Type",
+    "recruiterGuild": "Servers",
+    "recruiterBot": "Bots"
   },
   "empty": {
     "filteredTitle": "No listing for these filters",
@@ -35,5 +38,8 @@
   "invalid": {
     "title": "This search could not be applied",
     "restart": "Start over"
+  },
+  "bots": {
+    "directory": "Bot directory"
   }
 }

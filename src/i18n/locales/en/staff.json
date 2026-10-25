@@ -89,7 +89,8 @@
     "targets": {
       "post": "Post",
       "user": "Profile",
-      "guild": "Server"
+      "guild": "Server",
+      "bot": "Bot"
     },
     "open": "Open: {{target}}",
     "reasons": {
@@ -135,11 +136,13 @@
     "filters": {
       "all": "All",
       "user": "People",
-      "guild": "Servers"
+      "guild": "Servers",
+      "bot": "Bots"
     },
     "entities": {
       "user": "Person",
-      "guild": "Server"
+      "guild": "Server",
+      "bot": "Bot"
     },
     "empty": {
       "title": "No manual badges",

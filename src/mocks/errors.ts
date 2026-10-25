@@ -106,13 +106,15 @@ export function discordUnavailable(): ApiFailure {
 // The business errors of §12 (French messages: display is the front's job)
 // ---------------------------------------------------------------------------
 
-export const forbidden = (code: 'lineup_guild_forbidden' | 'lineup_post_forbidden') =>
+export const forbidden = (code: 'lineup_guild_forbidden' | 'lineup_post_forbidden' | 'lineup_bot_forbidden') =>
   lineupError(
     403,
     code,
     code === 'lineup_guild_forbidden'
       ? 'Vous ne gérez pas ce serveur.'
-      : "Vous n'avez pas le droit de modifier cette annonce.",
+      : code === 'lineup_bot_forbidden'
+        ? 'Il faut être administrateur du serveur support de ce bot.'
+        : "Vous n'avez pas le droit de modifier cette annonce.",
   );
 
 export const notFound = (
@@ -124,6 +126,8 @@ export const notFound = (
     | 'lineup_report_target_not_found'
     | 'lineup_report_not_found'
     | 'lineup_badge_not_found'
+    | 'lineup_bot_not_found'
+    | 'bot_not_found'
     | 'invite_not_found',
 ) => {
   const messages: Record<string, string> = {
@@ -135,6 +139,8 @@ export const notFound = (
     lineup_report_not_found: 'Signalement introuvable.',
     lineup_badge_not_found: "Ce badge n'est pas attribué.",
     invite_not_found: 'Invitation introuvable ou expirée.',
+    lineup_bot_not_found: 'Bot introuvable.',
+    bot_not_found: 'Aucune application avec cet identifiant.',
   };
   return lineupError(404, code, messages[code] ?? 'Introuvable.');
 };

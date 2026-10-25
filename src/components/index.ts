@@ -3,6 +3,9 @@
 export {ApplicationAction, ExternalApplyButton} from './ApplicationAction';
 export {BadgeList} from './BadgeList';
 export {BadgeStrip} from './BadgeStrip';
+export {BotAvatar} from './BotAvatar';
+export {BotRow, BotTile} from './BotCard';
+export {BotLookupPreview} from './BotLookupPreview';
 export {isStripBadge} from './stripBadges';
 export {DisplayName} from './DisplayName';
 export {FilterBar, type FilterDefinition, type FilterOption, type FilterSearch} from './filters';
@@ -26,6 +29,8 @@ export {NsfwConfirmDialog, NsfwGate} from './NsfwGate';
 export {ServiceImage} from './ServiceImage';
 export {PostCard} from './PostCard';
 export {PostStatusBadge} from './PostStatusBadge';
+export {type Recruiter, recruiterOf} from './recruiter';
+export {RecruiterAvatar} from './RecruiterAvatar';
 export {QuotaMeter} from './QuotaMeter';
 export {RelativeTime} from './RelativeTime';
 export {ReportButton, ReportDialog, type ReportTarget} from './ReportDialog';

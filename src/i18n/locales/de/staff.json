@@ -89,7 +89,8 @@
     "targets": {
       "post": "Anzeige",
       "user": "Profil",
-      "guild": "Server"
+      "guild": "Server",
+      "bot": "Bot"
     },
     "open": "Öffnen: {{target}}",
     "reasons": {
@@ -135,11 +136,13 @@
     "filters": {
       "all": "Alle",
       "user": "Personen",
-      "guild": "Server"
+      "guild": "Server",
+      "bot": "Bots"
     },
     "entities": {
       "user": "Person",
-      "guild": "Server"
+      "guild": "Server",
+      "bot": "Bot"
     },
     "empty": {
       "title": "Keine manuellen Abzeichen",

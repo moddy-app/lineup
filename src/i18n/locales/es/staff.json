@@ -89,7 +89,8 @@
     "targets": {
       "post": "Anuncio",
       "user": "Perfil",
-      "guild": "Servidor"
+      "guild": "Servidor",
+      "bot": "Bot"
     },
     "open": "Abrir: {{target}}",
     "reasons": {
@@ -135,11 +136,13 @@
     "filters": {
       "all": "Todas",
       "user": "Personas",
-      "guild": "Servidores"
+      "guild": "Servidores",
+      "bot": "Bots"
     },
     "entities": {
       "user": "Persona",
-      "guild": "Servidor"
+      "guild": "Servidor",
+      "bot": "Bot"
     },
     "empty": {
       "title": "Sin insignias manuales",

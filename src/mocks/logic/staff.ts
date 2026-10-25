@@ -3,6 +3,7 @@
 import {catalogFixture} from '@/api/catalog.fixture';
 import type {
   BadgeEntityType,
+  CatalogBadge,
   ManualBadgeGrant,
   Paginated,
   PostModeration,
@@ -22,7 +23,7 @@ import {compareKeyed, decodeCursor, pageRows} from './cursor';
 import {toStaffExperience} from './views';
 import {Issues, isUuid, Params} from './validate';
 
-const ENTITY_TYPES: readonly BadgeEntityType[] = ['user', 'guild'];
+const ENTITY_TYPES: readonly BadgeEntityType[] = ['user', 'guild', 'bot'];
 
 // ---------------------------------------------------------------------------
 // Queues
@@ -110,7 +111,7 @@ export const dismissReport = (env: Env, staff: Actor, id: string) => closeReport
 // ---------------------------------------------------------------------------
 
 const entityTypeInvalid = () =>
-  unprocessable('lineup_entity_type_invalid', 'entity_type doit valoir « user » ou « guild ».');
+  unprocessable('lineup_entity_type_invalid', 'entity_type doit valoir « user », « guild » ou « bot ».');
 
 function entityType(raw: string): BadgeEntityType {
   if (!(ENTITY_TYPES as readonly string[]).includes(raw)) throw entityTypeInvalid();
@@ -122,8 +123,10 @@ function entityType(raw: string): BadgeEntityType {
  * for (`moddy_server` is for a server only). Anything else: 422 `lineup_badge_invalid`.
  */
 function manualBadge(id: string, type: BadgeEntityType): string {
-  const entry = catalogFixture.badges.find((badge) => badge.id === id);
-  if (!entry || entry.source !== 'manual' || (entry.entity !== 'both' && entry.entity !== type)) {
+  const entry: CatalogBadge | undefined = catalogFixture.badges.find((badge) => badge.id === id);
+  // `entities` lists every kind the badge applies to (`entity` is kept for compatibility).
+  const applies = entry?.entities ? entry.entities.includes(type) : entry?.entity === 'both' || entry?.entity === type;
+  if (!entry || entry.source !== 'manual' || !applies) {
     throw unprocessable('lineup_badge_invalid', "Ce badge n'est pas attribuable à ce type d'entité.");
   }
   return id;
@@ -131,9 +134,13 @@ function manualBadge(id: string, type: BadgeEntityType): string {
 
 /**
  * A grant as the console reads it: the entity's name and icon come from its
- * Lineup profile (a person's, a server's), `null` when it has none.
+ * Lineup profile (a person's, a server's, a bot's), `null` when it has none.
  */
 function toBadgeGrant(env: Env, grant: StoredBadgeGrant): ManualBadgeGrant {
+  if (grant.entity_type === 'bot') {
+    const bot = env.db.botProfiles[grant.entity_id] ? env.db.bots[grant.entity_id] : undefined;
+    return {...grant, entity_name: bot?.name ?? null, entity_icon_url: bot?.avatar_url ?? null};
+  }
   if (grant.entity_type === 'guild') {
     const profile = env.db.profiles[grant.entity_id];
     const guild = env.db.guilds[grant.entity_id];

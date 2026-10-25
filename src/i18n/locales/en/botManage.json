@@ -1,0 +1,110 @@
+{
+  "bar": {
+    "unsaved": "Unsaved changes",
+    "save": "Save",
+    "saving": "Saving...",
+    "reset": "Cancel"
+  },
+  "links": {
+    "title": "Links",
+    "hint": "Up to {{count}} links, https only. The label is 40 characters at most.",
+    "label": "Link {{n}} label",
+    "url": "Link {{n}} address",
+    "remove": "Remove link {{n}}",
+    "add": "Add a link"
+  },
+  "theme": {
+    "label": "Theme",
+    "none": "No theme"
+  },
+  "tags": {
+    "label": "Tags",
+    "hint": "Separated by commas. Lowercase letters, digits and hyphens, 2 to 24 characters. {{count}} of {{max}}."
+  },
+  "errors": {
+    "fixFields": "Fix the highlighted fields, then save again.",
+    "descriptionMax": "At most {{count}} characters.",
+    "linkLabel": "A label of 1 to {{max}} characters is required.",
+    "linkUrl": "Enter an https address.",
+    "linksMax": "At most {{count}} links.",
+    "tagsMax": "At most {{count}} tags.",
+    "tagPattern": "\"{{tag}}\" is not valid: 2 to 24 lowercase letters, digits or hyphens.",
+    "languagesMax": "At most {{count}} languages.",
+    "inviteLength": "Enter a code or a link of 2 to 200 characters."
+  },
+  "description": {
+    "title": "Description",
+    "label": "Bot description",
+    "hint": "Markdown accepted. Leave empty to show the App Directory description.",
+    "discordTitle": "App Directory description:",
+    "discordNone": "This bot has no description on the App Directory.",
+    "useDiscord": "Use the Discord description",
+    "preview": "Preview",
+    "hidePreview": "Hide preview"
+  },
+  "topics": {
+    "title": "Theme and tags",
+    "description": "They help people find the bot in the directory and in posts."
+  },
+  "languages": {
+    "label": "Bot languages ({{count}} of {{max}})",
+    "title": "Languages",
+    "description": "The languages of the bot and its team. {{count}} of {{max}}."
+  },
+  "title": "Bot management",
+  "pageTitle": "Manage {{name}}",
+  "unknownName": "Unnamed bot",
+  "notFound": {
+    "title": "Bot not found",
+    "body": "This bot has no Lineup profile. Add it first from the dashboard.",
+    "action": "See the bots"
+  },
+  "forbidden": {
+    "title": "You do not manage this bot",
+    "body": "You must own or administer the bot's support server. \"Manage Server\" is not enough. If the developer just changed the support server, the rights follow the new one at the next refresh.",
+    "action": "See the profile"
+  },
+  "viewProfile": "See the public profile",
+  "saved": "Profile saved.",
+  "newPost": "New post",
+  "profile": {
+    "description": "What people see when they look at the bot."
+  },
+  "visibility": {
+    "title": "Visibility",
+    "label": "Show the bot in the directory",
+    "on": "The bot's profile and posts are visible to everyone.",
+    "off": "The profile and its posts are hidden, except for managers and the Moddy staff.",
+    "description": "Who can see the bot's profile and posts."
+  },
+  "snapshot": {
+    "title": "Discord data",
+    "body": "Name, avatar, server count and support server come from Discord. They are read every 6 hours; you can force a new read once a minute, for example after a change in the Developer Portal.",
+    "done": "Discord data refreshed.",
+    "staleDone": "Discord did not answer: the previous data is kept.",
+    "refresh": "Refresh now",
+    "refreshing": "Reading...",
+    "waitIn": "Available in {{seconds}} s",
+    "updated": "Updated {{relative}}",
+    "rights": "The managers are the administrators of the support server. If it changes, the rights follow the new one after the refresh."
+  },
+  "danger": {
+    "title": "Danger zone",
+    "body": "Deleting the profile hides it and closes the bot's posts. The bot itself is not touched on Discord.",
+    "action": "Delete the profile",
+    "confirmTitle": "Delete the profile of {{name}}?",
+    "confirmBody": "What happens:",
+    "effectPosts": "Your posts will be closed: drafts and published posts become \"closed\".",
+    "effectHidden": "Posts hidden by the Moddy team stay hidden.",
+    "effectReclaim": "The description, links, tags and visibility are lost.",
+    "confirm": "Delete",
+    "done": "The profile of {{name}} is deleted."
+  },
+  "pages": {
+    "profile": "Description, theme, tags, languages and links.",
+    "posts": "The posts of this bot, whoever wrote them.",
+    "discord": "What Lineup reads from Discord.",
+    "settings": "Visibility and deletion."
+  },
+  "notDiscoverable": "Your bot is no longer discoverable on Discord, or no longer has a support server. The data shown is the last known. Turn on discoverability in the Developer Portal (App Directory)."
+}
