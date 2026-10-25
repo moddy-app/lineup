@@ -944,6 +944,12 @@ a.inner-card {
   min-width: 0;
 }
 
+/* A profile's experiences: as many cards per row as fit, at least 18rem wide (one on a phone). */
+.inner-cards.experience-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(18rem, 100%), 1fr));
+}
+
 .experience-marker {
   display: flex;
 }
