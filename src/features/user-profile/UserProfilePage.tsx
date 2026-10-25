@@ -142,7 +142,7 @@ function Profile({profile}: {profile: UserProfile}) {
             {profile.experiences.length === 0 ? (
               <p className="profile-empty">{profile.is_self ? t('experiences.emptySelf') : t('experiences.empty')}</p>
             ) : (
-              <ExperienceList aria-labelledby="profile-experiences">
+              <ExperienceList className="experience-grid" aria-labelledby="profile-experiences">
                 {profile.experiences.map((experience) => (
                   <ExperienceRow
                     key={experience.id}

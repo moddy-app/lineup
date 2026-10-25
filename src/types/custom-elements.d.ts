@@ -35,7 +35,7 @@ import type {MdPrimaryTab} from '@material/web/tabs/primary-tab.js';
 import type {MdSecondaryTab} from '@material/web/tabs/secondary-tab.js';
 import type {MdTabs} from '@material/web/tabs/tabs.js';
 import type {MdOutlinedTextField} from '@material/web/textfield/outlined-text-field.js';
-import type {ModdyAppBar, ModdyThemeMenu, ModdyUserMenu} from '@moddy/design-kit';
+import type {ModdyAppBar, ModdyThemeMenu, ModdyThemePanel, ModdyUserMenu} from '@moddy/design-kit';
 import type {MdFilledButton} from '@material/web/button/filled-button.js';
 import type {MdFilledTonalButton} from '@material/web/button/filled-tonal-button.js';
 import type {MdOutlinedButton} from '@material/web/button/outlined-button.js';
@@ -180,6 +180,7 @@ declare module 'react' {
       // Design kit
       'moddy-app-bar': Props<ModdyAppBar, 'labels'> & {'home-href'?: string};
       'moddy-theme-menu': Props<ModdyThemeMenu, 'labels' | 'seeds'>;
+      'moddy-theme-panel': Props<ModdyThemePanel, 'labels' | 'seeds'>;
       'moddy-user-menu': Props<ModdyUserMenu, 'user' | 'labels'> & {
         /** Fired by the built-in "Sign out" item. */
         'onsign-out'?: Listener<ModdyUserMenu>;
