@@ -39,6 +39,18 @@ describe('Dropdown', () => {
     ]);
   });
 
+  it('inside an md-dialog, goes into the slotted element of the trigger (md-dialog has no default slot)', () => {
+    const dialog = document.createElement('md-dialog');
+    const content = document.createElement('div');
+    content.slot = 'content';
+    dialog.append(content);
+    document.body.append(dialog);
+    render(<Menu onPick={() => {}} />, {container: content});
+    fireEvent.click(screen.getByRole('button', {name: 'Ouvrir'}));
+    expect(screen.getByRole('menu').parentElement).toBe(content);
+    dialog.remove();
+  });
+
   it('chooses with a click and closes', () => {
     const onPick = vi.fn();
     render(<Menu onPick={onPick} />);

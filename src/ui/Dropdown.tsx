@@ -77,7 +77,8 @@ const CHOICES =
  * It is drawn in the top layer (Popover API) from a portal, so a `Card`'s
  * `overflow: clip`, a dialog or a stacking context never cuts or covers it;
  * without the Popover API (tests) it is a fixed element. Inside an
- * `md-dialog` it goes into the dialog, which keeps it usable. It is placed
+ * `md-dialog` it goes into the dialog's slotted element (the rest of the page
+ * is inert under a modal dialog). It is placed
  * from the trigger's rectangle when it opens and on resize, and closes on a
  * scroll of the page (nothing is computed while scrolling). Arrow keys, Home
  * and End move between choices, Enter chooses, Escape closes and gives focus
@@ -203,7 +204,9 @@ export function Dropdown({
   };
 
   const choiceRole = role === 'listbox' ? 'option' : 'menuitem';
-  const host: Element = anchor?.closest('md-dialog') ?? document.body;
+  // In a dialog, the popover goes into the slotted element of the trigger (`slot="content"`...):
+  // md-dialog has no default slot, so a direct child would never be drawn.
+  const host: Element = anchor?.closest('md-dialog > [slot]') ?? document.body;
 
   return (
     <>
