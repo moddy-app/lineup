@@ -10,6 +10,10 @@
  *   ['posts', 'mine', {guildId, status}]    infinite
  *   ['guilds', 'detail', id]
  *   ['guilds', 'mine']
+ *   ['bots', 'directory', filters]          infinite
+ *   ['bots', 'detail', id]
+ *   ['bots', 'mine']
+ *   ['bots', 'lookup', id]
  *   ['users', 'detail', id]
  *   ['staff', 'experiences', status]        infinite
  *   ['staff', 'reports', status]            infinite
@@ -21,6 +25,7 @@
 
 import type {
   BadgeEntityType,
+  BotDirectoryFilters,
   FeedFilters,
   MyPostsParams,
   Snowflake,
@@ -48,6 +53,14 @@ export const queryKeys = {
   guildDetails: () => ['guilds', 'detail'] as const,
   guildDetail: (id: Snowflake) => ['guilds', 'detail', id] as const,
   myGuilds: () => ['guilds', 'mine'] as const,
+
+  bots: () => ['bots'] as const,
+  botDirectories: () => ['bots', 'directory'] as const,
+  botDirectory: (filters: BotDirectoryFilters) => ['bots', 'directory', filters] as const,
+  botDetails: () => ['bots', 'detail'] as const,
+  botDetail: (id: Snowflake) => ['bots', 'detail', id] as const,
+  myBots: () => ['bots', 'mine'] as const,
+  botLookup: (id: Snowflake) => ['bots', 'lookup', id] as const,
 
   userDetails: () => ['users', 'detail'] as const,
   userDetail: (id: Snowflake) => ['users', 'detail', id] as const,
@@ -87,6 +100,7 @@ export function normalizeFeedFilters(filters: FeedFilters): FeedFilters {
     compensation: text(filters.compensation),
     q: text(filters.q),
     guild_id: text(filters.guild_id),
+    bot_id: text(filters.bot_id),
     author_id: text(filters.author_id),
     include_nsfw: filters.include_nsfw ? true : undefined,
   };
@@ -94,7 +108,15 @@ export function normalizeFeedFilters(filters: FeedFilters): FeedFilters {
 }
 
 export function normalizeMyPostsParams(params: MyPostsParams): MyPostsParams {
-  return stripUndefined({guildId: text(params.guildId), status: params.status});
+  return stripUndefined({guildId: text(params.guildId), botId: text(params.botId), status: params.status});
+}
+
+export function normalizeBotFilters(filters: BotDirectoryFilters): BotDirectoryFilters {
+  return stripUndefined({
+    theme: text(filters.theme),
+    q: text(filters.q),
+    include_nsfw: filters.include_nsfw ? true : undefined,
+  });
 }
 
 function stripUndefined<T extends object>(value: T): T {

@@ -10,6 +10,8 @@ import {RouteError} from './RouteError';
 import {Root} from './Root';
 import {onNewPath} from './preload';
 import {
+  botLoader,
+  botsLoader,
   editorLoader,
   feedLoader,
   guildLoader,
@@ -77,6 +79,18 @@ export const routes: RouteObject[] = [
             lazy: () => import('@/features/guild-profile/GuildProfilePage'),
           },
           {
+            path: p.bots,
+            loader: botsLoader,
+            shouldRevalidate: onNewPath,
+            lazy: () => import('@/features/bots/BotsPage'),
+          },
+          {
+            path: p.bot,
+            loader: botLoader,
+            shouldRevalidate: onNewPath,
+            lazy: () => import('@/features/bots/BotProfilePage'),
+          },
+          {
             path: p.user,
             loader: userLoader,
             shouldRevalidate: onNewPath,
@@ -124,6 +138,25 @@ export const routes: RouteObject[] = [
                 },
                 {path: 'discord', lazy: () => import('@/features/guild-manage/DiscordPage')},
                 {path: 'settings', lazy: () => import('@/features/guild-manage/SettingsPage')},
+              ],
+            },
+          ]),
+          protectedRoutes('manage', [
+            {
+              path: p.botManage,
+              loader: botLoader,
+              shouldRevalidate: onNewPath,
+              lazy: () => import('@/features/bot-manage/BotManageLayout'),
+              children: [
+                {index: true, lazy: () => import('@/features/bot-manage/ProfilePage')},
+                {
+                  path: 'posts',
+                  loader: myPostsLoader,
+                  shouldRevalidate: onNewPath,
+                  lazy: () => import('@/features/bot-manage/PostsPage'),
+                },
+                {path: 'discord', lazy: () => import('@/features/bot-manage/DiscordPage')},
+                {path: 'settings', lazy: () => import('@/features/bot-manage/SettingsPage')},
               ],
             },
           ]),

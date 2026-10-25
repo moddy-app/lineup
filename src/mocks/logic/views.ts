@@ -7,13 +7,17 @@
 
 import type {
   Application,
+  BotCard,
+  BotProfile,
   Experience,
+  ExperienceBot,
   ExperienceGuild,
   GuildCard,
   GuildProfile,
   MeProfileRow,
   Post,
   PostAuthor,
+  PostBot,
   PostDetail,
   PostGuild,
   PostWriteResult,
@@ -28,11 +32,20 @@ import type {
 } from '@/api/types';
 
 import type {Actor, Env, Viewer} from '../env';
-import type {DbExperience, DbPost, DbUser, DiscordGuild, GuildProfileRow} from '../model';
+import type {BotProfileRow, DbExperience, DbPost, DbUser, DiscordGuild, GuildProfileRow} from '../model';
 import {iso, snowflakeDate} from '../time';
-import {canManageGuildQuietly} from './access';
-import {guildBadges, summaryBadges, userBadges} from './badges';
-import {canEditPost, isExpired, isGuildSuspended, isNsfwGuild, isUserSuspended} from './visibility';
+import {canManageBotQuietly, canManageGuildQuietly} from './access';
+import {botBadges, guildBadges, summaryBadges, userBadges} from './badges';
+import {
+  botSupportGuildId,
+  canEditPost,
+  isBotSuspended,
+  isExpired,
+  isGuildSuspended,
+  isNsfwBot,
+  isNsfwGuild,
+  isUserSuspended,
+} from './visibility';
 
 export const MAX_PROFILE_POSTS = 20;
 const SERVER_REFRESH_AFTER_MS = 6 * 3600_000;
@@ -65,16 +78,29 @@ function postAuthor(env: Env, authorId: Snowflake): PostAuthor {
   };
 }
 
-/** The public view of a post (§5). */
+function postBot(env: Env, botId: Snowflake): PostBot {
+  const bot = env.db.bots[botId];
+  return {
+    id: botId,
+    name: bot?.name ?? null,
+    avatar_url: bot?.avatar_url ?? null,
+    nsfw: isNsfwBot(env, botId),
+    badges: botBadges(env, botId),
+  };
+}
+
+/** The public view of a post (§5). A bot post carries `bot` and no `guild` key. */
 export function toPost(env: Env, row: DbPost): Post {
   const {hidden_reason: _reason, ...post} = row;
-  return {
+  const base = {
     ...post,
+    bot_id: row.bot_id ?? null,
     application: row.application ? ({...row.application} satisfies Application) : null,
     is_expired: isExpired(row, env.now),
-    guild: postGuild(env, row.guild_id),
     author: postAuthor(env, row.author_id),
   };
+  if (row.kind === 'bot' && row.bot_id) return {...base, bot: postBot(env, row.bot_id)};
+  return {...base, guild: postGuild(env, row.guild_id)};
 }
 
 /** The private view (own posts, writes): adds `hidden_reason` (§5). */
@@ -115,16 +141,33 @@ function experienceGuild(env: Env, row: DbExperience): ExperienceGuild | null {
   };
 }
 
+/** `experience.bot`: the bot's summary when it has a listed Lineup profile; null otherwise. */
+function experienceBot(env: Env, row: DbExperience): ExperienceBot | null {
+  if (row.kind !== 'bot' || !row.bot_id) return null;
+  const profile = env.db.botProfiles[row.bot_id];
+  if (!profile?.listed || isBotSuspended(env, row.bot_id)) return null;
+  const bot = env.db.bots[row.bot_id];
+  return {
+    id: row.bot_id,
+    name: bot?.name ?? null,
+    avatar_url: bot?.avatar_url ?? null,
+    badges: botBadges(env, row.bot_id),
+  };
+}
+
 function experienceBase(env: Env, row: DbExperience) {
   return {
     id: row.id,
     kind: row.kind,
     guild_id: row.guild_id,
+    bot_id: row.kind === 'bot' ? (row.bot_id ?? null) : null,
     name: row.name,
     invite_url: row.kind === 'guild' && row.invite_code ? `https://discord.gg/${row.invite_code}` : null,
     image_url: row.image_url,
     member_count: row.kind === 'guild' ? row.member_count : null,
+    guild_count: row.kind === 'bot' ? (row.guild_count ?? null) : null,
     guild: experienceGuild(env, row),
+    bot: experienceBot(env, row),
     position: row.position,
     position_other: row.position_other,
     description: row.description,
@@ -244,10 +287,12 @@ export function userSummary(env: Env, user: DbUser): UserSummary {
  * (their oldest current experience), sorted by seniority; `since` is its
  * `start_date`.
  */
-export function teamOf(env: Env, guildId: Snowflake): TeamMember[] {
+export function teamOf(env: Env, guildId: Snowflake, kind: 'guild' | 'bot' = 'guild'): TeamMember[] {
   const byPerson = new Map<Snowflake, DbExperience>();
+  // A bot experience counts in the BOT's team, never in its support server's.
   const rows = Object.values(env.db.experiences)
-    .filter((row) => row.guild_id === guildId && row.status === 'verified' && row.end_date === null)
+    .filter((row) => (kind === 'bot' ? row.kind === 'bot' && row.bot_id === guildId : row.guild_id === guildId))
+    .filter((row) => row.status === 'verified' && row.end_date === null)
     .sort((a, b) => (a.start_date < b.start_date ? -1 : a.start_date > b.start_date ? 1 : 0));
   for (const row of rows) if (!byPerson.has(row.user_id)) byPerson.set(row.user_id, row);
   const team: TeamMember[] = [];
@@ -319,10 +364,114 @@ export function toGuildProfile(
     listed: profile.listed,
     posts: liveGuildPosts(env, profile.guild_id),
     team: teamOf(env, profile.guild_id),
+    bots: botsOfGuild(env, profile.guild_id),
     stale,
     // Managers only (it feeds "updated … ago"); null for anyone else.
     snapshot_at: canManage ? profile.snapshot_at : null,
     can_manage: canManage,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Bots
+// ---------------------------------------------------------------------------
+
+export function botCard(env: Env, profile: BotProfileRow): BotCard {
+  const bot = env.db.bots[profile.bot_id];
+  return {
+    id: profile.bot_id,
+    name: bot?.name ?? null,
+    avatar_url: bot?.avatar_url ?? null,
+    guild_count: bot?.guild_count ?? null,
+    description: cardDescription(profile.description ?? bot?.description ?? null),
+    theme: profile.theme,
+    tags: [...profile.tags],
+    nsfw: isNsfwBot(env, profile.bot_id),
+    badges: botBadges(env, profile.bot_id),
+    support_guild_id: botSupportGuildId(env, profile.bot_id),
+    listed: profile.listed,
+  };
+}
+
+/** `bots` of a server profile: the listed, visible bots whose support server it is. */
+export function botsOfGuild(env: Env, guildId: Snowflake): BotCard[] {
+  return Object.values(env.db.botProfiles)
+    .filter((profile) => profile.listed && botSupportGuildId(env, profile.bot_id) === guildId)
+    .filter((profile) => !isBotSuspended(env, profile.bot_id))
+    .map((profile) => botCard(env, profile))
+    .sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
+}
+
+/** A bot's public posts: published, unexpired, 20 at most, NSFW included. */
+export function liveBotPosts(env: Env, botId: Snowflake): Post[] {
+  return Object.values(env.db.posts)
+    .filter(
+      (post) =>
+        post.kind === 'bot' && post.bot_id === botId && post.status === 'published' && !isExpired(post, env.now),
+    )
+    .filter((post) => !isUserSuspended(env, post.author_id))
+    .sort(byPublishedDesc)
+    .slice(0, MAX_PROFILE_POSTS)
+    .map((post) => toPost(env, post));
+}
+
+/** A bot's full profile. The caller has already decided the viewer may read it. */
+export function toBotProfile(
+  env: Env,
+  profile: BotProfileRow,
+  actor: Actor | null,
+  suspendedViewer = false,
+): BotProfile {
+  const bot = env.db.bots[profile.bot_id];
+  const supportId = botSupportGuildId(env, profile.bot_id);
+  const supportGuild = supportId ? env.db.guilds[supportId] : undefined;
+  const supportProfile = supportId ? env.db.profiles[supportId] : undefined;
+  const stale =
+    env.now.getTime() - Date.parse(profile.snapshot_at) > SERVER_REFRESH_AFTER_MS &&
+    (env.discordDown || profile.refresh_blocked);
+  const canManage = !suspendedViewer && canManageBotQuietly(env, actor, supportId);
+  return {
+    id: profile.bot_id,
+    name: bot?.name ?? null,
+    avatar_url: bot?.avatar_url ?? null,
+    banner_url: null,
+    description: profile.description ?? bot?.description ?? null,
+    app_description: bot?.description ?? null,
+    guild_count: bot?.guild_count ?? null,
+    is_verified: bot?.is_verified ?? false,
+    discord_tags: [...(bot?.discord_tags ?? [])],
+    categories: [...(bot?.categories ?? [])],
+    add_url: `https://discord.com/oauth2/authorize?client_id=${profile.bot_id}`,
+    discoverable: Boolean(bot?.discoverable && bot.support_guild_id),
+    support_guild: supportId
+      ? {
+          id: supportId,
+          name: supportGuild?.name ?? null,
+          icon_url: supportGuild?.icon_url ?? null,
+          member_count: supportGuild?.member_count ?? null,
+          profile:
+            supportProfile && supportProfile.listed && !isGuildSuspended(env, supportId)
+              ? {
+                  id: supportId,
+                  name: supportGuild?.name ?? null,
+                  icon_url: supportGuild?.icon_url ?? null,
+                  badges: summaryBadges(guildBadges(env, supportId, {includePremium: false})),
+                }
+              : null,
+        }
+      : null,
+    links: profile.links.map((entry) => ({...entry})),
+    theme: profile.theme,
+    tags: [...profile.tags],
+    languages: [...profile.languages],
+    created_at: iso(snowflakeDate(profile.bot_id)),
+    badges: botBadges(env, profile.bot_id),
+    listed: profile.listed,
+    posts: liveBotPosts(env, profile.bot_id),
+    team: teamOf(env, profile.bot_id, 'bot'),
+    stale,
+    can_manage: canManage,
+    snapshot_at: canManage ? profile.snapshot_at : null,
   };
 }
 

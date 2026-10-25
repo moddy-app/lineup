@@ -75,7 +75,7 @@ describe('SettingsLayout', () => {
     ).toBe(false);
   });
 
-  it('offers a selector: you, the claimed servers, then "Ajouter un serveur" and "Gérer les serveurs"', async () => {
+  it('offers a selector: you, the claimed servers, then the server and bot dialogs', async () => {
     const {container} = settle('me/posts');
     const button = await waitFor(() => {
       const found = container.querySelector<HTMLElement>('.settings-context button');
@@ -91,6 +91,8 @@ describe('SettingsLayout', () => {
       'Atelier du Phénix',
       'Ajouter un serveur',
       'Gérer les serveurs',
+      'Ajouter un bot',
+      'Gérer les bots',
     ]);
     expect(items[0]?.getAttribute('aria-checked')).toBe('true');
   });
@@ -111,7 +113,8 @@ describe('SettingsLayout', () => {
     expect(await screen.findByText('Contenu')).toBeTruthy();
     fireEvent.click(container.querySelector<HTMLElement>('.settings-context button')!);
     const menu = await screen.findByRole('menu', {name: 'Gérer'});
-    expect([...menu.querySelectorAll<HTMLElement>('[role^="menuitem"]')]).toHaveLength(3);
+    // You, then the four dialogs.
+    expect([...menu.querySelectorAll<HTMLElement>('[role^="menuitem"]')]).toHaveLength(5);
   });
 
   it('opens the server dialogs from the menu, through ?servers=', async () => {

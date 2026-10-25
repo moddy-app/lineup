@@ -4,6 +4,8 @@
  * English is the source of truth for the types (see i18next.d.ts).
  */
 
+import deBotManage from './locales/de/botManage.json';
+import deBots from './locales/de/bots.json';
 import deCatalog from './locales/de/catalog.json';
 import deClaim from './locales/de/claim.json';
 import deCommon from './locales/de/common.json';
@@ -19,6 +21,8 @@ import deMyPosts from './locales/de/myPosts.json';
 import dePost from './locales/de/post.json';
 import deStaff from './locales/de/staff.json';
 import deUserProfile from './locales/de/userProfile.json';
+import enBotManage from './locales/en/botManage.json';
+import enBots from './locales/en/bots.json';
 import enCatalog from './locales/en/catalog.json';
 import enClaim from './locales/en/claim.json';
 import enCommon from './locales/en/common.json';
@@ -34,6 +38,8 @@ import enMyPosts from './locales/en/myPosts.json';
 import enPost from './locales/en/post.json';
 import enStaff from './locales/en/staff.json';
 import enUserProfile from './locales/en/userProfile.json';
+import esBotManage from './locales/es/botManage.json';
+import esBots from './locales/es/bots.json';
 import esCatalog from './locales/es/catalog.json';
 import esClaim from './locales/es/claim.json';
 import esCommon from './locales/es/common.json';
@@ -49,6 +55,8 @@ import esMyPosts from './locales/es/myPosts.json';
 import esPost from './locales/es/post.json';
 import esStaff from './locales/es/staff.json';
 import esUserProfile from './locales/es/userProfile.json';
+import frBotManage from './locales/fr/botManage.json';
+import frBots from './locales/fr/bots.json';
 import frCatalog from './locales/fr/catalog.json';
 import frClaim from './locales/fr/claim.json';
 import frCommon from './locales/fr/common.json';
@@ -64,6 +72,8 @@ import frMyPosts from './locales/fr/myPosts.json';
 import frPost from './locales/fr/post.json';
 import frStaff from './locales/fr/staff.json';
 import frUserProfile from './locales/fr/userProfile.json';
+import ptBRBotManage from './locales/pt-BR/botManage.json';
+import ptBRBots from './locales/pt-BR/bots.json';
 import ptBRCatalog from './locales/pt-BR/catalog.json';
 import ptBRClaim from './locales/pt-BR/claim.json';
 import ptBRCommon from './locales/pt-BR/common.json';
@@ -91,6 +101,8 @@ export const en = {
   claim: enClaim,
   guildProfile: enGuildProfile,
   guildManage: enGuildManage,
+  bots: enBots,
+  botManage: enBotManage,
   userProfile: enUserProfile,
   meProfile: enMeProfile,
   experiences: enExperiences,
@@ -114,6 +126,8 @@ export const resources = {
     claim: frClaim,
     guildProfile: frGuildProfile,
     guildManage: frGuildManage,
+    bots: frBots,
+    botManage: frBotManage,
     userProfile: frUserProfile,
     meProfile: frMeProfile,
     experiences: frExperiences,
@@ -131,6 +145,8 @@ export const resources = {
     claim: esClaim,
     guildProfile: esGuildProfile,
     guildManage: esGuildManage,
+    bots: esBots,
+    botManage: esBotManage,
     userProfile: esUserProfile,
     meProfile: esMeProfile,
     experiences: esExperiences,
@@ -148,6 +164,8 @@ export const resources = {
     claim: ptBRClaim,
     guildProfile: ptBRGuildProfile,
     guildManage: ptBRGuildManage,
+    bots: ptBRBots,
+    botManage: ptBRBotManage,
     userProfile: ptBRUserProfile,
     meProfile: ptBRMeProfile,
     experiences: ptBRExperiences,
@@ -165,6 +183,8 @@ export const resources = {
     claim: deClaim,
     guildProfile: deGuildProfile,
     guildManage: deGuildManage,
+    bots: deBots,
+    botManage: deBotManage,
     userProfile: deUserProfile,
     meProfile: deMeProfile,
     experiences: deExperiences,

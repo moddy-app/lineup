@@ -1,5 +1,5 @@
 /**
- * Every route of LINEUP.md §6, as one typed function. 41 routes; the app also
+ * Every route of LINEUP.md §6 and of the bot guide, as one typed function. 49 routes; the app also
  * calls `GET /auth/me` and `POST /auth/logout` (dashboard routes, not counted).
  *
  * | #  | Route                                                    | Function                      | File           |
@@ -45,6 +45,14 @@
  * | 39 | GET    /lineup/staff/reports                             | getStaffReports               | staff.ts       |
  * | 40 | POST   /lineup/staff/reports/{report_id}/resolve         | resolveReport                 | staff.ts       |
  * | 41 | POST   /lineup/staff/reports/{report_id}/dismiss         | dismissReport                 | staff.ts       |
+ * | 42 | GET    /lineup/bots                                      | getBots                       | bots.ts        |
+ * | 43 | GET    /lineup/me/bots                                   | getMyBots                     | bots.ts        |
+ * | 44 | GET    /lineup/bots/lookup/{bot_id}                      | lookupBot                     | bots.ts        |
+ * | 45 | POST   /lineup/bots/claim                                | claimBot                      | bots.ts        |
+ * | 46 | GET    /lineup/bots/{bot_id}                             | getBot                        | bots.ts        |
+ * | 47 | PUT    /lineup/bots/{bot_id}                             | updateBot                     | bots.ts        |
+ * | 48 | DELETE /lineup/bots/{bot_id}                             | deleteBot                     | bots.ts        |
+ * | 49 | POST   /lineup/bots/{bot_id}/refresh                     | refreshBot                    | bots.ts        |
  * | +  | GET    /auth/me (dashboard route, not under /lineup)     | getAccount                    | auth.ts        |
  * | +  | POST   /auth/logout (dashboard route, not under /lineup) | logout                        | auth.ts        |
  *
@@ -54,6 +62,7 @@
 
 export {getAccount, getMe, loginUrl, LOGIN_PATH, logout, sanitizeRedirect, setLoginUrlBuilder} from './auth';
 export type {LoginUrlBuilder} from './auth';
+export {claimBot, deleteBot, getBot, getBots, getMyBots, lookupBot, refreshBot, updateBot} from './bots';
 export {getCatalog} from './catalog';
 export {
   createExperience,

@@ -19,6 +19,8 @@ import type {InfiniteData} from '@tanstack/react-query';
 
 import type {
   Badge,
+  BotCard,
+  BotProfile,
   Catalog,
   GuildProfile,
   ManualBadgeGrant,
@@ -187,7 +189,9 @@ export function toPublicPost(post: Post): Post {
 /** Whether a post is listed by a `['posts', 'mine', params]` query. */
 export function belongsToMyPosts(post: Post, params: MyPostsParams, myId: Snowflake | undefined): boolean {
   if (params.status && post.status !== params.status) return false;
-  return params.guildId ? post.guild_id === params.guildId : myId !== undefined && post.author_id === myId;
+  if (params.guildId) return post.guild_id === params.guildId;
+  if (params.botId) return post.bot_id === params.botId;
+  return myId !== undefined && post.author_id === myId;
 }
 
 /** A post is on public display: published and not expired. */
@@ -237,6 +241,18 @@ export function withPostInUserProfile(profile: UserProfile, post: Post): UserPro
   return posts === profile.posts ? profile : {...profile, posts};
 }
 
+/** A bot profile after one of its posts was written. */
+export function withPostInBotProfile(profile: BotProfile, post: Post): BotProfile {
+  if (post.kind !== 'bot' || post.bot_id !== profile.id) return profile;
+  const posts = upsertPublicPost(profile.posts, post);
+  return posts === profile.posts ? profile : {...profile, posts};
+}
+
+export function withoutPostInBotProfile(profile: BotProfile, postId: Uuid): BotProfile {
+  const posts = removePublicPost(profile.posts, postId);
+  return posts === profile.posts ? profile : {...profile, posts};
+}
+
 export function withoutPostInGuildProfile(profile: GuildProfile, postId: Uuid): GuildProfile {
   const posts = removePublicPost(profile.posts, postId);
   return posts === profile.posts ? profile : {...profile, posts};
@@ -261,6 +277,14 @@ export function withModeration<T extends Post>(post: T, moderation: PostModerati
 /** A post whose server profile was deleted: its draft and published posts are closed (hidden ones stay). */
 export function closedWithGuild<T extends Post>(post: T, guildId: Snowflake): T {
   if (post.guild_id !== guildId || (post.status !== 'draft' && post.status !== 'published')) return post;
+  return {...post, status: 'closed'};
+}
+
+/** A post whose bot profile was deleted: its draft and published posts are closed (hidden ones stay). */
+export function closedWithBot<T extends Post>(post: T, botId: Snowflake): T {
+  if (post.kind !== 'bot' || post.bot_id !== botId || (post.status !== 'draft' && post.status !== 'published')) {
+    return post;
+  }
   return {...post, status: 'closed'};
 }
 
@@ -352,6 +376,42 @@ export function unclaimMyGuild(list: MyGuild[], guildId: Snowflake): MyGuild[] {
 }
 
 const byName = (a: MyGuild, b: MyGuild) => (a.name ?? '').localeCompare(b.name ?? '');
+
+// ---------------------------------------------------------------------------
+// Bots
+// ---------------------------------------------------------------------------
+
+/** The card of a bot, from its full profile (the description cut like the API's: 160 characters with "…"). */
+export function botCardOf(profile: BotProfile): BotCard {
+  const description = profile.description?.trim() || null;
+  return {
+    id: profile.id,
+    name: profile.name,
+    avatar_url: profile.avatar_url,
+    guild_count: profile.guild_count,
+    description: description && description.length > 160 ? `${description.slice(0, 159)}…` : description,
+    theme: profile.theme,
+    tags: profile.tags,
+    nsfw: profile.theme === 'nsfw',
+    badges: profile.badges,
+    support_guild_id: profile.support_guild?.id ?? null,
+    listed: profile.listed,
+  };
+}
+
+const byBotName = (a: BotCard, b: BotCard) => (a.name ?? '').localeCompare(b.name ?? '');
+
+/** "My bots" after a claim or a write: the card is added or replaced. */
+export function upsertMyBot(list: BotCard[], profile: BotProfile): BotCard[] {
+  const card = botCardOf(profile);
+  const present = list.some((current) => current.id === profile.id);
+  if (!present) return [...list, card].sort(byBotName);
+  return list.map((current) => (current.id === profile.id ? card : current));
+}
+
+export function removeMyBot(list: BotCard[], botId: Snowflake): BotCard[] {
+  return list.some((current) => current.id === botId) ? list.filter((current) => current.id !== botId) : list;
+}
 
 // ---------------------------------------------------------------------------
 // Badges

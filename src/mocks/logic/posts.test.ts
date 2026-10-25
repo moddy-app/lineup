@@ -139,7 +139,7 @@ describe('the public feed', () => {
 
   it('filters by languages, tags, theme, compensation and q (case-insensitive)', async () => {
     const api = createTestApi();
-    expect(ids(await api.call('GET', '/lineup/posts', {query: {languages: 'de'}}))).toEqual([postId(40)]);
+    expect(ids(await api.call('GET', '/lineup/posts', {query: {languages: 'de'}}))).toEqual([postId(47), postId(40)]);
     expect(ids(await api.call('GET', '/lineup/posts', {query: {tags: 'GAMEDEV'}})).sort()).toEqual([postId(16)]);
     expect(ids(await api.call('GET', '/lineup/posts', {query: {theme: 'esport'}})).sort()).toEqual(
       [postId(29), postId(30)].sort(),

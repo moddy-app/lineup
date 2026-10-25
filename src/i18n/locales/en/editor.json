@@ -95,6 +95,10 @@
       "user": {
         "title": "Offer my services",
         "hint": "A post in your name, to find a team."
+      },
+      "bot": {
+        "title": "A bot is hiring",
+        "hint": "For a bot whose support server you administer and that has a Lineup profile."
       }
     },
     "guildLegend": "Server",
@@ -106,7 +110,20 @@
       "title": "No managed server",
       "body": "You need to manage a Discord server and claim it on Lineup to post in its name. You can also publish a personal post."
     },
-    "locked": "The type and the server cannot change once the post exists."
+    "locked": "The type and the author cannot change once the post exists.",
+    "botLegend": "Bot",
+    "loadingBots": "Loading your bots.",
+    "unnamedBot": "Unnamed bot",
+    "addBot": "Add a bot",
+    "noBots": {
+      "title": "No bots managed",
+      "body": "Add to Lineup a bot whose support server you administer to post in its name."
+    },
+    "botsStale": {
+      "title": "Could not check your servers",
+      "body": "Discord did not answer. Try again in a moment.",
+      "retry": "Try again"
+    }
   },
   "content": {
     "title": "Title",
@@ -204,7 +221,8 @@
       "tags_other": "{{count}} tags",
       "expires": "Expires {{date}}",
       "never": "Never expires",
-      "featured": "Featured experience"
+      "featured": "Featured experience",
+      "bot": "Bot: {{name}}"
     }
   },
   "banner": {
@@ -212,7 +230,8 @@
     "myPosts": "My posts",
     "claim": "Claim a server",
     "quotaNew": "A draft does not count toward the limit. You can publish it when a slot frees up.",
-    "quotaEdit": "Your changes are saved, but the post is not published. Close a post, then publish it from My posts."
+    "quotaEdit": "Your changes are saved, but the post is not published. Close a post, then publish it from My posts.",
+    "claimBot": "Add a bot"
   },
   "preview": {
     "title": "Preview",
@@ -243,10 +262,13 @@
     "expiryMin": "Choose a date from tomorrow.",
     "expiryMax": "At most {{count}} days from today.",
     "featuredUserOnly": "Only a personal post can feature an experience.",
-    "featuredNotVerified": "This experience is not verified."
+    "featuredNotVerified": "This experience is not verified.",
+    "botRequired": "Choose a bot.",
+    "botNotManaged": "You do not manage this bot."
   },
   "author": {
     "guild": "Post for the server",
-    "user": "Post as yourself"
+    "user": "Post as yourself",
+    "bot": "Post for the bot"
   }
 }

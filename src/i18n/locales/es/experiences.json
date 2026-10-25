@@ -39,14 +39,16 @@
     "saveAndReset": "Guardar y eliminar la verificación",
     "created": "Experiencia añadida",
     "updated": "Experiencia modificada",
-    "limit": "Tiene {{count}} / {{max}} experiencias. Elimine una para añadir otra."
+    "limit": "Tiene {{count}} / {{max}} experiencias. Elimine una para añadir otra.",
+    "botRefreshed": "Bot actualizado desde Discord"
   },
   "fields": {
     "kind": {
       "label": "Tipo",
       "guild": "Servidor de Discord",
       "service": "Otro servicio",
-      "locked": "El tipo no se puede cambiar."
+      "locked": "El tipo no se puede cambiar.",
+      "bot": "Bot de Discord"
     },
     "currentServer": "Servidor actual:",
     "invite": "Invitación permanente",
@@ -65,7 +67,13 @@
     "endDate": "Fin",
     "current": "Puesto actual, sin fecha de fin",
     "image": "Imagen (URL https)",
-    "imageHelp": "Opcional. Un logotipo o una imagen del servicio."
+    "imageHelp": "Opcional. Un logotipo o una imagen del servicio.",
+    "currentBot": "Bot actual:",
+    "botId": "Application ID del bot",
+    "botIdHelp": "En el portal para desarrolladores de Discord, General Information, Application ID. El nombre y el avatar vienen de Discord.",
+    "botIdEditHelp": "Otro id cambia de bot y retira la verificación.",
+    "botPreview": "Ver el bot",
+    "botRefresh": "Actualizar desde Discord"
   },
   "warning": {
     "before": {
@@ -94,7 +102,9 @@
     "endFuture": "La fecha de fin no puede ser futura.",
     "endBeforeStart": "El fin no puede ser anterior al inicio.",
     "imageTooLong": "{{count}} caracteres como máximo.",
-    "imageNotHttps": "Introduzca una dirección que empiece por https://."
+    "imageNotHttps": "Introduzca una dirección que empiece por https://.",
+    "botIdRequired": "Indique el Application ID del bot.",
+    "botIdInvalid": "Un Application ID solo contiene cifras (de 17 a 20)."
   },
   "delete": {
     "title": "¿Eliminar {{title}}?",
@@ -133,7 +143,8 @@
       "MODERATE_MEMBERS": "Aislar temporalmente miembros",
       "MANAGE_NICKNAMES": "Gestionar apodos",
       "MANAGE_EVENTS": "Gestionar eventos"
-    }
+    },
+    "supportGuild": "Servidor de soporte comprobado"
   },
   "verify": {
     "action": "Verificar automáticamente",

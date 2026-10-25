@@ -10,14 +10,22 @@ import type {Catalog, FeedFilters, PostKind} from '@/api/types';
 /** The theme that the "include adult content" switch governs, never a filter of its own. */
 const NSFW_THEME = 'nsfw';
 
+/** The two pages of posts: `guild` is "Projets" (servers and bots), `user` is "Profils". */
+export type FeedPageKind = 'guild' | 'user';
+
+/** Who recruits, on "Projets": a server or a bot. No value: both. */
+export type Recruiter = 'guild' | 'bot';
+const RECRUITERS: readonly Recruiter[] = ['guild', 'bot'];
+
 /**
  * The filters the page lets people set (no `guild_id` / `author_id`). The kind
- * is not one of them: the route fixes it (`/` is `guild`, `/people` is `user`).
+ * is not one of them: the route fixes it (`/` is "Projets", `/people` is
+ * `user`). On "Projets", `recruiter` narrows to servers or bots (`?recruiter=`).
  */
 export type UiFilters = Pick<
   FeedFilters,
   'positions' | 'languages' | 'tags' | 'theme' | 'compensation' | 'q' | 'include_nsfw'
->;
+> & {recruiter?: Recruiter};
 
 export const SEARCH_DEBOUNCE_MS = 350;
 
@@ -93,6 +101,9 @@ export function parseFeedParams(params: URLSearchParams, catalog: Catalog): UiFi
   const nsfw = params.get('include_nsfw');
   if (nsfw === '1' || nsfw === 'true') filters.include_nsfw = true;
 
+  const recruiter = RECRUITERS.find((value) => value === params.get('recruiter'));
+  if (recruiter) filters.recruiter = recruiter;
+
   return filters;
 }
 
@@ -106,6 +117,7 @@ export function serializeFeedFilters(filters: UiFilters): URLSearchParams {
   if (filters.tags?.length) params.set('tags', filters.tags.join(','));
   if (filters.q) params.set('q', filters.q);
   if (filters.include_nsfw) params.set('include_nsfw', '1');
+  if (filters.recruiter) params.set('recruiter', filters.recruiter);
   return params;
 }
 
@@ -119,13 +131,21 @@ export function activeFilterCount(filters: UiFilters): number {
     filters.tags?.length,
     filters.q,
     filters.include_nsfw,
+    filters.recruiter,
   ].filter(Boolean).length;
 }
 
-/** The filters sent to the API: the route's kind, and adult content only once the age is confirmed. */
-export function effectiveFilters(filters: UiFilters, kind: PostKind, nsfwConfirmed: boolean): FeedFilters {
-  const {include_nsfw: includeNsfw, ...rest} = filters;
-  return includeNsfw && nsfwConfirmed ? {...rest, kind, include_nsfw: true} : {...rest, kind};
+/**
+ * The filters sent to the API: the route's kind (`user`), or on "Projets" the
+ * recruiter chosen (`guild` or `bot`), else no kind at all (servers and bots:
+ * the page drops the people's posts, see `useFeed`). Adult content only once
+ * the age is confirmed.
+ */
+export function effectiveFilters(filters: UiFilters, page: FeedPageKind, nsfwConfirmed: boolean): FeedFilters {
+  const {include_nsfw: includeNsfw, recruiter, ...rest} = filters;
+  const kind: PostKind | undefined = page === 'user' ? 'user' : recruiter;
+  const base: FeedFilters = kind ? {...rest, kind} : rest;
+  return includeNsfw && nsfwConfirmed ? {...base, include_nsfw: true} : base;
 }
 
 /**
@@ -134,14 +154,14 @@ export function effectiveFilters(filters: UiFilters, kind: PostKind, nsfwConfirm
  */
 export function legacyKindRedirect(
   params: URLSearchParams,
-  current: PostKind,
-): {kind: PostKind; search: URLSearchParams} | null {
+  current: FeedPageKind,
+): {kind: FeedPageKind; search: URLSearchParams} | null {
   const asked = params.get('type') ?? params.get('kind');
   const had = params.has('type') || params.has('kind');
   if (!had) return null;
   const rest = new URLSearchParams(params);
   rest.delete('type');
   rest.delete('kind');
-  const kind: PostKind = asked === 'user' || asked === 'guild' ? asked : current;
+  const kind: FeedPageKind = asked === 'user' || asked === 'guild' ? asked : current;
   return {kind, search: rest};
 }

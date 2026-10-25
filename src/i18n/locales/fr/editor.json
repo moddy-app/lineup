@@ -95,6 +95,10 @@
       "user": {
         "title": "Proposer mes services",
         "hint": "Une annonce à votre nom, pour trouver une équipe."
+      },
+      "bot": {
+        "title": "Un bot recrute",
+        "hint": "Pour un bot dont vous administrez le serveur support et qui a un profil Lineup."
       }
     },
     "guildLegend": "Serveur",
@@ -106,7 +110,20 @@
       "title": "Aucun serveur géré",
       "body": "Vous devez gérer un serveur Discord et le revendiquer sur Lineup pour publier en son nom. Vous pouvez aussi publier une annonce personnelle."
     },
-    "locked": "Le type et le serveur ne changent plus une fois l'annonce créée."
+    "locked": "Le type et l'auteur ne changent plus une fois l'annonce créée.",
+    "botLegend": "Bot",
+    "loadingBots": "Chargement de vos bots.",
+    "unnamedBot": "Bot sans nom",
+    "addBot": "Ajouter un bot",
+    "noBots": {
+      "title": "Aucun bot géré",
+      "body": "Ajoutez sur Lineup un bot dont vous administrez le serveur support pour publier en son nom."
+    },
+    "botsStale": {
+      "title": "Impossible de vérifier vos serveurs",
+      "body": "Discord n'a pas répondu. Réessayez dans un instant.",
+      "retry": "Réessayer"
+    }
   },
   "content": {
     "title": "Titre",
@@ -204,7 +221,8 @@
       "tags_other": "{{count}} étiquettes",
       "expires": "Expire le {{date}}",
       "never": "N'expire jamais",
-      "featured": "Expérience mise en avant"
+      "featured": "Expérience mise en avant",
+      "bot": "Bot : {{name}}"
     }
   },
   "banner": {
@@ -212,7 +230,8 @@
     "myPosts": "Mes annonces",
     "claim": "Revendiquer un serveur",
     "quotaNew": "Un brouillon ne compte pas dans la limite. Vous pourrez le publier quand une place se libère.",
-    "quotaEdit": "Vos modifications sont enregistrées, mais l'annonce n'est pas publiée. Fermez une annonce, puis publiez-la depuis Mes annonces."
+    "quotaEdit": "Vos modifications sont enregistrées, mais l'annonce n'est pas publiée. Fermez une annonce, puis publiez-la depuis Mes annonces.",
+    "claimBot": "Ajouter un bot"
   },
   "preview": {
     "title": "Aperçu",
@@ -243,10 +262,13 @@
     "expiryMin": "Choisissez une date à partir de demain.",
     "expiryMax": "Au plus {{count}} jours à partir d'aujourd'hui.",
     "featuredUserOnly": "Seule une annonce personnelle peut mettre une expérience en avant.",
-    "featuredNotVerified": "Cette expérience n'est pas vérifiée."
+    "featuredNotVerified": "Cette expérience n'est pas vérifiée.",
+    "botRequired": "Choisissez un bot.",
+    "botNotManaged": "Vous ne gérez pas ce bot."
   },
   "author": {
     "guild": "Annonce pour le serveur",
-    "user": "Annonce en votre nom"
+    "user": "Annonce en votre nom",
+    "bot": "Annonce pour le bot"
   }
 }

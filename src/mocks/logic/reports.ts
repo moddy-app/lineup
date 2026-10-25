@@ -45,7 +45,7 @@ export function createReport(
   }
   const targetId = input.target_type === 'post' ? input.target_id.toLowerCase() : String(BigInt(input.target_id));
 
-  // Who owns the target: the author of a post, the person, the one who claimed a server (§6.5).
+  // Who owns the target: the author of a post, the person, the one who claimed a server or a bot (§6.5).
   let ownerId: string | undefined;
   if (input.target_type === 'post') {
     const post = env.db.posts[targetId];
@@ -54,6 +54,11 @@ export function createReport(
   } else if (input.target_type === 'user') {
     if (!env.db.users[targetId]) throw notFound('lineup_report_target_not_found');
     ownerId = targetId;
+  } else if (input.target_type === 'bot') {
+    // A bot must have a profile; the one who claimed it cannot report it.
+    const profile = env.db.botProfiles[targetId];
+    if (!profile) throw notFound('lineup_report_target_not_found');
+    ownerId = profile.claimed_by;
   } else {
     const profile = env.db.profiles[targetId];
     if (!profile) throw notFound('lineup_report_target_not_found');

@@ -121,6 +121,45 @@ export interface GuildProfileRow {
   updated_at: IsoDateTime;
 }
 
+/** A bot as the App Directory knows it (the API reads it from a non-official Discord source). */
+export interface DiscordBot {
+  /** The application id (the same as the bot's for almost every bot). */
+  id: Snowflake;
+  name: string;
+  /** The bot's avatar, else the application's icon. */
+  avatar_url: string | null;
+  /** The App Directory's description. */
+  description: string | null;
+  /** Rounded by Discord. */
+  guild_count: number | null;
+  is_verified: boolean;
+  discord_tags: string[];
+  categories: string[];
+  /** Turned on by the developer in the Developer Portal (App Directory). */
+  discoverable: boolean;
+  /** The "Support Server" of the Developer Portal; null when none is set. */
+  support_guild_id: Snowflake | null;
+}
+
+/** `lineup_bot_profiles`. The Discord side is read from `DiscordBot`. */
+export interface BotProfileRow {
+  bot_id: Snowflake;
+  description: string | null;
+  links: Link[];
+  theme: string | null;
+  tags: string[];
+  languages: string[];
+  listed: boolean;
+  claimed_by: Snowflake;
+  /** The support server at the last refresh: the rights follow it until the next one. */
+  support_guild_id: Snowflake | null;
+  snapshot_at: IsoDateTime;
+  /** Refreshing always fails (`stale: true` once the snapshot is old). */
+  refresh_blocked: boolean;
+  created_at: IsoDateTime;
+  updated_at: IsoDateTime;
+}
+
 /** What a person is on a server, on Discord: the base permissions the API reads with their OAuth token. */
 export interface Member {
   user_id: Snowflake;
@@ -145,7 +184,7 @@ export interface Invite {
 export type StoredBadgeGrant = Omit<ManualBadgeGrant, 'entity_name' | 'entity_icon_url'>;
 
 /** `lineup_posts`. */
-export type DbPost = Omit<Post, 'is_expired' | 'guild' | 'author'> & {hidden_reason: string | null};
+export type DbPost = Omit<Post, 'is_expired' | 'guild' | 'bot' | 'author'> & {hidden_reason: string | null};
 
 /** `lineup_experiences`. */
 export interface DbExperience {
@@ -153,12 +192,16 @@ export interface DbExperience {
   user_id: Snowflake;
   kind: ExperienceKind;
   guild_id: Snowflake | null;
+  /** A bot experience only. */
+  bot_id?: Snowflake | null;
   invite_code: string | null;
   name: string;
   /** A server: its icon, read from the invitation. A service: an https URL the person typed. */
   image_url: string | null;
   /** A server only, read from the invitation. */
   member_count: number | null;
+  /** A bot only: its server count, read from Discord. */
+  guild_count?: number | null;
   position: string;
   position_other: string | null;
   description: string | null;
@@ -189,6 +232,9 @@ export interface DbData {
   users: Record<Snowflake, DbUser>;
   guilds: Record<Snowflake, DiscordGuild>;
   profiles: Record<Snowflake, GuildProfileRow>;
+  /** The App Directory. */
+  bots: Record<Snowflake, DiscordBot>;
+  botProfiles: Record<Snowflake, BotProfileRow>;
   members: Member[];
   invites: Record<string, Invite>;
   posts: Record<Uuid, DbPost>;

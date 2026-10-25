@@ -1,0 +1,110 @@
+{
+  "bar": {
+    "unsaved": "Cambios sin guardar",
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "reset": "Cancelar"
+  },
+  "links": {
+    "title": "Enlaces",
+    "hint": "Hasta {{count}} enlaces, solo https. El nombre tiene 40 caracteres como máximo.",
+    "label": "Nombre del enlace {{n}}",
+    "url": "Dirección del enlace {{n}}",
+    "remove": "Quitar el enlace {{n}}",
+    "add": "Añadir un enlace"
+  },
+  "theme": {
+    "label": "Temática",
+    "none": "Sin temática"
+  },
+  "tags": {
+    "label": "Etiquetas",
+    "hint": "Separadas por comas. Minúsculas, números y guiones, de 2 a 24 caracteres. {{count}} de {{max}}."
+  },
+  "errors": {
+    "fixFields": "Corrija los campos marcados y guarda de nuevo.",
+    "descriptionMax": "Máximo {{count}} caracteres.",
+    "linkLabel": "Se requiere un nombre de 1 a {{max}} caracteres.",
+    "linkUrl": "Escriba una dirección https.",
+    "linksMax": "Máximo {{count}} enlaces.",
+    "tagsMax": "Máximo {{count}} etiquetas.",
+    "tagPattern": "\"{{tag}}\" no es válida: de 2 a 24 minúsculas, números o guiones.",
+    "languagesMax": "Máximo {{count}} idiomas.",
+    "inviteLength": "Escriba un código o enlace de 2 a 200 caracteres."
+  },
+  "description": {
+    "title": "Descripción",
+    "label": "Descripción del bot",
+    "hint": "Se acepta Markdown. Déjelo vacío para mostrar la descripción del App Directory.",
+    "discordTitle": "Descripción del App Directory:",
+    "discordNone": "Este bot no tiene descripción en el App Directory.",
+    "useDiscord": "Usar la descripción de Discord",
+    "preview": "Vista previa",
+    "hidePreview": "Ocultar la vista previa"
+  },
+  "topics": {
+    "title": "Temática y etiquetas",
+    "description": "Ayudan a encontrar el bot en el directorio y en los anuncios."
+  },
+  "languages": {
+    "label": "Idiomas del bot ({{count}} de {{max}})",
+    "title": "Idiomas",
+    "description": "Los idiomas del bot y de su equipo. {{count}} de {{max}}."
+  },
+  "title": "Gestión del bot",
+  "pageTitle": "Gestionar {{name}}",
+  "unknownName": "Bot sin nombre",
+  "notFound": {
+    "title": "Bot no encontrado",
+    "body": "Este bot no tiene perfil en Lineup. Añádalo primero desde el panel.",
+    "action": "Ver los bots"
+  },
+  "forbidden": {
+    "title": "Usted no gestiona este bot",
+    "body": "Debe ser propietario o administrador del servidor de soporte del bot. «Gestionar servidor» no basta. Si el desarrollador acaba de cambiar el servidor de soporte, los derechos siguen al nuevo en la próxima actualización.",
+    "action": "Ver el perfil"
+  },
+  "viewProfile": "Ver el perfil público",
+  "saved": "Perfil guardado.",
+  "newPost": "Nuevo anuncio",
+  "profile": {
+    "description": "Lo que ven las personas que consultan el bot."
+  },
+  "visibility": {
+    "title": "Visibilidad",
+    "label": "Mostrar el bot en el directorio",
+    "on": "El perfil y los anuncios del bot son visibles para todos.",
+    "off": "El perfil y sus anuncios están ocultos, salvo para los gestores y el staff de Moddy.",
+    "description": "Quién puede ver el perfil y los anuncios del bot."
+  },
+  "snapshot": {
+    "title": "Datos de Discord",
+    "body": "El nombre, el avatar, el número de servidores y el servidor de soporte vienen de Discord. Se leen cada 6 horas; puede forzar una lectura una vez por minuto, por ejemplo tras un cambio en el portal para desarrolladores.",
+    "done": "Datos de Discord actualizados.",
+    "staleDone": "Discord no respondió: se conservan los datos anteriores.",
+    "refresh": "Actualizar ahora",
+    "refreshing": "Leyendo...",
+    "waitIn": "Disponible en {{seconds}} s",
+    "updated": "Actualizado {{relative}}",
+    "rights": "Los gestores son los administradores del servidor de soporte. Si cambia, los derechos siguen al nuevo tras la lectura."
+  },
+  "danger": {
+    "title": "Zona de peligro",
+    "body": "Eliminar el perfil lo oculta y cierra los anuncios del bot. El bot no se modifica en Discord.",
+    "action": "Eliminar el perfil",
+    "confirmTitle": "¿Eliminar el perfil de {{name}}?",
+    "confirmBody": "Qué ocurre:",
+    "effectPosts": "Sus anuncios se cerrarán: los borradores y los anuncios publicados pasan a «cerrado».",
+    "effectHidden": "Los anuncios ocultados por el equipo de Moddy siguen ocultos.",
+    "effectReclaim": "Se pierden la descripción, los enlaces, las etiquetas y la visibilidad.",
+    "confirm": "Eliminar",
+    "done": "Se eliminó el perfil de {{name}}."
+  },
+  "pages": {
+    "profile": "Descripción, tema, etiquetas, idiomas y enlaces.",
+    "posts": "Los anuncios de este bot, sea quien sea su autor.",
+    "discord": "Lo que Lineup lee de Discord.",
+    "settings": "Visibilidad y eliminación."
+  },
+  "notDiscoverable": "Su bot ya no es detectable en Discord o ya no declara servidor de soporte. Los datos mostrados son los últimos conocidos. Active la opción en el portal para desarrolladores (App Directory)."
+}

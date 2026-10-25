@@ -13,8 +13,8 @@ import {Status} from '@/ui';
 interface QuotaMeterProps {
   used: number;
   limit: number;
-  /** `guild`: posts of a server ("sur ce serveur"); `user`: the person's own. */
-  scope: 'guild' | 'user';
+  /** `guild`: posts of a server ("sur ce serveur"); `bot`: of a bot; `user`: the person's own. */
+  scope: 'guild' | 'bot' | 'user';
   className?: string;
 }
 

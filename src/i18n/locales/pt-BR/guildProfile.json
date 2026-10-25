@@ -56,5 +56,8 @@
     "label": "Equipe do servidor",
     "since": "{{position}}, desde {{date}}",
     "empty": "Só aparecem aqui as pessoas com uma experiência verificada neste servidor."
+  },
+  "bots": {
+    "title": "Bots deste servidor"
   }
 }

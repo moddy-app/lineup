@@ -7,7 +7,8 @@
   "post": {
     "kind": {
       "guild": "Sucht Verstärkung",
-      "user": "Sucht ein Team"
+      "user": "Sucht ein Team",
+      "bot": "Bot sucht Leute"
     },
     "status": {
       "draft": "Entwurf",
@@ -21,7 +22,8 @@
     "positions": "Positionen",
     "hoursPerWeek": "{{value}} Std. pro Woche",
     "openings_one": "{{value}} offene Stelle",
-    "openings_other": "{{value}} offene Stellen"
+    "openings_other": "{{value}} offene Stellen",
+    "unknownBot": "Bot ohne Namen"
   },
   "expiry": {
     "inHours_one": "Läuft in {{value}} Stunde ab",
@@ -100,14 +102,17 @@
       }
     },
     "members_one": "Mitglied",
-    "members_other": "Mitglieder"
+    "members_other": "Mitglieder",
+    "servers_one": "Server",
+    "servers_other": "Server"
   },
   "report": {
     "button": "Melden",
     "title": {
       "post": "Diese Anzeige melden",
       "user": "Dieses Profil melden",
-      "guild": "Diesen Server melden"
+      "guild": "Diesen Server melden",
+      "bot": "Diesen Bot melden"
     },
     "intro": "Ihre Meldung geht an das Moddy-Team. Sie erhalten keine Antwort.",
     "reason": "Grund",
@@ -161,7 +166,9 @@
     "guild_other": "{{used}} / {{limit}} veröffentlichte Anzeigen auf diesem Server",
     "user_one": "{{used}} / {{limit}} veröffentlichte Anzeige",
     "user_other": "{{used}} / {{limit}} veröffentlichte Anzeigen",
-    "full": "Limit erreicht"
+    "full": "Limit erreicht",
+    "bot_one": "{{used}} / {{limit}} veröffentlichte Anzeige für diesen Bot",
+    "bot_other": "{{used}} / {{limit}} veröffentlichte Anzeigen für diesen Bot"
   },
   "stale": {
     "text": "Discord-Daten sind möglicherweise veraltet"
@@ -203,7 +210,15 @@
     "context": {
       "label": "Verwalten",
       "me": "Ich",
-      "manage": "Meine Server verwalten"
+      "manage": "Meine Server verwalten",
+      "addBot": "Bot hinzufügen",
+      "manageBots": "Bots verwalten"
+    },
+    "botNav": {
+      "profile": "Profil",
+      "posts": "Anzeigen",
+      "discord": "Discord-Daten",
+      "settings": "Einstellungen"
     }
   },
   "filters": {
@@ -211,5 +226,14 @@
     "add": "Filter hinzufügen",
     "allUsed": "Alle Filter sind in Verwendung",
     "remove": "Entfernen"
+  },
+  "bot": {
+    "unknownName": "Bot ohne Namen",
+    "servers_one": "Server",
+    "servers_other": "Server",
+    "tags": "Schlagwörter",
+    "unlisted": "Nicht gelistet",
+    "verifiedApp": "Von Discord verifizierte App",
+    "supportGuild": "Support-Server: {{name}}"
   }
 }

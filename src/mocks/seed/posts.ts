@@ -10,7 +10,7 @@ import type {Application, Commitment, Requirement} from '@/api/types';
 
 import type {DbPost} from '../model';
 import {DAY, iso, MINUTE} from '../time';
-import {experienceId, fillerPostId, G, postId as pid, U} from './ids';
+import {B, experienceId, fillerPostId, G, postId as pid, U} from './ids';
 
 const requirement = (
   type: string,
@@ -63,6 +63,8 @@ export function seedPosts(now: Date): DbPost[] {
     author: string,
     seed: Omit<PostSeed, 'kind' | 'author_id'> & {published?: number},
   ) => ({kind: 'guild', guild_id: guild, author_id: author, ...seed}) as PostSeed & {published?: number};
+  const botPost = (bot: string, author: string, seed: Omit<PostSeed, 'kind' | 'author_id'> & {published?: number}) =>
+    ({kind: 'bot', bot_id: bot, author_id: author, ...seed}) as PostSeed & {published?: number};
   const userPost = (author: string, seed: Omit<PostSeed, 'kind' | 'author_id'> & {published?: number}) =>
     ({kind: 'user', author_id: author, ...seed}) as PostSeed & {published?: number};
 
@@ -738,6 +740,57 @@ export function seedPosts(now: Date): DbPost[] {
         theme: 'tech',
         tags: ['moderation', 'formation'],
         published: 4,
+      }),
+    ),
+    // ---- Bots ----------------------------------------------------------------------------------------------
+    make(
+      46,
+      botPost(B.cube, U.alex, {
+        title: 'Cube Guard cherche un développeur Java',
+        description:
+          'Cube Guard relie Cubelands FR et une centaine de serveurs Minecraft à Discord. Nous cherchons une personne à l’aise avec Java et les plugins Paper pour maintenir la synchronisation des sanctions.\n\nTravail à distance, quelques heures par semaine.',
+        positions: ['developer'],
+        theme: 'gaming',
+        tags: ['minecraft', 'java'],
+        application: dm,
+        commitment: commit(4, 'volunteer', 1),
+        published: 3,
+      }),
+    ),
+    make(
+      47,
+      botPost(B.moddy, U.noe, {
+        title: 'Moddy recrute des traducteurs',
+        description:
+          'Moddy est traduit en cinq langues. Nous cherchons des personnes pour relire les nouvelles phrases avant chaque version, en espagnol, en allemand et en portugais du Brésil.',
+        positions: ['other'],
+        positions_other: ['Traducteur'],
+        languages: ['es', 'de', 'pt'],
+        theme: 'tech',
+        application: url('https://moddy.app/jobs'),
+        published: 1,
+      }),
+    ),
+    make(
+      48,
+      botPost(B.pixel, U.camille, {
+        title: 'Pixel Helper cherche un graphiste',
+        description: 'Nous voulons refaire les illustrations des défis hebdomadaires. Brouillon à compléter.',
+        positions: ['graphic_designer'],
+        theme: 'art',
+        status: 'draft',
+      }),
+    ),
+    make(
+      49,
+      botPost(B.nox, U.karim, {
+        title: 'Nox cherche des scénaristes',
+        description:
+          'Écriture de scénarios pour nos salons de jeu de rôle pour adultes. Réservé aux personnes majeures.',
+        positions: ['other'],
+        positions_other: ['Scénariste'],
+        theme: 'nsfw',
+        published: 5,
       }),
     ),
   ];

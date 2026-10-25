@@ -1,13 +1,16 @@
 /**
  * The catalog as LINEUP.md §4 documents it ("valeurs réelles"), copied
- * verbatim. NOT used by the app, which always loads `GET /lineup/catalog`
- * (the lists are never hardcoded): this is what the development mock serves
- * and what the tests use. catalog.fixture.test.ts checks it against the doc.
+ * verbatim (`lineupDocCatalog`, checked against the doc by catalog.test.ts),
+ * then with the additions of the bot guide (`catalogFixture`): `entities` on
+ * every badge, the `discord_verified_app` badge, `max_published_posts_per_bot`.
+ * NOT used by the app, which always loads `GET /lineup/catalog` (the lists are
+ * never hardcoded): this is what the development mock serves and what the
+ * tests use.
  */
 
-import type {Catalog} from './types';
+import type {BadgeEntityType, Catalog, CatalogBadge} from './types';
 
-export const catalogFixture = {
+export const lineupDocCatalog = {
   positions: [
     {id: 'moderator', label: {fr: 'Modérateur', en: 'Moderator'}},
     {id: 'admin', label: {fr: 'Administrateur', en: 'Administrator'}},
@@ -254,4 +257,26 @@ export const catalogFixture = {
     title: {min: 5, max: 100},
     description: {min: 20, max: 4000},
   },
-} satisfies Catalog;
+} satisfies Omit<Catalog, 'limits'> & {limits: Omit<Catalog['limits'], 'max_published_posts_per_bot'>};
+
+/** The kinds of entity each badge applies to, as the API sends them since bots. */
+function entitiesOf(badge: {id: string; entity: string}): BadgeEntityType[] {
+  if (badge.id === 'lineup_verified' || badge.id === 'moddy_partner') return ['user', 'guild', 'bot'];
+  if (badge.entity === 'both') return ['user', 'guild'];
+  return [badge.entity as BadgeEntityType];
+}
+
+export const catalogFixture: Catalog = {
+  ...lineupDocCatalog,
+  badges: [
+    ...lineupDocCatalog.badges.map((badge): CatalogBadge => ({...badge, entities: entitiesOf(badge)})),
+    {
+      id: 'discord_verified_app',
+      label: {fr: 'Application vérifiée Discord', en: 'Discord verified app'},
+      entity: 'bot',
+      entities: ['bot'],
+      source: 'computed',
+    },
+  ],
+  limits: {...lineupDocCatalog.limits, max_published_posts_per_bot: 5},
+};

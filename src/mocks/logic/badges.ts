@@ -54,7 +54,7 @@ export function badge(id: string): Badge {
 const inCatalogOrder = (ids: Iterable<string>): Badge[] =>
   [...new Set(ids)].sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b)).map(badge);
 
-function manualBadges(env: Env, entityType: 'user' | 'guild', entityId: Snowflake): string[] {
+function manualBadges(env: Env, entityType: 'user' | 'guild' | 'bot', entityId: Snowflake): string[] {
   return env.db.badges
     .filter((grant) => grant.entity_type === entityType && grant.entity_id === entityId)
     .map((grant) => grant.badge);
@@ -75,6 +75,14 @@ export function guildBadges(env: Env, guildId: Snowflake, options: {includePremi
   // §10: the badge follows Discord's own level 1 or 3; the Lineup theme `nsfw` is a separate thing.
   if (guild && (guild.nsfw_level === 1 || guild.nsfw_level === 3)) ids.push('nsfw');
   ids.push(...manualBadges(env, 'guild', guildId));
+  return inCatalogOrder(ids);
+}
+
+/** A bot's badges: `discord_verified_app` when Discord verified the application, then manual grants. */
+export function botBadges(env: Env, botId: Snowflake): Badge[] {
+  const ids: string[] = [];
+  if (env.db.bots[botId]?.is_verified) ids.push('discord_verified_app');
+  ids.push(...manualBadges(env, 'bot', botId));
   return inCatalogOrder(ids);
 }
 

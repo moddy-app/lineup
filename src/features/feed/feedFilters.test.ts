@@ -64,9 +64,15 @@ describe('effectiveFilters', () => {
     expect(effectiveFilters({q: 'a'}, 'user', false)).toEqual({q: 'a', kind: 'user'});
   });
 
+  it('on Projets, sends the recruiter chosen, or no kind for servers and bots together', () => {
+    expect(effectiveFilters({q: 'a'}, 'guild', false)).toEqual({q: 'a'});
+    expect(effectiveFilters({recruiter: 'bot'}, 'guild', false)).toEqual({kind: 'bot'});
+    expect(effectiveFilters({recruiter: 'guild'}, 'guild', false)).toEqual({kind: 'guild'});
+  });
+
   it('sends include_nsfw only after the age confirmation', () => {
-    expect(effectiveFilters({include_nsfw: true}, 'guild', false)).toEqual({kind: 'guild'});
-    expect(effectiveFilters({include_nsfw: true}, 'guild', true)).toEqual({kind: 'guild', include_nsfw: true});
+    expect(effectiveFilters({include_nsfw: true}, 'user', false)).toEqual({kind: 'user'});
+    expect(effectiveFilters({include_nsfw: true}, 'user', true)).toEqual({kind: 'user', include_nsfw: true});
   });
 });
 

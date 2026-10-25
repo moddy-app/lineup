@@ -89,7 +89,8 @@
     "targets": {
       "post": "Anúncio",
       "user": "Perfil",
-      "guild": "Servidor"
+      "guild": "Servidor",
+      "bot": "Bot"
     },
     "open": "Abrir: {{target}}",
     "reasons": {
@@ -135,11 +136,13 @@
     "filters": {
       "all": "Todas",
       "user": "Pessoas",
-      "guild": "Servidores"
+      "guild": "Servidores",
+      "bot": "Bots"
     },
     "entities": {
       "user": "Pessoa",
-      "guild": "Servidor"
+      "guild": "Servidor",
+      "bot": "Bot"
     },
     "empty": {
       "title": "Nenhum selo manual",

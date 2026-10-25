@@ -379,3 +379,10 @@ md-dialog.experience-dialog {
 .exp-verification p.exp-note {
   font-size: var(--text-body-small);
 }
+
+/* A bot experience: "Preview" and "Refresh from Discord" under the Application ID. */
+.exp-bot-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-s);
+}

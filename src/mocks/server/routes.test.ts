@@ -1,6 +1,6 @@
 import {describe, expect, it} from 'vitest';
 
-import {experienceId, G, postId, reportId, U} from '../seed/ids';
+import {B, experienceId, G, postId, reportId, U} from '../seed/ids';
 import {createTestApi} from '../testing';
 import {routes} from './routes';
 
@@ -21,6 +21,14 @@ const DOC: ReadonlyArray<
   ['PUT', '/lineup/guilds/{guild_id}', 'session'],
   ['DELETE', '/lineup/guilds/{guild_id}', 'session'],
   ['POST', '/lineup/guilds/{guild_id}/refresh', 'session'],
+  ['GET', '/lineup/bots', 'public'],
+  ['GET', '/lineup/me/bots', 'session'],
+  ['GET', '/lineup/bots/lookup/{bot_id}', 'session'],
+  ['POST', '/lineup/bots/claim', 'session'],
+  ['GET', '/lineup/bots/{bot_id}', 'optional'],
+  ['PUT', '/lineup/bots/{bot_id}', 'session'],
+  ['DELETE', '/lineup/bots/{bot_id}', 'session'],
+  ['POST', '/lineup/bots/{bot_id}/refresh', 'session'],
   ['GET', '/lineup/users/{user_id}', 'optional'],
   ['GET', '/lineup/me/profile', 'session'],
   ['PUT', '/lineup/me/profile', 'session'],
@@ -57,6 +65,7 @@ const DOC: ReadonlyArray<
 
 const VALUES: Record<string, string> = {
   guild_id: G.cubelands,
+  bot_id: B.moddy,
   user_id: U.alex,
   post_id: postId(1),
   exp_id: experienceId(1),
@@ -70,8 +79,8 @@ const concrete = (path: string) => path.replace(/\{(\w+)\}/g, (_match, name: str
 const normalized = (path: string) => path.replace(/\{\w+\}|:\w+/g, ':p');
 
 describe('the table of routes', () => {
-  it('serves the 40 routes of LINEUP.md section 6 that are requests, plus the dashboard account and logout', () => {
-    expect(DOC).toHaveLength(42);
+  it('serves the 40 routes of LINEUP.md section 6 that are requests, the 8 bot routes, plus the dashboard account and logout', () => {
+    expect(DOC).toHaveLength(50);
     expect(DOC.some(([, path]) => path === '/lineup/auth/login')).toBe(false);
     const served = routes.map((route) => `${route.method} ${normalized(route.path)} ${route.auth}`).sort();
     const documented = DOC.map(([method, path, auth]) => `${method} ${normalized(path)} ${auth}`).sort();

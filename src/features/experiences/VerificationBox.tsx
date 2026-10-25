@@ -20,7 +20,7 @@ import {useAuthAction} from '@/auth/useAuthAction';
 import {RelativeTime, RetryButton} from '@/components';
 import {useLanguage} from '@/i18n/useLanguage';
 import {useT} from '@/i18n/useT';
-import {Chip, Chips, Icon, TextField, useSnackbar} from '@/ui';
+import {Chip, Chips, Icon, Pill, TextField, useSnackbar} from '@/ui';
 
 import {NOTE_MAX, verificationOffer} from './experienceForm';
 
@@ -125,6 +125,14 @@ export function VerificationBox({experience}: {experience: PrivateExperience}) {
                       </dd>
                     </>
                   )}
+                  {evidence.support_guild_id && (
+                    <>
+                      <dt>{t('evidence.supportGuild')}</dt>
+                      <dd>
+                        <Pill>{evidence.support_guild_id}</Pill>
+                      </dd>
+                    </>
+                  )}
                   {evidence.checked_at && (
                     <>
                       <dt>{t('evidence.checkedAt')}</dt>
@@ -202,7 +210,7 @@ export function VerificationBox({experience}: {experience: PrivateExperience}) {
 
       {failedReason && (
         <div className="exp-inline-panel is-error" role="alert">
-          <p>{errorMessage(verifyError, tErrors)}</p>
+          <p>{errorMessage(verifyError, tErrors, {subject: experience.kind === 'bot' ? 'bot' : 'guild'})}</p>
         </div>
       )}
 

@@ -8,6 +8,7 @@ import {newRuntime, type Db} from '../env';
 import {compareKeyed} from '../logic/cursor';
 import {isLive, isNsfwGuild, isNsfwPost} from '../logic/visibility';
 import {DAY, HOUR, iso} from '../time';
+import {seedBotProfiles, seedDiscordBots} from './bots';
 import {seedExperiences} from './experiences';
 import {seedFillerGuilds} from './fillers';
 import {seedDiscordGuilds, seedGuildProfiles, seedInvites, seedMembers} from './guilds';
@@ -17,7 +18,7 @@ import {seedFillerPosts, seedPosts} from './posts';
 import {seedUsers} from './users';
 
 /** Bump when the seed's shape changes: a stored database of another version is thrown away. */
-export const DB_VERSION = 3;
+export const DB_VERSION = 4;
 
 const FEED_PAGE = 20;
 const DIRECTORY_PAGE = 24;
@@ -31,6 +32,8 @@ export function createSeedDb(now: Date = new Date()): Db {
     users: seedUsers(now),
     guilds: Object.fromEntries(seedDiscordGuilds().map((guild) => [guild.id, guild])),
     profiles: Object.fromEntries(seedGuildProfiles(now).map((profile) => [profile.guild_id, profile])),
+    bots: Object.fromEntries(seedDiscordBots().map((bot) => [bot.id, bot])),
+    botProfiles: Object.fromEntries(seedBotProfiles(now).map((profile) => [profile.bot_id, profile])),
     members: seedMembers(),
     invites: Object.fromEntries(seedInvites(now).map((invite) => [invite.code.toLowerCase(), invite])),
     posts: Object.fromEntries(seedPosts(now).map((post) => [post.id, post])),
@@ -64,6 +67,13 @@ export function createSeedDb(now: Date = new Date()): Db {
 /** A server experience carries the icon and the member count read from its invitation when it was created. */
 function readServerExperiences(db: Db): void {
   for (const row of Object.values(db.experiences)) {
+    const bot = row.kind === 'bot' && row.bot_id ? db.bots[row.bot_id] : undefined;
+    if (bot) {
+      row.name = bot.name;
+      row.image_url = bot.avatar_url;
+      row.guild_count = bot.guild_count;
+      continue;
+    }
     const guild = row.kind === 'guild' && row.guild_id ? db.guilds[row.guild_id] : undefined;
     if (!guild) continue;
     row.image_url = guild.icon_url;
@@ -84,7 +94,13 @@ function addFillers(db: Db, now: Date): void {
   const feedRows = byKey(
     Object.values(db.posts)
       .filter((post) => isLive(post, now))
-      .filter((post) => post.kind === 'user' || db.profiles[post.guild_id ?? '']?.listed === true)
+      .filter((post) =>
+        post.kind === 'user'
+          ? true
+          : post.kind === 'bot'
+            ? db.botProfiles[post.bot_id ?? '']?.listed === true
+            : db.profiles[post.guild_id ?? '']?.listed === true,
+      )
       .filter((post) => !isNsfwPost(env, post)),
     (post) => ({at: post.published_at ?? post.created_at, id: post.id}),
   );

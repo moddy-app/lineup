@@ -3,11 +3,12 @@ import {Link, useParams} from 'react-router';
 import {useCatalogLabel} from '@/api/catalog';
 import {hasCode} from '@/api/client';
 import {useGuild} from '@/api/queries';
-import type {GuildProfile, TeamMember} from '@/api/types';
+import type {BotCard, GuildProfile} from '@/api/types';
 import {paths} from '@/app/paths';
 import {usePageTitle} from '@/app/usePageTitle';
 import {
   BadgeStrip,
+  BotRow,
   DisplayName,
   EmptyState,
   Fact,
@@ -23,16 +24,16 @@ import {
   StaleNotice,
   TagLabel,
   useNsfwConfirmed,
-  UserAvatar,
 } from '@/components';
 import {safeLinks} from '@/components/links';
 import {useLanguage} from '@/i18n/useLanguage';
 import {useT} from '@/i18n/useT';
 import {formatMonthYear, formatNumber} from '@/lib/format';
 import {safeHttpsUrl} from '@/lib/url';
-import {Card, Icon, LinkButton, Page, PageHeader, InnerCard, InnerCards, PageLoading, ShowcasePage} from '@/ui';
+import {Card, Icon, LinkButton, Page, PageHeader, InnerCards, PageLoading, ShowcasePage} from '@/ui';
 
 import {GuildActionsMenu} from './GuildActionsMenu';
+import {TeamCard} from './TeamCard';
 import './guildProfile.css';
 
 export function Component() {
@@ -150,7 +151,8 @@ function GuildView({guild}: {guild: GuildProfile}) {
         <aside className="guild-side">
           <InfoCard guild={guild} />
           <LinksCard guild={guild} />
-          <TeamCard team={guild.team} />
+          <BotsCard bots={guild.bots ?? []} />
+          <TeamCard team={guild.team} title={t('team.title')} label={t('team.label')} empty={t('team.empty')} />
         </aside>
       </div>
     </ShowcasePage>
@@ -246,48 +248,18 @@ function InfoCard({guild}: {guild: GuildProfile}) {
   );
 }
 
-function TeamCard({team}: {team: TeamMember[]}) {
+/** The bots whose support server this is: a link to each bot's profile. Nothing when there are none. */
+function BotsCard({bots}: {bots: BotCard[]}) {
   const {t} = useT('guildProfile');
-  const {label} = useCatalogLabel();
-  useLanguage();
+  if (bots.length === 0) return null;
   return (
-    <Card as="section" className="guild-team" aria-labelledby="guild-team-title">
-      <h2 id="guild-team-title">{t('team.title')}</h2>
-      {team.length === 0 ? (
-        <p className="guild-empty">{t('team.empty')}</p>
-      ) : (
-        <InnerCards aria-label={t('team.label')}>
-          {team.map((member) => {
-            const position =
-              member.position === 'other' && member.position_other
-                ? member.position_other
-                : label('positions', member.position);
-            const display = member.user.display_name ?? member.user.username ?? member.user.id;
-            return (
-              <InnerCard as="li" key={member.user.id} to={paths.user(member.user.id)}>
-                <UserAvatar
-                  id={member.user.id}
-                  src={member.user.avatar_url}
-                  decoration={member.user.avatar_decoration}
-                  size="small"
-                />
-                <span className="guild-member">
-                  <DisplayName
-                    name={display}
-                    badges={member.user.badges}
-                    entity="user"
-                    className="guild-member-name"
-                    focusable={false}
-                  />
-                  <span className="guild-member-meta">
-                    {t('team.since', {position, date: formatMonthYear(member.since)})}
-                  </span>
-                </span>
-              </InnerCard>
-            );
-          })}
-        </InnerCards>
-      )}
+    <Card as="section" className="guild-bots" aria-labelledby="guild-bots-title">
+      <h2 id="guild-bots-title">{t('bots.title')}</h2>
+      <InnerCards aria-label={t('bots.title')}>
+        {bots.map((bot) => (
+          <BotRow key={bot.id} bot={bot} />
+        ))}
+      </InnerCards>
     </Card>
   );
 }

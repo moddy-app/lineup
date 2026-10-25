@@ -6,7 +6,7 @@ import type {BadgeEntityType, CatalogBadge, StaffExperienceStatus, StaffReportSt
 export const REVIEW_STATUSES: readonly StaffExperienceStatus[] = ['pending', 'unverified', 'verified', 'rejected'];
 export const REPORT_STATUSES: readonly StaffReportStatus[] = ['open', 'resolved', 'dismissed', 'all'];
 export type EntityFilter = 'all' | BadgeEntityType;
-export const ENTITY_FILTERS: readonly EntityFilter[] = ['all', 'user', 'guild'];
+export const ENTITY_FILTERS: readonly EntityFilter[] = ['all', 'user', 'guild', 'bot'];
 
 /** The reason, note and badge-note limits of LINEUP.md §6.7. */
 export const REASON_MAX = FIELD_LIMITS.staff.reasonMax;
@@ -33,12 +33,20 @@ export function isEntityId(value: string): boolean {
   return /^\d{15,20}$/.test(value);
 }
 
-/** The manual badges (the only ones the staff can grant) that exist for this kind of entity. */
+/**
+ * The manual badges (the only ones the staff can grant) that exist for this
+ * kind of entity. `entities` is the full list; `entity` (`both` for user +
+ * guild) is only read when a catalog has no `entities` yet.
+ */
 export function manualBadgesFor(
   badges: readonly CatalogBadge[] | undefined,
   entityType: BadgeEntityType,
 ): CatalogBadge[] {
   return (badges ?? []).filter(
-    (badge) => badge.source === 'manual' && (badge.entity === 'both' || badge.entity === entityType),
+    (badge) =>
+      badge.source === 'manual' &&
+      (badge.entities
+        ? badge.entities.includes(entityType)
+        : badge.entity === entityType || (badge.entity === 'both' && entityType !== 'bot')),
   );
 }

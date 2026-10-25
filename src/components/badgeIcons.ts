@@ -22,6 +22,7 @@ const BADGE_ICONS: Readonly<Record<string, string>> = {
   discord_hypesquad_house_balance: 'balance',
   discord_early_supporter: 'favorite',
   discord_verified_bot: 'smart_toy',
+  discord_verified_app: 'verified',
   discord_early_verified_bot_developer: 'code',
   discord_certified_moderator: 'gavel',
   discord_active_developer: 'code',

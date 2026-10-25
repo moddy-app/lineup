@@ -1,6 +1,6 @@
 # API simulée
 
-Une imitation de l'API Moddy (les 41 routes de LINEUP.md §6 + `POST /auth/logout`) qui tourne dans le navigateur avec [MSW](https://mswjs.io) v2. Le code de l'app est le même avec ou sans elle : les handlers interceptent les URL absolues (`${config.apiBase}/lineup/...`). Le détail complet, y compris la table des codes d'invitation, est dans [`../src/mocks/README.md`](../src/mocks/README.md) ; cette page en donne l'essentiel.
+Une imitation de l'API Moddy (les 41 routes de LINEUP.md §6, les 8 routes des bots + `POST /auth/logout`) qui tourne dans le navigateur avec [MSW](https://mswjs.io) v2. Le code de l'app est le même avec ou sans elle : les handlers interceptent les URL absolues (`${config.apiBase}/lineup/...`). Le détail complet, y compris la table des codes d'invitation, est dans [`../src/mocks/README.md`](../src/mocks/README.md) ; cette page en donne l'essentiel.
 
 ## Démarrage
 
@@ -63,6 +63,10 @@ Résolus par le Discord du mock dans l'ordre documenté : invitation, droits, do
 - `GET /lineup/guilds/{id}` : `snapshot_at` pour un gestionnaire seulement ; Arena Esport FR a `invite.url` nul.
 - Expériences : `image_url` (https, 500 caractères, modifiable pour un service, ignoré pour un serveur) et `member_count` (lus dans l'invitation pour un serveur) ; `experience.guild` pour un serveur à profil listé.
 - Résumés (`post.guild`, `post.author`, `team[].user`, `experience.guild`, `me.user`, cartes) : `badges` sans badges Discord ni `moddy_premium` ; `post.guild.nsfw` ; cartes d'annuaire avec `description` (160 caractères, « … ») et `nsfw` ; `listed` sur `me/guilds` ; `entity_name` et `entity_icon_url` sur les badges staff.
+
+## Bots
+
+`db.bots` (l'App Directory) et `db.botProfiles` (`logic/bots.ts`, `seed/bots.ts`). Les droits suivent le serveur support (propriétaire ou `ADMINISTRATOR` dans la liste de serveurs de la personne). Application ID de test et cas pour Camille dans [`../src/mocks/README.md`](../src/mocks/README.md) (« Test bot ids »). `DB_VERSION` passe à 4.
 
 ## Données de départ
 

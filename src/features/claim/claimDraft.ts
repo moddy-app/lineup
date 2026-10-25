@@ -18,3 +18,10 @@ export function parseClaimDraft(value: unknown): ClaimDraft | null {
   if (invite.trim() === '' && guildId === null) return null;
   return {invite, guildId};
 }
+
+/** The Application ID typed in the "Add a bot" dialog, kept across the sign-in redirect. */
+export const BOT_CLAIM_DRAFT_KEY = 'bot-claim-draft';
+
+export function parseBotClaimDraft(value: unknown): string | null {
+  return typeof value === 'string' && value.trim() !== '' ? value : null;
+}

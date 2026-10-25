@@ -31,6 +31,7 @@ export function getFeed(
       compensation: filters.compensation,
       q: filters.q?.trim(),
       guild_id: filters.guild_id,
+      bot_id: filters.bot_id,
       author_id: filters.author_id,
       include_nsfw: filters.include_nsfw ? true : undefined,
       limit,
@@ -41,15 +42,15 @@ export function getFeed(
 
 /**
  * `GET /lineup/me/posts`: every status, newest created first, private view.
- * With a `guildId`: all the posts of that server whoever wrote them (managers only).
+ * With a `guildId` (or a `botId`): all the posts of that server (or bot) whoever wrote them (managers only).
  */
 export function getMyPosts(
-  {guildId, status}: MyPostsParams = {},
+  {guildId, botId, status}: MyPostsParams = {},
   {cursor, limit, signal}: PageOptions = {},
 ): Promise<Paginated<PrivatePost>> {
   return apiFetch<Paginated<PrivatePost>>('/lineup/me/posts', {
     signal,
-    query: {guild_id: guildId, status, limit, cursor},
+    query: {guild_id: guildId, bot_id: botId, status, limit, cursor},
   });
 }
 

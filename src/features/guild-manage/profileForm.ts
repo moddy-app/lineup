@@ -1,4 +1,4 @@
-import type {Catalog, GuildProfile, Link, UpdateGuildBody} from '@/api/types';
+import type {BotProfile, Catalog, GuildProfile, Link, UpdateGuildBody} from '@/api/types';
 import {FIELD_LIMITS} from '@/api/limits';
 import {safeHttpsUrl} from '@/lib/url';
 
@@ -24,7 +24,12 @@ export function lineupDescription(profile: Pick<GuildProfile, 'description' | 'd
   return description === (profile.discord_description ?? '') ? '' : description;
 }
 
-export function valuesFromProfile(profile: GuildProfile): ProfileFormValues {
+type EditableProfile = Pick<
+  GuildProfile,
+  'description' | 'discord_description' | 'links' | 'theme' | 'tags' | 'languages' | 'listed'
+>;
+
+export function valuesFromProfile(profile: EditableProfile): ProfileFormValues {
   return {
     description: lineupDescription(profile),
     links: profile.links.map((link) => ({...link})),
@@ -34,6 +39,11 @@ export function valuesFromProfile(profile: GuildProfile): ProfileFormValues {
     invite: '',
     listed: profile.listed,
   };
+}
+
+/** A bot's profile in the same form: its Discord text is the App Directory's description. */
+export function valuesFromBot(bot: BotProfile): ProfileFormValues {
+  return valuesFromProfile({...bot, discord_description: bot.app_description});
 }
 
 /** `Minecraft, #survie  RP` gives `['minecraft', 'survie', 'rp']`. */

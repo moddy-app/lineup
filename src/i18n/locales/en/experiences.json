@@ -39,14 +39,16 @@
     "saveAndReset": "Save and remove the verification",
     "created": "Experience added",
     "updated": "Experience updated",
-    "limit": "You have {{count}} / {{max}} experiences. Delete one to add another."
+    "limit": "You have {{count}} / {{max}} experiences. Delete one to add another.",
+    "botRefreshed": "Bot refreshed from Discord"
   },
   "fields": {
     "kind": {
       "label": "Type",
       "guild": "Discord server",
       "service": "Other service",
-      "locked": "The type cannot change."
+      "locked": "The type cannot change.",
+      "bot": "Discord bot"
     },
     "currentServer": "Current server:",
     "invite": "Permanent invite",
@@ -65,7 +67,13 @@
     "endDate": "End",
     "current": "Current role, no end date",
     "image": "Image (https URL)",
-    "imageHelp": "Optional. A logo or a picture of the service."
+    "imageHelp": "Optional. A logo or a picture of the service.",
+    "currentBot": "Current bot:",
+    "botId": "Bot's Application ID",
+    "botIdHelp": "In the Discord Developer Portal, General Information, Application ID. The name and avatar come from Discord.",
+    "botIdEditHelp": "Another id changes the bot and removes the verification.",
+    "botPreview": "Look up the bot",
+    "botRefresh": "Refresh from Discord"
   },
   "warning": {
     "before": {
@@ -94,7 +102,9 @@
     "endFuture": "The end date cannot be in the future.",
     "endBeforeStart": "The end cannot be before the start.",
     "imageTooLong": "{{count}} characters at most.",
-    "imageNotHttps": "Enter an address starting with https://."
+    "imageNotHttps": "Enter an address starting with https://.",
+    "botIdRequired": "Type the bot's Application ID.",
+    "botIdInvalid": "An Application ID is made of digits only (17 to 20)."
   },
   "delete": {
     "title": "Delete {{title}}?",
@@ -133,7 +143,8 @@
       "MODERATE_MEMBERS": "Timeout Members",
       "MANAGE_NICKNAMES": "Manage Nicknames",
       "MANAGE_EVENTS": "Manage Events"
-    }
+    },
+    "supportGuild": "Support server checked"
   },
   "verify": {
     "action": "Verify automatically",

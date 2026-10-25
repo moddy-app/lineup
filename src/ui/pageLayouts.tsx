@@ -2,7 +2,7 @@ import {type HTMLAttributes, lazy, type ReactNode, Suspense, useEffect, useId, u
 import {Link, useLocation, useNavigate} from 'react-router';
 
 import {paths} from '@/app/paths';
-import {CLAIM_DRAFT_KEY} from '@/features/claim/claimDraft';
+import {BOT_CLAIM_DRAFT_KEY, CLAIM_DRAFT_KEY} from '@/features/claim/claimDraft';
 import {useT} from '@/i18n/useT';
 import {cx} from '@/lib/cx';
 import {getItem} from '@/lib/storage';
@@ -136,10 +136,39 @@ function SettingsNavLink({to, icon, label, current}: SettingsLink) {
   );
 }
 
-/** The entries of a context: the person's four pages, or a server's five. */
+/** The entries of a context: the person's pages, a server's five, or a bot's four. */
 function useContextLinks(context: DashboardContext): SettingsLink[] {
   const {t} = useT('components');
   const {pathname} = useLocation();
+  if (context.kind === 'bot') {
+    const id = context.botId;
+    return [
+      {
+        to: paths.botManage(id),
+        icon: 'badge',
+        label: t('settings.botNav.profile'),
+        current: same(pathname, paths.botManage(id)),
+      },
+      {
+        to: paths.botManagePosts(id),
+        icon: 'campaign',
+        label: t('settings.botNav.posts'),
+        current: under(pathname, paths.botManagePosts(id)) || EDITOR_PATH.test(pathname),
+      },
+      {
+        to: paths.botManageDiscord(id),
+        icon: 'sync',
+        label: t('settings.botNav.discord'),
+        current: under(pathname, paths.botManageDiscord(id)),
+      },
+      {
+        to: paths.botManageSettings(id),
+        icon: 'settings',
+        label: t('settings.botNav.settings'),
+        current: under(pathname, paths.botManageSettings(id)),
+      },
+    ];
+  }
   if (context.kind === 'guild') {
     const id = context.guildId;
     return [
@@ -249,6 +278,7 @@ export function SettingsLayout({title, description, actions, children, className
   // A claim interrupted by the sign-in: come back to its dialog, wherever the sign-in landed.
   useEffect(() => {
     if (getItem<unknown>(CLAIM_DRAFT_KEY, null, 'session') !== null) servers.show('add');
+    else if (getItem<unknown>(BOT_CLAIM_DRAFT_KEY, null, 'session') !== null) servers.show('add-bot');
     // Once, when the page opens.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

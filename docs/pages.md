@@ -4,7 +4,7 @@ Une section par route de `src/app/paths.ts`. Toutes les pages sont chargées à 
 
 ## `/` Projets et `/people` Profils (`features/feed`)
 
-- Deux pages, un seul composant (`FeedView`, paramétré par `kind`) : `/` (`FeedPage`) liste les annonces `guild` (serveurs qui recrutent), `/people` (`PeoplePage`) les annonces `user` (personnes qui proposent leurs services). Le type n'est ni dans l'interface ni dans l'URL : la route le fixe. Une ancienne adresse `/?type=user` (ou `kind=`) est redirigée vers la bonne page, les autres filtres conservés (`legacyKindRedirect`).
+- Deux pages, un seul composant (`FeedView`, paramétré par `kind`) : `/` (`FeedPage`) liste les annonces `guild` et `bot` (serveurs et bots qui recrutent ; chip « Type » `?recruiter=guild|bot`, voir [bots.md](bots.md)), `/people` (`PeoplePage`) les annonces `user` (personnes qui proposent leurs services). Le type n'est ni dans l'interface ni dans l'URL : la route le fixe. Une ancienne adresse `/?type=user` (ou `kind=`) est redirigée vers la bonne page, les autres filtres conservés (`legacyKindRedirect`).
 - Haut de bas : `PageHeader` (titre, une ligne, action principale « Publier une annonce » ou « Proposer mes services » vers `paths.postNew()` (`paths.postNew('user')`, soit `?kind=user`, sur `/people`), connexion si anonyme, désactivée si suspendu), `FilterBar`, grille de `PostCard` `variant="tile"` sur toute la largeur de contenu (cartes carrées, `.feed-grid` : 4 colonnes à 1400 px, 2 sur téléphone ; l'état de chargement, « Charger plus » et la fin de liste restent dessous, pleine largeur), « Charger plus » / fin de liste. Pas de jauge de quota ici (elle reste dans l'éditeur et Mes annonces).
 - API : `GET /lineup/posts` (`useFeed`, curseur, `kind` envoyé), `GET /lineup/catalog` (filtres).
 - Filtres dans l'URL (`feedFilters.ts`) : `q` (recherche, délai 350 ms, champ principal), chips Postes (multi), Langues (multi), Thème (single), Rémunération (single), Contenu adulte (Masquer / Afficher, passe par `NsfwConfirmDialog`). `tags` reste lisible depuis l'URL mais n'a pas de chip (pas de liste connue). Une valeur inconnue du catalogue est ignorée.
@@ -37,6 +37,10 @@ Une section par route de `src/app/paths.ts`. Toutes les pages sont chargées à 
 - API : `GET /lineup/me/posts` (curseur, filtre `status`), `POST .../publish`, `POST .../close`, `DELETE`.
 - États : chargement, vide propre à chaque statut, erreur de ligne avec réessai, pagination « Charger plus », confirmation de suppression.
 - Erreurs : `lineup_quota_exceeded`, `lineup_post_expired`, `lineup_post_invalid_status`, `lineup_post_not_found`.
+
+## Bots : `/bots`, `/bots/:botId`, `/bots/:botId/manage/*`
+
+Voir [bots.md](bots.md) (annuaire, profil, gestion, dialogues « Ajouter un bot » et « Gérer les bots », intégrations dans Projets, l'éditeur, les expériences, le profil serveur et le staff).
 
 ## `/guilds` (ancienne adresse de l'annuaire)
 

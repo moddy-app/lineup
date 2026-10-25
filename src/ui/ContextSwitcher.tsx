@@ -1,8 +1,9 @@
 import {useNavigate} from 'react-router';
 
-import {useGuild, useMyGuilds} from '@/api/queries';
+import {useBot, useGuild, useMyBots, useMyGuilds} from '@/api/queries';
 import {paths} from '@/app/paths';
 import {useSession} from '@/auth/session';
+import {BotAvatar} from '@/components/BotAvatar';
 import {GuildIcon} from '@/components/GuildIcon';
 import {useT} from '@/i18n/useT';
 import {defaultAvatarUrl} from '@/lib/discord';
@@ -14,8 +15,9 @@ import {Icon} from './Icon';
 import {useServersDialog} from './serversDialog';
 
 /**
- * "Who am I managing": you, or one of your claimed servers, then "Add a
- * server" and "Manage servers" (two dialogs, `?servers=`). One full-width block (`surface-container-high`, no border) and the shared `Dropdown`. While the
+ * "Who am I managing": you, one of your claimed servers or one of your bots,
+ * then "Add a server", "Manage servers", "Add a bot" and "Manage bots" (four
+ * dialogs, `?servers=`). One full-width block (`surface-container-high`, no border) and the shared `Dropdown`. While the
  * list of servers loads or if it fails, only you (and the server of the
  * current address, read with `useGuild`) are offered.
  */
@@ -28,6 +30,9 @@ export function ContextSwitcher({context}: {context: DashboardContext}) {
   const myGuilds = useMyGuilds();
   const currentGuildId = context.kind === 'guild' ? context.guildId : undefined;
   const currentGuild = useGuild(currentGuildId);
+  const myBots = useMyBots();
+  const currentBotId = context.kind === 'bot' ? context.botId : undefined;
+  const currentBot = useBot(currentBotId);
 
   const user = me?.user;
   const myName = user?.global_name ?? user?.username ?? t('settings.context.me');
@@ -56,14 +61,36 @@ export function ContextSwitcher({context}: {context: DashboardContext}) {
     });
   }
 
+  const bots = myBots.data?.items ?? [];
+  for (const bot of bots) {
+    options.push({
+      context: {kind: 'bot', botId: bot.id},
+      label: bot.name ?? bot.id,
+      leading: <BotAvatar id={bot.id} src={bot.avatar_url} size="small" />,
+    });
+  }
+  if (currentBotId && !bots.some((bot) => bot.id === currentBotId)) {
+    options.push({
+      context: context,
+      label: currentBot.data?.name ?? currentBotId,
+      leading: <BotAvatar id={currentBotId} src={currentBot.data?.avatar_url} size="small" />,
+    });
+  }
+
   const current = options.find((option) => sameContext(option.context, context)) ?? options[0]!;
-  const items: DropdownItem[] = options.map((option) => ({
-    key: option.context.kind === 'guild' ? option.context.guildId : 'me',
-    label: option.label,
-    leading: option.leading,
-    selected: sameContext(option.context, context),
+  const items: DropdownItem[] = options.map(({context: target, label, leading}) => ({
+    key: target.kind === 'guild' ? `guild:${target.guildId}` : target.kind === 'bot' ? `bot:${target.botId}` : 'me',
+    label,
+    leading,
+    selected: sameContext(target, context),
     onSelect: () =>
-      void navigate(option.context.kind === 'guild' ? paths.guildManage(option.context.guildId) : paths.me()),
+      void navigate(
+        target.kind === 'guild'
+          ? paths.guildManage(target.guildId)
+          : target.kind === 'bot'
+            ? paths.botManage(target.botId)
+            : paths.me(),
+      ),
   }));
   items.push(
     {
@@ -74,6 +101,19 @@ export function ContextSwitcher({context}: {context: DashboardContext}) {
       onSelect: () => servers.show('add'),
     },
     {key: 'manage', label: tClaim('menu.manage'), icon: 'settings', onSelect: () => servers.show('manage')},
+    {
+      key: 'add-bot',
+      label: t('settings.context.addBot'),
+      icon: 'smart_toy',
+      separated: true,
+      onSelect: () => servers.show('add-bot'),
+    },
+    {
+      key: 'manage-bots',
+      label: t('settings.context.manageBots'),
+      icon: 'tune',
+      onSelect: () => servers.show('manage-bots'),
+    },
   );
 
   return (

@@ -10,7 +10,7 @@ import type {VerificationEvidence} from '@/api/types';
 import type {DbExperience} from '../model';
 import {DAY, iso} from '../time';
 import {mockImageUrl} from './assets';
-import {experienceId as xid, G, U} from './ids';
+import {B, experienceId as xid, G, U} from './ids';
 
 type ExperienceSeed = Pick<DbExperience, 'user_id' | 'kind' | 'name' | 'position' | 'start_date'> &
   Partial<DbExperience>;
@@ -330,6 +330,43 @@ export function seedExperiences(now: Date): DbExperience[] {
         description: 'Animation de tournois amateurs.',
       }),
       25,
+    ),
+    // Bots: the name, avatar and server count are read from the App Directory (seed/index.ts).
+    make(
+      {
+        user_id: U.camille,
+        kind: 'bot',
+        bot_id: B.cube,
+        name: 'Cube Guard',
+        position: 'developer',
+        start_date: '2023-05-01',
+        description: 'Commandes de sanctions synchronisées avec le serveur Minecraft.',
+        ...oauth(20, ['MANAGE_MESSAGES', 'MODERATE_MEMBERS'], false, 4),
+      },
+      26,
+    ),
+    make(
+      {
+        user_id: U.noe,
+        kind: 'bot',
+        bot_id: B.moddy,
+        name: 'Moddy',
+        position: 'developer',
+        start_date: '2023-11-21',
+        ...oauth(40, ['ADMINISTRATOR'], true, 8),
+      },
+      27,
+    ),
+    make(
+      {
+        user_id: U.camille,
+        kind: 'bot',
+        bot_id: B.pixel,
+        name: 'Pixel Helper',
+        position: 'support',
+        start_date: '2024-02-01',
+      },
+      28,
     ),
   ];
 }

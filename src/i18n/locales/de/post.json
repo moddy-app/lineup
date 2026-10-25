@@ -34,7 +34,9 @@
     "guild": "Server",
     "user": "Autor",
     "viewGuild": "Server ansehen",
-    "viewUser": "Profil ansehen"
+    "viewUser": "Profil ansehen",
+    "bot": "Bot",
+    "viewBot": "Bot ansehen"
   },
   "featured": {
     "title": "Hervorgehobene Erfahrung"

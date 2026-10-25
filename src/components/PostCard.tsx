@@ -2,7 +2,7 @@
  * A post in two forms.
  *
  *  - `feed`: a whole-card link (`a.card`, the kit's one hover). Nothing
- *    interactive inside it. Server or author (with the verification mark) and
+ *    interactive inside it. Server, bot or author (with the verification mark) and
  *    the date, title, a two-line excerpt, then one line of meta (positions as
  *    small pills, compensation, hours, openings, expiry, language flags). The
  *    page says whether servers recruit or people offer: no kind marker.
@@ -26,13 +26,13 @@ import {CommitmentSummary} from './CommitmentSummary';
 import {ExpiryLabel} from './ExpiryLabel';
 import {expiryIsNear} from './expiry';
 import {DisplayName} from './DisplayName';
-import {GuildIcon} from './GuildIcon';
 import {LanguageFlags} from './LanguageFlags';
 import {positionIcon, positionItems} from './positions';
 import {PostStatusBadge} from './PostStatusBadge';
+import {recruiterOf} from './recruiter';
+import {RecruiterAvatar} from './RecruiterAvatar';
 import {RelativeTime} from './RelativeTime';
 import {plainExcerpt} from './text';
-import {UserAvatar} from './UserAvatar';
 
 interface PostCardProps {
   post: Post;
@@ -55,27 +55,19 @@ function usePositionItems(post: Post) {
 function PostFeedCard({post, showStatus}: {post: Post; showStatus?: boolean}) {
   const {t} = useT('components');
   const positions = usePositionItems(post);
-  const isGuild = post.kind === 'guild';
-  const name = isGuild
-    ? (post.guild?.name ?? t('post.unknownGuild'))
-    : (post.author.global_name ?? post.author.username ?? t('post.unknownAuthor'));
-  const badges = isGuild ? post.guild?.badges : post.author.badges;
+  const recruiter = recruiterOf(post, t);
   const near = expiryIsNear(post.expires_at, post.is_expired);
   const hasMeta = positions.length > 0 || post.commitment !== null || post.languages.length > 0 || near;
 
   return (
     <Card to={paths.post(post.id)} className="post-card">
       <div className="post-head">
-        {isGuild && post.guild_id ? (
-          <GuildIcon id={post.guild_id} iconUrl={post.guild?.icon_url} size="small" />
-        ) : (
-          <UserAvatar id={post.author.id} src={post.author.avatar_url} size="small" />
-        )}
+        <RecruiterAvatar recruiter={recruiter} size="small" />
         <DisplayName
           className="post-author-name"
-          name={name}
-          badges={badges}
-          entity={isGuild ? 'guild' : 'user'}
+          name={recruiter.name}
+          badges={recruiter.badges}
+          entity={recruiter.entity}
           focusable={false}
         />
         <RelativeTime className="post-date" value={post.published_at ?? post.created_at} />
@@ -122,11 +114,7 @@ function PostTile({post, showStatus}: {post: Post; showStatus?: boolean}) {
   const {t} = useT('components');
   const {label} = useCatalogLabel();
   const positions = usePositionItems(post);
-  const isGuild = post.kind === 'guild';
-  const name = isGuild
-    ? (post.guild?.name ?? t('post.unknownGuild'))
-    : (post.author.global_name ?? post.author.username ?? t('post.unknownAuthor'));
-  const badges = isGuild ? post.guild?.badges : post.author.badges;
+  const recruiter = recruiterOf(post, t);
   const shown = positions.slice(0, TILE_POSITIONS);
   const hidden = positions.length - shown.length;
   const compensation = post.commitment?.compensation;
@@ -134,17 +122,13 @@ function PostTile({post, showStatus}: {post: Post; showStatus?: boolean}) {
   return (
     <Card to={paths.post(post.id)} className="post-card post-tile">
       <div className="post-head">
-        {isGuild && post.guild_id ? (
-          <GuildIcon id={post.guild_id} iconUrl={post.guild?.icon_url} size="small" />
-        ) : (
-          <UserAvatar id={post.author.id} src={post.author.avatar_url} size="small" />
-        )}
+        <RecruiterAvatar recruiter={recruiter} size="small" />
         <div className="post-head-text">
           <DisplayName
             className="post-author-name"
-            name={name}
-            badges={badges}
-            entity={isGuild ? 'guild' : 'user'}
+            name={recruiter.name}
+            badges={recruiter.badges}
+            entity={recruiter.entity}
             focusable={false}
           />
           <RelativeTime className="post-date" value={post.published_at ?? post.created_at} />
@@ -186,8 +170,8 @@ function PostRow({post, showStatus}: {post: Post; showStatus?: boolean}) {
     <InnerCard as="li" to={paths.post(post.id)}>
       <Shape
         small
-        shape={post.kind === 'guild' ? 'square' : 'hexagon'}
-        tone={post.kind === 'guild' ? 'primary' : 'tertiary'}
+        shape={post.kind === 'guild' ? 'square' : post.kind === 'bot' ? 'pentagon' : 'hexagon'}
+        tone={post.kind === 'guild' ? 'primary' : post.kind === 'bot' ? 'secondary' : 'tertiary'}
         icon={positionIcon(first ?? 'other')}
       />
       <RowBody

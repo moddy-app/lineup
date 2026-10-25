@@ -50,7 +50,14 @@
     "validation_error": "Einige Felder sind ungültig.",
     "lineup_rate_limited": "Zu viele Versuche. Versuchen Sie es gleich noch einmal.",
     "discord_unavailable": "Discord antwortet gerade nicht. Versuchen Sie es gleich noch einmal.",
-    "network_error": "Keine Verbindung. Prüfen Sie Ihr Netzwerk."
+    "network_error": "Keine Verbindung. Prüfen Sie Ihr Netzwerk.",
+    "lineup_bot_forbidden": "Sie müssen Eigentümer oder Administrator des Support-Servers dieses Bots sein.",
+    "lineup_bot_not_found": "Dieser Bot wurde nicht gefunden oder hat kein Lineup-Profil.",
+    "bot_not_found": "Kein Bot mit dieser ID. Verwenden Sie die Application ID.",
+    "lineup_bot_already_claimed": "Dieser Bot hat bereits ein Lineup-Profil.",
+    "bot_not_discoverable": "Dieser Bot ist nicht auffindbar. Aktivieren Sie die Auffindbarkeit im Developer Portal (App Directory).",
+    "bot_support_guild_missing": "Für diesen Bot ist im Developer Portal kein Support-Server angegeben.",
+    "lineup_bot_profile_missing": "Dieser Bot hat kein Lineup-Profil. Beanspruchen Sie ihn zuerst."
   },
   "sessionExpired": "Ihre Sitzung ist abgelaufen. Melden Sie sich erneut an.",
   "generic": "Es ist ein Fehler aufgetreten. Versuchen Sie es erneut.",
@@ -70,7 +77,9 @@
     "guild_one": "Sie haben bereits {{count}} veröffentlichte Anzeige auf diesem Server. Schließen Sie eine oder speichern Sie diese als Entwurf.",
     "guild_other": "Sie haben bereits {{count}} veröffentlichte Anzeigen auf diesem Server. Schließen Sie eine oder speichern Sie diese als Entwurf.",
     "user_one": "Sie haben bereits {{count}} veröffentlichte Anzeige. Schließen Sie eine oder speichern Sie diese als Entwurf.",
-    "user_other": "Sie haben bereits {{count}} veröffentlichte Anzeigen. Schließen Sie eine oder speichern Sie diese als Entwurf."
+    "user_other": "Sie haben bereits {{count}} veröffentlichte Anzeigen. Schließen Sie eine oder speichern Sie diese als Entwurf.",
+    "bot_one": "Dieser Bot hat bereits {{count}} veröffentlichte Anzeige. Schließen Sie eine oder speichern Sie diese als Entwurf.",
+    "bot_other": "Dieser Bot hat bereits {{count}} veröffentlichte Anzeigen. Schließen Sie eine oder speichern Sie diese als Entwurf."
   },
   "forbidden": {
     "claim": "Sie müssen Eigentümer des Servers sein oder die Berechtigung Administrator oder Server verwalten haben.",
@@ -86,7 +95,8 @@
     "kind": "Der Anzeigentyp ist ungültig.",
     "compensation": "Die Vergütung ist ungültig.",
     "positions": "Eine der Positionen ist ungültig.",
-    "status": "Der Status ist ungültig."
+    "status": "Der Status ist ungültig.",
+    "bot_id": "Filtern Sie nach Server oder nach Bot, nicht nach beidem."
   },
   "verificationFailed": {
     "not_member": "Sie sind kein Mitglied dieses Servers. Beantragen Sie eine manuelle Prüfung.",
@@ -94,7 +104,8 @@
   },
   "verificationNotApplicable": {
     "not_guild": "Die automatische Verifizierung gilt nur für Discord-Server. Beantragen Sie eine manuelle Prüfung.",
-    "ended": "Die automatische Verifizierung gilt nur für laufende Erfahrungen. Beantragen Sie eine manuelle Prüfung."
+    "ended": "Die automatische Verifizierung gilt nur für laufende Erfahrungen. Beantragen Sie eine manuelle Prüfung.",
+    "bot_unavailable": "Dieser Bot ist nicht mehr auffindbar oder hat keinen Support-Server. Beantragen Sie eine manuelle Prüfung."
   },
   "validation": {
     "required": "Dieses Feld ist erforderlich.",
@@ -124,5 +135,9 @@
     "identifier": "Diese Kennung ist ungültig.",
     "notAccepted": "Dieses Feld wird nicht akzeptiert.",
     "invalid": "Dieser Wert ist ungültig."
+  },
+  "verificationFailedBot": {
+    "not_member": "Sie sind kein Mitglied des Support-Servers dieses Bots. Beantragen Sie eine manuelle Prüfung.",
+    "no_staff_permission": "Sie sind Mitglied des Support-Servers dieses Bots, aber ohne Staff-Berechtigung. Beantragen Sie eine manuelle Prüfung."
   }
 }

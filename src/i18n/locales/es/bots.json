@@ -1,0 +1,104 @@
+{
+  "unknownName": "Bot sin nombre",
+  "directory": {
+    "title": "Bots",
+    "subtitle": "Los bots de Discord presentes en Lineup, sus equipos y sus anuncios.",
+    "add": "Añadir un bot",
+    "search": "Buscar un bot",
+    "emptyTitle": "Todavía no hay bots",
+    "emptyBody": "Los bots aparecen aquí en cuanto su equipo los añade a Lineup.",
+    "list": "Bots",
+    "end": "Fin de la lista, {{count}} bots mostrados."
+  },
+  "notFound": {
+    "title": "Bot no encontrado",
+    "body": "Este bot no tiene perfil en Lineup, o su perfil no es público.",
+    "action": "Ver los bots"
+  },
+  "profile": {
+    "add": "Añadir el bot",
+    "manage": "Gestionar"
+  },
+  "notices": {
+    "notDiscoverable": "Su bot ya no es detectable en Discord: los datos mostrados son los últimos conocidos.",
+    "unlisted": "Este perfil está oculto: solo lo ven los gestores y el staff de Moddy, así como sus anuncios.",
+    "unlistedAction": "Cambiar la visibilidad"
+  },
+  "about": {
+    "title": "Acerca de",
+    "none": "Este bot aún no tiene descripción.",
+    "tags": "Etiquetas"
+  },
+  "posts": {
+    "title_one": "{{count}} anuncio abierto",
+    "title_other": "{{count}} anuncios abiertos",
+    "titleEmpty": "Anuncios abiertos",
+    "label": "Anuncios del bot",
+    "empty": "Este bot no está reclutando por ahora."
+  },
+  "info": {
+    "title": "Información",
+    "created": "Creado en Discord en",
+    "theme": "Tema",
+    "discordTopics": "Categorías del App Directory",
+    "snapshot": "Datos de Discord",
+    "updated": "Actualizado {{relative}}"
+  },
+  "support": {
+    "title": "Servidor de soporte",
+    "members_one": "{{value}} miembro",
+    "members_other": "{{value}} miembros"
+  },
+  "links": {
+    "title": "Enlaces"
+  },
+  "team": {
+    "title": "Equipo",
+    "label": "Equipo del bot",
+    "empty": "Aquí solo aparecen las personas con una experiencia verificada en este bot."
+  },
+  "menu": {
+    "label": "Más acciones",
+    "report": "Denunciar este bot",
+    "copyLink": "Copiar el enlace",
+    "copied": "Enlace copiado.",
+    "copyFailed": "No se pudo copiar.",
+    "copyId": "Copiar el identificador del bot",
+    "idCopied": "Identificador copiado."
+  },
+  "claim": {
+    "title": "Añadir un bot",
+    "close": "Cerrar",
+    "search": "Buscar",
+    "searching": "Buscando...",
+    "searchIn": "Buscar en {{wait}}",
+    "submit": "Reclamar este bot",
+    "claiming": "Reclamando...",
+    "intro": "Introduzca el Application ID del bot. Tres condiciones:",
+    "conditionDiscoverable": "el bot es detectable: el desarrollador lo activa en el portal para desarrolladores, sección App Directory;",
+    "conditionSupport": "declara un servidor de soporte (campo Support Server del portal);",
+    "conditionAdmin": "usted es propietario o administrador de ese servidor de soporte. «Gestionar servidor» no basta.",
+    "idLabel": "Application ID",
+    "idHint": "El id está en el portal para desarrolladores de Discord, General Information, Application ID.",
+    "idInvalid": "Un Application ID solo contiene cifras (de 17 a 20).",
+    "claimed": "Este bot ya tiene un perfil.",
+    "openProfile": "Ver el perfil del bot",
+    "notAdmin": "Debe ser administrador de {{name}} para reclamar este bot.",
+    "notAdminHelp": "Si acaba de recibir esos derechos, espere unos minutos: la lista de sus servidores se conserva 5 minutos.",
+    "success": "{{name}} está en Lineup."
+  },
+  "mine": {
+    "title": "Gestionar los bots",
+    "label": "Mis bots",
+    "listed": "Visible",
+    "unlisted": "No listado",
+    "profile": "Ver el perfil",
+    "manage": "Gestionar",
+    "add": "Añadir un bot",
+    "emptyTitle": "Ningún bot",
+    "emptyBody": "Los bots cuyo servidor de soporte administra aparecen aquí una vez añadidos.",
+    "staleTitle": "No se pudieron comprobar sus servidores",
+    "staleBody": "Discord no respondió. Vuelva a intentarlo en un momento.",
+    "retry": "Reintentar"
+  }
+}

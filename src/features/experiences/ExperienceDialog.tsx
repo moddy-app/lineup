@@ -6,12 +6,12 @@ import {useCatalogLabel} from '@/api/catalog';
 import {hasCode, isApiError} from '@/api/client';
 import {errorMessage, fieldErrors} from '@/api/errors';
 import {useCreateExperience, useUpdateExperience} from '@/api/mutations';
-import {useCatalog} from '@/api/queries';
+import {useBotLookup, useCatalog} from '@/api/queries';
 import type {PrivateExperience} from '@/api/types';
 import {registerBeforeLogin} from '@/auth/beforeLogin';
 import {useSession} from '@/auth/session';
 import {useAuthAction} from '@/auth/useAuthAction';
-import {InviteHelp, isRetryable, RetryButton, ServiceImage} from '@/components';
+import {BotLookupPreview, InviteHelp, isRetryable, RetryButton, ServiceImage} from '@/components';
 import {useT} from '@/i18n/useT';
 import {setItem} from '@/lib/storage';
 import {Checkbox, Dialog, Icon, Select, TextField, useSnackbar} from '@/ui';
@@ -35,6 +35,8 @@ import {
 export const EXPERIENCE_DRAFT_KEY = 'lineup-experience-draft';
 
 const INVITE_ERRORS = ['invite_not_found', 'invite_invalid', 'invite_expiring', 'invite_guild_mismatch'];
+/** A bot the App Directory cannot use: on the Application ID field. */
+const BOT_ERRORS = ['bot_not_found', 'bot_not_discoverable', 'bot_support_guild_missing'];
 
 interface ExperienceDialogProps {
   /** The experience being edited; null to create one. */
@@ -66,6 +68,9 @@ export function ExperienceDialog({experience, draft, count, max, onClose}: Exper
   const [submitted, setSubmitted] = useState(false);
   const [serverErrors, setServerErrors] = useState<Record<string, string>>({});
   const [failure, setFailure] = useState<unknown>(null);
+  // The preview of the bot, asked by the person (the lookup is limited to 20 per minute).
+  const [previewId, setPreviewId] = useState<string | null>(null);
+  const preview = useBotLookup(form.kind === 'bot' ? previewId : null);
   const pending = create.isPending || update.isPending;
 
   const latest = useRef(form);
@@ -120,13 +125,32 @@ export function ExperienceDialog({experience, draft, count, max, onClose}: Exper
       const fields = fieldErrors(error, tErrors);
       if (Object.keys(fields).length > 0) setServerErrors(fields);
       else if (hasCode(error, ...INVITE_ERRORS)) setServerErrors({invite: errorMessage(error, tErrors)});
+      else if (hasCode(error, ...BOT_ERRORS)) setServerErrors({bot_id: errorMessage(error, tErrors)});
       setFailure(error);
     }
   }
 
+  /** The same bot sent again: its name, avatar and server count are read from Discord, the verification stays. */
+  async function refreshBot() {
+    if (!experience?.bot_id) return;
+    setFailure(null);
+    try {
+      const saved = await auth.run(() =>
+        update.mutateAsync({experienceId: experience.id, body: {bot_id: experience.bot_id!}}),
+      );
+      if (saved) snackbar.show({message: t('dialog.botRefreshed')});
+    } catch (error) {
+      setFailure(error);
+    }
+  }
+
+  const previewError =
+    preview.isError && hasCode(preview.error, ...BOT_ERRORS) ? errorMessage(preview.error, tErrors) : undefined;
+
   const failureText = (() => {
     if (!failure || Object.keys(serverErrors).length > 0) return null;
     if (hasCode(failure, 'lineup_experience_limit')) return t('dialog.limit', {count: count, max});
+    if (hasCode(failure, ...BOT_ERRORS)) return null;
     return errorMessage(failure, tErrors);
   })();
 
@@ -136,6 +160,7 @@ export function ExperienceDialog({experience, draft, count, max, onClose}: Exper
   }));
   const kindOptions = [
     {value: 'guild', label: t('fields.kind.guild')},
+    {value: 'bot', label: t('fields.kind.bot')},
     {value: 'service', label: t('fields.kind.service')},
   ];
 
@@ -192,7 +217,7 @@ export function ExperienceDialog({experience, draft, count, max, onClose}: Exper
         <Select
           label={t('fields.kind.label')}
           value={form.kind}
-          onValueChange={(value) => set('kind', value === 'service' ? 'service' : 'guild')}
+          onValueChange={(value) => set('kind', value === 'service' || value === 'bot' ? value : 'guild')}
           options={kindOptions}
           disabled={editing}
           supportingText={editing ? t('fields.kind.locked') : undefined}
@@ -218,6 +243,54 @@ export function ExperienceDialog({experience, draft, count, max, onClose}: Exper
               <summary>{t('fields.inviteHow')}</summary>
               <InviteHelp headingLevel={4} />
             </details>
+          </>
+        ) : form.kind === 'bot' ? (
+          <>
+            {editing && experience && (
+              <p className="exp-current-server">
+                {t('fields.currentBot')} <strong>{experience.name}</strong>
+              </p>
+            )}
+            <TextField
+              label={t('fields.botId')}
+              value={form.bot_id}
+              onValueChange={(value) => set('bot_id', value)}
+              inputMode="numeric"
+              maxLength={24}
+              supportingText={editing ? t('fields.botIdEditHelp') : t('fields.botIdHelp')}
+              errorText={text('bot_id') ?? previewError}
+              autocomplete="off"
+            />
+            <div className="exp-bot-tools">
+              <md-text-button
+                type="button"
+                disabled={!/^\d{17,20}$/.test(form.bot_id.trim()) || preview.isFetching}
+                onclick={() => {
+                  const id = form.bot_id.trim();
+                  if (id === previewId) void preview.refetch();
+                  else setPreviewId(id);
+                }}
+              >
+                <md-icon slot="icon" className="filled" aria-hidden="true">
+                  search
+                </md-icon>
+                {t('fields.botPreview')}
+              </md-text-button>
+              {editing && experience?.bot_id && (
+                <md-text-button type="button" disabled={pending || !canWrite} onclick={() => void refreshBot()}>
+                  <md-icon slot="icon" className="filled" aria-hidden="true">
+                    sync
+                  </md-icon>
+                  {t('fields.botRefresh')}
+                </md-text-button>
+              )}
+            </div>
+            {preview.data && preview.data.id === form.bot_id.trim() && <BotLookupPreview bot={preview.data} />}
+            {preview.isError && !previewError && (
+              <p className="exp-error" role="alert">
+                {errorMessage(preview.error, tErrors)}
+              </p>
+            )}
           </>
         ) : (
           <>

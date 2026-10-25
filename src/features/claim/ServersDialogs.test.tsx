@@ -48,7 +48,8 @@ const dialogButton = () => document.querySelector('md-dialog md-filled-button') 
 const fieldError = () => {
   return inviteField()?.getAttribute('errortext') ?? '';
 };
-const inviteField = () => document.querySelector('md-dialog md-outlined-text-field');
+// The open dialog's field (the bot dialogs stay mounted, closed, next to it).
+const inviteField = () => document.querySelector('md-dialog[open] md-outlined-text-field');
 
 async function openFor(name: string) {
   const row = (await screen.findByText(name)).closest('li') as HTMLElement;

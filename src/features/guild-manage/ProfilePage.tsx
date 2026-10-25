@@ -8,7 +8,7 @@ import {flagUrl} from '@/components/languageFlags';
 import {useT} from '@/i18n/useT';
 import {Checkbox, Icon, SettingsPanel, Select, TextField} from '@/ui';
 
-import {SaveBar} from './SaveBar';
+import {type ManageNamespace, SaveBar} from './SaveBar';
 import {parseTags} from './profileForm';
 import {useGuildForm} from './useGuildForm';
 import {useManagedGuild} from './useManagedGuild';
@@ -16,10 +16,24 @@ import {useManagedGuild} from './useManagedGuild';
 /** /guilds/:guildId/manage : the public profile (description, theme, tags, languages, links). */
 export function Component() {
   const guild = useManagedGuild();
-  const {t} = useT('guildManage');
+  return (
+    <ProfileEditor form={useGuildForm(guild, 'profile')} discordText={guild.discord_description} ns="guildManage" />
+  );
+}
+
+interface ProfileEditorProps {
+  form: ReturnType<typeof useGuildForm>;
+  /** Discord's own description (a server's, or a bot's App Directory text): what shows when the field is empty. */
+  discordText: string | null;
+  /** Whose words: a server's (`guildManage`) or a bot's (`botManage`, the same keys). */
+  ns: ManageNamespace;
+}
+
+/** The profile form of a server or a bot: description, theme and tags, languages, links, and the save bar. */
+export function ProfileEditor({form, discordText: rawDiscordText, ns}: ProfileEditorProps) {
+  const {t} = useT(ns as 'guildManage');
   const {label} = useCatalogLabel();
   const catalog = useCatalog();
-  const form = useGuildForm(guild, 'profile');
   const {values, set, limits, fieldError} = form;
   const [preview, setPreview] = useState(false);
 
@@ -37,7 +51,7 @@ export function Component() {
   const toggleLanguage = (id: string, on: boolean) =>
     set({languages: on ? [...values.languages, id] : values.languages.filter((language) => language !== id)});
 
-  const discordText = guild.discord_description?.trim();
+  const discordText = rawDiscordText?.trim();
 
   return (
     <form
@@ -191,7 +205,7 @@ export function Component() {
         </div>
       </SettingsPanel>
 
-      <SaveBar {...form.bar} />
+      <SaveBar {...form.bar} ns={ns} />
     </form>
   );
 }

@@ -7,7 +7,8 @@
   "post": {
     "kind": {
       "guild": "Recrute",
-      "user": "Cherche une équipe"
+      "user": "Cherche une équipe",
+      "bot": "Bot qui recrute"
     },
     "status": {
       "draft": "Brouillon",
@@ -21,7 +22,8 @@
     "positions": "Postes",
     "hoursPerWeek": "{{value}} h par semaine",
     "openings_one": "{{value}} poste ouvert",
-    "openings_other": "{{value}} postes ouverts"
+    "openings_other": "{{value}} postes ouverts",
+    "unknownBot": "Bot sans nom"
   },
   "expiry": {
     "inHours_one": "Expire dans {{value}} heure",
@@ -100,14 +102,17 @@
       }
     },
     "members_one": "membre",
-    "members_other": "membres"
+    "members_other": "membres",
+    "servers_one": "serveur",
+    "servers_other": "serveurs"
   },
   "report": {
     "button": "Signaler",
     "title": {
       "post": "Signaler cette annonce",
       "user": "Signaler ce profil",
-      "guild": "Signaler ce serveur"
+      "guild": "Signaler ce serveur",
+      "bot": "Signaler ce bot"
     },
     "intro": "Votre signalement est transmis à l'équipe Moddy. Vous ne recevrez pas de réponse.",
     "reason": "Motif",
@@ -161,7 +166,9 @@
     "guild_other": "{{used}} / {{limit}} annonces publiées sur ce serveur",
     "user_one": "{{used}} / {{limit}} annonce publiée",
     "user_other": "{{used}} / {{limit}} annonces publiées",
-    "full": "Limite atteinte"
+    "full": "Limite atteinte",
+    "bot_one": "{{used}} / {{limit}} annonce publiée pour ce bot",
+    "bot_other": "{{used}} / {{limit}} annonces publiées pour ce bot"
   },
   "stale": {
     "text": "Données Discord potentiellement anciennes"
@@ -203,7 +210,15 @@
     "context": {
       "label": "Gérer",
       "me": "Moi",
-      "manage": "Gérer mes serveurs"
+      "manage": "Gérer mes serveurs",
+      "addBot": "Ajouter un bot",
+      "manageBots": "Gérer les bots"
+    },
+    "botNav": {
+      "profile": "Profil",
+      "posts": "Annonces",
+      "discord": "Données Discord",
+      "settings": "Paramètres"
     }
   },
   "filters": {
@@ -211,5 +226,14 @@
     "add": "Ajouter un filtre",
     "allUsed": "Tous les filtres sont utilisés",
     "remove": "Retirer"
+  },
+  "bot": {
+    "unknownName": "Bot sans nom",
+    "servers_one": "serveur",
+    "servers_other": "serveurs",
+    "tags": "Étiquettes",
+    "unlisted": "Non listé",
+    "verifiedApp": "Application vérifiée Discord",
+    "supportGuild": "Serveur support : {{name}}"
   }
 }

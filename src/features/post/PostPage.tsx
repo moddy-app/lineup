@@ -7,7 +7,7 @@ import {useCatalogLabel} from '@/api/catalog';
 import {hasCode} from '@/api/client';
 import {errorMessage} from '@/api/errors';
 import {useClosePost, useDeletePost, usePublishPost} from '@/api/mutations';
-import {useGuild, useMyExperiences, useMyProfile, usePost, useUser} from '@/api/queries';
+import {useBot, useGuild, useMyExperiences, useMyProfile, usePost, useUser} from '@/api/queries';
 import {queryKeys} from '@/api/queryKeys';
 import type {PostDetail} from '@/api/types';
 import {useRetryAfter} from '@/api/useRetryAfter';
@@ -24,7 +24,8 @@ import {
   ErrorState,
   ExperienceRow,
   ExpiryLabel,
-  GuildIcon,
+  RecruiterAvatar,
+  recruiterOf,
   InlineStats,
   isNsfw,
   LanguageFlags,
@@ -36,7 +37,6 @@ import {
   type RequirementViewer,
   RetryButton,
   TimezoneLabel,
-  UserAvatar,
 } from '@/components';
 import {positionItems} from '@/components/positions';
 import {formatNumber} from '@/lib/format';
@@ -114,27 +114,33 @@ function NotFound() {
 
 // ---------------------------------------------------------------------------
 
-/** Who posts: the server (kind `guild`) or the person (kind `user`), with what the page can tell of them. */
+/**
+ * Who posts: the server (kind `guild`), the bot (kind `bot`) or the person
+ * (kind `user`), with what the page can tell of them.
+ */
 function usePoster(post: PostDetail) {
   const {t: tc} = useT('components');
-  const isGuild = post.kind === 'guild' && post.guild_id !== null;
-  const guild = useGuild(isGuild ? post.guild_id! : undefined);
-  const user = useUser(isGuild ? undefined : post.author_id);
-  const name = isGuild
-    ? (post.guild?.name ?? guild.data?.name ?? tc('post.unknownGuild'))
-    : (post.author.global_name ?? post.author.username ?? tc('post.unknownAuthor'));
+  const recruiter = recruiterOf(post, tc);
+  const isGuild = recruiter.entity === 'guild';
+  const isBot = recruiter.entity === 'bot';
+  const guild = useGuild(isGuild ? recruiter.id : undefined);
+  const bot = useBot(isBot ? recruiter.id : undefined);
+  const user = useUser(isGuild || isBot ? undefined : post.author_id);
   return {
+    recruiter,
     isGuild,
-    name,
-    badges: isGuild ? (post.guild?.badges ?? guild.data?.badges) : post.author.badges,
-    to: isGuild ? paths.guild(post.guild_id!) : paths.user(post.author_id),
+    isBot,
+    name: isGuild && !post.guild?.name ? (guild.data?.name ?? recruiter.name) : recruiter.name,
+    badges: isGuild ? (post.guild?.badges ?? guild.data?.badges) : recruiter.badges,
+    to: recruiter.to,
     guild: guild.data,
+    bot: bot.data,
     user: user.data,
   };
 }
 
 function PostView({post, onDeleted}: {post: PostDetail; onDeleted: () => void}) {
-  const nsfw = isNsfw({theme: post.theme, guild: post.guild});
+  const nsfw = isNsfw({theme: post.theme, guild: post.guild}) || post.bot?.nsfw === true;
   const poster = usePoster(post);
   return (
     <ShowcasePage className="post-page">
@@ -358,15 +364,11 @@ function PostHeader({post, poster, onDeleted}: {post: PostDetail; poster: Poster
             <p className="post-byline">
               <span className="post-byline-item">
                 <Link to={poster.to} className="post-poster-link">
-                  {poster.isGuild ? (
-                    <GuildIcon id={post.guild_id!} iconUrl={post.guild?.icon_url} size="small" />
-                  ) : (
-                    <UserAvatar id={post.author.id} src={post.author.avatar_url} size="small" />
-                  )}
+                  <RecruiterAvatar recruiter={poster.recruiter} size="small" />
                   <DisplayName
                     name={poster.name}
                     badges={poster.badges}
-                    entity={poster.isGuild ? 'guild' : 'user'}
+                    entity={poster.recruiter.entity}
                     focusable={false}
                   />
                 </Link>
@@ -575,7 +577,8 @@ function Summary({post}: {post: PostDetail}) {
 /** The server or the person behind the post: a small card that leads to their profile. */
 function Poster({post, poster}: {post: PostDetail; poster: Poster}) {
   const {t} = useT('post');
-  const {guild} = poster;
+  const {t: tc} = useT('components');
+  const {guild, bot} = poster;
   const stats = poster.isGuild
     ? [
         {
@@ -584,33 +587,31 @@ function Poster({post, poster}: {post: PostDetail; poster: Poster}) {
           label: t('stats.members', {count: guild?.member_count ?? 0}),
         },
       ]
-    : [];
+    : poster.isBot
+      ? [{icon: 'dns', value: bot?.guild_count ?? null, label: tc('bot.servers', {count: bot?.guild_count ?? 0})}]
+      : [];
+  const kind = poster.isGuild ? 'guild' : poster.isBot ? 'bot' : 'user';
 
   return (
     <Card as="section" className="post-poster" aria-labelledby="post-poster-title">
       <h2 id="post-poster-title" className="visually-hidden">
-        {poster.isGuild ? t('author.guild') : t('author.user')}
+        {t(`author.${kind}`)}
       </h2>
       <div className="post-poster-head">
-        {poster.isGuild ? (
-          <GuildIcon id={post.guild_id!} iconUrl={post.guild?.icon_url} />
-        ) : (
-          <UserAvatar id={post.author.id} src={post.author.avatar_url} />
-        )}
+        <RecruiterAvatar recruiter={poster.recruiter} />
         <div className="post-poster-text">
-          <DisplayName
-            as="strong"
-            name={poster.name}
-            badges={poster.badges}
-            entity={poster.isGuild ? 'guild' : 'user'}
-          />
-          {!poster.isGuild && post.author.username && <Pill>@{post.author.username}</Pill>}
+          <DisplayName as="strong" name={poster.name} badges={poster.badges} entity={poster.recruiter.entity} />
+          {kind === 'user' && post.author.username && <Pill>@{post.author.username}</Pill>}
           <InlineStats items={stats} compact />
         </div>
       </div>
       <CardActions>
-        <LinkButton variant="outlined" icon={poster.isGuild ? 'groups' : 'person'} to={poster.to}>
-          {poster.isGuild ? t('author.viewGuild') : t('author.viewUser')}
+        <LinkButton
+          variant="outlined"
+          icon={kind === 'guild' ? 'groups' : kind === 'bot' ? 'smart_toy' : 'person'}
+          to={poster.to}
+        >
+          {t(kind === 'guild' ? 'author.viewGuild' : kind === 'bot' ? 'author.viewBot' : 'author.viewUser')}
         </LinkButton>
       </CardActions>
     </Card>

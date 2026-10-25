@@ -54,6 +54,25 @@ export const G = {
   marche: at(2023, 5, 9, 226),
 } as const;
 
+/** Bots (the application id is the bot's creation date). */
+export const B = {
+  // Claimed and listed.
+  moddy: at(2023, 11, 21, 301),
+  pixel: at(2021, 4, 2, 302),
+  cube: at(2021, 3, 1, 303),
+  nox: at(2020, 4, 9, 304),
+  // Claimed, unlisted (Léo's).
+  devhelper: at(2022, 2, 14, 305),
+  // Claimed, support server suspended: invisible.
+  marche: at(2023, 6, 1, 306),
+  // In the App Directory, no Lineup profile.
+  atelier: at(2022, 7, 7, 311),
+  beats: at(2024, 3, 3, 312),
+  // Errors of the lookup: not discoverable, no support server.
+  ghost: at(2022, 9, 9, 313),
+  lonely: at(2023, 2, 2, 314),
+} as const;
+
 const uuid = (kind: string, n: number) => `${kind}0000000-0000-4000-8000-${String(n).padStart(12, '0')}`;
 
 /** Posts: `a…`, experiences: `e…`, reports: `c…` (readable prefixes). */
